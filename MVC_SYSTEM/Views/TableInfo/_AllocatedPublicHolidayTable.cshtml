@@ -1,0 +1,69 @@
+﻿@model IEnumerable<MVC_SYSTEM.ViewingModels.vw_CutiUmumLdgDetails>
+@using MVC_SYSTEM.Class;
+@{
+    GetConfig GetConfig = new GetConfig();
+    int bill = 0;
+}
+
+@if (Model.Any())
+{
+    <div id="scrollArea2">
+        <logo />
+        <table class="table table-hover table-bordered" style="font-size: 11px;" border="0">
+            <thead>
+                <tr>
+                    <th colspan="10" style="text-align:center;vertical-align:middle;">
+                        @ViewBag.NamaSyarikat
+                        <br />
+                        (@GlobalResEstate.lblCompanyNo : @ViewBag.NoSyarikat)
+                        <br />
+                        @GlobalResEstate.lblTitleAllocatedPublicHolidayTable
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th bgcolor="#ffcc80" style="color: black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">@GlobalResEstate.hdrNo</th>
+                    <th bgcolor="#ffcc80" style="color: black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">@GlobalResEstate.hdrDesc</th>
+                    <th bgcolor="#ffcc80" style="color: black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">@GlobalResEstate.hdrLeaveDate</th>
+                </tr>
+                @foreach (var item in Model)
+                {
+                    bill = bill + 1;
+                    <tr>
+                        <td align="center" style="vertical-align: middle !important; border: 1px solid black;" border="1">
+                            @bill
+                        </td>
+                        <td align="center" style="vertical-align: middle !important; border: 1px solid black;" border="1">
+                            @item.fld_KeteranganCuti
+                        </td>
+                        <td align="center" style="vertical-align: middle !important; border: 1px solid black;" border="1">
+                            @item.fld_TarikhCuti.Value.ToString("dd/MM/yyyy")
+                        </td>
+                    </tr>
+                }
+            </tbody>
+
+        </table>
+        <newpage />
+    </div>
+
+    <div style="text-align:right; margin-top:10px">
+        <a class="btn btn-default btn-sm" href="#" id="printpage">
+            <span class="glyphicon glyphicon-print"> </span> @GlobalResEstate.btnPrint
+        </a>
+        <a class="btn btn-default btn-sm" href="#" id="downloadpdf">
+            <span><img src="~/Asset/Images/pdf-icon.png" width="20px" height="20px" /></span> @GlobalResEstate.btnDownloadPdf
+        </a>
+    </div>
+
+}
+else
+{
+    <hr/>
+    <div class="text-center">
+        @Html.Label(@GlobalResEstate.msgNoRecord)
+    </div>
+    <hr/>
+}
+

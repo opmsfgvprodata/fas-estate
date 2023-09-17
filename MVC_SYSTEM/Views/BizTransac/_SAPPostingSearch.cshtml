@@ -1,0 +1,300 @@
+﻿@using MVC_SYSTEM.Class
+@model MVC_SYSTEM.CustomModels.CustMod_SAPPostingData
+@{
+    int GLItemNo = 1;
+    decimal? TotalAmountGL = 0;
+    GetConfig getconfig = new GetConfig();
+    string dateformat = getconfig.GetData("dateformat");
+    string dateformat2 = getconfig.GetData("dateformat2");
+}
+@if (Model == null)
+{
+    <div id="scrollArea2" class="modal-body" style="text-align: center">
+        <p style="color: red">@ViewBag.Message</p>
+    </div>
+}
+else
+{
+    using (Html.BeginForm("", "", FormMethod.Post, new { id = "PostingDataSAP" }))
+    {
+        <div class="panel panel-success">
+            <div class="panel-heading">Header</div>
+            <div class="panel-body">
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        <div class="col-sm-6 col-md-6 col-lg-6">
+                            <label>Company Code</label>
+                            @Html.TextBox("CompCode", Model.GetSAPPostRef.fld_CompCode, htmlAttributes: new { @class = "form-control", @readonly = "readonly", @required = "required" })
+                        </div>
+                        <div class="col-sm-6 col-md-6 col-lg-6 ss-item-required">
+                            <label>Reference No</label>
+                            @Html.TextBox("RefNo", Model.GetSAPPostRef.fld_RefNo, htmlAttributes: new { @class = "form-control", @required = "required" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-6 col-md-6 col-lg-6">
+                            <label for="startdate">Posting Date</label>
+                            <div class='input-group date' id='PostingDate1'>
+                                <input type="datetime" class="form-control" name="PostingDate" id="PostingDate" onkeydown="return false" required />
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-md-6 col-lg-6">
+                            <label for="startdate">Invoice Date</label>
+                            <div class='input-group date' id='InvoiceDate1'>
+                                <input type="datetime" class="form-control" name="InvoiceDate" id="InvoiceDate" onkeydown="return false" required />
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-success">
+            <div class="panel-heading">Customer CPD</div>
+            <div class="panel-body">
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        <div class="col-sm-6 col-md-6 col-lg-6 ss-item-required">
+                            <label>Name</label>
+                            @Html.TextBox("Name", Model.GetSAPPostRef.fld_CpdName, htmlAttributes: new { @class = "form-control", @required = "required" })
+                        </div>
+                        <div class="col-sm-6 col-md-6 col-lg-6 ss-item-required">
+                            <label>Name 2</label>
+                            @Html.TextBox("Name2", Model.GetSAPPostRef.fld_CpdName2, htmlAttributes: new { @class = "form-control", @required = "required" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-4 col-md-4 col-lg-4">
+                            <label>Postcode</label>
+                            @Html.TextBox("PostCode", Model.GetSAPPostRef.fld_PostCode, htmlAttributes: new { @class = "form-control", @readonly = "readonly" })
+                        </div>
+                        <div class="col-sm-4 col-md-4 col-lg-4">
+                            <label>City</label>
+                            @Html.TextBox("City", Model.GetSAPPostRef.fld_City, htmlAttributes: new { @class = "form-control", @readonly = "readonly" })
+                        </div>
+                        <div class="col-sm-4 col-md-4 col-lg-4">
+                            <label>Country</label>
+                            @Html.TextBox("Country", Model.GetSAPPostRef.fld_Country, htmlAttributes: new { @class = "form-control", @readonly = "readonly" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-success">
+            <div class="panel-heading">Vendor</div>
+            <div class="panel-body">
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        <div class="col-sm-6 col-md-6 col-lg-6 ss-item-required">
+                            <label>Vendor No</label>
+                            @Html.TextBox("VendorNo", Model.GetSAPPostVendorDataDetails.fld_VendorNo, htmlAttributes: new { @class = "form-control", @required = "required" })
+                        </div>
+                        <div class="col-sm-6 col-md-6 col-lg-6">
+                            <label for="startdate">Baseline Date</label>
+                            <div class='input-group date' id='BaselineDate1'>
+                                <input type="datetime" class="form-control" name="BaselineDate" id="BaselineDate" readonly onkeydown="return false" />
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-6 col-md-6 col-lg-6 ss-item-required">
+                            <label>Description</label>
+                            @Html.TextBox("DescVendor", Model.GetSAPPostVendorDataDetails.fld_Desc, htmlAttributes: new { @class = "form-control", @required = "required" })
+                        </div>
+                        <div class="col-sm-2 col-md-2 col-lg-2">
+                            <label>Currency</label>
+                            @Html.TextBox("Currency", Model.GetSAPPostVendorDataDetails.fld_Currency, htmlAttributes: new { @class = "form-control", @readonly = "readonly" })
+                        </div>
+                        <div class="col-sm-4 col-md-4 col-lg-4">
+                            <label>Amount</label>
+                            @Html.TextBox("Amount", Model.GetSAPPostVendorDataDetails.fld_Amount, htmlAttributes: new { @class = "form-control", @readonly = "readonly" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-success">
+            <div class="panel-heading">GL List</div>
+            <div class="panel-body">
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        <div class="col-sm-12 col-md-12 col-lg-12">
+                            <table class="table table-bordered" style="font-size: 11px;" border="0" width="100%">
+                                <thead>
+                                    <tr>
+                                        <th bgcolor="#ffcc80" width="5%" style="color:black; text-align:center; vertical-align:middle;border:1px solid black;" border="1">No</th>
+                                        <th bgcolor="#ffcc80" width="10%" style="color:black; text-align:center; vertical-align:middle;border:1px solid black;" border="1">GL No</th>
+                                        <th bgcolor="#ffcc80" width="30%" style="color:black; text-align:center; vertical-align:middle;border:1px solid black;" border="1">Text</th>
+                                        <th bgcolor="#ffcc80" width="10%" style="color:black; text-align:center; vertical-align:middle;border:1px solid black;" border="1">IO</th>
+                                        <th bgcolor="#ffcc80" width="10%" style="color:black; text-align:center; vertical-align:middle;border:1px solid black;" border="1">Amount (@Model.GetSAPPostVendorDataDetails.fld_Currency)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var ItemGL in Model.SAPPostGLIODataDetails)
+                                    {
+                                        <tr>
+                                            <td align="center">@GLItemNo</td>
+                                            <td align="center">@ItemGL.fld_GL</td>
+                                            <td align="left">@ItemGL.fld_Desc</td>
+                                            <td align="center">@ItemGL.fld_IO</td>
+                                            <td align="right">@ItemGL.fld_Amount</td>
+                                        </tr>
+                                        TotalAmountGL = TotalAmountGL + ItemGL.fld_Amount;
+                                        GLItemNo++;
+                                    }
+                                </tbody>
+                                <tr>
+                                    <td colspan="4"></td>
+                                    <td align="right">@TotalAmountGL</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            @Html.Hidden("PostingID", Model.GetSAPPostRef.fld_ID)
+            <button class="btn btn-success" name="SavePost" id="SavePost" type="button">@GlobalResEstate.btnSave</button>
+            <button class="btn btn-success" name="PostToSAP" id="PostToSAP" type="button">Posting</button>
+            <button class="btn btn-success" name="PostLog" id="PostLog" type="button">SAP Masej</button>
+        </div>
+        <div id='myModal' class='modal fade in'>
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div id='myModalContent'>
+                        <section class="content-wrapper main-content clear-fix">
+                            <div class="modal-body">
+                                <div class="form-horizontal">
+                                    <div class="panel panel-primary">
+                                        <div class="panel-heading">SAP Auth</div>
+                                        <div class="panel-body">
+                                            <div class="form-group">
+                                                <div class="col-sm-3">
+                                                    <label id="catsel">Username</label>
+                                                    <input type="text" id="Username" name="Username" class="form-control" required />
+                                                </div>
+                                                <div class="col-sm-3">
+                                                    <label id="catsel">Password</label>
+                                                    <input type="password" id="Password" name="Password" class="form-control" required />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer" style="margin-top: -20px;">
+                                <button class="btn btn-success" name="SaveOtherDifValue" id="SaveOtherDifValue" type="button">@GlobalResEstate.btnSave</button>
+                                <button class="btn btn-warning" data-dismiss="modal" id="back2">@GlobalResEstate.btnBack</button>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    <script>
+            $(document).ready(function () {
+                $('#PostingDate1').data("DateTimePicker").date('@string.Format("{0:" + dateformat2 + "}", Model.GetSAPPostRef.fld_PostingDate)');
+                $('#InvoiceDate1').data("DateTimePicker").date('@string.Format("{0:" + dateformat2 + "}", Model.GetSAPPostRef.fld_InvoiceDate)');
+                $('#BaselineDate1').data("DateTimePicker").date('@string.Format("{0:" + dateformat2 + "}", Model.GetSAPPostVendorDataDetails.fld_BaseDate)');
+            });
+
+            $('#PostLog').click(function (e) {
+                var Populink = "@Url.Action("SAPReturnReport", "BizTransac", new { PostingID = Model.GetSAPPostRef.fld_ID }, "http")";
+                window.open(Populink, null, "height=780,width=1000,status=yes,toolbar=no,menubar=no,location=no,scrollbars=yes,resizable=no");
+                e.stopPropagation();
+                e.preventDefault();
+            });
+
+            $('#PostingDate1').datetimepicker({
+                format: '@dateformat',
+                useCurrent: false
+            });
+            $('#InvoiceDate1').datetimepicker({
+                format: '@dateformat',
+                useCurrent: false
+            });
+            $('#BaselineDate1').datetimepicker({
+                format: '@dateformat',
+                useCurrent: false
+            });
+
+            $("#SavePost").click(function () {
+                $("#divLoading").css("display", "");
+                formcheck();
+                var ajxfn = {};
+                ajxfn.url = "@Url.Action("_SAPSaveData", "BizTransac")";
+                ajxfn.type = "POST";
+                ajxfn.data = JSON.stringify($("#PostingDataSAP").serializeObject());
+                ajxfn.datatype = "json";
+                ajxfn.contentType = "application/json";
+                ajxfn.success = function (result) {
+                    $.simplyToast(result.msg, result.statusmsg);
+                    $("#divLoading").css("display", "none");
+                };
+                ajxfn.error = function () {
+                    $.simplyToast('@GlobalResEstate.msgError', 'danger');
+                    $("#divLoading").css("display", "none");
+                };
+                $.ajax(ajxfn);
+            });
+
+            $("#PostToSAP").click(function () {
+                var PostingID = $("#PostingID").val();
+                var SAPUsername = "3000745";
+                var SAPPassword = "fikafld";
+                $("#divLoading").css("display", "");
+                var ajxfn = {};
+                ajxfn.url = "@Url.Action("_PostToSAP", "BizTransac")";
+                ajxfn.type = "POST";
+                ajxfn.data = JSON.stringify({ PostingID: PostingID, SAPUsername: SAPUsername, SAPPassword: SAPPassword });
+                ajxfn.datatype = "json";
+                ajxfn.contentType = "application/json";
+                ajxfn.success = function (result) {
+                    $.simplyToast(result.msg, result.statusmsg);
+                    $("#divLoading").css("display", "none");
+                };
+                ajxfn.error = function () {
+                    $.simplyToast('@GlobalResEstate.msgError', 'danger');
+                    $("#divLoading").css("display", "none");
+                };
+                $.ajax(ajxfn);
+            });
+
+            function formcheck() {
+                var fields = $(".ss-item-required")
+                    .find("select, textarea, input").serializeArray();
+
+                $.each(fields, function (i, field) {
+                    if (!field.value)
+                        alert(field.name + ' is required');
+                });
+                console.log(fields);
+            }
+
+            $.fn.serializeObject = function () {
+                var o = {};
+                var a = this.serializeArray();
+                $.each(a, function () {
+                    if (o[this.name]) {
+                        if (!o[this.name].push) {
+                            o[this.name] = [o[this.name]];
+                        }
+                        o[this.name].push(this.value || '');
+                    } else {
+                        o[this.name] = this.value || '';
+                    }
+                });
+                return o;
+            };
+    </script>
+}

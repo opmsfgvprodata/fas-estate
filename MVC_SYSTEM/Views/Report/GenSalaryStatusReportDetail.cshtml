@@ -1,0 +1,166 @@
+﻿@model IEnumerable<MVC_SYSTEM.MasterModels.tbl_SevicesProcess>
+@using MVC_SYSTEM.Class;
+
+@{
+    ViewBag.Title = "GenSalaryStatusReportDetail";
+    //Layout = "~/Views/Shared/_LayoutMain.cshtml";
+    //GetConfig GetConfig = new GetConfig();
+    GetConfig GetConfig = new GetConfig();
+    GetTriager GetTriager = new GetTriager();
+    GetLadang GetLadang = new GetLadang();
+    GetIdentity GetIdentity = new GetIdentity();
+    ChangeTimeZone ChangeTimeZone = new ChangeTimeZone();
+    DateTime Todaydate = ChangeTimeZone.gettimezone();
+    string uniquefilename = "SkbReport_" + ViewBag.UserID + "_" + Todaydate.Year.ToString() + Todaydate.Month.ToString() + Todaydate.Day.ToString() + Todaydate.Hour.ToString() + Todaydate.Minute.ToString() + Todaydate.Second.ToString();
+    int? ldgID = Model.Select(s => s.fld_LadangID).FirstOrDefault();
+    int? wlyhID = Model.Select(s => s.fld_WilayahID).FirstOrDefault();
+    int? flag = Model.Select(s => s.fld_Flag).FirstOrDefault();
+    int i = 0;
+    int j = 0;
+    int? statusJana = 0;
+}
+
+<div class="panel panel-primary">
+    <div class="panel-heading">LAPORAN STATUS PENJANAAN GAJI</div>
+    <div class="panel-body">
+        @if (ViewBag.DataCount < 1)
+        {
+            <p style="color:red">@GlobalResEstate.msgNoRecord</p>
+        }
+        else
+        {
+            <div id="scrollArea2" class="modal-body">
+                <logo />
+                <table class="table table-bordered" style="font-size: 11px;" border="0">
+                    <thead>
+                        <tr>
+                            <th colspan="6" style="text-align:center;vertical-align:middle; border:none;">
+                                @ViewBag.NamaSyarikat
+                                <br />
+                                (@GlobalResEstate.lblCompanyNo : @ViewBag.NoSyarikat)
+                                <br />
+                                Laporan Status Penjanaan Gaji
+                                <br />
+                                @*@GetTriager.GetMonthName(ViewBag.MonthSelection) @ViewBag.YearSelection*@
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var monthItem in Model.Select(s => s.fld_Month).Distinct())
+                        {
+                            <tr>
+                                <th colspan="2" style="border-bottom:1px solid; border-top:none; border-left:none; border-right:none; border-bottom-color:red">@GetTriager.GetMonthName(monthItem.Value) @ViewBag.YearSelection</th>
+                            </tr>
+                            <tr>
+                                <td style="border:none; width:50%">
+                                    <table>
+                                        <tr>
+                                            <td style="border:none;">
+                                                <label style="font-size:small; font-weight:normal;">Status Penjanaan Gaji</label><br />
+                                                @foreach (var item in Model.Where(x => x.fld_Month == monthItem))
+                                                {
+                                                    i = i + 1;
+                                                    if (i == 1)
+                                                    {
+                                                        <label style="font-size:small; font-weight:normal;">Tarikh Proses</label><br />
+                                                    }
+                                                    else
+                                                    {
+                                                        <label style="font-size:small; font-weight:normal;">Tarikh Kemaskini Proses</label><br />
+                                                    }
+                                                }
+                                            </td>
+                                            <td style="border:none;">
+                                                @{
+                                                    statusJana = Model.Where(x => x.fld_Month == monthItem).Select(s => s.fld_Flag).LastOrDefault();
+                                                }
+                                                <label style="font-size:small; font-weight:bold;">: @GetConfig.GetWebConfigDesc(statusJana.ToString(), "genSalary", ViewBag.NegaraID, ViewBag.SyarikatID)</label><br />
+                                                @foreach (var item in Model.Where(x => x.fld_Month == monthItem))
+                                                {
+                                                    <label style="font-size:small; font-weight:normal;">: @string.Format("{0:dd/MM/yyyy}", item.fld_DTProcess)</label><br />
+                                                }
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                                <td style="border:none; width:50%">
+                                    <table>
+                                        <tr>
+                                            <td style="border:none;">
+                                                <br style="font-size:medium" />
+                                                @foreach (var item in Model.Where(x => x.fld_Month == monthItem))
+                                                {
+                                                    j = j + 1;
+                                                    if (j == 1)
+                                                    {
+                                                        <label style="font-size:small; font-weight:normal;">Diproses Oleh</label><br />
+                                                    }
+                                                    else
+                                                    {
+                                                        <label style="font-size:small; font-weight:normal;">Proses Dikemaskini Oleh</label><br />
+                                                    }
+
+                                                }
+                                            </td>
+                                            <td style="border:none;">
+                                                <br style="font-size:medium" />
+                                                @foreach (var item in Model.Where(x => x.fld_Month == monthItem))
+                                                {
+                                                    <label style="font-size:small; font-weight:normal;">: @GetIdentity.MyNameFullName(item.fld_UserID)</label><br />
+                                                }
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+                <newpage />
+                
+            </div>
+            <div style="text-align:right; margin-top:10px">
+                <a class="btn btn-default btn-sm" href="#" id="printpage">
+                    <span class="glyphicon glyphicon-print"> </span> @GlobalResEstate.btnPrint
+                </a>
+                <a class="btn btn-default btn-sm" href="#" id="downloadpdf">
+                    <span><img src="~/Asset/Images/pdf-icon.png" width="20px" height="20px" /></span> @GlobalResEstate.btnDownloadPdf
+                </a>
+                <a class="btn btn-default btn-sm" href="#" onclick="HTMLtoExcel('')">
+                    <span><img src="~/Asset/Images/excel-icon.png" width="20px" height="20px" /></span> @GlobalResEstate.btnDownloadExcel
+                </a>
+            </div>
+        }
+    </div>
+</div>
+<script>
+    $(Document).ready(function () {
+        $("#printpage").click(function () {
+            $("#reportTable").printThis();
+        });
+
+        $("#downloadpdf").click(function () {
+            var myHtml = document.getElementById('scrollArea').innerHTML;
+            //alert(myHtml);
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("ConvertPDF", "Report")',
+                dataType: 'json',
+                contentType: 'application/json',
+                data: JSON.stringify({ myHtml: myHtml, filename: "@uniquefilename", reportname: "NoSkb" }),
+                success: function (result) {
+                    if (result.success) {
+                        var win = window.open(result.link, '_blank');
+                        win.focus();
+                    } else {
+                        $.simplyToast(result.msg, result.status);
+                    }
+                },
+                error: function (error) {
+                    $.simplyToast('@GlobalResEstate.msgError', 'danger');
+                }
+            });
+            return false;
+        });
+    });
+</script>

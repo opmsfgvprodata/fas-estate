@@ -1,0 +1,167 @@
+﻿@model MVC_SYSTEM.ViewingModels.PagedList<MVC_SYSTEM.ViewingModels.vw_KumpulanPekerja>
+@{
+    ViewBag.Title = "WorkerGroupInfo";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+
+    AjaxOptions options = new AjaxOptions
+    {
+        HttpMethod = "Get",
+        UpdateTargetId = "searchResultWorkerGroupInfo",
+        InsertionMode = InsertionMode.Replace,
+        LoadingElementId = "UpdateProgress1"
+    };
+}
+
+<script src="~/Asset/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+
+@section scripts{
+    @Scripts.Render("~/Asset/Scripts/AjaxModal.js")
+}
+
+<section class="content-wrapper main-content clear-fix">
+    <div class="well bottom" style="padding-bottom:16px">
+        @using (Ajax.BeginForm("_WorkerSearch", "WorkerInfo", null, options, new { @id = "WorkerSearch" }))
+        {
+            <div class="row">
+                <div class="col-sm-3">
+                    <div class="radio">
+                        <label style="font-weight: bold">@Html.RadioButton("RadioGroup", 0, new {@checked = "checked"}) @GlobalResEstate.lblAll</label>
+                    </div>
+                    <div class="radio">
+                        <label style="font-weight: bold">@Html.RadioButton("RadioGroup", 1) @GlobalResEstate.lblNoGroup</label>
+                    </div>
+                </div>
+                <div class="col-sm-7">
+                    @Html.Label(GlobalResEstate.lblSearch)
+                    @Html.TextBox("filter", null, htmlAttributes: new {@class = "form-control", placeholder = GlobalResEstate.lblSearchPkj, @id = "txtfilter", @value = ""})
+                </div>
+                <div class="col-sm-2">
+                    <button type="submit" id="btnCari" class="btn btn-block btn-primary"><span class="glyphicon glyphicon-search"></span> @GlobalResEstate.btnSearch</button>
+                    <input type="button" class="btn btn-block btn-primary" value=@GlobalResEstate.btnList onclick="javascript:resetSearch1();"/>
+                </div>
+            </div>
+        }
+    </div>
+
+    <div class="well" style="margin-top: 7px;">
+        <div class="modal-body">
+            <div class="panel panel-primary">
+                <div class="panel-heading">@GlobalResEstate.lblWorkerGroupInfo</div>
+                <div class="panel-body">
+                    <div id="searchResultWorkerGroupInfo">
+                        @Html.Action("_WorkerSearch", new { filter = "" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <a href=@Url.Action("WorkerGroupManage", "WorkerInfo") class="btn btn-success" role="button" onclick="return DisplayProgressMessage(this);">@GlobalResEstate.btnGroupManage</a>
+            <a href=@Url.Action("Index", "WorkerInfo") class="btn btn-warning" role="button" onclick="return DisplayProgressMessage2(this);">@GlobalResEstate.btnBack</a>
+        </div>
+    </div>
+</section>
+<!-- modal placeholder-->
+<div id='myModal' class='modal fade in'>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div id='myModalContent'></div>
+        </div>
+    </div>
+</div>
+
+<div id='myModal1' class='modal fade in'>
+    <div class="modal-dialog modal-lg" style="width: 85%">
+        <div class="modal-content">
+            <div id='myModalContent1'></div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .header_table th {
+        text-align: center;
+        vertical-align: middle !important;
+    }
+
+    .kodkmpln {
+        width: 100px;
+        font-size: 12px;
+        text-align: center;
+        vertical-align: middle !important;
+    }
+
+    .nopkj {
+        width: 100px;
+        font-size: 12px;
+        text-align: center;
+        vertical-align: middle !important;
+    }
+
+    .namapkj {
+        width: 250px;
+        font-size: 12px;
+        text-align: left;
+        vertical-align: middle !important;
+    }
+
+    .count {
+        width: 30px;
+        font-size: 12px;
+        text-align: center;
+        vertical-align: middle !important;
+    }
+
+    .checkbox {
+        width: 20px;
+        height: 20px;
+        vertical-align: middle !important;
+    }
+
+    .delete {
+        width: 50px;
+        font-size: 12px;
+        vertical-align: middle !important;
+    }
+
+    .tindakan {
+        width: 30px;
+        text-align: center;
+        vertical-align: middle !important;
+    }
+
+    .height {
+        height: 50px !important;
+    }
+
+</style>
+
+<script>
+    function resetSearch1() {
+        document.getElementById("txtfilter").value = "";
+        document.getElementById('btnCari').click();
+    }
+
+    $(document).ready(function () {
+        $('input[name="RadioGroup"]').on("click", function (e) {
+            console.log($('input[name=RadioGroup]:checked').val());
+            var Radiogrp = $('input[name=RadioGroup]:checked').val();
+            var radiogroup = {};
+            //var div = $('#searchResultWorkerGroupInfo').html();
+
+            $('#UpdateProgress1').show();
+            radiogroup.url = "@Url.Action("_WorkerSearch", "WorkerInfo")";
+            radiogroup.type = "POST";
+            radiogroup.data = JSON.stringify({ RadioGroup: Radiogrp });
+            radiogroup.datatype = "json";
+            radiogroup.contentType = "application/json";
+            radiogroup.success = function (result) {
+                $('#searchResultWorkerGroupInfo').html(result);
+                $('#UpdateProgress1').hide();
+            };
+            radiogroup.error = function () { $.simplyToast(@GlobalResEstate.msgError, 'danger'); };
+            $.ajax(radiogroup);
+        });
+    });
+</script>
+
+

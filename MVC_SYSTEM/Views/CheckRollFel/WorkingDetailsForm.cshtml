@@ -1,0 +1,169 @@
+﻿@model IEnumerable<MVC_SYSTEM.CustomModels.CustMod_AttWork>
+@{
+    int itemno = 1;
+    short? disablebox = Model.Select(s => s.disabletextbox).Distinct().FirstOrDefault();
+    decimal? kadar = Model.Select(s => s.Kadar).Distinct().FirstOrDefault();
+    string datano = "";
+    short loopdatahdr = 0;
+    string unit = Model.Select(s => s.Unit).Distinct().FirstOrDefault();
+    string kdhbyr = Model.Select(s => s.KdhByr).Distinct().FirstOrDefault();
+    decimal? maxhasil = Model.Select(s => s.MaximumHsl).Distinct().FirstOrDefault();
+    decimal? TotalAmount = 0;
+}
+
+<thead>
+    <tr>
+        <th bgcolor="#ffcc80" width="2%" style="color:black; text-align:center; vertical-align:middle;border:1px solid black;" border="1">@GlobalResEstate.hdrNo</th>
+        <th bgcolor="#ffcc80" width="10%" style="color:black; text-align:center; vertical-align:middle;border:1px solid black;" border="1">@GlobalResEstate.hdrNoPkj</th>
+        <th bgcolor="#ffcc80" width="10%" style="color:black; text-align:center; vertical-align:middle;border:1px solid black;" border="1">@GlobalResEstate.hdrName</th>
+        <th bgcolor="#ffcc80" width="10%" style="color:black; text-align:center; vertical-align:middle;border:1px solid black;" border="1">@GlobalResEstate.lblAttend/@GlobalResEstate.lblLeave</th>
+        @switch (disablebox)
+        {
+            case 1:
+                <th bgcolor="#ffcc80" width="5%" style="color:black; text-align:center; vertical-align:middle;border:1px solid black;" border="1">@GlobalResEstate.hdrRate (RM)</th>
+                <th bgcolor="#ffcc80" width="10%" style="color:black; text-align:center; vertical-align:middle;border:1px solid black;" border="1">@GlobalResEstate.hdrOutcome (@unit)</th>
+                <th bgcolor="#ffcc80" width="10%" style="color:black; text-align:center; vertical-align:middle;border:1px solid black;" border="1">@GlobalResEstate.lblTotal (RM)</th>
+                <th bgcolor="#ffcc80" width="10%" style="color:black; text-align:center; vertical-align:middle;border:1px solid black;" border="1">@GlobalResEstate.lblBonusPrice (%)</th>
+                break;
+            case 2:
+                if (kdhbyr == "A")
+                {
+                    <th bgcolor="#ffcc80" width="10%" style="color:black; text-align:center; vertical-align:middle;border:1px solid black;" border="1">@GlobalResEstate.lblHarvestMethod</th>
+                }
+                <th bgcolor="#ffcc80" width="5%" style="color:black; text-align:center; vertical-align:middle;border:1px solid black;" border="1">@GlobalResEstate.hdrRate (RM)</th>
+                <th bgcolor="#ffcc80" width="10%" style="color:black; text-align:center; vertical-align:middle;border:1px solid black;" border="1">@GlobalResEstate.hdrOutcome (@unit)</th>
+                <th bgcolor="#ffcc80" width="10%" style="color:black; text-align:center; vertical-align:middle;border:1px solid black;" border="1">@GlobalResEstate.lblTotal (RM)</th>
+                <th bgcolor="#ffcc80" width="10%" style="color:black; text-align:center; vertical-align:middle;border:1px solid black;" border="1">@GlobalResEstate.hdrQuality</th>
+                <th bgcolor="#ffcc80" width="10%" style="color:black; text-align:center; vertical-align:middle;border:1px solid black;" border="1">@GlobalResEstate.lblBonusPrice (%)</th>
+                break;
+            case 3:
+                <th bgcolor="#ffcc80" width="10%" style="color:black; text-align:center; vertical-align:middle;border:1px solid black;" border="1">@GlobalResEstate.lblKong (RM)</th>
+                break;
+        }
+        <th bgcolor="#ffcc80" width="10%" style="color:black; text-align:center; vertical-align:middle;border:1px solid black;" border="1">@GlobalResEstate.lblOvertime (Jam)</th>
+    </tr>
+</thead>
+<tbody>
+    @if (Model.Count() > 0)
+    {
+        foreach (var item in Model)
+        {
+            TotalAmount = 0;
+            <tr>
+                <td align="center" style="vertical-align:middle !important; border:1px solid black;" border="1">@itemno</td>
+                <td align="center" style="vertical-align:middle !important; border:1px solid black;" border="1">@item.Nopkj <input type="hidden" id="nopkj_@itemno" name="nopkj_@itemno" value="@item.Nopkj" /></td>
+                <td align="center" style="vertical-align:middle !important; border:1px solid black;" border="1">@item.Namapkj</td>
+                <td align="center" style="vertical-align:middle !important; border:1px solid black;" border="1">@item.Keteranganhdr <input type="hidden" id="checkpurpose_@itemno" name="checkpurpose_@itemno" value="@disablebox" /></td>
+                @if (item.statushdr == "hadirkerja")
+                {
+                    datano += itemno.ToString() + ",";
+                    loopdatahdr += 1;
+                    switch (disablebox)
+                    {
+                        case 1:
+
+                            <td align="center" style="vertical-align:middle !important; border:1px solid black;" border="1">
+                                <p id="kadartext_@itemno">@kadar</p> <input type="hidden" id="kadar_@itemno" name="kadar_@itemno" value="@kadar" />
+                                @if (itemno == 1)
+                                {
+                                    <input type="hidden" id="maxhasil" name="maxhasil" value="@maxhasil" />
+                                }
+                            </td>
+                            <td align="center" style="vertical-align:middle !important; border:1px solid black;" border="1"><input type="hidden" id="gandaankadar_@itemno" name="gandaankadar_@itemno" value="@item.KadarByrn" /><input id="hasil_@itemno" name="hasil_@itemno" class="form-control" value="0" onchange="calculatetotal(this,'kadar_@itemno','gandaankadar_@itemno','jumlah_@itemno','jumlahH_@itemno', 'jumlahHS_@itemno', 'JnisAktvt');" /></td>
+                            <td align="center" style="vertical-align:middle !important; border:1px solid black;" border="1"><input id="jumlah_@itemno" name="jumlah_@itemno" class="form-control" value="0.00" disabled /><input type="hidden" id="jumlahH_@itemno" name="jumlahH_@itemno" value="0" /><input type="hidden" id="jumlahHS_@itemno" name="jumlahHS_@itemno" value="0" /></td>
+                            <td align="center" style="vertical-align:middle !important; border:1px solid black;" border="1">
+                                <select id="bonus_@itemno" name="bonus_@itemno" class="form-control" onchange="bonuschange(this);">
+                                    <option value="0">0</option>
+                                    <option value="50">50</option>
+                                    <option value="100">100</option>
+                                </select>
+                            </td>
+                            break;
+                        case 2:
+                            if (kdhbyr == "A")
+                            {
+                                <td align="center" style="vertical-align:middle !important; border:1px solid black;" border="1">
+                                    <select id="kdhmnuai_@itemno" name="kdhmnuai_@itemno" class="form-control" onchange="kdhmnuaichange(this, 'kadar_@itemno', 'kadartext_@itemno');">
+                                        <option value="A">Manual</option>
+                                        <option value="B">Mekanikal</option>
+                                    </select>
+                                </td>
+                            }
+                            <td align="center" style="vertical-align:middle !important; border:1px solid black;" border="1">
+                                <p id="kadartext_@itemno">@kadar</p> <input type="hidden" id="kadar_@itemno" name="kadar_@itemno" value="@kadar" />
+                                @if (itemno == 1)
+                                {
+                                    <input type="hidden" id="maxhasil" name="maxhasil" value="@maxhasil" />
+                                }
+                            </td>
+                            <td align="center" style="vertical-align:middle !important; border:1px solid black;" border="1"><input type="hidden" id="gandaankadar_@itemno" name="gandaankadar_@itemno" value="@item.KadarByrn" /><input id="hasil_@itemno" name="hasil_@itemno" class="form-control" onchange="calculatetotal(this,'kadar_@itemno','gandaankadar_@itemno','jumlah_@itemno','jumlahH_@itemno', 'jumlahHS_@itemno', 'JnisAktvt');" /></td>
+                            <td align="center" style="vertical-align:middle !important; border:1px solid black;" border="1"><input id="jumlah_@itemno" name="jumlah_@itemno" class="form-control" value="0.00" disabled /><input type="hidden" id="jumlahH_@itemno" name="jumlahH_@itemno" value="0" /><input type="hidden" id="jumlahHS_@itemno" name="jumlahHS_@itemno" value="0" /></td>
+                            <td align="center" style="vertical-align:middle !important; border:1px solid black;" border="1"><input id="kualiti_@itemno" name="kualiti_@itemno" class="form-control" value="0" onchange="kualitichange(this);" /></td>
+                            <td align="center" style="vertical-align:middle !important; border:1px solid black;" border="1">
+                                <select id="bonus_@itemno" name="bonus_@itemno" class="form-control" onchange="bonuschange(this);">
+                                    <option value="0">0</option>
+                                    <option value="50">50</option>
+                                    <option value="100">100</option>
+                                </select>
+                            </td>
+                            break;
+                        case 3:
+                            TotalAmount = kadar * item.KadarByrn;
+                            <td align="center" style="vertical-align:middle !important; border:1px solid black;" border="1">@kadar <input type="hidden" id="kadar_@itemno" name="kadar_@itemno" value="@kadar" /><input type="hidden" id="gandaankadar_@itemno" name="gandaankadar_@itemno" value="@item.KadarByrn" /><input type="hidden" id="jumlahH_@itemno" name="jumlahH_@itemno" value="@TotalAmount" /><input type="hidden" id="jumlahHS_@itemno" name="jumlahHS_@itemno" value="@TotalAmount" /></td>
+                            break;
+                    }
+                    <td align="center" style="vertical-align:middle !important; border:1px solid black;" border="1"><input id="ot_@itemno" name="ot_@itemno" class="form-control" value="0" onchange="otchange(this);" /></td>
+                }
+                else
+                {
+                    switch (disablebox)
+                    {
+                        case 1:
+                            <td align="center" style="vertical-align:middle !important; border:1px solid black;" border="1">
+                                -
+                                @if (itemno == 1)
+                                {
+                                    <input type="hidden" id="maxhasil" name="maxhasil" value="@maxhasil" />
+                                }
+                            </td>
+                            <td align="center" style="vertical-align:middle !important; border:1px solid black;" border="1">-</td>
+                            <td align="center" style="vertical-align:middle !important; border:1px solid black;" border="1">-</td>
+                            <td align="center" style="vertical-align:middle !important; border:1px solid black;" border="1">-</td>
+                            break;
+                        case 2:
+                            if (kdhbyr == "A")
+                            {
+                                <td align="center" style="vertical-align:middle !important; border:1px solid black;" border="1">-</td>
+                            }
+                            <td align="center" style="vertical-align:middle !important; border:1px solid black;" border="1">
+                                @if (itemno == 1)
+                                {
+                                    <input type="hidden" id="maxhasil" name="maxhasil" value="@maxhasil" />
+                                }
+                                -
+                            </td>
+                            <td align="center" style="vertical-align:middle !important; border:1px solid black;" border="1">-</td>
+                            <td align="center" style="vertical-align:middle !important; border:1px solid black;" border="1">-</td>
+                            <td align="center" style="vertical-align:middle !important; border:1px solid black;" border="1">-</td>
+                            <td align="center" style="vertical-align:middle !important; border:1px solid black;" border="1">-</td>
+                            break;
+                        case 3:
+                            <td align="center" style="vertical-align:middle !important; border:1px solid black;" border="1">-</td>
+                            break;
+                    }
+                    <td align="center" style="vertical-align:middle !important; border:1px solid black;" border="1">-</td>
+                }
+            </tr>
+            itemno++;
+        }
+    }
+    else
+    {
+        <tr>
+            <td align="center" colspan="6" style="vertical-align:middle !important; border:1px solid black;" border="1">@GlobalResEstate.msgNoRecord</td>
+        </tr>
+    }
+</tbody>
+<input type="hidden" id="datano" name="datano" value="@datano"/>
+<input type="hidden" id="loopdatahdr" name="loopdatahdr" value="@loopdatahdr" />
+

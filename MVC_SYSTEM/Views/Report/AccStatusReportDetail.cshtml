@@ -1,0 +1,175 @@
+﻿@using MVC_SYSTEM.Class
+@using MVC_SYSTEM.Models
+@model IEnumerable<MVC_SYSTEM.Models.tbl_TutupUrusNiaga>
+@{
+    ViewBag.Title = "AccStatusReportDetail";
+    GetConfig GetConfig = new GetConfig();
+    GetTriager GetTriager = new GetTriager();
+    GetLadang GetLadang = new GetLadang();
+    GetIdentity GetIdentity = new GetIdentity();
+    ChangeTimeZone ChangeTimeZone = new ChangeTimeZone();
+    DateTime Todaydate = ChangeTimeZone.gettimezone();
+    string uniquefilename = "SkbReport_" + ViewBag.UserID + "_" + Todaydate.Year.ToString() + Todaydate.Month.ToString() + Todaydate.Day.ToString() + Todaydate.Hour.ToString() + Todaydate.Minute.ToString() + Todaydate.Second.ToString();
+
+}
+
+@if (Model != null && Model.Count() != 0)
+{
+    @*<div class="panel panel-primary">
+        <div class="panel-heading">LAPORAN STATUS AKAUN</div>*@
+    <div class="panel-body">
+        @*@if (ViewBag.DataCount < 1)
+            {
+                <p style="color:red">@GlobalResEstate.msgNoRecord</p>
+            }
+            else
+            {*@
+        <div id="scrollArea2" class="modal-body">
+            <logo />
+            <table class="table table-bordered" style="font-size: 11px;" border="0" width="100%">
+                <thead>
+                    <tr>
+                        <th colspan="6" style="text-align:center;vertical-align:middle; border:none;">
+                            @ViewBag.NamaSyarikat
+                            <br />
+                            (@GlobalResEstate.lblCompanyNo : @ViewBag.NoSyarikat)
+                            <br />
+                            Laporan Status Akaun
+                            <br />
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <th colspan="2" style="border-bottom:1px solid; border-top:none; border-left:none; border-right:none; border-bottom-color:red">@GetTriager.GetMonthName(item.fld_Month.Value) @item.fld_Year</th>
+                        </tr>
+                        <tr>
+                            <td style="border:none; width:50%">
+                                <table>
+                                    <tr>
+                                        <td style="border:none;">
+                                            <label style="font-size:small; font-weight:normal;">Status Akaun</label><br />
+                                            <label style="font-size:small; font-weight:normal;">Tarikh Tindakan</label><br />
+                                            @if (item.fld_ModifiedDT != null)
+                                            {
+                                                <label style="font-size:small; font-weight:normal;">Tarikh Kemaskini</label><br />
+                                            }
+                                        </td>
+                                        <td style="border:none;">
+                                            <label style="font-size:small; font-weight:bold;">: @GetConfig.GetWebConfigDesc(item.fld_StsTtpUrsNiaga.ToString(), "statusUrusniaga", item.fld_NegaraID, item.fld_SyarikatID)  </label><br />
+                                            <label style="font-size:small; font-weight:normal;">: @string.Format("{0:dd/MM/yyyy}", item.fld_CreatedDT)</label><br />
+                                            @if (item.fld_ModifiedDT != null)
+                                            {
+                                                <label style="font-size:small; font-weight:normal;">: @string.Format("{0:dd/MM/yyyy}", item.fld_ModifiedDT)</label><br />
+                                            }
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                            <td style="border:none; width:50%">
+                                <table>
+                                    <tr>
+                                        <td style="border:none;">
+                                            <br style="font-size:medium" />
+                                            <label style="font-size:small; font-weight:normal;">Tindakan Oleh</label><br />
+                                            @if (item.fld_ModifiedBy != null)
+                                            {
+                                                <label style="font-size:small; font-weight:normal;">Tindakan Dikemaskini Oleh</label><br />
+                                            }
+                                        </td>
+                                        <td style="border:none;">
+                                            <br style="font-size:medium" />
+                                            <label style="font-size:small; font-weight:normal;">: @GetIdentity.MyNameFullName(item.fld_CreatedBy)</label><br />
+                                            @if (item.fld_ModifiedBy != null)
+                                            {
+                                                <label style="font-size:small; font-weight:normal;">: @GetIdentity.MyNameFullName(item.fld_ModifiedBy)</label><br />
+                                            }
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <newpage />
+        </div>
+    </div>
+    if (ViewBag.Print == null)
+    {
+        <div style="text-align:right; margin-top:10px">
+            <a class="btn btn-default btn-sm" href="#" id="printpage">
+                <span class="glyphicon glyphicon-print"> </span> @GlobalResEstate.btnPrint
+            </a>
+            <a class="btn btn-default btn-sm" href="#" id="downloadpdf">
+                <span><img src="~/Asset/Images/pdf-icon.png" width="20px" height="20px" /></span> @GlobalResEstate.btnDownloadPdf
+            </a>
+            <a class="btn btn-default btn-sm" href="#" onclick="HTMLtoExcel('')">
+                <span><img src="~/Asset/Images/excel-icon.png" width="20px" height="20px" /></span> @GlobalResEstate.btnDownloadExcel
+            </a>
+        </div>
+    }
+}
+@if (Model == null || Model.Count() == 0)
+{
+    <div id="scrollArea2" class="modal-body" style="text-align: center">
+        <p style="color: red">@ViewBag.Message</p>
+
+    </div>
+}
+<style>
+    #page td {
+        padding: 2px;
+        margin: 2px;
+    }
+</style>
+@*</div>*@
+<script>
+    $(document).ready(function () {
+        $("#printpage").click(function () {
+            var DivElement = document.getElementById("scrollArea2").innerHTML;
+            var oldPage = document.body.innerHTML;
+            document.body.innerHTML = DivElement;
+            window.print();
+            document.body.innerHTML = oldPage;
+        })
+
+        $("#downloadpdf").click(function () {
+            //var RadioGroup = $('input[name=RadioGroup]:checked').val();
+            var MonthList = $("#MonthList").val();
+            var YearList = $("#YearList").val();
+            //var GroupList = $("#GroupList").val();
+            //var StatusList = $("#StatusList").val();
+            //var WorkCategoryList = $("#WorkCategoryList").val();
+
+            //var StatusList = '';
+            //var WorkCategoryList = '';
+
+            var param = '/?MonthList=' + MonthList + '&YearList=' + YearList;
+            var controller = 'Report';
+            var action = 'PrintAccStatusPdf';
+
+            var ajxfn = {};
+            ajxfn.url = "@Url.Action("PDFIndetifier", "PdfCreator")";
+            ajxfn.type = "POST";
+            ajxfn.data = JSON.stringify({ controller: controller, action: action, param: param });
+            ajxfn.datatype = "json";
+            ajxfn.contentType = "application/json";
+            ajxfn.success = function (result) {
+                //var win = window.open(result.link, '_blank');
+                //win.focus();
+                PDFObject.embed(result.link, "#searchAccStatusWork", { height: "450px" });
+            };
+
+            ajxfn.error = function () {
+                $.simplyToast('@GlobalResEstate.msgError', 'danger');
+                $("#UpdateProgress1").css("display", "none");
+            };
+            $.ajax(ajxfn);
+
+            return false;
+        });
+    });
+</script>

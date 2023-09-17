@@ -1,0 +1,98 @@
+﻿@{
+    var grid = new WebGrid(
+        canPage: true,
+        rowsPerPage: Model.PageSize,
+        canSort: false,
+        ajaxUpdateContainerId: "grid");
+
+    grid.Bind(Model.Content, rowCount: Model.TotalRecords, autoSortAndPage: false);
+    grid.Pager(WebGridPagerModes.All);
+
+    if (@grid.TotalRowCount > 0)
+    {
+        <div class="text-center">@grid.TotalRowCount @Html.Label("Workers")</div>
+
+        @grid.GetHtml(htmlAttributes: new { id = "grid" }, // id for ajaxUpdateContainerId parameter
+            tableStyle: "table table-bordered table-striped table-list table-hover",
+            headerStyle: "header_table",
+            alternatingRowStyle: "Grid-alt",
+            selectedRowStyle: "Grid-selected",
+            rowStyle: "Grid-rowstyle",
+            mode: WebGridPagerModes.All,
+            columns: grid.Columns(
+                grid.Column(header: GlobalResEstate.hdrNo
+                    , format: item => item.WebGrid.Rows.IndexOf(item) + 1
+                                      + Math.Round(Convert.ToDouble(grid.TotalRowCount / grid.PageCount) / grid.RowsPerPage)
+                                      * grid.RowsPerPage * grid.PageIndex, style: "count height"),
+                grid.Column(columnName: "fld_Nopkj", header: "Worker ID", style: "kodkmpln height"),
+                grid.Column(columnName: "fld_Nama", header: "Worker Name", style: "jeniskerja height"),
+                grid.Column(columnName: "fld_IncrmntSalary", header : "Increment Value (RM)", style: "keterangankumpulan height"),
+                grid.Column(columnName: "fld_DailyInsentif", header: "Daily Incentive Value (RM)", style: "keterangankumpulan height"),
+                grid.Column(columnName: "StatusGetIncrement", header : "Increment Status Process", style: "bilanganahli height", format: (item) =>
+                {
+                    string Status = "<p>No Increment</p>";
+                    if (item.StatusGetIncrement == 0)
+                    {
+                        Status = "<p>No Increment</p>";
+                    }
+                    else if (item.StatusGetIncrement == 1)
+                    {
+                        Status = "<p><font color='Green'>Approved</font></p>";
+                    }
+                    else if (item.StatusGetIncrement == 2)
+                    {
+                        Status = "<p><font color='orange'>Waiting Approval</font></p>";
+                    }
+                    else if (item.StatusGetIncrement == 3)
+                    {
+                        Status = "<p><font color='red'>Not Approved</font></p>";
+                    }
+                    else if (item.StatusGetIncrement == 4)
+                    {
+                        Status = "<p><font color='orange'>Waiting Submit To HQ</font></p>";
+                    }
+                    return Html.Raw(Status);
+                }),
+                grid.Column(GlobalResEstate.hdrAction, format: (item) =>
+                {
+                    if (item.StatusGetIncrement == 0)
+                    {
+                        var tindakan = "<a data-modal1='' href='" + @Url.Action("_SalaryIncrementAdd", "SalaryIncrement") + "/?NoPkj=" + item.fld_Nopkj + "' class='btn btn-success' role='button' title='" + GlobalResEstate.btnAdd + "' onclick='return DisplayProgressMessage2(this);'><span class='glyphicon glyphicon-plus'></span></a>";
+                        return @Html.Raw(tindakan);
+                    }
+                    else
+                    {
+                        var tindakan = "<a data-modal1='' href='" + @Url.Action("_SalaryIncrementEdit", "SalaryIncrement") + "/?NoPkj=" + item.fld_Nopkj + "' class='btn btn-warning' role='button' title='Edit' onclick='return DisplayProgressMessage(this);'><i class='fa fa-edit fa-lg'></i></a>";
+
+                        return @Html.Raw(tindakan);
+                    }
+                }, canSort:false, style: "tindakan")
+
+
+                )
+            )
+    }
+
+    else
+    {
+        <hr />
+        <div class="text-center">
+            @Html.Label(GlobalResEstate.msgErrorSearch)
+        </div>
+        <hr />
+    }
+}
+
+<!-- Modal -->
+<div id="AddModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content" id="AddModalContent">
+        </div>
+
+    </div>
+</div>
+
+
+

@@ -1,0 +1,290 @@
+﻿@using MVC_SYSTEM.Class
+@model IEnumerable<MVC_SYSTEM.ViewingModels.vw_MaklumatCutiPekerja>
+
+@{
+    GetTriager GetTriager = new GetTriager();
+
+    int? month = ViewBag.MonthList;
+    int? year = ViewBag.YearList;
+    string worker = ViewBag.WorkerList;
+    int bil = 0;
+}
+
+@if (Model != null && Model.Count() != 0)
+{
+    <div id="scrollArea2" class="modal-body">
+        <logo />
+        <table class="table table-hover table-bordered" style="font-size: 11px;" border="0">
+            <thead>
+                <tr>
+                    <th colspan="18" style="text-align: center; vertical-align: middle; border: none;">
+                        @ViewBag.NamaSyarikat
+                        <br />
+                        (@GlobalResEstate.lblCompanyNo : @ViewBag.NoSyarikat)
+                        <br />
+                        @GlobalResEstate.lblLeaveReport
+                    </th>
+                </tr>
+                <tr>
+                    <th rowspan="2" width="1%" bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">@GlobalResEstate.hdrNo</th>
+                    <th rowspan="2" width="3%" bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">@GlobalResEstate.hdrNoPkj</th>
+                    <th rowspan="2" width="3%" bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">@GlobalResEstate.hdrName</th>
+                    <th rowspan="1" colspan="2" width="3%" bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">@GlobalResEstate.lblLeave</th>
+                    <th rowspan="1" colspan="12" width="3%" bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">@GlobalResEstate.lblMonth</th>
+                    <th rowspan="2" width="2%" bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">@GlobalResEstate.lblTotal</th>
+
+                </tr>
+                <tr>
+                    <th rowspan="1" width="3%" bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">@GlobalResEstate.lblLeaveType</th>
+                    <th rowspan="1" width="2%" bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">@GlobalResEstate.lblQualify</th>
+                    <th rowspan="1" width="1%" bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">1</th>
+                    <th rowspan="1" width="1%" bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">2</th>
+                    <th rowspan="1" width="1%" bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">3</th>
+                    <th rowspan="1" width="1%" bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">4</th>
+                    <th rowspan="1" width="1%" bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">5</th>
+                    <th rowspan="1" width="1%" bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">6</th>
+                    <th rowspan="1" width="1%" bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">7</th>
+                    <th rowspan="1" width="1%" bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">8</th>
+                    <th rowspan="1" width="1%" bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">9</th>
+                    <th rowspan="1" width="1%" bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">10</th>
+                    <th rowspan="1" width="1%" bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">11</th>
+                    <th rowspan="1" width="1%" bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">12</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    int tahunMonthCount = 0;
+                    int amMonthCount = 0;
+                    int sakitMonthCount = 0;
+                    //int hariMingguMonthCount = 0;
+                    int cutiMingguanMonthCount = 0;
+                    int pontengMonthCount = 0;
+
+                    bil = bil + 1;
+
+                    <tr>
+                        <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1" rowspan="5">@bil</td>
+                        <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1" rowspan="5">@item.Pkjmast.fld_Nopkj</td>
+                        <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1" rowspan="5">@item.Pkjmast.fld_Nama</td>
+                        <td style="vertical-align:middle !important;border:1px solid black;" border="1">
+                            Cuti Tahunan
+                        </td>
+
+                        <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                            @item.CutiTahunan
+                        </td>
+
+                        @foreach (var cuti in item.CutiTahunByBulan)
+                        {
+                            tahunMonthCount += 1;
+
+                            if (cuti != 0)
+                            {
+                                <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                  @cuti
+                                </td>
+                            }
+                            else
+                            {
+                                <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                    @cuti
+                                </td>
+                            }
+                        }
+
+                        <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+
+                            @GetTriager.GetTotalForDays(item.CutiTahunByBulan)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="vertical-align:middle !important;border:1px solid black;" border="1">
+                            Cuti Am
+                        </td>
+                        <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                            @item.CutiAm
+                        </td>
+                        @foreach (var cuti in item.CutiAmByBulan)
+                        {
+                            amMonthCount += 1;
+
+                            if (cuti != 0)
+                            {
+                    <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                        @cuti
+                    </td>
+                            }
+                            else
+                            {
+                                <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                    @cuti
+                                </td>
+                            }
+                        }
+
+                        <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+
+                            @GetTriager.GetTotalForDays(item.CutiAmByBulan)
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td colspan="1" style="vertical-align:middle !important;border:1px solid black;" border="1">Cuti Sakit</td>
+                        <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                            @item.CutiSakit
+                        </td>
+                        @foreach (var cuti in item.CutiSakitByBulan)
+                        {
+                            sakitMonthCount += 1;
+
+                            if (cuti != 0)
+                            {
+                                <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                    @cuti
+                                </td>
+                            }
+                            else
+                            {
+                                <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                    @cuti
+                                </td>
+                            }
+
+                        }
+                        <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+
+                            @GetTriager.GetTotalForDays(item.CutiSakitByBulan)
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td colspan="2" style="vertical-align:middle !important;border:1px solid black;" border="1">@GlobalResEstate.lblWeeklyLeave</td>
+                        @foreach (var cuti in item.CutiMingguanByBulan)
+                        {
+                            cutiMingguanMonthCount += 1;
+
+                            if (cuti != 0)
+                            {
+                    <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                        @cuti
+                    </td>
+                            }
+                            else
+                            {
+                                <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                    @cuti
+                                </td>
+                            }
+                        }
+                        <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                            @GetTriager.GetTotalForDays(item.CutiMingguanByBulan)
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td colspan="2" style="vertical-align:middle !important;border:1px solid black;" border="1">@GlobalResEstate.lblAbsent</td>
+                        @foreach (var cuti in item.PontengByBulan)
+                        {
+                            pontengMonthCount += 1;
+
+                            if (cuti != 0)
+                            {
+                    <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                        @cuti
+                    </td>
+                            }
+                            else
+                            {
+                                <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                    @cuti
+                                </td>
+                            }
+                        }
+                        <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                            @GetTriager.GetTotalForDays(item.PontengByBulan)
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <newpage />
+    </div>
+    if (ViewBag.Print == null)
+    {
+        <div style="text-align:right; margin-top:10px">
+            <a class="btn btn-default btn-sm" href="#" id="printpage">
+                <span class="glyphicon glyphicon-print"> </span> @GlobalResEstate.btnPrint
+            </a>
+            <a class="btn btn-default btn-sm" href="#" id="downloadpdf">
+                <span><img src="~/Asset/Images/pdf-icon.png" width="20px" height="20px" /></span> @GlobalResEstate.btnDownloadPdf
+            </a>
+            <a class="btn btn-default btn-sm" href="#" onclick="HTMLtoExcel('')">
+                <span><img src="~/Asset/Images/excel-icon.png" width="20px" height="20px" /></span> @GlobalResEstate.btnDownloadExcel
+            </a>
+        </div>
+    }
+}
+
+@if (Model.Count() == 0)
+{
+    <div id="scrollArea2" class="modal-body" style="text-align: center">
+        <p style="color: red">@ViewBag.Message</p>
+
+    </div>
+}
+<style>
+    #page td {
+        padding: 2px;
+        margin: 2px;
+    }
+</style>
+
+<script>
+    $(document).ready(function () {
+        $("#printpage").click(function () {
+            var DivElement = document.getElementById("scrollArea2").innerHTML;
+            var oldPage = document.body.innerHTML;
+            document.body.innerHTML = DivElement;
+            window.print();
+            document.body.innerHTML = oldPage;
+        })
+
+        $("#downloadpdf").click(function () {
+            var RadioGroup = $('input[name=RadioGroup]:checked').val();
+            //var MonthList = $("#MonthList").val();
+            var YearList = $("#YearList").val();
+            var SelectionList = $("#SelectionList").val();
+            //var StatusList = $("#StatusList").val();
+            //var WorkCategoryList = $("#WorkCategoryList").val();
+
+            var StatusList = '';
+            var WorkCategoryList = '';
+
+            var param = '/?RadioGroup=' + RadioGroup + '&YearList=' + YearList + '&SelectionList=' + SelectionList + '&StatusList=' + StatusList + '&WorkCategoryList=' + WorkCategoryList;
+            var controller = 'Report';
+            var action = 'PrintLeavePdf';
+
+            var ajxfn = {};
+            ajxfn.url = "@Url.Action("PDFIndetifier", "PdfCreator")";
+            ajxfn.type = "POST";
+            ajxfn.data = JSON.stringify({ controller: controller, action: action, param: param });
+            ajxfn.datatype = "json";
+            ajxfn.contentType = "application/json";
+            ajxfn.success = function (result) {
+                //var win = window.open(result.link, '_blank');
+                //win.focus();
+                PDFObject.embed(result.link, "#searchResultWorkerLeaveRptInfo", { height: "450px" });
+            };
+
+            ajxfn.error = function () {
+                $.simplyToast('@GlobalResEstate.msgError', 'danger');
+                $("#UpdateProgress1").css("display", "none");
+            };
+            $.ajax(ajxfn);
+
+            return false;
+        });
+    });
+</script>

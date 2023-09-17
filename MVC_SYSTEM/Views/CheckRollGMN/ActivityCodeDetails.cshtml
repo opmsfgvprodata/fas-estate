@@ -1,0 +1,60 @@
+﻿@model IEnumerable<MVC_SYSTEM.MasterModels.tbl_UpahAktiviti>
+@{
+    ViewBag.Title = "Activity Code Details";
+    Layout = "~/Views/Shared/_LayoutPopup.cshtml";
+    int bil = 1;
+}
+
+<section class="content-wrapper main-content clear-fix">
+    <div class="well2 bottom2">
+        <div class="panel panel-primary">
+            <div class="modal-body">
+                <p>Jenis Aktiviti : @ViewBag.ActvtType</p>
+                <table class="table table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th class="text-center-0" width="2%">
+                                <b>No.</b>
+                            </th>
+                            <th class="text-center-0" width="3%">
+                                <b>Kod Aktiviti</b>
+                            </th>
+                            <th class="text-center" width="30%">
+                                <b>Keterangan</b>
+                            </th>
+                            <th class="text-center" width="10%">
+                                <b>Unit</b>
+                            </th>
+                            <th class="text-center" width="10%">
+                                <b>Harga (RM)</b>
+                            </th>
+                        </tr>
+                    </thead>
+
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td align="center" width="2%">
+                                @bil
+                            </td>
+                            <td align="center" width="3%">
+                                @Html.DisplayFor(modelItem => item.fld_KodAktvt)
+                            </td>
+                            <td align="left" width="30%">
+                                @Html.DisplayFor(modelItem => item.fld_Desc)
+                            </td>
+                            <td align="center" width="10%">
+                                @Html.DisplayFor(modelItem => item.fld_Unit)
+                            </td>
+                            <td align="right" width="10%">
+                                @Html.DisplayFor(modelItem => item.fld_Harga)
+                            </td>
+
+                        </tr>
+                        bil++;
+                    }
+                </table>
+            </div>
+        </div>
+    </div>
+</section>

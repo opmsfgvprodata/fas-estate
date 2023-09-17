@@ -1,0 +1,152 @@
+﻿@using MVC_SYSTEM.Class
+@using MVC_SYSTEM.Models
+@model IEnumerable<MVC_SYSTEM.Models.tbl_Pkjmast>
+@{
+    ViewBag.Title = "KwspSocsoReport";
+    GetTriager GetTriager = new GetTriager();
+    GetEstateDetail GetGroup = new GetEstateDetail();
+    GetConfig GetConfig = new GetConfig();
+}
+@if (Model != null && Model.Count() != 0)
+{    
+        <div id="scrollArea" class="modal-body">
+            <logo />
+            <table class="table table-bordered" style="font-size: 11px;" border="0">
+                <thead>
+                    <tr>
+                        <th colspan="6" style="text-align:center;vertical-align:middle; border:none;">
+                            @ViewBag.NamaSyarikat
+                            <br />
+                            (@GlobalResEstate.lblCompanyNo : @ViewBag.NoSyarikat)
+                            <br />
+                            @GlobalResEstate.lblKwspSocsoReport
+                            <br />
+                            <label style="font-size:small">
+
+                            </label>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    @foreach (var item in Model)
+                    {
+                <tr>
+                    <th colspan="2" style="border-bottom:1px solid; border-top:none; border-left:none; border-right:none; border-bottom-color:red">@item.fld_Nopkj - @item.fld_Nama</th>
+                </tr>
+                <tr>
+                    <td style="border:none; width:50%">
+                        <table>
+                            <tr>
+                                <td style="border:none;">
+                                    <label style="font-size:small; font-weight:normal;">@GlobalResEstate.hdrNoPkj</label><br />
+                                    <label style="font-size:small; font-weight:normal;">@GlobalResEstate.hdrName</label><br />
+                                    @*<label style="font-size:small; font-weight:normal;">No KP/Passport</label>*@<br />
+
+                                </td>
+                                <td style="border:none;">
+                                    <label style="font-size:small; font-weight:normal;">: @item.fld_Nopkj</label><br />
+                                    <label style="font-size:small; font-weight:normal;">: @item.fld_Nama</label><br />
+                                    @*<label style="font-size:small; font-weight:normal;">: @item.fld_Nokp </label>*@<br />
+
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td style="border:none; width:50%">
+                        <table>
+                            <tr>
+                                <td style="border:none;">
+                                    <label style="font-size:small; font-weight:normal;">@GlobalResEstate.lblKwspType</label><br />
+                                    <label style="font-size:small; font-weight:normal;">@GlobalResEstate.lblSocsoType</label><br />
+                                    <label style="font-size:small; font-weight:normal;">@GlobalResEstate.lblStatus</label><br />
+                                </td>
+                                <td style="border:none;">
+                                    <label style="font-size:small; font-weight:normal;">: @GetConfig.GetKwspSocso(item.fld_KodKWSP, item.fld_SyarikatID.Value, item.fld_NegaraID.Value)</label><br />
+                                    <label style="font-size:small; font-weight:normal;">: @GetConfig.GetKwspSocso(item.fld_KodSocso, item.fld_SyarikatID.Value, item.fld_NegaraID.Value)</label><br />
+                                    <label style="font-size:small; font-weight:normal;">: @GetConfig.GetWebConfigDesc(item.fld_StatusKwspSocso, "statusaktif", item.fld_NegaraID, item.fld_SyarikatID)</label><br />
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                    }
+                </tbody>
+            </table>
+            <newpage />
+        </div>
+    if (ViewBag.Print == null)
+    {
+        <div style="text-align:right; margin-top:10px">
+            <a class="btn btn-default btn-sm" href="#" id="printpage">
+                <span class="glyphicon glyphicon-print"> </span> @GlobalResEstate.btnPrint
+            </a>
+            <a class="btn btn-default btn-sm" href="#" id="downloadpdf">
+                <span><img src="~/Asset/Images/pdf-icon.png" width="20px" height="20px" /></span> @GlobalResEstate.btnDownloadPdf
+            </a>
+            <a class="btn btn-default btn-sm" href="#" onclick="HTMLtoExcel('')">
+                <span><img src="~/Asset/Images/excel-icon.png" width="20px" height="20px" /></span> @GlobalResEstate.btnDownloadExcel
+            </a>
+        </div>
+    }
+}
+ @if (Model.Count() == 0)
+ {
+        <div id="scrollArea2" class="modal-body" style="text-align: center">
+            <p style="color: red">@ViewBag.Message</p>
+
+        </div>
+ }
+ <style>
+     #page td {
+            padding: 2px;
+            margin: 2px;
+ }
+ </style>
+ <script>
+     $(document).ready(function () {
+         $("#printpage").click(function () {
+             var DivElement = document.getElementById("scrollArea").innerHTML;
+             var oldPage = document.body.innerHTML;
+             document.body.innerHTML = DivElement;
+             window.print();
+             document.body.innerHTML = oldPage;
+         })
+
+        $("#downloadpdf").click(function () {
+            //var RadioGroup = $('input[name=RadioGroup]:checked').val();
+            //var MonthList = $("#MonthList").val();
+            //var YearList = $("#YearList").val();
+            //var SelectionList = $("#GroupList").val();
+            var StatusList = $("#StatusList").val();
+            //var WorkCategoryList = $("#WorkCategoryList").val();
+
+            //var StatusList = '';
+            //var WorkCategoryList = '';
+
+            var param = '/?StatusList=' + StatusList;
+            var controller = 'Report';
+            var action = 'PrintKwspSocsoPdf';
+
+            var ajxfn = {};
+            ajxfn.url = "@Url.Action("PDFIndetifier", "PdfCreator")";
+            ajxfn.type = "POST";
+            ajxfn.data = JSON.stringify({ controller: controller, action: action, param: param });
+            ajxfn.datatype = "json";
+            ajxfn.contentType = "application/json";
+            ajxfn.success = function (result) {
+                //var win = window.open(result.link, '_blank');
+                //win.focus();
+                PDFObject.embed(result.link, "#searchResultKwspSocsoInfo", { height: "450px" });
+            };
+
+            ajxfn.error = function () {
+                $.simplyToast('@GlobalResEstate.msgError', 'danger');
+                $("#UpdateProgress1").css("display", "none");
+            };
+            $.ajax(ajxfn);
+
+            return false;
+        });
+    });
+ </script>

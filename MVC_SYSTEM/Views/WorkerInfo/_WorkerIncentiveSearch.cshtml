@@ -1,0 +1,96 @@
+﻿@{   
+    var grid = new WebGrid(
+        source: Model,
+        canPage: true,
+        rowsPerPage: @ViewBag.pageSize,
+        canSort: false,
+        ajaxUpdateContainerId: "gridT");
+
+    grid.Pager(WebGridPagerModes.All);
+
+    if (@grid.TotalRowCount > 0)
+    {
+        <div class="text-center">@grid.TotalRowCount @Html.Label(GlobalResEstate.lblTotalRecord)</div>
+
+        @grid.GetHtml(
+            htmlAttributes: new { id = "gridT" },
+            tableStyle: "table table-striped table-bordered table-list table-hover",
+            headerStyle: "header_table",
+            alternatingRowStyle: "Grid-alt",
+            selectedRowStyle: "Grid-selected",
+            rowStyle: "Grid-rowstyle",
+            mode: WebGridPagerModes.All,
+            columns: grid.Columns(
+                grid.Column(header: GlobalResEstate.hdrNo
+                    , format: item => item.WebGrid.Rows.IndexOf(item) + 1
+                                      + Math.Round(Convert.ToDouble(grid.TotalRowCount / grid.PageCount) / grid.RowsPerPage)
+                                      * grid.RowsPerPage * grid.PageIndex, style: "count"),
+                grid.Column("Pkjmast.fld_Nopkj", GlobalResEstate.hdrNoPkj, style: "nopkj"),
+                grid.Column("Pkjmast.fld_Nama", GlobalResEstate.hdrName, style: "namapkj"),
+                grid.Column(GlobalResEstate.lblIncentive, format: (item) =>
+                {
+                    WebGrid subGrid = new WebGrid(source: item.Insentif);
+
+                    if (@subGrid.TotalRowCount > 0)
+                    {
+                        return subGrid.GetHtml(
+                            htmlAttributes: new { id = "nestedT" },
+                            tableStyle: "table borderless",
+                            headerStyle: "header_table",
+                            alternatingRowStyle: "Grid-alt",
+                            rowStyle: "Grid-rowstyle borderless",
+                            displayHeader: false,
+
+                            columns: subGrid.Columns(
+                                subGrid.Column(format: (Insentif) =>
+                                {
+                                    var keterangan = Insentif.fld_KodInsentif + " - " + Insentif.fld_Keterangan;
+                                    return @Html.Raw(keterangan);
+                                }, canSort: false, style: "insentif borderless"),
+                                subGrid.Column("fld_NilaiInsentif", format: (fld_NilaiInsentif) => $"RM", style: "rmind borderless"),
+                                subGrid.Column("fld_NilaiInsentif", style: "nilaiinsentif borderless"),
+                                subGrid.Column(GlobalResEstate.hdrAction, format: (Insentif) =>
+                                {
+                                    if (Insentif.fld_TetapanNilai != 0)
+                                    {
+                                        var tindakan = "&nbsp;<a data-modal1='' href='" + @Url.Action("_WorkerIncentiveDelete", "WorkerInfo") + "/?insentif=" + Insentif.fld_InsentifID + "' class='btn btn-danger' role='button' title='" + GlobalResEstate.lblIncentiveValueDelete + "' onclick='return DisplayProgressMessage2(this);'><i class='fa fa-trash fa-lg'></i></a>";
+                                        return @Html.Raw(tindakan);
+                                    }
+
+                                    else
+                                    {
+                                        var tindakan = "<a data-modal2='' href='" + @Url.Action("_WorkerIncentiveEdit", "WorkerInfo") + "/?insentif=" + Insentif.fld_InsentifID + "' class='btn btn-success' role='button' title='"+ GlobalResEstate.lblIncentiveValueUpdate + "' onclick='return DisplayProgressMessage2(this);'><i class='fa fa-edit fa-lg'></i></a>" +
+                                                       "&nbsp;<a data-modal1='' href='" + @Url.Action("_WorkerIncentiveDelete", "WorkerInfo") + "/?insentif=" + Insentif.fld_InsentifID + "' class='btn btn-danger' role='button' title='" + GlobalResEstate.lblIncentiveValueDelete + "' onclick='return DisplayProgressMessage2(this);'><i class='fa fa-trash fa-lg'></i></a>";
+                                        return @Html.Raw(tindakan);
+                                    }
+                                    
+                                }, canSort: false, style: "tindakan2 borderless"))
+
+                                );
+                    }
+                    else
+                    {
+                        return @Html.Raw("<br/><div class='text-center'>" + @GlobalResEstate.lblNoIncentive + "</div><br/>");
+                    }
+                }),
+                grid.Column(GlobalResEstate.hdrAction, format: (item) =>
+                {
+                    var tindakan = "<a data-modal1='' href='" + @Url.Action("_WorkerIncentiveAdd", "WorkerInfo") + "/?nopkj=" + item.Pkjmast.fld_Nopkj + "' class='btn btn-success' role='button' title='" + GlobalResEstate.lblIncentiveValueAdd + "' onclick='return DisplayProgressMessage2(this);'><i class='fa fa-plus fa-lg'></i></a>";
+                    return @Html.Raw(tindakan);
+                }, canSort: false, style: "tindakan")
+
+                )
+            )
+    }
+
+    else
+    {
+        <hr />
+        <div class="text-center">
+            @Html.Label(GlobalResEstate.msgErrorSearch)
+        </div>
+        <hr />
+    }
+} 
+
+  

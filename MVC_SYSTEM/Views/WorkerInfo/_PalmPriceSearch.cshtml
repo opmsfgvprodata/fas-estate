@@ -1,0 +1,108 @@
+﻿
+@model MVC_SYSTEM.ViewingModels.vw_HargaSemasa
+
+@if (Model != null)
+{
+    <div class="modal-body">
+        <div class="form-horizontal">
+            <div class="panel panel-primary">
+                <div class="panel-heading">DAFTAR HARGA SAWIT SEMASA</div>
+                <div class="panel-body">
+                    <div class="form-group">
+                        <label class="control-label col-sm-2">Jenis Tanaman:</label>
+                        <div class="col-sm-9">
+                            @Html.TextBoxFor(model => model.fldOptConfDesc, htmlAttributes: new { @class = "form-control", @readonly = "true" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-2">Harga Semasa (RM):</label>
+                        <div class="col-sm-5">
+                            @Html.TextBoxFor(model => model.fld_HargaSemasa, htmlAttributes: new { @class = "form-control", @readonly = "true" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-2">Kategori Berdasarkan Harga Semasa:</label>
+                        <div class="col-sm-1">
+                            @Html.TextBoxFor(model => model.fld_KodHarga, htmlAttributes: new { @class = "form-control", @readonly = "true" })
+                        </div>
+                        <label class="control-label col-sm-2">Harga Terendah (RM):</label>
+                        <div class="col-sm-2">
+                            @Html.TextBoxFor(model => model.fld_RangeHargaLower, htmlAttributes: new { @class = "form-control", @readonly = "true" })
+                        </div>
+                        <label class="control-label col-sm-2">Harga Tertinggi (RM):</label>
+                        <div class="col-sm-2">
+                            @Html.TextBoxFor(model => model.fld_RangeHargaUpper, htmlAttributes: new { @class = "form-control", @readonly = "true" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-2">Insentif (RM):</label>
+                        <div class="col-sm-5">
+                            @Html.TextBoxFor(model => model.fld_Insentif, htmlAttributes: new { @class = "form-control", @readonly = "true" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <a class="btn btn-success" data-modal1="" href="@Url.Action("_PalmPriceEdit", "WorkerInfo", new {JenisTanamanList = @ViewBag.JenisTanamanSelectedValue })" id="btnCreate" onclick="return DisplayProgressMessage2(this);">Kemaskini</a>
+        <a href=@Url.Action("Index", "WorkerInfo") class="btn btn-warning" role="button">Kembali</a>
+    </div>
+}
+
+else
+{
+    <div class="modal-body">
+        <div class="panel panel-primary">
+            <div class="panel-heading">DAFTAR HARGA SAWIT SEMASA</div>
+            <div class="panel-body">
+                <div class="modal-body" style="text-align: center">
+                    <p style="color: red">@ViewBag.Message</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-footer">
+        @if (ViewBag.FirstTime != "True")
+        {
+            @*<a class="btn btn-success" role="button" id="createHargaSemasa">Tambah</a>*@
+
+            <a class="btn btn-success" data-modal1="" href="@Url.Action("_PalmPriceAdd", "WorkerInfo", new {JenisTanamanList = @ViewBag.JenisTanamanSelectedValue })" id="btnCreate" onclick="return DisplayProgressMessage2(this);">Tambah</a>
+        }
+        <a href=@Url.Action("Index", "WorkerInfo") class="btn btn-warning" role="button">Kembali</a>
+    </div>
+}
+
+@*<script type="text/javascript">
+        $(function () {
+            $('#createHargaSemasa').on('click',
+                function () {
+                    var jenisTanamanList = $('#JenisTanamanList').val();
+                    console.log(jenisTanamanList);
+
+                    $.ajax({
+                        type: 'GET',
+                        url: '@Url.Action("_PalmPriceAdd", "WorkerInfo")',
+                        dataType: 'json',
+                        contentType: 'application/json',
+                        async: false,
+                        data: { JenisTanamanList: jenisTanamanList },
+                        datatype: "json",
+                        success: function (result) {
+                            console.log(result);
+                            $('#myModalContent').html(result);
+                        },
+                        error: function () {  
+                            alert("Dynamic content load failed.");  
+                        } 
+                    });
+                });
+        });
+    </script>*@
+
+
+
+
+
+

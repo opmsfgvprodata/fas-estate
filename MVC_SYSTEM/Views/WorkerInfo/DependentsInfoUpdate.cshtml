@@ -1,0 +1,169 @@
+﻿@model MVC_SYSTEM.Models.tbl_KeluargaPkj
+@using MVC_SYSTEM.Class
+
+@{
+    ViewBag.Title = "DependentsInfoUpdate";
+    //Layout = "~/Views/Shared/_LayoutMain.cshtml";
+    GetConfig getconfig = new GetConfig();
+    string dateformat = getconfig.GetData("dateformat3");
+}
+
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 class="modal-title">@GlobalResEstate.titleUpdate</h3>
+</div>
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div class="modal-body">
+        <div class="form-horizontal">
+            <div class="panel panel-primary">
+                <div class="panel-heading">Kemaskini Maklumat</div>
+                <div class="panel-body">
+                    <span id="progress" class="text-center" style="display: none;">
+                        <img src="~/Asset/Images/wait.gif" alt="wait" />
+                    </span>
+                    <div class="form-group">
+                        <div class="col-sm-6">
+                            <label class="control-label col-md-4">No Pekerja</label>
+                            <div class="col-md-8">
+                                @Html.Hidden("IDkeluarga",Model.fld_ID)
+                                @Html.DropDownList("fld_Nopkj", null, htmlAttributes: new { @class = "form-control", disabled = "disabled" })
+                                @Html.ValidationMessageFor(model => model.fld_Nopkj, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-6">
+                            <label class="control-label col-md-4">Nama Waris</label>
+                            <div class="col-md-8">
+                                @Html.TextBox("fld_NamaKeluarga", null, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.fld_NamaKeluarga, "", new { @class = "text-danger" })                  
+                            </div>
+                        </div>
+                        <div class="col-sm-5">
+                            <label class="control-label col-md-5">Hubungan Waris</label>
+                            <div class="col-md-5">
+                                @Html.DropDownList("fld_Hubungan", null, htmlAttributes: new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.fld_Hubungan, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-6">
+                            <label class="control-label col-md-4">No Tel Waris</label>
+                            <div class="col-md-8">
+                                @Html.TextBox("fld_NoTel", null, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.fld_NoTel, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="col-sm-5">
+                            <label class="control-label col-md-5">Tarikh Lahir Waris</label>
+                            <div class='input-group date col-md-5' id='datetimepicker1'>
+                                @Html.EditorFor(Model => Model.fld_TLahir, new { htmlAttributes = new { @class = "form-control", @type = "text", @placeholder = "dd/mm/yyyy" } })
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-6">
+                            <label class="control-label col-md-4">No Permit</label>
+                            <div class="col-md-8">
+                                @Html.TextBox("fld_Permit", null, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.fld_Permit, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="col-sm-5">
+                            <label class="control-label col-md-5">Tarikh Tamat Permit</label>
+                            <div class='input-group date col-md-5' id='datetimepicker1'>
+                                @Html.EditorFor(Model => Model.fld_PermitExprd, new { htmlAttributes = new { @class = "form-control", @type = "text", @placeholder = "dd/mm/yyyy" } })
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-6">
+                            <label class="control-label col-md-4">No Passport</label>
+                            <div class="col-md-8">
+                                @Html.TextBox("fld_Pspt", null, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.fld_Pspt, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="col-sm-5">
+                            <label class="control-label col-md-5">Tarikh Tamat Passport</label>
+                            <div class='input-group date col-md-5' id='datetimepicker1'>
+                                @Html.EditorFor(Model => Model.fld_PsptExprd, new { htmlAttributes = new { @class = "form-control", @type = "text", @placeholder = "dd/mm/yyyy" } })
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-6">
+                            <label class="control-label col-md-4">Tarikh Tamat Insurans</label>
+                            <div class='input-group date col-md-8' id='datetimepicker1'>
+                                @Html.EditorFor(Model => Model.fld_InsuransExprd, new { htmlAttributes = new { @class = "form-control", @type = "text", @placeholder = "dd/mm/yyyy" } })
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <input class="btn btn-primary" type="submit" value=@GlobalResEstate.btnSave />
+        <button class="btn btn-warning" data-dismiss="modal">@GlobalResEstate.btnBack</button>
+    </div>
+}
+<script>
+                $("form").removeData("validator");
+                $("form").removeData("unobtrusiveValidation");
+                $.validator.unobtrusive.parse("form");
+</script>
+<script>
+    $(function () {
+        $('#fld_TLahir').datetimepicker({
+            timepicker: false,
+            format: '@dateformat'
+        });
+        $('#fld_PermitExprd').datetimepicker({
+            timepicker: false,
+            format: '@dateformat',
+        });
+        $('#fld_PsptExprd').datetimepicker({
+            timepicker: false,
+            format: '@dateformat'
+        });
+        $('#fld_InsuransExprd').datetimepicker({
+            timepicker: false,
+            format: '@dateformat'
+        });
+                });
+
+    $(document).ready(function () {
+        $("#fld_NamaKeluarga").keyup(function (e) {
+            var nama = $("#fld_NamaKeluarga").val();
+            $("#fld_NamaKeluarga").val(nama.toUpperCase());
+        });
+
+        $("#fld_Permit").keyup(function (e) {
+            var nama2 = $("#fld_Permit").val();
+            $("#fld_Permit").val(nama2.toUpperCase());
+        });
+
+        $("#fld_Pspt").keyup(function (e) {
+            var nama3 = $("#fld_Pspt").val();
+            $("#fld_Pspt").val(nama3.toUpperCase());
+        });
+    });
+</script>
+

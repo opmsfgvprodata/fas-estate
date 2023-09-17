@@ -1,0 +1,44 @@
+﻿@using MVC_SYSTEM.Class;
+
+@{
+    ViewBag.Title = "LevelsInfoSubPkt";
+    //Layout = "~/Views/Shared/_LayoutMain.cshtml";
+    GetStatus GetStatus = new GetStatus();
+
+    var grid = new WebGrid(
+        canPage: true,
+        rowsPerPage: Model.PageSize,
+        canSort: false,
+        ajaxUpdateContainerId: "grid");
+
+    grid.Bind(Model.Content, rowCount: Model.TotalRecords, autoSortAndPage: false);
+
+    GetEstateDetail GetEstateDetail = new GetEstateDetail();
+}
+
+<div class="text-center">@grid.TotalRowCount @Html.Label(GlobalResEstate.lblTotalRecord)</div>
+<div>
+    @{
+        @grid.GetHtml(htmlAttributes: new { id = "grid" }, // id for ajaxUpdateContainerId parameter
+                                fillEmptyRows: false,
+                                tableStyle: "table table-bordered table-striped table-list table-hover",
+                                headerStyle: "header_table",
+                                alternatingRowStyle: "Grid-alt",
+                                selectedRowStyle: "Grid-selected",
+                                rowStyle: "Grid-rowstyle",
+                                footerStyle: "table-pager",
+                                mode: WebGridPagerModes.All,
+                                columns: grid.Columns(
+                                    grid.Column(GlobalResEstate.hdrNo, canSort: false, format: item => item.WebGrid.Rows.IndexOf(item) + 1 + Math.Round(Convert.ToDouble(grid.TotalRowCount / grid.PageCount) / grid.RowsPerPage) * grid.RowsPerPage * grid.PageIndex, style: "count"),
+                                    grid.Column(GlobalResEstate.lblWbsCode, format: (item) => GetEstateDetail.GetWBSCode(item.fld_NegaraID, item.fld_SyarikatID, item.fld_WilayahID, item.fld_LadangID, item.fld_KodPktUtama), canSort: false, style: "kod"),
+                                    grid.Column("fld_Pkt", GlobalResEstate.lblSubLevelCode, style: "nopkj"),
+                                    grid.Column("fld_NamaPkt", GlobalResEstate.lblSubLevelName, style: "namapkj"),
+                                    grid.Column("fld_LsPkt", GlobalResEstate.lblArea, style: "nokp"),
+                                    grid.Column(GlobalResEstate.hdrAction, canSort: false, style: "tindakan",
+                                        format: @<text>
+                                        @Html.Raw("<a data-modal='' href='" + @Url.Action("LevelsSubPktUpdate", "BasicInfo") + "/?id=" + item.fld_Pkt + "' class='btn btn-success' title='Update Worker' onclick='return DisplayProgressMessage(this);'><i class='fa fa-edit fa-lg'></i></a>")
+                                        @Html.Raw("<a data-modal='' href='" + @Url.Action("LevelsSubPktDelete", "BasicInfo") + "/?id=" + item.fld_Pkt + "' class='btn btn-danger' title='Worker Status' onclick='return DisplayProgressMessage(this);'><i class='fa fa-trash fa-lg'></i></a>")
+                                        </text>)
+                                    ))
+    }
+</div>

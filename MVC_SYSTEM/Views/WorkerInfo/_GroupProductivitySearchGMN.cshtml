@@ -1,0 +1,68 @@
+﻿@{
+    var grid = new WebGrid(
+        canPage: true,
+        rowsPerPage: Model.PageSize,
+        canSort: false,
+        ajaxUpdateContainerId: "grid");
+
+    grid.Bind(Model.Content, rowCount: Model.TotalRecords, autoSortAndPage: false);
+    grid.Pager(WebGridPagerModes.All);
+
+    if (@grid.TotalRowCount > 0)
+    {
+        <div class="text-center">@grid.TotalRowCount @Html.Label(GlobalResEstate.lblTotalRecordGroup)</div>
+
+        @grid.GetHtml(htmlAttributes: new { id = "grid" }, // id for ajaxUpdateContainerId parameter
+                 tableStyle: "table table-bordered table-striped table-list table-hover",
+                 headerStyle: "header_table",
+                 alternatingRowStyle: "Grid-alt",
+                 selectedRowStyle: "Grid-selected",
+                 rowStyle: "Grid-rowstyle",
+                 mode: WebGridPagerModes.All,
+                 columns: grid.Columns(
+                     grid.Column(header: GlobalResEstate.hdrNo
+                         , format: item => item.WebGrid.Rows.IndexOf(item) + 1
+                                           + Math.Round(Convert.ToDouble(grid.TotalRowCount / grid.PageCount) / grid.RowsPerPage)
+                                           * grid.RowsPerPage * grid.PageIndex, style: "count height"),
+                     grid.Column(columnName: "fld_KodKumpulan", header: GlobalResEstate.hdrGroupCode, style: "kodkmpln height"),
+                     grid.Column(columnName: "fld_KodKerja", header: GlobalResEstate.hdrWorkAktvt, style: "jeniskerja height"),
+                     grid.Column(columnName: "fld_Keterangan", header: GlobalResEstate.hdrDesc, style: "keterangankumpulan height"),
+                     grid.Column(columnName: "bilangan_ahli", header: GlobalResEstate.hdrBilAhli, style: "bilanganahli height"),
+                     grid.Column(GlobalResEstate.hdrAction, format: (item) =>
+                     {
+                         if (item.bilangan_ahli != 0)
+                         {
+                             var tindakan = "<a data-modal='' href='" + @Url.Action("_GroupMemberProductivityInfoGMN", "WorkerInfo") + "/?kumpulan=" + item.fld_KumpulanID + "' class='btn btn-primary' role='button' title='" + @GlobalResEstate.btnGroupProductivityInfo + "' onclick='return DisplayProgressMessage(this);'><span class='glyphicon glyphicon-user'></span></a>" +
+                                            "&nbsp<a data-modal1='' href='" + @Url.Action("_GroupProductivityAddGMN", "WorkerInfo") + "/?kumpulan=" + item.fld_KumpulanID + "' class='btn btn-success' role='button' title='" + @GlobalResEstate.btnAdd + "' onclick='return DisplayProgressMessage(this);'><span class='glyphicon glyphicon-plus'></span></a>";
+                             return @Html.Raw(tindakan);
+                         }
+                         else
+                         {
+                             var tindakan = "";
+
+                             return @Html.Raw(tindakan);
+                         }
+                     }, canSort: false, style: "tindakan height")
+
+
+                     )
+                 )
+    }
+
+    else
+    {
+        <hr />
+        <div class="text-center">
+            @Html.Label(GlobalResEstate.msgErrorSearch)
+        </div>
+        <hr />
+    }
+}
+
+<script>
+    function displayError() {
+        $.simplyToast('Kumpulan ini tidak mempunyai ahli ', 'danger');
+    }
+</script>
+
+

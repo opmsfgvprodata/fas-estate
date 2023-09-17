@@ -1,0 +1,61 @@
+﻿@using MVC_SYSTEM.Class
+@model MVC_SYSTEM.ViewingModels.PagedList<MVC_SYSTEM.ViewingModels.vw_HasilSawitPkt>
+
+<div id="pktYield">
+
+    @{
+        GetConfig getConfig = new GetConfig();
+
+        var grid = new WebGrid(
+            canPage: true,
+            rowsPerPage: Model.PageSize,
+            canSort: false,
+            ajaxUpdateContainerId: "grid");
+
+        grid.Bind(Model.Content, rowCount: Model.TotalRecords, autoSortAndPage: false);
+        //grid.Pager(WebGridPagerModes.All);
+
+        if (@grid.TotalRowCount > 0)
+        {
+            <div class="text-center">@grid.TotalRowCount @Html.Label(GlobalResEstate.lblTabLevel)</div>
+
+            @grid.GetHtml(htmlAttributes: new { id = "grid" }, // id for ajaxUpdateontainerId parameter
+                          tableStyle: "table table-bordered table-striped table-list table-hover",
+                          headerStyle: "header_table",
+                          alternatingRowStyle: "Grid-alt",
+                          selectedRowStyle: "Grid-selected",
+                          rowStyle: "Grid-rowstyle",
+                          footerStyle: "table-pager",
+                          mode: WebGridPagerModes.All,
+                          columns: grid.Columns(
+                              grid.Column(header: GlobalResEstate.hdrNo
+                                  , format: item => item.WebGrid.Rows.IndexOf(item) + 1
+                                                    + Math.Round(Convert.ToDouble(grid.TotalRowCount / grid.PageCount) / grid.RowsPerPage)
+                                                    * grid.RowsPerPage * grid.PageIndex, style: "count"),
+                              grid.Column(columnName: "fld_PktUtama", header: GlobalResEstate.lblLevelCode, style: "kodpkt"),
+                              grid.Column(columnName: "fld_LsPktUtama", header: GlobalResEstate.lblLevelArea, style: "luaspkt"),
+                              grid.Column(
+                                  header: GlobalResEstate.hdrYield + "(Tan)", style: "hasilsawit",
+                                  format: @<text>
+                                    <span id="hasilTan1" class="display-mode">@item.fld_HasilTan</span>
+                                    @Html.TextBox("fld_hasilTan", (int?)item.fld_HasilTan, htmlAttributes: new { @class = "edit-mode form-control", Style = "display:none; text-align: center;", size = 10, @Value = @item.fld_HasilTan })
+                                </text>)
+                                     ));
+        }
+        else
+        {
+            <hr />
+            <div class="text-center">
+                @Html.Label("Message", (string)ViewBag.Message)
+            </div>
+            <hr />
+        }
+    }
+</div>
+
+
+
+
+
+
+

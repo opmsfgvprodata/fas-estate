@@ -1,0 +1,1045 @@
+﻿@model IEnumerable<MVC_SYSTEM.CustomModels2.CustMod_DetailWork>
+@{
+    var GetCCs = Model.OrderBy(o => o.costcenter).Select(s => new { s.costcenter}).Distinct().ToList();
+    var GetLCs = Model.OrderBy(o => o.levelcode).Select(s => new { s.levelcode, s.leveldesc }).Distinct().ToList();
+        var GetACs = Model.OrderBy(o => o.actvtcode).Select(s => new { s.actvtcode }).Distinct().ToList();
+        var GetGLs = Model.OrderBy(o => o.gl).Select(s => new { s.gl }).Distinct().ToList();
+        var GetGRPs = Model.OrderBy(o => o.grp).Select(s => new { s.grp }).Distinct().ToList();
+     var GetCCLvls = Model.OrderBy(o => o.costcenter).Select(s => new { s.costcenter, s.levelcode}).Distinct().ToList();
+     var GetCCActs = Model.OrderBy(o => o.costcenter).Select(s => new { s.costcenter, s.actvtcode, s.actvtdesc}).Distinct().ToList();
+     var GetCCGLs = Model.OrderBy(o => o.costcenter).Select(s => new { s.costcenter, s.gl}).Distinct().ToList();
+       var GetCCgrps = Model.OrderBy(o => o.costcenter).Select(s => new { s.costcenter, s.grp}).Distinct().ToList();
+
+
+
+
+    int count = 1;
+}
+
+@if (Model != null && Model.Count() != 0)
+{
+    <div id="scrollArea2" class="modal-body">
+        <table class="table table-hover table-bordered" style="font-size: 11px;" border="0" width="100%">
+
+
+            @if (ViewBag.Option == "1")
+            {
+                <thead>
+                    <tr>
+                        <th colspan="17" style="text-align:center;vertical-align:middle;">
+                            @ViewBag.TitleReport
+                            <br />
+                            @ViewBag.NamaSyarikat
+                            <br />
+                            (@ViewBag.NoSyarikat)
+                            <br />
+                        </th>
+                    </tr>
+
+
+
+                    <tr>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">No</th>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Kod Pusat</th>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Kong</th>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Overtime Hour</th>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Overtime RM</th>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Piece-Rate Qty</th>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Piece-Rate RM</th>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Insentif Harian</th>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Pendapatan Lain-Lain</th>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Pendapatan Kasar</th>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Potongan</th>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Jumlah</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var GetCC in GetCCs)
+                    {
+                        decimal totalkongpay = 0;
+                        decimal totalottime = 0;
+                        decimal totalototpay = 0;
+                        decimal totalpieceratepay = 0;
+                        decimal totalpieceratequantity = 0;
+                        decimal totalincentive = 0;
+                        decimal totalotherincome = 0;
+                        decimal totaltotalincome = 0;
+                        decimal totaltotaldeduction = 0;
+                        decimal totalnetincome = 0;
+                        var GetDataDetails = Model.Where(x => x.costcenter == GetCC.costcenter).ToList();
+                        var i = 1;
+                        foreach (var GetDataDetail in GetDataDetails)
+                        {
+                            var DataToDisplay = Model.Where(x => x.costcenter == GetCC.costcenter).FirstOrDefault();
+
+
+                            totalkongpay = totalkongpay + DataToDisplay.kongpay;
+                            totalottime = totalottime + DataToDisplay.ottime;
+                            totalototpay = totalototpay + DataToDisplay.otpay;
+                            totalpieceratepay = totalpieceratepay + DataToDisplay.pieceratepay;
+                            totalincentive = totalincentive + DataToDisplay.incentive;
+                            totalotherincome = totalotherincome + DataToDisplay.otherincome;
+                            totaltotalincome = totaltotalincome + DataToDisplay.totalincome;
+                            totaltotaldeduction = totaltotaldeduction + DataToDisplay.totaldeduction;
+                            totalnetincome = totalnetincome + DataToDisplay.netincome;
+                            totalpieceratequantity = totalpieceratequantity + DataToDisplay.piecerateqnty;
+
+                        }
+                        <tr>
+                            <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @count
+                            </td>
+                            <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">@GetCC.costcenter</td>
+                            <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @totalkongpay
+                            </td>
+                            <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @totalottime
+                            </td>
+                            <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @totalototpay
+                            </td>
+                            <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @totalpieceratepay
+                            </td>
+                            <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @totalpieceratequantity
+                            </td>
+                            <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @totalincentive
+                            </td>
+                            <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @totalotherincome
+                            </td>
+                            <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @totaltotalincome
+                            </td>
+                            <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @totaltotaldeduction
+                            </td>
+                            <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @totalnetincome
+                            </td>
+                        </tr>
+                        count++;
+                    }
+                </tbody>
+            }
+            @if (ViewBag.Option == "2")
+            {
+                <thead>
+                    <tr>
+                        <th colspan="17" style="text-align:center;vertical-align:middle;">
+                            @ViewBag.TitleReport
+                            <br />
+                            @ViewBag.NamaSyarikat
+                            <br />
+                            (@ViewBag.NoSyarikat)
+                            <br />
+                        </th>
+                    </tr>
+
+
+
+                    <tr>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">No</th>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Level</th>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Kong</th>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Overtime Hour</th>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Overtime RM</th>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Piece-Rate Qty</th>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Piece-Rate RM</th>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Insentif Harian</th>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Pendapatan Lain-Lain</th>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Pendapatan Kasar</th>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Potongan</th>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Jumlah</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var GetLC in GetLCs)
+                    {
+                        decimal totalkongpay = 0;
+                        decimal totalottime = 0;
+                        decimal totalototpay = 0;
+                        decimal totalpieceratepay = 0;
+                        decimal totalpieceratequantity = 0;
+                        decimal totalincentive = 0;
+                        decimal totalotherincome = 0;
+                        decimal totaltotalincome = 0;
+                        decimal totaltotaldeduction = 0;
+                        decimal totalnetincome = 0;
+                        var GetDataDetails = Model.Where(x => x.levelcode == GetLC.levelcode).ToList();
+                        var i = 1;
+                        foreach (var GetDataDetail in GetDataDetails)
+                        {
+                            var DataToDisplay = Model.Where(x => x.levelcode == GetLC.levelcode).FirstOrDefault();
+
+
+
+
+                            totalkongpay = totalkongpay + DataToDisplay.kongpay;
+                            totalottime = totalottime + DataToDisplay.ottime;
+                            totalototpay = totalototpay + DataToDisplay.otpay;
+                            totalpieceratepay = totalpieceratepay + DataToDisplay.pieceratepay;
+                            totalincentive = totalincentive + DataToDisplay.incentive;
+                            totalotherincome = totalotherincome + DataToDisplay.otherincome;
+                            totaltotalincome = totaltotalincome + DataToDisplay.totalincome;
+                            totaltotaldeduction = totaltotaldeduction + DataToDisplay.totaldeduction;
+                            totalnetincome = totalnetincome + DataToDisplay.netincome;
+                            totalpieceratequantity = totalpieceratequantity + DataToDisplay.piecerateqnty;
+
+                        }
+                        <tr>
+                            <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @count
+                            </td>
+                            <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">@GetLC.levelcode - @GetLC.leveldesc</td>
+                            <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @totalkongpay
+                            </td>
+                            <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @totalottime
+                            </td>
+                            <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @totalototpay
+                            </td>
+                            <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @totalpieceratepay
+                            </td>
+                            <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @totalpieceratequantity
+                            </td>
+                            <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @totalincentive
+                            </td>
+                            <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @totalotherincome
+                            </td>
+                            <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @totaltotalincome
+                            </td>
+                            <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @totaltotaldeduction
+                            </td>
+                            <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @totalnetincome
+                            </td>
+                        </tr>
+                        count++;
+                    }
+                </tbody>
+            }
+            @if (ViewBag.Option == "3")
+            {
+                <thead>
+                    <tr>
+                        <th colspan="17" style="text-align:center;vertical-align:middle;">
+                            @ViewBag.TitleReport
+                            <br />
+                            @ViewBag.NamaSyarikat
+                            <br />
+                            (@ViewBag.NoSyarikat)
+                            <br />
+                        </th>
+                    </tr>
+
+
+
+                    <tr>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">No</th>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Aktiviti</th>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Kong</th>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Overtime Hour</th>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Overtime RM</th>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Piece-Rate Qty</th>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Piece-Rate RM</th>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Insentif Harian</th>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Pendapatan Lain-Lain</th>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Pendapatan Kasar</th>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Potongan</th>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Jumlah</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var GetaC in GetACs)
+                    {
+                        decimal totalkongpay = 0;
+                        decimal totalottime = 0;
+                        decimal totalototpay = 0;
+                        decimal totalpieceratepay = 0;
+                        decimal totalpieceratequantity = 0;
+                        decimal totalincentive = 0;
+                        decimal totalotherincome = 0;
+                        decimal totaltotalincome = 0;
+                        decimal totaltotaldeduction = 0;
+                        decimal totalnetincome = 0;
+                        var GetDataDetails = Model.Where(x => x.actvtcode == GetaC.actvtcode).ToList();
+                        var i = 1;
+                        foreach (var GetDataDetail in GetDataDetails)
+                        {
+                            var DataToDisplay = Model.Where(x => x.actvtcode == GetaC.actvtcode).FirstOrDefault();
+
+
+                           
+
+                            totalkongpay = totalkongpay + DataToDisplay.kongpay;
+                            totalottime = totalottime + DataToDisplay.ottime;
+                            totalototpay = totalototpay + DataToDisplay.otpay;
+                            totalpieceratepay = totalpieceratepay + DataToDisplay.pieceratepay;
+                            totalincentive = totalincentive + DataToDisplay.incentive;
+                            totalotherincome = totalotherincome + DataToDisplay.otherincome;
+                            totaltotalincome = totaltotalincome + DataToDisplay.totalincome;
+                            totaltotaldeduction = totaltotaldeduction + DataToDisplay.totaldeduction;
+                            totalnetincome = totalnetincome + DataToDisplay.netincome;
+                            totalpieceratequantity = totalpieceratequantity + DataToDisplay.piecerateqnty;
+
+                        }
+                        <tr>
+                            <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @count
+                            </td>
+                            <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">@GetaC.actvtcode</td>
+                            <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @totalkongpay
+                            </td>
+                            <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @totalottime
+                            </td>
+                            <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @totalototpay
+                            </td>
+                            <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @totalpieceratepay
+                            </td>
+                            <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @totalpieceratequantity
+                            </td>
+                            <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @totalincentive
+                            </td>
+                            <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @totalotherincome
+                            </td>
+                            <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @totaltotalincome
+                            </td>
+                            <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @totaltotaldeduction
+                            </td>
+                            <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @totalnetincome
+                            </td>
+                        </tr>
+                        count++;
+                    }
+                </tbody>
+            }
+            @if (ViewBag.Option == "4")
+            {
+                <thead>
+                    <tr>
+                        <th colspan="17" style="text-align:center;vertical-align:middle;">
+                            @ViewBag.TitleReport
+                            <br />
+                            @ViewBag.NamaSyarikat
+                            <br />
+                            (@ViewBag.NoSyarikat)
+                            <br />
+                        </th>
+                    </tr>
+
+
+
+                    <tr>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">No</th>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">GL SAP</th>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Kong</th>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Overtime Hour</th>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Overtime RM</th>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Piece-Rate Qty</th>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Piece-Rate RM</th>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Insentif Harian</th>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Pendapatan Lain-Lain</th>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Pendapatan Kasar</th>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Potongan</th>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Jumlah</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var GetGL in GetGLs)
+                    {
+                        decimal totalkongpay = 0;
+                        decimal totalottime = 0;
+                        decimal totalototpay = 0;
+                        decimal totalpieceratepay = 0;
+                        decimal totalpieceratequantity = 0;
+                        decimal totalincentive = 0;
+                        decimal totalotherincome = 0;
+                        decimal totaltotalincome = 0;
+                        decimal totaltotaldeduction = 0;
+                        decimal totalnetincome = 0;
+                        var GetDataDetails = Model.Where(x => x.gl == GetGL.gl).ToList();
+                        var i = 1;
+                        foreach (var GetDataDetail in GetDataDetails)
+                        {
+                            var DataToDisplay = Model.Where(x => x.gl == GetGL.gl).FirstOrDefault();
+
+
+                      
+
+                            totalkongpay = totalkongpay + DataToDisplay.kongpay;
+                            totalottime = totalottime + DataToDisplay.ottime;
+                            totalototpay = totalototpay + DataToDisplay.otpay;
+                            totalpieceratepay = totalpieceratepay + DataToDisplay.pieceratepay;
+                            totalincentive = totalincentive + DataToDisplay.incentive;
+                            totalotherincome = totalotherincome + DataToDisplay.otherincome;
+                            totaltotalincome = totaltotalincome + DataToDisplay.totalincome;
+                            totaltotaldeduction = totaltotaldeduction + DataToDisplay.totaldeduction;
+                            totalnetincome = totalnetincome + DataToDisplay.netincome;
+                            totalpieceratequantity = totalpieceratequantity + DataToDisplay.piecerateqnty;
+                        }
+                        <tr>
+                            <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @count
+                            </td>
+                            <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">@GetGL.gl</td>
+                            <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @totalkongpay
+                            </td>
+                            <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @totalottime
+                            </td>
+                            <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @totalototpay
+                            </td>
+                            <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @totalpieceratepay
+                            </td>
+                            <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @totalpieceratequantity
+                            </td>
+                            <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @totalincentive
+                            </td>
+                            <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @totalotherincome
+                            </td>
+                            <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @totaltotalincome
+                            </td>
+                            <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @totaltotaldeduction
+                            </td>
+                            <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @totalnetincome
+                            </td>
+                        </tr>
+                        count++;
+                    }
+                </tbody>
+            }
+            @if (ViewBag.Option == "5")
+            {
+                <thead>
+                    <tr>
+                        <th colspan="17" style="text-align:center;vertical-align:middle;">
+                            @ViewBag.TitleReport
+                            <br />
+                            @ViewBag.NamaSyarikat
+                            <br />
+                            (@ViewBag.NoSyarikat)
+                            <br />
+                        </th>
+                    </tr>
+
+
+
+                    <tr>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">No</th>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Group</th>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Kong</th>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Overtime Hour</th>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Overtime RM</th>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Piece-Rate Qty</th>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Piece-Rate RM</th>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Insentif Harian</th>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Pendapatan Lain-Lain</th>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Pendapatan Kasar</th>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Potongan</th>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Jumlah</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var getGRP in GetGRPs)
+                    {
+                        decimal totalkongpay = 0;
+                        decimal totalottime = 0;
+                        decimal totalototpay = 0;
+                        decimal totalpieceratepay = 0;
+                        decimal totalpieceratequantity = 0;
+                        decimal totalincentive = 0;
+                        decimal totalotherincome = 0;
+                        decimal totaltotalincome = 0;
+                        decimal totaltotaldeduction = 0;
+                        decimal totalnetincome = 0;
+                        var GetDataDetails = Model.Where(x => x.grp == getGRP.grp).ToList();
+
+
+
+                        foreach (var GetDataDetail in GetDataDetails)
+                        {
+                            var DataToDisplay = Model.Where(x => x.grp == getGRP.grp).FirstOrDefault();
+
+
+
+
+                            totalkongpay = totalkongpay + DataToDisplay.kongpay;
+                            totalottime = totalottime + DataToDisplay.ottime;
+                            totalototpay = totalototpay + DataToDisplay.otpay;
+                            totalpieceratepay = totalpieceratepay + DataToDisplay.pieceratepay;
+                            totalincentive = totalincentive + DataToDisplay.incentive;
+                            totalotherincome = totalotherincome + DataToDisplay.otherincome;
+                            totaltotalincome = totaltotalincome + DataToDisplay.totalincome;
+                            totaltotaldeduction = totaltotaldeduction + DataToDisplay.totaldeduction;
+                            totalnetincome = totalnetincome + DataToDisplay.netincome;
+                            totalpieceratepay = totalpieceratepay + DataToDisplay.pieceratepay;
+                            totalpieceratequantity = totalpieceratequantity + DataToDisplay.piecerateqnty;
+
+
+                        }
+                        <tr>
+                            <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @count
+                            </td>
+                            <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">@getGRP.grp</td>
+                            <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @totalkongpay
+                            </td>
+                            <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @totalottime
+                            </td>
+                            <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @totalototpay
+                            </td>
+                            <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @totalpieceratepay
+                            </td>
+                            <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @totalpieceratequantity
+                            </td>
+                            <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @totalincentive
+                            </td>
+                            <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @totalotherincome
+                            </td>
+                            <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @totaltotalincome
+                            </td>
+                            <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @totaltotaldeduction
+                            </td>
+                            <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @totalnetincome
+                            </td>
+                        </tr>
+                        count++;
+                    }
+
+
+                </tbody>
+            }
+
+
+            @if (ViewBag.Option == "6")
+            {
+                <thead>
+                    <tr>
+                        <th colspan="17" style="text-align:center;vertical-align:middle;">
+                            @ViewBag.TitleReport
+                            <br />
+                            @ViewBag.NamaSyarikat
+                            <br />
+                            (@ViewBag.NoSyarikat)
+                            <br />
+                        </th>
+                    </tr>
+
+
+
+                    <tr>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">No</th>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Cost Center</th>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Level</th>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Kong</th>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Overtime Hour</th>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Overtime RM</th>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Piece-Rate Qty</th>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Piece-Rate RM</th>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Insentif Harian</th>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Pendapatan Lain-Lain</th>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Pendapatan Kasar</th>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Potongan</th>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Jumlah</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var getcclvl in GetCCLvls)
+                    {
+                        decimal totalkongpay = 0;
+                        decimal totalottime = 0;
+                        decimal totalototpay = 0;
+                        decimal totalpieceratepay = 0;
+                        decimal totalpieceratequantity = 0;
+                        decimal totalincentive = 0;
+                        decimal totalotherincome = 0;
+                        decimal totaltotalincome = 0;
+                        decimal totaltotaldeduction = 0;
+                        decimal totalnetincome = 0;
+                        var GetDataDetails = Model.Where(x => x.costcenter == getcclvl.costcenter && x.levelcode == getcclvl.levelcode).ToList();
+
+
+
+                        foreach (var GetDataDetail in GetDataDetails)
+                        {
+                            var DataToDisplay = Model.Where(x => x.costcenter == getcclvl.costcenter && x.levelcode == getcclvl.levelcode).FirstOrDefault();
+
+
+
+
+                            totalkongpay = totalkongpay + DataToDisplay.kongpay;
+                            totalottime = totalottime + DataToDisplay.ottime;
+                            totalototpay = totalototpay + DataToDisplay.otpay;
+                            totalpieceratepay = totalpieceratepay + DataToDisplay.pieceratepay;
+                            totalincentive = totalincentive + DataToDisplay.incentive;
+                            totalotherincome = totalotherincome + DataToDisplay.otherincome;
+                            totaltotalincome = totaltotalincome + DataToDisplay.totalincome;
+                            totaltotaldeduction = totaltotaldeduction + DataToDisplay.totaldeduction;
+                            totalnetincome = totalnetincome + DataToDisplay.netincome;
+                            totalpieceratepay = totalpieceratepay + DataToDisplay.pieceratepay;
+                            totalpieceratequantity = totalpieceratequantity + DataToDisplay.piecerateqnty;
+
+
+                        }
+                        <tr>
+                            <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @count
+                            </td>
+                            <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">@getcclvl.costcenter</td>
+                            <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">@getcclvl.levelcode</td>
+                            <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @totalkongpay
+                            </td>
+                            <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @totalottime
+                            </td>
+                            <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @totalototpay
+                            </td>
+                            <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @totalpieceratepay
+                            </td>
+                            <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @totalpieceratequantity
+                            </td>
+                            <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @totalincentive
+                            </td>
+                            <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @totalotherincome
+                            </td>
+                            <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @totaltotalincome
+                            </td>
+                            <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @totaltotaldeduction
+                            </td>
+                            <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @totalnetincome
+                            </td>
+                        </tr>
+                        count++;
+                    }
+
+
+                </tbody>
+            }
+
+            @if (ViewBag.Option == "7")
+            {
+                <thead>
+                    <tr>
+                        <th colspan="17" style="text-align:center;vertical-align:middle;">
+                            @ViewBag.TitleReport
+                            <br />
+                            @ViewBag.NamaSyarikat
+                            <br />
+                            (@ViewBag.NoSyarikat)
+                            <br />
+                        </th>
+                    </tr>
+
+
+
+                    <tr>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">No</th>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Cost Center</th>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Aktiviti</th>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Kong</th>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Overtime Hour</th>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Overtime RM</th>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Piece-Rate Qty</th>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Piece-Rate RM</th>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Insentif Harian</th>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Pendapatan Lain-Lain</th>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Pendapatan Kasar</th>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Potongan</th>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Jumlah</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var GetCCAct in GetCCActs)
+                    {
+                        decimal totalkongpay = 0;
+                        decimal totalottime = 0;
+                        decimal totalototpay = 0;
+                        decimal totalpieceratepay = 0;
+                        decimal totalpieceratequantity = 0;
+                        decimal totalincentive = 0;
+                        decimal totalotherincome = 0;
+                        decimal totaltotalincome = 0;
+                        decimal totaltotaldeduction = 0;
+                        decimal totalnetincome = 0;
+                        var GetDataDetails = Model.Where(x => x.costcenter == GetCCAct.costcenter && x.actvtcode == GetCCAct.actvtcode).ToList();
+
+
+
+                        foreach (var GetDataDetail in GetDataDetails)
+                        {
+                            var DataToDisplay = Model.Where(x => x.costcenter == GetCCAct.costcenter && x.actvtcode == GetCCAct.actvtcode).FirstOrDefault();
+
+
+
+
+                            totalkongpay = totalkongpay + DataToDisplay.kongpay;
+                            totalottime = totalottime + DataToDisplay.ottime;
+                            totalototpay = totalototpay + DataToDisplay.otpay;
+                            totalpieceratepay = totalpieceratepay + DataToDisplay.pieceratepay;
+                            totalincentive = totalincentive + DataToDisplay.incentive;
+                            totalotherincome = totalotherincome + DataToDisplay.otherincome;
+                            totaltotalincome = totaltotalincome + DataToDisplay.totalincome;
+                            totaltotaldeduction = totaltotaldeduction + DataToDisplay.totaldeduction;
+                            totalnetincome = totalnetincome + DataToDisplay.netincome;
+                            totalpieceratepay = totalpieceratepay + DataToDisplay.pieceratepay;
+                            totalpieceratequantity = totalpieceratequantity + DataToDisplay.piecerateqnty;
+
+
+                        }
+                        <tr>
+                            <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @count
+                            </td>
+                            <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">@GetCCAct.costcenter</td>
+                            <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">@GetCCAct.actvtcode - @GetCCAct.actvtdesc</td>
+                            <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @totalkongpay
+                            </td>
+                            <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @totalottime
+                            </td>
+                            <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @totalototpay
+                            </td>
+                            <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @totalpieceratepay
+                            </td>
+                            <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @totalpieceratequantity
+                            </td>
+                            <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @totalincentive
+                            </td>
+                            <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @totalotherincome
+                            </td>
+                            <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @totaltotalincome
+                            </td>
+                            <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @totaltotaldeduction
+                            </td>
+                            <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @totalnetincome
+                            </td>
+                        </tr>
+                        count++;
+                    }
+
+
+                </tbody>
+            }
+            @if (ViewBag.Option == "8")
+            {
+                <thead>
+                    <tr>
+                        <th colspan="17" style="text-align:center;vertical-align:middle;">
+                            @ViewBag.TitleReport
+                            <br />
+                            @ViewBag.NamaSyarikat
+                            <br />
+                            (@ViewBag.NoSyarikat)
+                            <br />
+                        </th>
+                    </tr>
+
+
+
+                    <tr>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">No</th>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Cost Center</th>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">GL SAP</th>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Kong</th>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Overtime Hour</th>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Overtime RM</th>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Piece-Rate Qty</th>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Piece-Rate RM</th>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Insentif Harian</th>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Pendapatan Lain-Lain</th>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Pendapatan Kasar</th>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Potongan</th>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Jumlah</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var getccgl in GetCCGLs)
+                    {
+                        decimal totalkongpay = 0;
+                        decimal totalottime = 0;
+                        decimal totalototpay = 0;
+                        decimal totalpieceratepay = 0;
+                        decimal totalpieceratequantity = 0;
+                        decimal totalincentive = 0;
+                        decimal totalotherincome = 0;
+                        decimal totaltotalincome = 0;
+                        decimal totaltotaldeduction = 0;
+                        decimal totalnetincome = 0;
+                        var GetDataDetails = Model.Where(x => x.costcenter == getccgl.costcenter && x.gl == getccgl.gl).ToList();
+
+
+
+                        foreach (var GetDataDetail in GetDataDetails)
+                        {
+                            var DataToDisplay = Model.Where(x => x.costcenter == getccgl.costcenter && x.gl == getccgl.gl).FirstOrDefault();
+
+
+
+
+                            totalkongpay = totalkongpay + DataToDisplay.kongpay;
+                            totalottime = totalottime + DataToDisplay.ottime;
+                            totalototpay = totalototpay + DataToDisplay.otpay;
+                            totalpieceratepay = totalpieceratepay + DataToDisplay.pieceratepay;
+                            totalincentive = totalincentive + DataToDisplay.incentive;
+                            totalotherincome = totalotherincome + DataToDisplay.otherincome;
+                            totaltotalincome = totaltotalincome + DataToDisplay.totalincome;
+                            totaltotaldeduction = totaltotaldeduction + DataToDisplay.totaldeduction;
+                            totalnetincome = totalnetincome + DataToDisplay.netincome;
+                            totalpieceratepay = totalpieceratepay + DataToDisplay.pieceratepay;
+                            totalpieceratequantity = totalpieceratequantity + DataToDisplay.piecerateqnty;
+
+
+                        }
+                        <tr>
+                            <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @count
+                            </td>
+                            <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">@getccgl.costcenter</td>
+                            <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">@getccgl.gl</td>
+                            <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @totalkongpay
+                            </td>
+                            <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @totalottime
+                            </td>
+                            <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @totalototpay
+                            </td>
+                            <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @totalpieceratepay
+                            </td>
+                            <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @totalpieceratequantity
+                            </td>
+                            <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @totalincentive
+                            </td>
+                            <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @totalotherincome
+                            </td>
+                            <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @totaltotalincome
+                            </td>
+                            <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @totaltotaldeduction
+                            </td>
+                            <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @totalnetincome
+                            </td>
+                        </tr>
+                        count++;
+                    }
+
+
+                </tbody>
+            }
+
+            @if (ViewBag.Option == "9")
+            {
+                <thead>
+                    <tr>
+                        <th colspan="17" style="text-align:center;vertical-align:middle;">
+                            @ViewBag.TitleReport
+                            <br />
+                            @ViewBag.NamaSyarikat
+                            <br />
+                            (@ViewBag.NoSyarikat)
+                            <br />
+                        </th>
+                    </tr>
+
+
+
+                    <tr>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">No</th>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Cost Center</th>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Group</th>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Kong</th>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Overtime Hour</th>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Overtime RM</th>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Piece-Rate Qty</th>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Piece-Rate RM</th>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Insentif Harian</th>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Pendapatan Lain-Lain</th>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Pendapatan Kasar</th>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Potongan</th>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Jumlah</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var getccgl in GetCCgrps)
+                    {
+                        decimal totalkongpay = 0;
+                        decimal totalottime = 0;
+                        decimal totalototpay = 0;
+                        decimal totalpieceratepay = 0;
+                        decimal totalpieceratequantity = 0;
+                        decimal totalincentive = 0;
+                        decimal totalotherincome = 0;
+                        decimal totaltotalincome = 0;
+                        decimal totaltotaldeduction = 0;
+                        decimal totalnetincome = 0;
+                        var GetDataDetails = Model.Where(x => x.costcenter == getccgl.costcenter && x.grp == getccgl.grp).ToList();
+
+
+
+                        foreach (var GetDataDetail in GetDataDetails)
+                        {
+                            var DataToDisplay = Model.Where(x => x.costcenter == getccgl.costcenter && x.grp == getccgl.grp).FirstOrDefault();
+
+
+
+
+                            totalkongpay = totalkongpay + DataToDisplay.kongpay;
+                            totalottime = totalottime + DataToDisplay.ottime;
+                            totalototpay = totalototpay + DataToDisplay.otpay;
+                            totalpieceratepay = totalpieceratepay + DataToDisplay.pieceratepay;
+                            totalincentive = totalincentive + DataToDisplay.incentive;
+                            totalotherincome = totalotherincome + DataToDisplay.otherincome;
+                            totaltotalincome = totaltotalincome + DataToDisplay.totalincome;
+                            totaltotaldeduction = totaltotaldeduction + DataToDisplay.totaldeduction;
+                            totalnetincome = totalnetincome + DataToDisplay.netincome;
+                            totalpieceratepay = totalpieceratepay + DataToDisplay.pieceratepay;
+                            totalpieceratequantity = totalpieceratequantity + DataToDisplay.piecerateqnty;
+
+
+                        }
+                        <tr>
+                            <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @count
+                            </td>
+                            <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">@getccgl.costcenter</td>
+                            <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">@getccgl.grp</td>
+                            <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @totalkongpay
+                            </td>
+                            <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @totalottime
+                            </td>
+                            <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @totalototpay
+                            </td>
+                            <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @totalpieceratepay
+                            </td>
+                            <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @totalpieceratequantity
+                            </td>
+                            <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @totalincentive
+                            </td>
+                            <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @totalotherincome
+                            </td>
+                            <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @totaltotalincome
+                            </td>
+                            <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @totaltotaldeduction
+                            </td>
+                            <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @totalnetincome
+                            </td>
+                        </tr>
+                        count++;
+                    }
+
+
+                </tbody>
+            }
+        </table>
+    </div>
+}
+else
+{
+    <div id="scrollArea2" class="modal-body" style="text-align: center">
+        <p style="color: red">No Data.</p>
+    </div>
+}
+
+<div style="text-align:right; margin-top:10px">
+    <a class="btn btn-default btn-sm" href="#" id="printpage">
+        <span class="glyphicon glyphicon-print"> </span> @GlobalResEstate.btnPrint
+    </a>
+    <a class="btn btn-default btn-sm" href="#" onclick="HTMLtoExcel('LAPORAN_KERJA_TERPERINCI')">
+        <span><img src="~/Asset/Images/excel-icon.png" width="20px" height="20px" /></span> @GlobalResEstate.btnDownloadExcel
+    </a>
+</div>
+<style>
+    #page td {
+        padding: 2px;
+        margin: 2px;
+    }
+</style>
+<script src="~/Asset/Scripts/FromHTML.js"></script>
+<script src="~/Asset/Scripts/FileSaver.js"></script>
+<script>
+    $(document).ready(function () {
+        $("#printpage").click(function () {
+            var DivElement = document.getElementById("scrollArea2").innerHTML;
+            var oldPage = document.body.innerHTML;
+            document.body.innerHTML = DivElement;
+            window.print();
+            document.body.innerHTML = oldPage;
+        })
+    });
+</script>

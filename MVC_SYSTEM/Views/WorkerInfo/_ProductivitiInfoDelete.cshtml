@@ -1,0 +1,138 @@
+﻿@using MVC_SYSTEM.Class
+@model MVC_SYSTEM.ViewingModels.tbl_Produktiviti
+
+@{
+    @Scripts.Render("~/bundles/jqueryval")
+    GetConfig config = new GetConfig();
+    string namePkj = config.getPkjNameFromPkjNo(Model.fld_Nopkj, Model.fld_NegaraID, Model.fld_SyarikatID, Model.fld_WilayahID, Model.fld_LadangID, ViewBag.host, ViewBag.user, ViewBag.catalog, ViewBag.pass);
+}
+
+<section class="content-wrapper main-content clear-fix">
+
+    @*<div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            @if (Model.fldDeleted == false)
+            {
+                <h3 class="modal-title">@GlobalResEstate.lblEmailDel</h3>
+            }
+            else
+            {
+                <h3 class="modal-title">@GlobalResEstate.lblEmailUnDel</h3>
+            }
+        </div>*@
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 class="modal-title">@GlobalResEstate.lblProductivityInfoDelete</h3>
+    </div>
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        <div class="modal-body">
+            <div class="form-horizontal">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">@GlobalResEstate.lblProductvtInfo</div>
+                    <div class="panel-body">
+                        <div class="form-group">
+                            <label class="control-label col-sm-3">@GlobalResEstate.hdrNoPkj:</label>
+                            <div class="col-sm-2">
+                                @Html.TextBoxFor(model => model.fld_Nopkj, htmlAttributes: new { @class = "form-control", @disabled = "true" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-3">@GlobalResEstate.hdrName:</label>
+                            <div class="col-sm-7">
+                                @Html.TextBox("fld_Kdaktf", namePkj, htmlAttributes: new { @class = "form-control", @readonly = "readonly" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-3">@GlobalResEstate.hdrCategory:</label>
+                            <div class="col-sm-2">
+                                @Html.TextBoxFor(model => model.fld_JenisPelan, htmlAttributes: new { @class = "form-control", @disabled = "true" })
+                            </div>
+                        @*</div>
+                        <div class="form-group">*@
+                            <label class="control-label col-sm-3">@GlobalResEstate.hdrTarget:</label>
+                            <div class="col-sm-2">
+                                @Html.TextBoxFor(model => model.fld_Targetharian, htmlAttributes: new { @class = "form-control", @disabled = "true" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-3">@GlobalResEstate.hdrUnit:</label>
+                            <div class="col-sm-2">
+                                @Html.TextBoxFor(model => model.fld_Unit, htmlAttributes: new { @class = "form-control", @disabled = "true" })
+                            </div>
+                        @*</div>
+                        <div class="form-group">*@
+                            <label class="control-label col-sm-3">@GlobalResEstate.hdrTargetWorkingDay:</label>
+                            <div class="col-sm-2">
+                                @Html.TextBoxFor(model => model.fld_HadirKerja, htmlAttributes: new { @class = "form-control", @disabled = "true" })
+                            </div>
+                        </div>
+                        @*<div class="form-group">
+            <label class="control-label col-sm-3">@GlobalResEstate.lblLevelArea:</label>
+            <div class="col-sm-3">
+                @Html.TextBoxFor(model => model.fld_LsPktUtama, htmlAttributes: new { @class = "form-control", @disabled = "true" })
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-sm-3">@GlobalResEstate.hdrYield:</label>
+            <div class="col-sm-3">
+                @Html.TextBoxFor(model => model.fld_HasilTan, htmlAttributes: new { @class = "form-control", @disabled = "true" })
+            </div>
+        </div>*@
+                        @*<div class="form-group">
+            <label class="control-label col-sm-3">@GlobalResEstate.lblDepart:</label>
+            <div class="col-sm-8">
+                @Html.TextBoxFor(model => model.fldDepartment, htmlAttributes: new { @class = "form-control", @disabled = "true" })
+            </div>
+        </div>*@
+                        @*<div class="form-group">
+            <label class="control-label col-sm-3">@GlobalResCorp.lblRegion:</label>
+            <div class="col-sm-8">
+                @Html.TextBoxFor(model => model.fldWilayahID, htmlAttributes: new { @class = "form-control", @disabled = "true" })
+            </div>
+        </div>*@
+                        @*<div class="form-group">
+            <label class="control-label col-sm-3">@GlobalResCorp.hdrCategory:</label>
+            <div class="col-sm-4">
+                @Html.TextBoxFor(model => model.fldOptConfFlag2, htmlAttributes: new { @class = "form-control", @disabled = "true" })
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-sm-3">@GlobalResCorp.lblIsDecimal:</label>
+            <div class="col-sm-4">
+                @Html.TextBox("IsNumber", config.GetWebConfigDesc(Model.fldOptConfFlag3, "pilihanYaTidak", Model.fld_NegaraID, Model.fld_SyarikatID), new { @class = "form-control", @disabled = "true" })
+            </div>
+        </div>*@
+                        @Html.HiddenFor(model => model.fld_Nopkj)
+                        @*@Html.HiddenFor(model => model.fld_Bulan)
+        @Html.HiddenFor(model => model.fld_Tahun)*@
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-12 text-center">
+                    <h3>
+                        <span class="label label-danger">
+                            @GlobalResEstate.msgDelete
+                        </span>
+                    </h3>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <input class="btn btn-success" type="submit" value=@GlobalResEstate.btnYes>
+            <button class="btn btn-danger" data-dismiss="modal">@GlobalResEstate.btnNo</button>
+        </div>
+    }
+</section>
+
+<script>
+    $("form").removeData("validator");
+    $("form").removeData("unobtrusiveValidation");
+    $.validator.unobtrusive.parse("form");
+</script>
+
+
+
+

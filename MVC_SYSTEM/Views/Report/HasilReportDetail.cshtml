@@ -1,0 +1,551 @@
+﻿@model IEnumerable<MVC_SYSTEM.Models.tbl_Kerja>
+@using MVC_SYSTEM.Class
+@using MVC_SYSTEM.Models
+@{
+    ViewBag.Title = "HasilReport";
+    //Layout = "~/Views/Shared/_LayoutMain.cshtml";
+    System.Globalization.DateTimeFormatInfo mfi = new System.Globalization.DateTimeFormatInfo();
+    GetIdentity GetIdentity = new GetIdentity();
+    GetEstateDetail GetWorkerDetail = new GetEstateDetail();
+    GetConfig GetConfig = new GetConfig();
+    ChangeTimeZone ChangeTimeZone = new ChangeTimeZone();
+    DateTime Todaydate = ChangeTimeZone.gettimezone();
+    string uniquefilename = "AccountReport_" + ViewBag.UserID + "_" + Todaydate.Year.ToString() + Todaydate.Month.ToString() + Todaydate.Day.ToString() + Todaydate.Hour.ToString() + Todaydate.Minute.ToString() + Todaydate.Second.ToString();
+    int bill = 0;
+    string nama = "";
+    decimal JumlahKadar = 0;
+    decimal JumlahHasil = 0;
+}
+
+@if (Model != null && Model.Count() != 0)
+{
+    @*<div class="panel panel-primary">
+        <div class="panel-heading">@GlobalResEstate.lblHasilReport.ToUpper()</div>
+        <div class="panel-body">
+            @if (ViewBag.DataCount < 1)
+            {
+                <p style="color:red">@GlobalResEstate.msgErrorSearch</p>
+            }
+            else
+            {*@
+    <div id="scrollArea2" class="modal-body">
+        @if (ViewBag.RadioSelection == 0) // add by fitri 26-01-2021
+        { // add by fitri 26-01-2021
+            <logo />
+            <table class="table table-hover table-bordered" style="font-size: 11px;" border="0" width="100%" cellspacing="0">
+                <!-- add by fitri 23-09-2020 -->
+                @*** comment by fitri 26-01-2021
+                    @foreach (var pkj in Model.Select(s => new { s.fld_Nopkj, s.fld_WilayahID, s.fld_NegaraID, s.fld_SyarikatID, s.fld_LadangID }).Distinct())
+                    {
+                        //bill = 0;
+                        //JumlahKadar = 0;
+                        //JumlahHasil = 0;
+                        nama = GetWorkerDetail.Name(pkj.fld_Nopkj, pkj.fld_WilayahID.Value, pkj.fld_SyarikatID.Value, pkj.fld_NegaraID.Value, pkj.fld_LadangID.Value); //Uncomment by fitri 23-09-2020
+                    ***@
+                <thead>
+                    <tr>
+                        <th colspan="13" style="text-align:center;vertical-align:middle;">
+                            @ViewBag.NamaSyarikat
+                            <br />
+                            (@GlobalResEstate.lblCompanyNo : @ViewBag.NoSyarikat)
+                            <br />
+                            @*@GlobalResEstate.lblHasilReport*@   @*comment by fitri 26-01-2021*@
+                            Yield Report   @*add by fitri 26-01-2021*@
+                            <br />
+                            @mfi.GetMonthName(Convert.ToInt32(ViewBag.MonthSelection)) - @ViewBag.YearSelection
+                        </th>
+                    </tr>
+                    @*comment by fitri 26-01-2021*@
+                    @*<tr>
+                        <th colspan="10" bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">
+                            @pkj.fld_Nopkj - @nama
+                        </th>
+                        </tr>*@
+                    <tr>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">@GlobalResEstate.hdrNo</th>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">@GlobalResEstate.lblWorker</th>
+                        @*comment by fitri 26-01-2021*@
+                        @*<th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">@GlobalResEstate.hdrActvtCode</th>*@
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">@GlobalResEstate.hdrWorkAktvt</th>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">@GlobalResEstate.lblLevel</th>
+                        @*add by fitri 26-01-2021*@
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Daily Wage</th>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Elaun Pokok Tinggi</th>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Elaun Kesukaran</th>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Bayaran Tambahan Tuai</th>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Insentif Pencapaian Hasil</th>
+                        @*end*@
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">@GlobalResEstate.hdrRate (RM)</th>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">@GlobalResEstate.hdrOutcome (Tan)</th>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">@GlobalResEstate.lblTotal (RM)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @* Comment by fitri 26-01-2021
+                        @foreach (var item in Model.Where(x => x.fld_Nopkj == pkj.fld_Nopkj))
+                        {
+                        //string Amt = @GetTriager.GetTotalForMoney(item.fldKredit);
+                        bill = bill + 1;
+                        JumlahKadar = JumlahKadar + item.fld_Amount.Value;
+                        JumlahHasil = JumlahHasil + item.fld_JumlahHasil.Value;
+                         <tr>
+                             <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                 @bill
+                             </td>
+                             <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                 @item.fld_Tarikh.Value.ToString("dd/MM/yyyy")
+                             </td>
+                             <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                 @item.fld_KodAktvt
+                             </td>
+                             <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                 @GetConfig.GetAktvt(item.fld_KodAktvt, item.fld_NegaraID.Value, item.fld_SyarikatID.Value)
+                             </td>
+                             <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                 @item.fld_KodPkt
+                             </td>
+                             <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                 @item.fld_KadarByr
+                             </td>
+                             <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                 @item.fld_JumlahHasil
+                             </td>
+                             <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                 @item.fld_DailyIncentive
+                             </td>
+                             <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                 @item.fld_Amount
+                             </td>
+                         </tr>
+                    *@
+
+                    @*Add by fitri 26-01-2021*@
+                    @foreach (var pkj in Model.Select(s => new { s.fld_Nopkj, s.fld_WilayahID, s.fld_NegaraID, s.fld_SyarikatID, s.fld_LadangID }).Distinct())
+                    {
+                        bill = bill + 1;
+                        string NamaPkj = GetWorkerDetail.Name(pkj.fld_Nopkj, pkj.fld_WilayahID.Value, pkj.fld_SyarikatID.Value, pkj.fld_NegaraID.Value, pkj.fld_LadangID.Value);
+                        <tr>
+                            <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @bill
+                            </td>
+                            <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @pkj.fld_Nopkj - @NamaPkj
+                            </td>
+                            <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @foreach (var item in Model.Where(x => x.fld_Nopkj == pkj.fld_Nopkj).GroupBy(g => new { g.fld_KodAktvt, g.fld_NegaraID, g.fld_SyarikatID }).Select(s => new { Actvy = s.Key.fld_KodAktvt, Neg = s.Key.fld_NegaraID, Sya = s.Key.fld_SyarikatID }))
+                                {
+                                    string x = " - ";
+                                    @item.Actvy @x @GetConfig.GetAktvt(item.Actvy, item.Neg.Value, item.Sya.Value) <br />
+                                }
+                            </td>
+                            <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @foreach (var item in Model.Where(x => x.fld_Nopkj == pkj.fld_Nopkj).OrderBy(o => o.fld_KodPkt).GroupBy(g => new { g.fld_KodAktvt, g.fld_KodPkt }).Select(s => new { s.Key.fld_KodPkt }))
+                                {
+                                    @item.fld_KodPkt<br />
+                                }
+                            </td>
+                            <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @foreach (var item in Model.Where(x => x.fld_Nopkj == pkj.fld_Nopkj).GroupBy(g => new { g.fld_KodAktvt }))
+                                {
+                                    @item.Where(w => w.fld_DailyIncentivCode == "P38").Sum(s => s.fld_DailyIncentive).Value.ToString("N")<br />
+                                }
+                            </td>
+                            <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @foreach (var item in Model.Where(x => x.fld_Nopkj == pkj.fld_Nopkj).GroupBy(g => new { g.fld_KodAktvt }))
+                                {
+                                    @item.Where(w => w.fld_DailyIncentivCode == "P44").Sum(s => s.fld_Amount).Value.ToString("N")<br />
+                                }
+                            </td>
+                            <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @foreach (var item in Model.Where(x => x.fld_Nopkj == pkj.fld_Nopkj).GroupBy(g => new { g.fld_KodAktvt }))
+                                {
+                                    @item.Where(w => w.fld_KodAktvt == "A003").Sum(s => s.fld_Amount).Value.ToString("N")<br />
+                                }
+                            </td>
+                            <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @foreach (var item in Model.Where(x => x.fld_Nopkj == pkj.fld_Nopkj).GroupBy(g => new { g.fld_KodAktvt }))
+                                {
+                                    @item.Where(w => w.fld_DailyIncentivCode == "P44").Sum(s => s.fld_Amount).Value.ToString("N")<br />
+                                }
+                            </td>
+                            <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @foreach (var item in Model.Where(x => x.fld_Nopkj == pkj.fld_Nopkj).GroupBy(g => new { g.fld_KodAktvt }))
+                                {
+                                    @item.Where(w => w.fld_DailyIncentivCode == "P64").Sum(s => s.fld_Amount).Value.ToString("N")<br />
+                                }
+                            </td>
+                            <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @foreach (var item in Model.Where(x => x.fld_Nopkj == pkj.fld_Nopkj).GroupBy(g => new { g.fld_KodAktvt }))
+                                {
+                                    @item.Sum(s => s.fld_KadarByr).Value.ToString("N") <br />
+                                }
+                            </td>
+                            <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @foreach (var item in Model.Where(x => x.fld_Nopkj == pkj.fld_Nopkj).GroupBy(g => new { g.fld_KodAktvt }))
+                                {
+                                    @item.Sum(s => s.fld_JumlahHasil).Value.ToString("N") <br />
+                                }
+                            </td>
+                            <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @foreach (var item in Model.Where(x => x.fld_Nopkj == pkj.fld_Nopkj).GroupBy(g => new { g.fld_KodAktvt }))
+                                {
+                                    @item.Sum(s => s.fld_Amount).Value.ToString("N")<br />
+                                }
+                            </td>
+                        </tr>
+                    }
+                    <tr>
+                        <td colspan="10" bgcolor="#ffcc80" style="color:black; text-align: right; vertical-align:middle !important;border:1px solid black;" border="1">
+                            <strong>@GlobalResEstate.lblTotal</strong>
+                        </td>
+                        <td align="center" bgcolor="#ffcc80" style="color:black; vertical-align:middle !important;border:1px solid black;" border="1">
+                            @*@JumlahHasil.ToString("N")*@   @*Comment by fitri 26-01-2021*@
+                            @Model.Sum(a => a.fld_JumlahHasil).Value.ToString("N")   @*add by fitri 26-01-2021*@
+                        </td>
+                        <td align="center" bgcolor="#ffcc80" style="color:black; vertical-align:middle !important;border:1px solid black;" border="1">
+                            @*@JumlahKadar.ToString("N")*@   @*Comment by fitri 26-01-2021*@
+                            @Model.Sum(a => a.fld_Amount).Value.ToString("N")   @*add by fitri 26-01-2021*@
+                        </td>
+                    </tr>
+                </tbody>
+                @*<tfoot>
+                        <tr>
+                            <td colspan="7" bgcolor="#ffcc80" style="color:black; text-align: right; vertical-align:middle !important;border:1px solid black;" border="1">
+                                <strong>Jumlah</strong>
+                            </td>
+                            <td colspan="7" bgcolor="#ffcc80" style="color:black; text-align: right; vertical-align:middle !important;border:1px solid black;" border="1">
+                                @JumlahKadar
+                            </td>
+                        </tr>
+                    </tfoot>*@
+            </table>
+            @*< newpage />*@
+        } // add by fitri 26-01-2021
+        else if (ViewBag.RadioSelection == 1) // add by fitri 27-01-2021
+        {
+            <logo />
+            <table class="table table-hover table-bordered" style="font-size: 11px;" border="0" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th colspan="12" style="text-align:center;vertical-align:middle;">
+                            @ViewBag.NamaSyarikat
+                            <br />
+                            (@GlobalResEstate.lblCompanyNo : @ViewBag.NoSyarikat)
+                            <br />
+                            Yield Report
+                            <br />
+                            @mfi.GetMonthName(Convert.ToInt32(ViewBag.MonthSelection)) - @ViewBag.YearSelection
+                        </th>
+                    </tr>
+                    <tr>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">@GlobalResEstate.hdrNo</th>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">@*@GlobalResEstate.hdrActvtCode*@ Group</th>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">@GlobalResEstate.hdrWorkAktvt</th>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">@GlobalResEstate.lblLevel</th>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Daily Wage</th>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Elaun Pokok Tinggi</th>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Elaun Kesukaran</th>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Bayaran Tambahan Tuai</th>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Insentif Pencapaian Hasil</th>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">@GlobalResEstate.hdrRate (RM)</th>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">@GlobalResEstate.hdrOutcome (Tan)</th>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">@GlobalResEstate.lblTotal (RM)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var grp in Model.Select(s => new { s.fld_Kum, s.fld_WilayahID, s.fld_NegaraID, s.fld_SyarikatID, s.fld_LadangID }).Distinct())
+                    {
+                        bill = bill + 1;
+                        string NamaKumpulan = GetWorkerDetail.GetGroupName(grp.fld_Kum, grp.fld_WilayahID.Value, grp.fld_SyarikatID.Value, grp.fld_NegaraID.Value, grp.fld_LadangID.Value);
+                        <tr>
+                            <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @bill
+                            </td>
+                            <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @grp.fld_Kum - @NamaKumpulan
+                            </td>
+                            <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @foreach (var item in Model.Where(x => x.fld_Kum == grp.fld_Kum).GroupBy(g => new { g.fld_KodAktvt, g.fld_NegaraID, g.fld_SyarikatID }).Select(s => new { Actvy = s.Key.fld_KodAktvt, Neg = s.Key.fld_NegaraID, Sya = s.Key.fld_SyarikatID }))
+                                {
+                                    string x = " - ";
+                                    @item.Actvy @x @GetConfig.GetAktvt(item.Actvy, item.Neg.Value, item.Sya.Value) <br />
+                                }
+                            </td>
+                            <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @foreach (var item in Model.Where(x => x.fld_Kum == grp.fld_Kum).OrderBy(o => o.fld_KodPkt).GroupBy(g => new { g.fld_Kum, g.fld_KodPkt }).Select(s => new { s.Key.fld_KodPkt }))
+                                {
+                                    @item.fld_KodPkt<br />
+                                }
+                            </td>
+                            <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @foreach (var item in Model.Where(x => x.fld_Kum == grp.fld_Kum).GroupBy(g => new { g.fld_Kum }))
+                                {
+                                    @item.Where(w => w.fld_DailyIncentivCode == "P38").Sum(s => s.fld_DailyIncentive).Value.ToString("N")<br />
+                                }
+                            </td>
+                            <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @foreach (var item in Model.Where(x => x.fld_Kum == grp.fld_Kum).GroupBy(g => new { g.fld_Kum }))
+                                {
+                                    @item.Where(w => w.fld_DailyIncentivCode == "P44").Sum(s => s.fld_Amount).Value.ToString("N")<br />
+                                }
+                            </td>
+                            <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @foreach (var item in Model.Where(x => x.fld_Kum == grp.fld_Kum).GroupBy(g => new { g.fld_Kum }))
+                                {
+                                    @item.Where(w => w.fld_KodAktvt == "A003").Sum(s => s.fld_Amount).Value.ToString("N")<br />
+                                }
+                            </td>
+                            <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @foreach (var item in Model.Where(x => x.fld_Kum == grp.fld_Kum).GroupBy(g => new { g.fld_Kum }))
+                                {
+                                    @item.Where(w => w.fld_DailyIncentivCode == "P44").Sum(s => s.fld_Amount).Value.ToString("N")<br />
+                                }
+                            </td>
+                            <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @foreach (var item in Model.Where(x => x.fld_Kum == grp.fld_Kum).GroupBy(g => new { g.fld_Kum }))
+                                {
+                                    @item.Where(w => w.fld_DailyIncentivCode == "P64").Sum(s => s.fld_Amount).Value.ToString("N")<br />
+                                }
+                            </td>
+                            <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @foreach (var item in Model.Where(x => x.fld_Kum == grp.fld_Kum).GroupBy(g => new { g.fld_Kum }))
+                                {
+                                    @item.Sum(s => s.fld_KadarByr).Value.ToString("N") <br />
+                                }
+                            </td>
+                            <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @foreach (var item in Model.Where(x => x.fld_Kum == grp.fld_Kum).GroupBy(g => new { g.fld_Kum }))
+                                {
+                                    @item.Sum(s => s.fld_JumlahHasil).Value.ToString("N") <br />
+                                }
+                            </td>
+                            <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @foreach (var item in Model.Where(x => x.fld_Kum == grp.fld_Kum).GroupBy(g => new { g.fld_Kum }))
+                                {
+                                    @item.Sum(s => s.fld_Amount).Value.ToString("N")<br />
+                                }
+                            </td>
+                        </tr>
+                    }
+                    <tr>
+                        <td colspan="10" bgcolor="#ffcc80" style="color:black; text-align: right; vertical-align:middle !important;border:1px solid black;" border="1">
+                            <strong>@GlobalResEstate.lblTotal</strong>
+                        </td>
+                        <td align="center" bgcolor="#ffcc80" style="color:black; vertical-align:middle !important;border:1px solid black;" border="1">
+                            @Model.Sum(a => a.fld_JumlahHasil).Value.ToString("N")
+                        </td>
+                        <td align="center" bgcolor="#ffcc80" style="color:black; vertical-align:middle !important;border:1px solid black;" border="1">
+                            @Model.Sum(a => a.fld_Amount).Value.ToString("N")
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        }
+        else // LEVEL
+        {
+            <logo />
+            <table class="table table-hover table-bordered" style="font-size: 11px;" border="0" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th colspan="11" style="text-align:center;vertical-align:middle;">
+                            @ViewBag.NamaSyarikat
+                            <br />
+                            (@GlobalResEstate.lblCompanyNo : @ViewBag.NoSyarikat)
+                            <br />
+                            Yield Report
+                            <br />
+                            @mfi.GetMonthName(Convert.ToInt32(ViewBag.MonthSelection)) - @ViewBag.YearSelection
+                        </th>
+                    </tr>
+                    <tr>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">@GlobalResEstate.hdrNo</th>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">@GlobalResEstate.lblLevel</th>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">@GlobalResEstate.hdrWorkAktvt</th>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Daily Wage</th>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Elaun Pokok Tinggi</th>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Elaun Kesukaran</th>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Bayaran Tambahan Tuai</th>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Insentif Pencapaian Hasil</th>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">@GlobalResEstate.hdrRate (RM)</th>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">@GlobalResEstate.hdrOutcome (Tan)</th>
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">@GlobalResEstate.lblTotal (RM)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var lvl in Model.Select(s => new { s.fld_KodPkt, s.fld_WilayahID, s.fld_NegaraID, s.fld_SyarikatID, s.fld_LadangID }).OrderBy(o => o.fld_KodPkt).Distinct())
+                    {
+                        bill = bill + 1;
+                        string levelname = GetWorkerDetail.LevelName(lvl.fld_KodPkt, lvl.fld_WilayahID.Value, lvl.fld_SyarikatID.Value, lvl.fld_NegaraID.Value, lvl.fld_LadangID.Value);
+                        <tr>
+                            <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @bill
+                            </td>
+                            <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @lvl.fld_KodPkt - @levelname
+                            </td>
+                            <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @foreach (var item in Model.Where(x => x.fld_KodPkt == lvl.fld_KodPkt).OrderBy(o => o.fld_KodAktvt).GroupBy(g => new { g.fld_KodAktvt, g.fld_NegaraID, g.fld_SyarikatID }).Select(s => new { Actvy = s.Key.fld_KodAktvt, Neg = s.Key.fld_NegaraID, Sya = s.Key.fld_SyarikatID }))
+                                {
+                                    string x = " - ";
+                                    @item.Actvy @x @GetConfig.GetAktvt(item.Actvy, item.Neg.Value, item.Sya.Value) <br />
+                                }
+                            </td>
+                            <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @foreach (var item in Model.Where(x => x.fld_KodPkt == lvl.fld_KodPkt).GroupBy(g => new { g.fld_KodPkt }))
+                                {
+                                    @item.Where(w => w.fld_DailyIncentivCode == "P38").Sum(s => s.fld_DailyIncentive).Value.ToString("N")<br />
+                                }
+                            </td>
+                            <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @foreach (var item in Model.Where(x => x.fld_KodPkt == lvl.fld_KodPkt).GroupBy(g => new { g.fld_KodPkt }))
+                                {
+                                    @item.Where(w => w.fld_DailyIncentivCode == "P44").Sum(s => s.fld_Amount).Value.ToString("N")<br />
+                                }
+                            </td>
+                            <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @foreach (var item in Model.Where(x => x.fld_KodPkt == lvl.fld_KodPkt).GroupBy(g => new { g.fld_KodPkt }))
+                                {
+                                    @item.Where(w => w.fld_KodAktvt == "A003").Sum(s => s.fld_Amount).Value.ToString("N")<br />
+                                }
+                            </td>
+                            <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @foreach (var item in Model.Where(x => x.fld_KodPkt == lvl.fld_KodPkt).GroupBy(g => new { g.fld_KodPkt }))
+                                {
+                                    @item.Where(w => w.fld_DailyIncentivCode == "P44").Sum(s => s.fld_Amount).Value.ToString("N")<br />
+                                }
+                            </td>
+                            <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @foreach (var item in Model.Where(x => x.fld_KodPkt == lvl.fld_KodPkt).GroupBy(g => new { g.fld_KodPkt }))
+                                {
+                                    @item.Where(w => w.fld_DailyIncentivCode == "P64").Sum(s => s.fld_Amount).Value.ToString("N")<br />
+                                }
+                            </td>
+                            <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @foreach (var item in Model.Where(x => x.fld_KodPkt == lvl.fld_KodPkt).GroupBy(g => new { g.fld_KodPkt }))
+                                {
+                                    @item.Sum(s => s.fld_KadarByr).Value.ToString("N") <br />
+                                }
+                            </td>
+                            <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @foreach (var item in Model.Where(x => x.fld_KodPkt == lvl.fld_KodPkt).GroupBy(g => new { g.fld_KodPkt }))
+                                {
+                                    @item.Sum(s => s.fld_JumlahHasil).Value.ToString("N") <br />
+                                }
+                            </td>
+                            <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @foreach (var item in Model.Where(x => x.fld_KodPkt == lvl.fld_KodPkt).GroupBy(g => new { g.fld_KodPkt }))
+                                {
+                                    @item.Sum(s => s.fld_Amount).Value.ToString("N")<br />
+                                }
+                            </td>
+                        </tr>
+                    }
+                    <tr>
+                        <td colspan="9" bgcolor="#ffcc80" style="color:black; text-align: right; vertical-align:middle !important;border:1px solid black;" border="1">
+                            <strong>@GlobalResEstate.lblTotal</strong>
+                        </td>
+                        <td align="center" bgcolor="#ffcc80" style="color:black; vertical-align:middle !important;border:1px solid black;" border="1">
+                            @Model.Sum(a => a.fld_JumlahHasil).Value.ToString("N")
+                        </td>
+                        <td align="center" bgcolor="#ffcc80" style="color:black; vertical-align:middle !important;border:1px solid black;" border="1">
+                            @Model.Sum(a => a.fld_Amount).Value.ToString("N")
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        }
+        @*end fitri add*@
+    </div>
+    if (ViewBag.Print == null)
+    {
+        <div style="text-align:right; margin-top:10px">
+            <a class="btn btn-default btn-sm" href="#" id="printpage">
+                <span class="glyphicon glyphicon-print"> </span> @GlobalResEstate.btnPrint
+            </a>
+            <a class="btn btn-default btn-sm" href="#" id="downloadpdf">
+                <span><img src="~/Asset/Images/pdf-icon.png" width="20px" height="20px" /></span> @GlobalResEstate.btnDownloadPdf
+            </a>
+            <a class="btn btn-default btn-sm" href="#" onclick="HTMLtoExcel('HasilReport')">
+                <!--add by fitri 23-09-2020-->
+                <span><img src="~/Asset/Images/excel-icon.png" width="20px" height="20px" /></span> @GlobalResEstate.btnDownloadExcel
+            </a>
+        </div>
+
+    }
+}
+
+@if (Model == null || Model.Count() == 0)
+{
+    <div id="scrollArea2" class="modal-body" style="text-align: center">
+        <p style="color: red">@ViewBag.Message</p>
+    </div>
+}
+
+<style>
+    #page td {
+        padding: 2px;
+        margin: 2px;
+    }
+
+    thead {
+        display: table-header-group
+    }
+    /*add by fitri 23-09-2020*/
+    tfoot {
+        display: table-row-group
+    }
+    /*add by fitri 23-09-2020*/
+    tr {
+        page-break-inside: avoid
+    }
+    /*add by fitri 23-09-2020*/
+</style>
+<script src="~/Asset/Scripts/FromHTML.js"></script> <!--add by fitri 23-09-2020 -->
+<script src="~/Asset/Scripts/FileSaver.js"></script> <!--add by fitri 23-09-2020-->
+<script>
+    $(document).ready(function () {
+        $("#printpage").click(function () {
+            var DivElement = document.getElementById("scrollArea2").innerHTML;
+            var oldPage = document.body.innerHTML;
+            document.body.innerHTML = DivElement;
+            window.print();
+            document.body.innerHTML = oldPage;
+        })
+
+        $("#downloadpdf").click(function () {
+            var RadioGroup = $('input[name=RadioGroup]:checked').val();
+            var MonthList = $("#MonthList").val();
+            var YearList = $("#YearList").val();
+            var SelectionList = $("#SelectionList").val();
+            //var StatusList = $("#StatusList").val();
+            //var WorkCategoryList = $("#WorkCategoryList").val();
+
+            //var StatusList = '';
+            //var WorkCategoryList = '';
+
+            var param = '/?RadioGroup=' + RadioGroup + '&MonthList=' + MonthList + '&YearList=' + YearList + '&SelectionList=' + SelectionList;
+            var controller = 'Report';
+            var action = 'PrintHasilPdf';
+
+            var ajxfn = {};
+            ajxfn.url = "@Url.Action("PDFIndetifier", "PdfCreator")";
+            ajxfn.type = "POST";
+            ajxfn.data = JSON.stringify({ controller: controller, action: action, param: param });
+            ajxfn.datatype = "json";
+            ajxfn.contentType = "application/json";
+            ajxfn.success = function (result) {
+                //var win = window.open(result.link, '_blank');
+                //win.focus();
+                PDFObject.embed(result.link, "#searchHasil", { height: "450px" });
+            };
+
+            ajxfn.error = function () {
+                $.simplyToast('@GlobalResEstate.msgError', 'danger');
+                $("#UpdateProgress1").css("display", "none");
+            };
+            $.ajax(ajxfn);
+
+            return false;
+        });
+    });
+</script>

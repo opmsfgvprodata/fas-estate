@@ -1,0 +1,205 @@
+﻿@{
+    ViewBag.Title = ViewBag.TitleReport;
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+
+    AjaxOptions options = new AjaxOptions
+    {
+        HttpMethod = "Get",
+        UpdateTargetId = "searchResult",
+        InsertionMode = InsertionMode.Replace,
+        LoadingElementId = "divLoading"
+    };
+}
+<style>
+    input.grpcb {
+        transform: scale(1.5);
+        margin: 7px;
+    }
+</style>
+<script src="~/Asset/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+
+<div id="divLoading" style="display:none;">
+    <div class="progressTest">
+        <label>
+            @GlobalResEstate.msgWait
+        </label>
+    </div>
+</div>
+
+
+<section class="content-wrapper main-content clear-fix">
+    <div class="well bottom" style="padding-bottom:16px;">
+        @using (Ajax.BeginForm("_LprnKrjaBlnan", "Report2", null, options, new { @id = "RptSearch" }))
+        {
+            @Html.AntiForgeryToken()
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-sm-1" id="divlist">
+                        <label>Tahun</label>
+                        @Html.DropDownList("YearList", null, htmlAttributes: new { @class = "form-control" })
+                    </div>
+                    <div class="col-sm-1" id="divlist">
+                        <label>Dari</label>
+                        @Html.DropDownList("MonthList", null, htmlAttributes: new { @class = "form-control" })
+                    </div>
+                    <div class="col-sm-1" id="divlist">
+                        <label>Hingga</label>
+                        @Html.DropDownList("MonthList2", null, htmlAttributes: new { @class = "form-control" })
+                    </div>
+                    <div class="col-sm-2" id="divlist">
+                        @Html.CheckBox("EnbleCC", new { @checked = "checked", @class = "grpcb" })
+                        <label>Cost Center</label>
+                        @Html.DropDownList("PilihanCC", null, htmlAttributes: new { @class = "form-control" })
+                    </div>
+                    <div class="col-sm-3" id="divlist">
+                        @Html.CheckBox("EnblePkt", new { @checked = "checked", @class = "grpcb" })
+                        <label>Level</label>
+                        @Html.DropDownList("PilihanPkt", null, htmlAttributes: new { @class = "form-control" })
+                    </div>
+                    <div class="col-sm-2" id="divlist">
+                        @Html.CheckBox("EnbleAktvt", new { @checked = "checked", @class = "grpcb" })
+                        <label>Activity</label>
+                        @Html.DropDownList("PilihanAktvt", null, htmlAttributes: new { @class = "form-control" })
+                    </div>
+                    <div class="col-sm-2" id="divlist">
+                        @Html.CheckBox("EnbleGL", new { @checked = "checked", @class = "grpcb" })
+                        <label>GL Account</label>
+                        @Html.DropDownList("PilihanGL", null, htmlAttributes: new { @class = "form-control" })
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="col-sm-2" id="divlist">
+                        @Html.CheckBox("EnbleGrp", new { @checked = "checked", @class = "grpcb" })
+                        <label>Group</label>
+                        @Html.DropDownList("PilihanGrp", null, htmlAttributes: new { @class = "form-control" })
+                    </div>
+                    <div class="col-sm-4" id="divlist">
+                        @Html.CheckBox("EnbleWrk", new { @checked = "checked", @class = "grpcb" })
+                        <label>Worker</label>
+                        @Html.DropDownList("PilihanWrk", null, htmlAttributes: new { @class = "form-control" })
+                    </div>
+                    <div class="col-sm-1" id="divlist">
+                        <label>Active</label>
+                        @Html.DropDownList("PilihanSts", null, htmlAttributes: new { @class = "form-control" })
+                    </div>
+                    <div class="col-sm-1">
+                        @Html.RadioButton("Selection1", 0, new { @checked = "checked", @id = "harga" })
+                        <label>Harga</label><br />
+                        @Html.RadioButton("Selection1", 1, new { @id = "kuantiti" })
+                        <label>Kuantiti</label>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="row">
+                            <div class="col-sm-4">
+                                @Html.CheckBox("Selection21", new { @checked = "checked", @id = "kg" })
+                                <label>KONG</label><br />
+                                @Html.CheckBox("Selection24", new { @checked = "checked", @id = "pr" })
+                                <label>PIECE-RATE</label><br />
+                            </div>
+                            <div class="col-sm-4">
+                                @Html.CheckBox("Selection22", new { @checked = "checked", @id = "ot" })
+                                <label>OT</label><br />
+                                @Html.CheckBox("Selection25", new { @checked = "checked", @id = "in" })
+                                <label>INCENTIVE</label><br />
+
+                            </div>
+                            <div class="col-sm-4">
+                                @Html.CheckBox("Selection23", new { @checked = "checked", @id = "or" })
+                                <label>OTHERS</label><br />
+                                @Html.CheckBox("Selection26", new { @checked = "checked", @id = "de" })
+                                <label>DEDUCTION</label><br />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-1" style="padding-top:25px;">
+                        <input class="btn btn-primary btn-block" type="submit" name="Lihat" id="btnSubmit" value="@GlobalResEstate.btnView" />
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+    <div class="well" style="margin-top:7px;">
+        <div class="panel panel-primary">
+            <div class="panel-heading">@ViewBag.TitleReport.ToUpper()</div>
+            <div class="panel-body">
+                <div id="searchResult">
+                    <div id="scrollArea2" class="modal-body" style="text-align: center">
+                        <p style="color: red">Please select the selection and click view button.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<script>
+    $(function () {
+        $('#EnbleCC').change(function () {
+            if ($(this).is(':checked')) {
+                $('#PilihanCC').removeAttr('disabled');
+            } else {
+                $('#PilihanCC').attr('disabled', 'disabled');
+            }
+        });
+
+        $('#EnblePkt').change(function () {
+            if ($(this).is(':checked')) {
+                $('#PilihanPkt').removeAttr('disabled');
+            } else {
+                $('#PilihanPkt').attr('disabled', 'disabled');
+            }
+        });
+
+        $('#EnbleAktvt').change(function () {
+            if ($(this).is(':checked')) {
+                $('#PilihanAktvt').removeAttr('disabled');
+            } else {
+                $('#PilihanAktvt').attr('disabled', 'disabled');
+            }
+        });
+
+        $('#EnbleGL').change(function () {
+            if ($(this).is(':checked')) {
+                $('#PilihanGL').removeAttr('disabled');
+            } else {
+                $('#PilihanGL').attr('disabled', 'disabled');
+            }
+        });
+
+        $('#EnbleGrp').change(function () {
+            if ($(this).is(':checked')) {
+                $('#PilihanGrp').removeAttr('disabled');
+            } else {
+                $('#PilihanGrp').attr('disabled', 'disabled');
+            }
+        });
+
+        $('#EnbleWrk').change(function () {
+            if ($(this).is(':checked')) {
+                $('#PilihanWrk').removeAttr('disabled');
+            } else {
+                $('#PilihanWrk').attr('disabled', 'disabled');
+            }
+        });
+        $('#harga').change(function () {
+            if ($(this).is(':checked')) {
+                $('#kg').removeAttr('disabled');
+                $('#ot').removeAttr('disabled');
+                $('#de').removeAttr('disabled');
+                $('#or').removeAttr('disabled');
+                $('#in').removeAttr('disabled');
+            }
+        });
+        $('#kuantiti').change(function () {
+            if ($(this).is(':checked')) {
+                $('#kg').attr('disabled', 'disabled');
+                $('#ot').attr('disabled', 'disabled');
+                $('#de').attr('disabled', 'disabled');
+                $('#or').attr('disabled', 'disabled');
+                $('#in').attr('disabled', 'disabled');
+            }
+        });
+    });
+</script>

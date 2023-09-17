@@ -1,0 +1,184 @@
+﻿
+@model MVC_SYSTEM.ViewingModels.PagedList<MVC_SYSTEM.ViewingModels.vw_HasilSawitBlok>
+
+<div id="blokYield">
+
+    @{
+        var grid = new WebGrid(
+            canPage: true,
+            rowsPerPage: Model.PageSize,
+            canSort: false,
+            ajaxUpdateContainerId: "grid",
+            ajaxUpdateCallback: "callBackBlok");
+
+        grid.Bind(Model.Content, rowCount: Model.TotalRecords, autoSortAndPage: false);
+        //grid.Pager(WebGridPagerModes.All);
+
+        if (@grid.TotalRowCount > 0)
+        {
+            <div class="text-center">@grid.TotalRowCount @Html.Label("maklumat Blok")</div>
+
+            @grid.GetHtml(htmlAttributes: new { id = "grid" }, // id for ajaxUpdateontainerId parameter
+                tableStyle: "table table-bordered table-striped table-list table-hover",
+                headerStyle: "header_table",
+                alternatingRowStyle: "Grid-alt",
+                selectedRowStyle: "Grid-selected",
+                rowStyle: "Grid-rowstyle",
+                footerStyle: "table-pager",
+                mode: WebGridPagerModes.All,
+                columns: grid.Columns(
+                    grid.Column(header: "No."
+                        , format: item => item.WebGrid.Rows.IndexOf(item) + 1
+                                          + Math.Round(Convert.ToDouble(grid.TotalRowCount / grid.PageCount) / grid.RowsPerPage)
+                                          * grid.RowsPerPage * grid.PageIndex, style: "count"),
+                    grid.Column(columnName: "fld_Blok", header: "Kod Blok", style: "kodpkt"),
+                    grid.Column(columnName: "fld_LsBlok", header: "Luas Blok", style: "luaspkt"),
+                    grid.Column(
+                        header: "Hasil Sawit Bulanan", style: "hasilsawit",
+                        format: @<text>
+                            <span id="hasilTan1" class="display-mode">@item.fld_HasilTan</span>
+                            @Html.TextBox("fld_hasilTan", (int?)item.fld_HasilTan, htmlAttributes: new { @class = "edit-mode form-control", Style = "display:none; text-align: center;", size = 10, @Value = @item.fld_HasilTan })
+                        </text>),
+                    grid.Column(GlobalResEstate.hdrAction, format: (item) =>
+                    {
+                        if (item.fld_HasilTan != 0)
+                        {
+                            var blok = @item.fld_Blok;
+                            var tindakan = "<button class='edit-book display-mode btn btn-success btn-block' title='Kemaskini Hasil Sawit'><i class='fa fa-edit fa-lg'></i></button>" +
+                                           "<button class='save-book edit-mode btn btn-success btn-block' id='" + blok + "' style='display: none;' title='Simpan Hasil Sawit'><i class='fa fa-check fa-lg'></i></button>" +
+                                           "<button class='edit-mode cancel btn btn-danger btn-block' style='display: none;' title='Batal'><i class='fa fa-remove fa-lg'></i></button>";
+                            return @Html.Raw(tindakan);
+                        }
+                        else
+                        {
+                            var blok = @item.fld_Blok;
+                            var tindakan = "<button class='edit-book display-mode btn btn-success btn-block' title='Kemaskini Hasil Sawit'><i class='fa fa-plus fa-lg'></i></button>" +
+                                           "<button class='save-book edit-mode btn btn-success btn-block' id='" + blok + "' style='display: none;' title='Simpan Hasil Sawit'><i class='fa fa-check fa-lg'></i></button>" +
+                                           "<button class='edit-mode cancel btn btn-danger btn-block' style='display: none;' title='Batal'><i class='fa fa-remove fa-lg'></i></button>";
+                            return @Html.Raw(tindakan);
+                        }
+                    }, canSort: false, style: "tindakan")
+                    ));
+        }
+        else
+        {
+            <hr />
+            <div class="text-center">
+                @Html.Label("Tiada maklumat dijumpai")
+            </div>
+
+            <hr />
+        }
+    }
+</div>
+
+<script>
+    function callBackBlok() {
+        $('.edit-mode').hide();
+        $('.edit-book').on('click',
+            function () {
+                var tr = $(this).parents('tr:first');
+                tr.find('.edit-mode, .display-mode').toggle();
+            });
+        $('.cancel').on('click',
+            function () {
+                var tr = $(this).parents('tr:first');
+                tr.find('.edit-mode, .display-mode').toggle();
+            });
+        $('.save-book').on('click',
+            function () {
+                var tr = $(this).parents('tr:first');
+                var kodBlok = $(this).prop('id');
+                console.log(kodBlok);
+                var hasilTan = tr.find('#fld_hasilTan').val();
+                console.log(hasilTan);
+                var jenisPeringkat = $('#jenisPeringkatDdl').val();
+                console.log(jenisPeringkat);
+                var bulan = $('#MonthDdl').val();
+                console.log(bulan);
+                var tahun = $('#YearDdl').val();
+                console.log(tahun);
+
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("addBlokYieldInfo", "WorkerInfo")',
+                    dataType: 'json',
+                    contentType: 'application/json',
+                    async: false,
+                    data: JSON.stringify({ kodBlok: kodBlok, hasilTan: hasilTan, month: bulan, year: tahun }),
+                    success: function(result) {
+                        $.simplyToast(result.msg, result.status);
+                        if (result.status == "success") {
+                            $("#blokYield").load('@Url.Action("_YieldCreate", "WorkerInfo")', { JenisPeringkatList: jenisPeringkat, MonthList: bulan, YearList: tahun });
+                            tr.find('.edit-mode, .display-mode').toggle();
+                        }
+                    }
+                });
+            });
+    }
+</script>
+
+
+<script>
+    $(function afterRefresh () {
+        $('.edit-mode').hide();
+        $('.edit-book').on('click',
+            function () {
+                var tr = $(this).parents('tr:first');
+                tr.find('.edit-mode, .display-mode').toggle();
+            });
+        $('.cancel').on('click',
+            function () {
+                var tr = $(this).parents('tr:first');
+                tr.find('.edit-mode, .display-mode').toggle();
+            });
+        $('.save-book').on('click',
+            function () {
+                var tr = $(this).parents('tr:first');
+                var kodBlok = $(this).prop('id');
+                console.log(kodBlok);
+                var hasilTan = tr.find('#fld_hasilTan').val();
+                console.log(hasilTan);
+                var jenisPeringkat = $('#jenisPeringkatDdl').val();
+                console.log(jenisPeringkat);
+                var bulan = $('#MonthDdl').val();
+                console.log(bulan);
+                var tahun = $('#YearDdl').val();
+                console.log(tahun);
+
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("addBlokYieldInfo", "WorkerInfo")',
+                    dataType: 'json',
+                    contentType: 'application/json',
+                    async: false,
+                    data: JSON.stringify({ kodBlok: kodBlok, hasilTan: hasilTan, month: bulan, year: tahun }),
+                    success: function(result) {
+                        $.simplyToast(result.msg, result.status);
+                        if (result.status == "success") {
+                            $("#blokYield").load('@Url.Action("_YieldCreate", "WorkerInfo")', { JenisPeringkatList: jenisPeringkat, MonthList: bulan, YearList: tahun });
+                            tr.find('.edit-mode, .display-mode').toggle();
+                        }
+                    }
+                });
+            });
+        });
+
+
+
+    //$( document ).ajaxStart(function() {
+    //    //$('.edit-mode').hide();
+    //});
+
+    //$( document ).ajaxStop(function() {
+    //    $('.edit-mode').hide();
+    //    });
+
+
+</script>
+
+
+
+
+
+

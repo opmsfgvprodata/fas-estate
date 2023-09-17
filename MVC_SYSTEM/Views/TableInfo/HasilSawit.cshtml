@@ -1,0 +1,83 @@
+﻿@model IEnumerable<MVC_SYSTEM.Models.tbl_HasilSawit>
+
+@{
+    ViewBag.Title = "HasilSawit";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+<section class="content-wrapper main-content clear-fix">
+
+    @using (Html.BeginForm("HasilSawit", null, FormMethod.Get))
+    {
+        <div class="well bottom">
+            <div class="row">
+                @*<div class="col-sm-6">
+                    @Html.Label("Peringkat")
+                    @Html.TextBox("Search", null, htmlAttributes: new { @class = "form-control" })
+                </div>*@
+                <div class="col-sm-2">
+                    @Html.Label("Bulan")
+                    @Html.DropDownList("BulanList", null, htmlAttributes: new { @class = "form-control" })
+                </div>
+                <div class="col-sm-2">
+                    @Html.Label("Tahun")
+                    @Html.DropDownList("TahunList", null, htmlAttributes: new { @class = "form-control" })
+                </div>
+                <div class="col-sm-2">
+                    @Html.Label("Kumpulan")
+                    @Html.DropDownList("KumpulanList", null, htmlAttributes: new { @class = "form-control" })
+                </div>
+                <div class="col-sm-2" style="padding-top:25px;">
+                    <input class="btn btn-primary btn-block" type="submit" name="Lihat" id="Lihat" value="Cari" onclick="return DisplayProgressMessage(this);" />
+                </div>
+            </div>
+        </div>
+        <div id="DataTable" class="well">
+            <h4 style="text-align:center;"><strong>JADUAL HASIL SAWIT</strong></h4>
+            <div id="scrollArea" class="modal-body">
+                <logo />
+                <table class="table table-hover table-bordered" style="font-size: 11px;" border="0" id="tblSample">
+                    <thead>
+                        @*<tr>
+                                <th colspan="8" style="text-align:center;vertical-align:middle;">
+                                    @ViewBag.NamaSyarikat
+                                    <br />
+                                    (@GlobalResNoSkb.hdrCmpnyNo : @ViewBag.NoSyarikat)
+                                    <br />
+                                    @GlobalResNoSkb.hdrReportTitle
+                                    <br />
+                                    @GetTriager.GetMonthName(ViewBag.Month) - @ViewBag.Year
+                                </th>
+                            </tr>*@
+                        <tr>
+                            <th bgcolor="#ffcc80" style="color:white;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Peringkat</th>
+                            <th bgcolor="#ffcc80" style="color:white;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Hasil Sawit (Tan/Hek)</th>
+                            <th bgcolor="#ffcc80" style="color:white;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Luas Berhasil Sawit(Hek)</th>
+                            <th bgcolor="#ffcc80" style="color:white;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Jumlah Luas</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                    @item.fld_pkt
+                                </td>
+                                <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                    @item.fld_hsltan
+                                </td>
+                                <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                    @item.fld_luas_hek
+                                </td>
+                                <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                    @item.fld_jumlah
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+                <newpage />
+            </div>
+        </div>
+    }
+</section>

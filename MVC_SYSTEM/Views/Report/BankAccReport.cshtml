@@ -1,0 +1,54 @@
+﻿@*@model IEnumerable<MVC_SYSTEM.MasterModels.tbl_Ladang>*@
+@using MVC_SYSTEM.Class;
+
+@{
+    ViewBag.Title = "BankAccReport";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+    //GetConfig GetConfig = new GetConfig();
+    //ChangeTimeZone ChangeTimeZone = new ChangeTimeZone();
+    //DateTime Todaydate = ChangeTimeZone.gettimezone();
+    //string uniquefilename = "AccountReport_" + ViewBag.UserID + "_" + Todaydate.Year.ToString() + Todaydate.Month.ToString() + Todaydate.Day.ToString() + Todaydate.Hour.ToString() + Todaydate.Minute.ToString() + Todaydate.Second.ToString();
+
+    AjaxOptions options = new AjaxOptions
+    {
+        HttpMethod = "Get",
+        UpdateTargetId = "searchAccBankRptInfo",
+        InsertionMode = InsertionMode.Replace,
+        LoadingElementId = "divLoading"
+    };
+}
+
+<script src="~/Asset/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+
+<div id="divLoading" style="display:none;">
+    <div class="progressTest">
+        <label>
+            @GlobalResEstate.msgWait
+        </label>
+    </div>
+</div>
+
+
+    <section class="content-wrapper main-content clear-fix">
+        <div class="well">
+        <div class="panel panel-primary">
+            <div class="panel-heading">@GlobalResEstate.lblEstateAccReport.ToUpper()</div>
+            <div class="panel-body">
+                <div id="searchAccBankRptInfo">
+                    @Html.Action("_BankAccReport", "Report", null)
+                </div>
+            </div>
+        </div>
+        </div>
+    </section>
+    
+
+
+<style>
+    #page td {
+        padding: 2px;
+        margin: 2px;
+    }
+</style>
+
+

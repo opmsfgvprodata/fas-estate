@@ -1,0 +1,171 @@
+﻿@model IEnumerable<MVC_SYSTEM.Models.tbl_Pkjmast>
+@using Itenso.TimePeriod;
+
+@{
+    ViewBag.Title = "ExpiredNotiReport";
+    //Layout = "~/Views/Shared/_LayoutMain.cshtml";
+    int bill = 0;
+    DateTime today = DateTime.Now;
+    //TimeSpan totalmonthleft = 0;
+}
+
+@if (ViewBag.DataCount < 1)
+{
+    <p style="color:black">@GlobalResEstate.msgErrorSearch</p>
+}
+else
+{
+    <div id="scrollArea" class="modal-body">
+        <logo />
+        <table id="reportTable" class="table table-bordered" style="font-size: 11px !important;" border="0">
+            <thead>
+
+                <tr>
+                    <th colspan="6" style="text-align:center;vertical-align:middle; border:none !important;">
+                        @ViewBag.NamaSyarikat
+                        <br />
+                        (@GlobalResEstate.lblCompanyNo : @ViewBag.NoSyarikat)
+                        <br />
+                        @GlobalResEstate.lblPermitReport
+                        <br />
+                        <label style="font-size:small">
+
+                        </label>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    bill = bill + 1;
+                    DateDiff totalmonthleft = new DateDiff(today, item.fld_T2prmt.Value);
+                    <tr>
+                        <th colspan="2" style="border-bottom:1px solid !important; border-top:none !important; border-left:none !important; border-right:none !important; border-bottom-color:red !important">@bill. @item.fld_Nopkj - @item.fld_Nama</th>
+                    </tr>
+                    <tr>
+                        <td style="border:none !important; width:50%">
+                            <table style="font-size:11px !important">
+                                <tr>
+                                    <td style="border:none !important;">
+                                        <label style="font-size:small; font-weight:normal;">@GlobalResEstate.hdrNoPkj</label><br />
+                                        <label style="font-size:small; font-weight:normal;">@GlobalResEstate.hdrName</label><br />
+                                        <label style="font-size:small; font-weight:normal;">@GlobalResEstate.lblPermitNo</label><br />
+
+                                    </td>
+                                    <td style="border:none !important;">
+                                        <label style="font-size:small; font-weight:normal;">: @item.fld_Nopkj</label><br />
+                                        <label style="font-size:small; font-weight:normal;">: @item.fld_Nama</label><br />
+                                        <label style="font-size:small; font-weight:normal;">: @item.fld_Prmtno </label><br />
+
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td style="border:none !important; width:50%">
+                            <table style="font-size:11px !important">
+                                <tr>
+                                    <td style="border:none !important;">
+                                        <label style="font-size:small; font-weight:normal;">@GlobalResEstate.lblPermitStart</label><br />
+                                        <label style="font-size:small; font-weight:normal;">@GlobalResEstate.lblPermitEnd</label><br />
+                                        <label style="font-size:small; font-weight:normal;">@GlobalResEstate.hdrExpiredMonth</label><br />
+                                    </td>
+                                    <td style="border:none !important;">
+                                        <label style="font-size:small; font-weight:normal;">: @item.fld_T1prmt</label><br />
+                                        <label style="font-size:small; font-weight:normal;">: @item.fld_T2prmt</label><br />
+                                        @if (totalmonthleft.Months > 0)
+                                        {
+                                            <label style="font-size:small; font-weight:normal; color:green">: @totalmonthleft.Months @GlobalResEstate.lblMonth</label><br />
+                                        }
+                                        else
+                                        {
+                                            <label style="font-size:small; font-weight:normal; color:red">: @totalmonthleft.Months @GlobalResEstate.lblMonth</label><br />
+                                        }
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="2" style="text-align:left; border:none; margin-bottom:0px;">
+                        <label style="font-size:small; font-weight:normal;">Dicetak Oleh: Nurul Izzati bt. Roslan</label>
+                        <label style="font-size:small; font-weight:normal;">&nbsp;&nbsp;&nbsp;Tarikh Dicetak: 08/12/2017</label>
+                        <label style="font-size:small; font-weight:normal;">&nbsp;&nbsp;&nbsp;Masa Dicetak: 12:15 PM</label>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+        <newpage />
+    </div>
+    if (ViewBag.Print == null)
+    {
+        <div style="text-align:right; margin-top:10px">
+            <a class="btn btn-default btn-sm" href="#" id="printpage">
+                <span class="glyphicon glyphicon-print"> </span> @GlobalResEstate.btnPrint
+            </a>
+            <a class="btn btn-default btn-sm" href="#" id="downloadpdf">
+                <span><img src="~/Asset/Images/pdf-icon.png" width="20px" height="20px" /></span> @GlobalResEstate.btnDownloadPdf
+            </a>
+            <a class="btn btn-default btn-sm" href="#" onclick="HTMLtoExcel('')">
+                <span><img src="~/Asset/Images/excel-icon.png" width="20px" height="20px" /></span> @GlobalResEstate.btnDownloadExcel
+            </a>
+        </div>
+    }
+}
+
+<style>
+    #page td {
+        padding: 2px;
+        margin: 2px;
+    }
+</style>
+
+<script>
+    $(document).ready(function () {
+        $("#printpage").click(function () {
+            var DivElement = document.getElementById("scrollArea").innerHTML;
+            var oldPage = document.body.innerHTML;
+            document.body.innerHTML = DivElement;
+            window.print();
+            document.body.innerHTML = oldPage;
+        })
+
+        $("#downloadpdf").click(function () {
+            //var RadioGroup = $('input[name=RadioGroup]:checked').val();
+            var MonthList = $("#MonthList").val();
+            //var YearList = $("#YearList").val();
+            //var SelectionList = $("#SelectionList").val();
+            //var StatusList = $("#StatusList").val();
+            //var WorkCategoryList = $("#WorkCategoryList").val();
+
+            //var StatusList = '';
+            //var WorkCategoryList = '';
+
+            var param = '/?MonthList=' + MonthList;
+            var controller = 'Report';
+            var action = 'PrintNotiPermitPdf';
+
+            var ajxfn = {};
+            ajxfn.url = "@Url.Action("PDFIndetifier", "PdfCreator")";
+            ajxfn.type = "POST";
+            ajxfn.data = JSON.stringify({ controller: controller, action: action, param: param });
+            ajxfn.datatype = "json";
+            ajxfn.contentType = "application/json";
+            ajxfn.success = function (result) {
+                //var win = window.open(result.link, '_blank');
+                //win.focus();
+                PDFObject.embed(result.link, "#tab1primary", { height: "450px" });
+            };
+
+            ajxfn.error = function () {
+                $.simplyToast('@GlobalResEstate.msgError', 'danger');
+                $("#UpdateProgress1").css("display", "none");
+            };
+            $.ajax(ajxfn);
+
+            return false;
+        });
+    });
+</script>

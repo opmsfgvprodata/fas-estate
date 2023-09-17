@@ -1,0 +1,376 @@
+﻿@model IEnumerable<MVC_SYSTEM.Models.vw_RptAIPS>
+@using MVC_SYSTEM.Class;
+
+@{
+    ViewBag.Title = "AIPSReport";
+    //Layout = "~/Views/Shared/_LayoutMain.cshtml";
+    System.Globalization.DateTimeFormatInfo mfi = new System.Globalization.DateTimeFormatInfo();
+    string monthname = "";
+    int bill = 0;
+    decimal TotalInsentifProduktiviti = 0;
+    decimal TotalInsentifKualiti = 0;
+    decimal TotalInsentifKehadiran = 0;
+    decimal TotalInsentif = 0;
+    ChangeTimeZone ChangeTimeZone = new ChangeTimeZone();
+    DateTime Todaydate = ChangeTimeZone.gettimezone();
+    GetConfig GetConfig = new GetConfig();
+    string uniquefilename = "AccountReport_" + ViewBag.UserID + "_" + Todaydate.Year.ToString() + Todaydate.Month.ToString() + Todaydate.Day.ToString() + Todaydate.Hour.ToString() + Todaydate.Minute.ToString() + Todaydate.Second.ToString();
+}
+
+@if (Model != null && Model.Count() != 0)
+{
+    <div class="panel panel-primary">
+        <div class="panel-heading">@GlobalResEstate.lblAipsReport.ToUpper()</div>
+        <div class="panel-body">
+            @*@if (ViewBag.DataCount < 1)
+                    {
+                        <p style="color:red">@GlobalResEstate.msgErrorSearch</p>
+                }
+                else
+                {*@
+            <div id="scrollArea" class="modal-body">
+                <logo />
+                <table class="table table-hover table-bordered" style="font-size: 11px;" border="0">
+                    <thead>
+                        <tr>
+                            <th colspan="45" style="text-align:center;vertical-align:middle;">
+                                @ViewBag.NamaSyarikat
+                                <br />
+                                (@GlobalResEstate.lblCompanyNo : @ViewBag.NoSyarikat)
+                                <br />
+                                Laporan AIPS
+                                <br />
+                                @*@mfi.GetMonthName(Convert.ToInt32(ViewBag.MonthSelection)) - @ViewBag.YearSelection*@
+                            </th>
+                        </tr>
+                        <tr>
+                            <th rowspan="2" bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">@GlobalResEstate.hdrNo</th>
+                            <th rowspan="2" bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">@GlobalResEstate.hdrNoPkj</th>
+                            <th rowspan="2" bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">@GlobalResEstate.hdrName</th>
+                            <th rowspan="2" bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">@GlobalResEstate.hdrNoKp</th>
+                            @*<th rowspan="2" bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Peringkat</th>*@
+                            <th rowspan="2" bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">@GlobalResEstate.lblGroup</th>
+                            <th rowspan="2" bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">@GlobalResEstate.lblWorkerKtgri</th>
+                            <th rowspan="2" bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">@GlobalResEstate.hdrCategory</th>
+                            <th rowspan="2" bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">@GlobalResEstate.lblIncentiveType</th>
+                            @for (int i = 1; i <= 12; i++)
+                            {
+                                monthname = mfi.GetAbbreviatedMonthName(i);
+                                <th colspan="3" bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">@monthname</th>
+                            }
+                            <th rowspan="2" bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">@GlobalResEstate.lblTotalPaid (RM)</th>
+                        </tr>
+                        <tr>
+                            @for (int i = 1; i <= 12; i++)
+                            {
+                                <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">@GlobalResEstate.lblTarget</th>
+                                <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">@GlobalResEstate.lblAchieve</th>
+                                <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">RM</th>
+                            }
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Select(s => new { s.fld_Nopkj, s.fld_Nama, s.fld_Nokp, s.fld_KodKumpulan, s.fld_Ktgpkj, s.fld_JenisPelan, s.fld_NegaraID, s.fld_SyarikatID }).Distinct())
+                        {
+                            bill = bill + 1;
+                            TotalInsentifProduktiviti = 0;
+                            TotalInsentifKualiti = 0;
+                            TotalInsentifKehadiran = 0;
+                            TotalInsentif = 0;
+                            <tr>
+                                <td rowspan="4" align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                    @bill
+                                </td>
+                                <td rowspan="4" align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                    @item.fld_Nopkj
+                                </td>
+                                <td rowspan="4" align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                    @item.fld_Nama
+                                </td>
+                                <td rowspan="4" align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                    @item.fld_Nokp
+                                </td>
+                                @*<td rowspan="3" align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                        @item.fld_KodKumpulan
+                                    </td>*@
+                                <td rowspan="4" align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                    @item.fld_KodKumpulan
+                                </td>
+                                <td rowspan="4" align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                    @GetConfig.GetWebConfigDesc(item.fld_Ktgpkj, "designation", item.fld_NegaraID, item.fld_SyarikatID)
+                                </td>
+                                <td rowspan="4" align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                    @item.fld_JenisPelan
+                                </td>
+                                <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                    @GlobalResEstate.hdrProductvt
+                                </td>
+                                @for (int i = 1; i <= 12; i++)
+                                {
+
+                                    var data1 = Model.Where(x => x.fld_Nopkj == item.fld_Nopkj && x.fld_Month == i).Count();
+                                    if (data1 < 1)
+                                    {
+                                        <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                            -
+                                        </td>
+                                        <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                            -
+                                        </td>
+                                        <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                            -
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        foreach (var prod in Model.Where(x => x.fld_Nopkj == item.fld_Nopkj && x.fld_Month == i))
+                                        {
+                                            TotalInsentifProduktiviti = TotalInsentifProduktiviti + prod.fld_ProdInsentif.Value;
+                                            <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                                @prod.fld_TargetProd.GetValueOrDefault()
+                                            </td>
+                                            <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                                @prod.fld_CapaiProd.GetValueOrDefault()
+                                            </td>
+                                            <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                                @prod.fld_ProdInsentif.GetValueOrDefault()
+                                            </td>
+                                        }
+                                    }
+                                }
+                                <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                    @TotalInsentifProduktiviti
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                    @GlobalResEstate.hdrQuality
+                                </td>
+                                @for (int i = 1; i <= 12; i++)
+                                {
+                                    var data2 = Model.Where(x => x.fld_Nopkj == item.fld_Nopkj && x.fld_Month == i).Count();
+                                    if (data2 < 1)
+                                    {
+                                        <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                            -
+                                        </td>
+                                        <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                            -
+                                        </td>
+                                        <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                            -
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        foreach (var kua in Model.Where(x => x.fld_Nopkj == item.fld_Nopkj && x.fld_Month == i))
+                                        {
+                                            TotalInsentifKualiti = TotalInsentifKualiti + kua.fld_KuaInsentif.Value;
+                                            <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                                @kua.fld_KuaTarget.GetValueOrDefault()
+                                            </td>
+                                            <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                                @kua.fld_KuaCapai.GetValueOrDefault()
+                                            </td>
+                                            <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                                @kua.fld_KuaInsentif.GetValueOrDefault()
+                                            </td>
+                                        }
+                                    }
+
+                                }
+                                <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                    @TotalInsentifKualiti
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                    @GlobalResEstate.hdrAttendance
+                                </td>
+                                @for (int i = 1; i <= 12; i++)
+                                {
+                                    var data3 = Model.Where(x => x.fld_Nopkj == item.fld_Nopkj && x.fld_Month == i).Count();
+                                    if (data3 < 1)
+                                    {
+                                        <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                            -
+                                        </td>
+                                        <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                            -
+                                        </td>
+                                        <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                            -
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        foreach (var hdr in Model.Where(x => x.fld_Nopkj == item.fld_Nopkj && x.fld_Month == i))
+                                        {
+                                            TotalInsentifKehadiran = TotalInsentifKehadiran + hdr.fld_HdrInsentif.Value;
+                                            <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                                @hdr.fld_HdrTarget.GetValueOrDefault()
+                                            </td>
+                                            <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                                @hdr.fld_HdrCapai.GetValueOrDefault()
+                                            </td>
+                                            <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                                @hdr.fld_HdrInsentif.GetValueOrDefault()
+                                            </td>
+                                        }
+                                    }
+                                }
+                                <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                    @TotalInsentifKehadiran
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                    @GlobalResEstate.lblOverall
+                                </td>
+                                @for (int i = 1; i <= 12; i++)
+                                {
+                                    var data4 = Model.Where(x => x.fld_Nopkj == item.fld_Nopkj && x.fld_Month == i).Count();
+                                    if (data4 < 1)
+                                    {
+                                        <td colspan="2" bgcolor="#ffcc80" style="color:black; text-align: right; vertical-align:middle !important;border:1px solid black;" border="1">
+                                            <strong>@GlobalResEstate.lblTotal</strong>
+                                        </td>
+                                        <td bgcolor="#ffcc80" style="color:black; text-align: right; vertical-align:middle !important;border:1px solid black;" border="1">
+                                            <strong>-</strong>
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        foreach (var total in Model.Where(x => x.fld_Nopkj == item.fld_Nopkj && x.fld_Month == i))
+                                        {
+                                            TotalInsentif = TotalInsentif + total.fld_AIPS.Value;
+                                            <td colspan="2" bgcolor="#ffcc80" style="color:black; text-align: right; vertical-align:middle !important;border:1px solid black;" border="1">
+                                                <strong>@GlobalResEstate.lblTotal</strong>
+                                            </td>
+                                            <td bgcolor="#ffcc80" style="color:black; text-align: right; vertical-align:middle !important;border:1px solid black;" border="1">
+                                                <strong>@total.fld_AIPS</strong>
+                                            </td>
+                                        }
+                                    }
+                                }
+                                <td bgcolor="#ffcc80" style="color:black; text-align: right; vertical-align:middle !important;border:1px solid black;" border="1">
+                                    <strong>@TotalInsentif</strong>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+                <newpage />
+            </div>
+        </div>
+    </div>
+    if (ViewBag.Print == null)
+    {
+        <div style="text-align:right; margin-top:10px">
+            <a class="btn btn-default btn-sm" href="#" id="printpage">
+                <span class="glyphicon glyphicon-print"> </span> @GlobalResEstate.btnPrint
+            </a>
+            <a class="btn btn-default btn-sm" href="#" id="downloadpdf">
+                <span><img src="~/Asset/Images/pdf-icon.png" width="20px" height="20px" /></span> @GlobalResEstate.btnDownloadPdf
+            </a>
+            <a class="btn btn-default btn-sm" href="#" onclick="HTMLtoExcel('')">
+                <span><img src="~/Asset/Images/excel-icon.png" width="20px" height="20px" /></span> @GlobalResEstate.btnDownloadExcel
+            </a>
+        </div>
+    }
+}
+
+@if (Model == null || Model.Count() == 0)
+{
+    <div id="scrollArea2" class="modal-body" style="text-align: center">
+        <p style="color: red">@ViewBag.Message</p>
+
+    </div>
+}
+
+<style>
+    #page td {
+        padding: 2px;
+        margin: 2px;
+    }
+</style>
+
+<script>
+    $(document).ready(function () {
+
+        $("#printpage").click(function () {
+            var DivElement = document.getElementById("scrollArea").innerHTML;
+            var oldPage = document.body.innerHTML;
+            document.body.innerHTML = DivElement;
+            window.print();
+            document.body.innerHTML = oldPage;
+        })
+
+        $("#downloadpdf").click(function () {
+            //var RadioGroup = $('input[name=RadioGroup]:checked').val();
+            var MonthList = $("#MonthList").val();
+            var YearList = $("#YearList").val();
+            var WorkerList = $("#WorkerList").val();
+            //var StatusList = $("#StatusList").val();
+            //var WorkCategoryList = $("#WorkCategoryList").val();
+
+            //var StatusList = '';
+            //var WorkCategoryList = '';
+
+            var param = '/?MonthList=' + MonthList + '&YearList=' + YearList + '&WorkerList=' + WorkerList;
+            var controller = 'Report';
+            var action = 'PrintAIPSPdf';
+
+            var ajxfn = {};
+            ajxfn.url = "@Url.Action("PDFIndetifier", "PdfCreator")";
+            ajxfn.type = "POST";
+            ajxfn.data = JSON.stringify({ controller: controller, action: action, param: param });
+            ajxfn.datatype = "json";
+            ajxfn.contentType = "application/json";
+            ajxfn.success = function (result) {
+                //var win = window.open(result.link, '_blank');
+                //win.focus();
+                PDFObject.embed(result.link, "#searchResultAIPSInfo", { height: "450px" });
+            };
+
+            ajxfn.error = function () {
+                $.simplyToast('@GlobalResEstate.msgError', 'danger');
+                $("#UpdateProgress1").css("display", "none");
+            };
+            $.ajax(ajxfn);
+
+            return false;
+        });
+    });
+</script>
+@*<script>
+    $(Document).ready(function () {
+        $("#printpage").click(function () {
+            $("#reportTable").printThis();
+        });
+
+        $("#downloadpdf").click(function () {
+            var myHtml = document.getElementById('scrollArea').innerHTML;
+            //alert(myHtml);
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("ConvertPDF", "Report")',
+                dataType: 'json',
+                contentType: 'application/json',
+                data: JSON.stringify({ myHtml: myHtml, filename: "@uniquefilename", reportname: "NoSkb" }),
+                success: function (result) {
+                    if (result.success) {
+                        var win = window.open(result.link, '_blank');
+                        win.focus();
+                    } else {
+                        $.simplyToast(result.msg, result.status);
+                    }
+                },
+                error: function (error) {
+                    $.simplyToast(@GlobalResEstate.msgError, 'danger');
+                }
+            });
+            return false;
+        });
+    });
+</script>*@

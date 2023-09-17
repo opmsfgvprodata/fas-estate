@@ -1,0 +1,145 @@
+﻿@model IEnumerable<MVC_SYSTEM.CustomModels2.CustMod_RptActvByLvlWorker>
+@{
+    var GetCCs = Model.OrderBy(o => o.leveltype).Select(s => new { s.costcenter, s.leveltype, s.lvlcode, s.lvldesc }).Distinct().ToList();
+    int count = 1;
+}
+
+@if (Model != null && Model.Count() != 0)
+{
+    <div id="scrollArea2" class="modal-body">
+        <table class="table table-hover table-bordered" style="font-size: 11px;" border="0" width="100%">
+            <thead>
+                <tr>
+                    <th colspan="17" style="text-align:center;vertical-align:middle;">
+                        @ViewBag.TitleReport
+                        <br />
+                        @ViewBag.NamaSyarikat
+                        <br />
+                        (@ViewBag.NoSyarikat)
+                        <br />
+                    </th>
+                </tr>
+                <tr>
+                    <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">No</th>
+                    <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Kod Pusat</th>
+                    <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Nama Kod Pusat Peringkat</th>
+                    <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">NPA &amp; Nama Pekerja</th>
+                    <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Kong Pay</th>
+                    <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">OT Time</th>
+                    <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">OT Pay</th>
+                    <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Piece Rate Pay</th>
+                    <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Incentive</th>
+                    <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Other Income</th>
+                    <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Total Income</th>
+                    <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Deduction</th>
+                    <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var GetCC in GetCCs)
+                {
+                    var GetDataDetails = Model.Where(x => x.costcenter == GetCC.costcenter && x.lvlcode == GetCC.lvlcode).Select(s => new { s.workerno, s.workername }).Distinct().ToList();
+                    var i = 1;
+                    foreach (var GetDataDetail in GetDataDetails)
+                    {
+                        var DataToDisplay = Model.Where(x => x.workerno == GetDataDetail.workerno && x.lvlcode == GetCC.lvlcode).FirstOrDefault();
+
+                        <tr>
+                            <td align="left" style="vertical-align:middle !important;border:1px solid black;" border="1">@count</td>
+
+                            @if (i == 1)
+                            {
+                                <td align="center" colspan="2" rowspan="@GetDataDetails.Count()" style="vertical-align:middle !important;border:1px solid black;" border="1"></td>
+
+                            }
+
+                            <td align="left" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @GetDataDetail.workerno - @GetDataDetail.workername
+                            </td>
+                            <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @DataToDisplay.kong
+                            </td>
+                            <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @DataToDisplay.ottime
+                            </td>
+                            <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @DataToDisplay.otpayment
+                            </td>
+                            <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @DataToDisplay.piecereatepay
+                            </td>
+                            <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @DataToDisplay.dailyincentivepay
+                            </td>
+                            <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @DataToDisplay.otherincome
+                            </td>
+                            <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @DataToDisplay.totalincome
+                            </td>
+                            <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @DataToDisplay.totaldeduction
+                            </td>
+                            <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @DataToDisplay.overallincome
+                            </td>
+                        </tr>
+                        count++;
+                        i++;
+                    }
+                    <tr>
+                        <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1"></td>
+                        <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">@GetCC.costcenter</td>
+                        <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">@GetCC.lvldesc</td>
+                        <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                            Total
+                        </td>
+                        <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1"></td>
+                        <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1"></td>
+                        <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1"></td>
+                        <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1"></td>
+                        <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1"></td>
+                        <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1"></td>
+                        <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1"></td>
+                        <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1"></td>
+                        <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1"></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+else
+{
+    <div id="scrollArea2" class="modal-body" style="text-align: center">
+        <p style="color: red">No Data.</p>
+    </div>
+}
+
+<div style="text-align:right; margin-top:10px">
+    <a class="btn btn-default btn-sm" href="#" id="printpage">
+        <span class="glyphicon glyphicon-print"> </span> @GlobalResEstate.btnPrint
+    </a>
+    <a class="btn btn-default btn-sm" href="#" onclick="HTMLtoExcel('LprnBlnnByrnAktvt')">
+        <span><img src="~/Asset/Images/excel-icon.png" width="20px" height="20px" /></span> @GlobalResEstate.btnDownloadExcel
+    </a>
+</div>
+<style>
+    #page td {
+        padding: 2px;
+        margin: 2px;
+    }
+</style>
+<script src="~/Asset/Scripts/FromHTML.js"></script>
+<script src="~/Asset/Scripts/FileSaver.js"></script>
+<script>
+    $(document).ready(function () {
+        $("#printpage").click(function () {
+            var DivElement = document.getElementById("scrollArea2").innerHTML;
+            var oldPage = document.body.innerHTML;
+            document.body.innerHTML = DivElement;
+            window.print();
+            document.body.innerHTML = oldPage;
+        })
+    });
+</script>

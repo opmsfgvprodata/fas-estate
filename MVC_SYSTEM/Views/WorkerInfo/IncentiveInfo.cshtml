@@ -1,0 +1,276 @@
+﻿@model IEnumerable<MVC_SYSTEM.ViewingModels.vw_MaklumatInsentifPekerja>
+
+@using MVC_SYSTEM.Class;
+@{
+    ViewBag.Title = GlobalResEstate.lblTitleWorkerIncentive;
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+
+    AjaxOptions options = new AjaxOptions
+    {
+        HttpMethod = "Get",
+        UpdateTargetId = "searchResultWorkerIncentiveInfo",
+        InsertionMode = InsertionMode.Replace,
+        LoadingElementId = "UpdateProgress1"
+    };
+}
+
+<script src="~/Asset/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+
+<section class="content-wrapper main-content clear-fix">
+    <div class="well bottom" style="padding-bottom:16px">
+        <div class="form-horizontal">
+            @using (Ajax.BeginForm("_WorkerIncentiveSearch", "WorkerInfo", null, options, new { @id = "WorkerIncentiveSearch" }))
+
+            {
+            <div class="row">
+                <div class="col-sm-4">
+                    @Html.Label(GlobalResEstate.lblSearch)
+                    @Html.TextBox("filter", null, htmlAttributes: new { @class = "form-control", placeholder = GlobalResEstate.lblSearchPkj, @id = "txtfilter", @value = "" })
+                </div>
+                <div class="col-sm-1" id="divlist">
+                    @Html.Label(GlobalResEstate.lblMonth)
+                    @Html.DropDownList("MonthList", null, htmlAttributes: new { @class = "form-control" })
+                </div>
+                <div class="col-sm-1" id="divlist">
+                    @Html.Label(GlobalResEstate.lblYear)
+                    @Html.DropDownList("YearList", null, htmlAttributes: new { @class = "form-control" })
+                </div>
+                <div class="col-sm-6 btn-group" style="padding-top:24px;">
+                    <input class="btn btn-primary col-sm-3" type="submit" id="btnCari" name="Lihat" value=@GlobalResEstate.btnView />
+                    <input type="button" class="btn btn-primary col-sm-3" value=@GlobalResEstate.btnList onclick="javascript:resetSearch1();" />
+                </div>
+            </div>
+            }
+        </div>
+    </div>
+    <div class="well" style="margin-top: 7px;">
+        <div class="modal-body">
+            <div class="panel panel-primary">
+                <div class="panel-heading">@GlobalResEstate.lblInsentifInfo</div>
+                <div class="panel-body">
+                    <div id="searchResultWorkerIncentiveInfo">
+                        @Html.Action("_WorkerIncentiveSearch", new {filter = ""})
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="modal-footer">
+            <a href=@Url.Action("Index", "WorkerInfo") class="btn btn-warning" role="button" onclick="return DisplayProgressMessage2(this);">@GlobalResEstate.btnBack</a>
+        </div>
+    </div>
+</section>
+
+<!-- modal placeholder-->
+
+<div id='myModal' class='modal fade in'>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div id='myModalContent'></div>
+        </div>
+    </div>
+</div>
+
+<div id='myModal1' class='modal fade in'>
+    <div class="modal-dialog modal-lg" style="width: 60%">
+        <div class="modal-content">
+            <div id='myModalContent1'></div>
+        </div>
+    </div>
+</div>
+
+<div id="myModal2" class="modal fade in">
+    <div class="modal-dialog modal-lg" style="width: 60%">
+        <div class="modal-content">
+            <div id="myModalContent2"></div>
+        </div>
+    </div>
+</div>
+
+
+@section scripts{
+    @Scripts.Render("~/Asset/Scripts/AjaxModal.js")
+}
+
+<script>
+    $(function () {
+
+        $(document).on("click", "a[data-modal2]", function (e) {
+            $('#myModal').modal('hide');
+            $('#myModalContent2').load(this.href, function () {
+                $('#myModal2').modal({
+                    backdrop: 'static', keyboard: false
+                }, 'show');
+                bindForm2(this);
+            });
+            return false;
+        });
+    });
+
+    function bindForm2(dialog) {
+    $('form', dialog).submit(function () {
+        $('#progress').show();
+        var filter = $('#txtfilter').val();
+        $.ajax({
+            url: this.action,
+            type: this.method,
+            data: $(this).serialize(),
+            success: function (result) {
+                if (result.success) {
+                    if (result.checkingdata == '0') {
+                        $('#myModal2').modal('hide');
+                        $('#progress').hide();
+                        $('#searchResultWorkerIncentiveInfo').load('@Url.Action("_WorkerIncentiveSearch", "WorkerInfo")', { filter: filter });
+
+                        if (result.method == '1') {
+                        }
+                        else if (result.method == '2') {
+
+                        }
+
+                        if (result.data2 == 'creditcard') {
+                            document.getElementById("creditcard").innerText = result.data1;
+                        }
+                    }
+                    else {
+                        $('#progress').hide();
+                    }
+                } else {
+                    $('#progress').hide();
+
+                }
+
+                $.simplyToast(result.msg, result.status);
+            }
+        });
+
+        return false;
+        });
+    }
+</script>
+
+<style>
+
+    .header_table th {
+        text-align: center;
+        vertical-align: middle !important;
+    }
+
+    .namapkj {
+        width: 300px;
+        font-size: 12px;
+        /*text-align: center;*/
+        vertical-align: middle !important;
+    }
+    .nopkj {
+        width: 130px;
+        font-size: 12px;
+        text-align: center;
+        vertical-align: middle !important;
+    }
+    .count {
+        width: 50px;
+        font-size: 12px;
+        text-align: center;
+        vertical-align: middle !important;
+    }
+
+    .rmind {
+        width: 20px;
+        font-size: 12px;
+        text-align: right;
+        vertical-align: middle !important;
+    }
+
+    #nestedT .table td:nth-child(3)
+    {
+        border: none;
+    }
+
+    .nilaiinsentif {
+        width: 50px;
+        font-size: 12px;
+        text-align: right;
+        vertical-align: middle !important;
+    }
+
+    .insentif {
+        width: 150px;
+        font-size: 12px;
+        text-align: left;
+        vertical-align: middle !important;
+    }
+
+    .delete {
+        width: 50px;
+        font-size: 12px;
+        vertical-align: middle !important;
+    }
+
+    .tindakan {
+        width: 100px;
+        text-align: center;
+        vertical-align: middle !important;
+    }
+
+    .tindakan2 {
+        width: 50px;
+        text-align: center;
+        vertical-align: middle !important;
+    }
+
+    .borderless {
+        border: none !important;
+        background-color: transparent !important;
+    }
+
+    
+</style>
+
+<!--Jquery code that makes the rows collapsable in grid-->
+<script>
+    function resetSearch1() {
+        document.getElementById("txtfilter").value = "";
+        document.getElementById('btnCari').click();
+    }
+
+    //$(document).ajaxStart(function(){
+    //    $('#divLoading').show();
+    //}).ajaxStop(function(){
+    //    $('#divLoading').hide();
+    //    });
+</script>
+
+
+
+
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+
+

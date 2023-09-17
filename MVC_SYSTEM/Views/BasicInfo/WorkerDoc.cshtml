@@ -1,0 +1,53 @@
+﻿@model IEnumerable<MVC_SYSTEM.Models.tbl_SupportedDoc>
+@{
+    int bill = 0;
+}
+
+<div>
+    <label>Senarai Dokumen : </label>
+    <table style="border:hidden;">
+        @*<thead>
+            <tr>
+                <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Nama Dokumen</th>
+                <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Tindakan</th>
+            </tr>
+        </thead>*@
+        <tbody>
+            @foreach (var item in Model)
+            {
+                bill = bill + 1;
+                <tr>
+                    <td align="left" style="vertical-align:middle !important;border:hidden;padding:15px;">@bill. 
+                        <a href="@item.fld_Url" target="_blank">@item.fld_NamaFile</a></td>
+                    <td  align="right" style="vertical-align:middle !important;border:hidden;">
+                        <button type="button" class="btn btn-danger btn-lg" style="font-size:9px;" onclick="RemoveFile(this, @item.fld_ID);"><i class='fa fa-trash fa-lg'></i></button>
+                    </td>
+                </tr>
+            }
+            
+        </tbody>
+    </table>
+</div>
+
+
+<script>
+    function RemoveFile(rowno, fileid) {
+        console.log(fileid);
+        $.ajax({
+            type: 'GET',
+            url: '@Url.Action("RemoveDoc", "BasicInfo")',
+            data: { 'docID': fileid },
+            success: function (response) {
+                if (response.statusTrans)
+                {
+                    $(rowno).parent().parent().remove();
+                    $.simplyToast('Maklumat Berjaya dipadam', 'success');
+                    //console.log("It works !!")
+                }
+                else {
+                    $.simplyToast('@GlobalResEstate.msgError', 'error');
+                }
+            },
+        });
+    }
+</script>

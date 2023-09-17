@@ -1,0 +1,100 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+<div id="UpdateProgress1" style="display:none;">
+    <div class="progressTest">
+        <label>
+            @GlobalResEstate.msgWait
+        </label>
+    </div>
+</div>
+<section class="content-wrapper main-content clear-fix">
+    <div class="well">
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+            <div class="modal-body">
+                <div class="form-horizontal">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">@GlobalResEstate.menuTableInfo.ToUpper()</div>
+                        <div class="panel-body">
+                            <div class="form-group">
+                                <div class="col-sm-6">
+                                    <label for="ListReport">@GlobalResEstate.lblTableInfoList</label>
+                                    @Html.DropDownList("TableInfoList", null, htmlAttributes: new { @class = "form-control" })
+                                </div>
+                                <div id="sublist" class="col-sm-6">
+                                    <label for="ListReport">@GlobalResEstate.lblMaintenanceListSub</label>
+                                    @Html.DropDownList("TableInfoSubList", null, htmlAttributes: new { @class = "form-control" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer-report">
+                    <input class="btn btn-primary" type="submit" name="upload" id="upload" value=@GlobalResEstate.btnGo onclick="return DisplayProgressMessage(this);" />
+                </div>
+            </div>
+        }
+    </div>
+</section>
+
+<script>
+    $(document).ready(function () {
+        console.log($("#TableInfoList").val());
+        var SubList = {};
+        //var disableoption = "";
+        SubList.url = "@Url.Action("GetSubList", "TableInfo")";
+        SubList.type = "POST";
+        SubList.data = JSON.stringify({ ListID: $("#TableInfoList").val() });
+        SubList.datatype = "json";
+        SubList.contentType = "application/json";
+        SubList.success = function (sublist) {
+            $("#TableInfoSubList").empty();
+            if (sublist.length != 0) {
+                $("#sublist").removeClass("hidden");
+                $.simplyToast('@GlobalResEstate.msgSubMenu', 'success');
+                for (var i = 0; i < sublist.length; i++) {
+                    $("#TableInfoSubList").append("<option value=" + sublist[i].Value + ">" + sublist[i].Text + "</option>");
+                }
+            }
+            else {
+                $("#TableInfoSubList").empty();
+                $("#sublist").addClass("hidden");
+            }
+        };
+        SubList.error = function () { $.simplyToast('@GlobalResEstate.msgError', 'error'); };
+        $.ajax(SubList);
+
+        $("#TableInfoList").change(function () {
+            var SubList = {};
+            //var disableoption = "";
+            SubList.url = "@Url.Action("GetSubList", "TableInfo")";
+            SubList.type = "POST";
+            SubList.data = JSON.stringify({ ListID: $("#TableInfoList").val() });
+            SubList.datatype = "json";
+            SubList.contentType = "application/json";
+            SubList.success = function (sublist) {
+                $("#TableInfoSubList").empty();
+                if (sublist.length != 0) {
+                    $("#sublist").removeClass("hidden");
+                    $.simplyToast('@GlobalResEstate.msgSubMenu', 'success');
+                    for (var i = 0; i < sublist.length; i++) {
+                        $("#TableInfoSubList").append("<option value=" + sublist[i].Value + ">" + sublist[i].Text + "</option>");
+                    }
+                }
+                else {
+                    $("#TableInfoSubList").empty();
+                    $("#sublist").addClass("hidden");
+                }
+            };
+            SubList.error = function () { $.simplyToast('@GlobalResEstate.msgError', 'error'); };
+            $.ajax(SubList);
+        });
+    });
+</script>
+
+

@@ -1,0 +1,26 @@
+﻿
+@{
+    ViewBag.Title = "Kadar Upah (Am)";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+<section class="content-wrapper main-content clear-fix">
+
+    @using (Html.BeginForm("PayrateFull", null, FormMethod.Get))
+    {
+        @Html.AntiForgeryToken()
+        <div id="DataTable" class="well" style="margin-top: 7px">
+            <div class="modal-body">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">@GlobalResEstate.lblPayrateFull.ToUpper()</div>
+                    <div id="divdetail" class="panel-body">
+                        @Html.Action("PayrateFullDetails", "TableInfo")
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a style="text-align:right" href="@Url.Action("Index", "TableInfo")" class="btn btn-warning">@GlobalResEstate.btnBack</a>
+            </div>
+        </div>
+                    }
+</section>

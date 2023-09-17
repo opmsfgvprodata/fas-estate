@@ -1,0 +1,78 @@
+﻿@model IEnumerable<MVC_SYSTEM.MasterModels.tbl_UpahMenuai>
+
+
+@using MVC_SYSTEM.Class;
+@{
+    ViewBag.Title = "PayrateDetail";
+    //Layout = "~/Views/Shared/_LayoutMain.cshtml";
+    GetConfig GetConfig = new GetConfig();
+}
+
+@if (Model.Count() > 0)
+{
+    <div id="scrollArea2">
+        <logo />
+        <table class="table table-hover table-bordered" style="font-size: 11px;" border="0">
+            <thead>
+                <tr>
+                    <th colspan="10" style="text-align:center;vertical-align:middle;">
+                        @ViewBag.NamaSyarikat
+                        <br />
+                        (@GlobalResEstate.lblCompanyNo : @ViewBag.NoSyarikat)
+                        <br />
+                        @GlobalResEstate.lblPayrate
+                    </th>
+                </tr>
+            </thead>
+            @foreach (var jadual in Model.Select(s => new { s.fld_Jadual, s.fld_NegaraID, s.fld_SyarikatID }).Distinct())
+            {
+                <tbody>
+                    <tr>
+                        <th colspan="10" bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">
+                            @GetConfig.GetWebConfigDesc(jadual.fld_Jadual, "jnsMenuai", jadual.fld_NegaraID, jadual.fld_SyarikatID)
+                        </th>
+                    </tr>
+                    <tr>
+                        <th bgcolor="#ffcc80" style="color: black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">@GlobalResEstate.hdrZonHasil (Tan/Hek)</th>
+                        <th bgcolor="#ffcc80" style="color: black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">@GlobalResEstate.hdrRate (RM/Tan)</th>
+                        <th bgcolor="#ffcc80" style="color: black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">@GlobalResEstate.hdrNote</th>
+
+                    </tr>
+                    @foreach (var item in Model.Where(x => x.fld_Jadual == jadual.fld_Jadual))
+                    {
+                        <tr>
+                            <td align="center" style="vertical-align: middle !important; border: 1px solid black;" border="1">
+                                @item.fld_HasilLower - @item.fld_HasilUpper
+                            </td>
+                            <td align="center" style="vertical-align: middle !important; border: 1px solid black;" border="1">
+                                @item.fld_Kadar
+                            </td>
+                            <td align="center" style="vertical-align: middle !important; border: 1px solid black;" border="1">
+                                @GetConfig.Insentif(item.fld_Catitan.Value, item.fld_NegaraID, item.fld_SyarikatID)
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+
+            }
+        </table>
+        <newpage />
+    </div>
+
+    <div style="text-align:right; margin-top:10px">
+        <a class="btn btn-default btn-sm" href="#" id="printpage">
+            <span class="glyphicon glyphicon-print"> </span> @GlobalResEstate.btnPrint
+        </a>
+        <a class="btn btn-default btn-sm" href="#" id="downloadpdf">
+            <span><img src="~/Asset/Images/pdf-icon.png" width="20px" height="20px" /></span> @GlobalResEstate.btnDownloadPdf
+        </a>
+    </div>
+
+}
+else
+{
+    <p style="color:red">@GlobalResEstate.msgErrorSearch</p>
+}
+
+
+

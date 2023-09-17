@@ -1,0 +1,130 @@
+﻿@model MVC_SYSTEM.ViewingModels.PagedList<MVC_SYSTEM.ViewingModels.vw_MaklumatProduktiviti>
+
+@{
+    //Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 class="modal-title">@GlobalResEstate.titleProductvtInfo</h3>
+</div>
+
+<div class="modal-body">
+    <div class="panel panel-primary">
+        <div class="panel-heading">@GlobalResEstate.lblGroupProductvtInfo</div>
+        <div class="panel-body">
+            <div class="form-horizontal">
+                <div>
+                    @{
+                        var grid = new WebGrid(
+                            //source: Model,
+                            canPage: true,
+                            rowsPerPage: @ViewBag.pageSize,
+                            canSort: false,
+                            ajaxUpdateContainerId: "gridT");
+
+                        grid.Bind(Model.Content, rowCount: Model.TotalRecords, autoSortAndPage: false);
+
+                        grid.Pager(WebGridPagerModes.All);
+
+                        if (@grid.TotalRowCount > 0)
+                        {
+                            <div class="text-center">@grid.TotalRowCount @Html.Label(GlobalResEstate.lblTotalRecord)</div>
+
+                            @grid.GetHtml(htmlAttributes: new { id = "grid" }, // id for ajaxUpdateontainerId parameter
+                                           tableStyle: "table table-bordered table-striped table-list table-hover",
+                                           headerStyle: "header_table",
+                                           alternatingRowStyle: "Grid-alt",
+                                           selectedRowStyle: "Grid-selected",
+                                           rowStyle: "Grid-rowstyle",
+                                           footerStyle: "table-pager",
+                                           mode: WebGridPagerModes.All,
+                                           columns: grid.Columns(
+                                               grid.Column(header: GlobalResEstate.hdrNo
+                                                   , format: item => item.WebGrid.Rows.IndexOf(item) + 1
+                                                                     + Math.Round(Convert.ToDouble(grid.TotalRowCount / grid.PageCount) / grid.RowsPerPage)
+                                                                     * grid.RowsPerPage * grid.PageIndex, style: "count"),
+                                               grid.Column(columnName: "fld_Nopkj", header: GlobalResEstate.hdrNoPkj, style: "nopkj"),
+                                               grid.Column(columnName: "fld_Nama", header: GlobalResEstate.hdrName, style: "namapkj"),
+                                               grid.Column(columnName: "fld_Nokp", header: GlobalResEstate.hdrNoKp, style: "nokp"),
+                                               grid.Column(columnName: "fld_HadirKerja", header: GlobalResEstate.hdrTargetWorkingDay, style: "hadirkerja")
+                                               ))
+                            ;
+                        }
+
+                        else
+                        {
+                            <hr />
+                            <div class="text-center">
+                                @Html.Label(GlobalResEstate.msgErrorSearch)
+                            </div>
+                            <hr />
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<div class="modal-footer" style="margin-top:-5px;">
+    <button class="btn btn-warning" data-dismiss="modal">@GlobalResEstate.btnBack</button>
+</div>
+
+<script>
+    $("form").removeData("validator");
+    $("form").removeData("unobtrusiveValidation");
+    $.validator.unobtrusive.parse("form");
+
+</script>
+
+<style>
+
+    .header_table th {
+        text-align: center;
+    }
+
+    .namapkj {
+        width: 300px;
+        font-size: 12px;
+        /*text-align: center;*/
+    }
+
+    .nopkj {
+        width: 130px;
+        font-size: 12px;
+        text-align: center;
+    }
+
+    .count {
+        width: 60px;
+        font-size: 12px;
+        text-align: center;
+    }
+
+    .nokp {
+        width: 130px;
+        font-size: 12px;
+        text-align: center;
+    }
+
+    .kategori {
+        width: 100px;
+        font-size: 12px;
+        text-align: center;
+    }
+
+    .targetharian {
+        width: 100px;
+        font-size: 12px;
+        text-align: center;
+    }
+
+    .hadirkerja {
+        width: 100px;
+        font-size: 12px;
+        text-align: center;
+    }
+</style>
+
+

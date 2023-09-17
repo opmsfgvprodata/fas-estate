@@ -1,0 +1,181 @@
+﻿@model IEnumerable<MVC_SYSTEM.MasterModels.tbl_UpahAktiviti>
+
+@{
+    GetConfig getConfig = new GetConfig();
+    /**/
+
+    ViewBag.Title = "Index";
+    GetIdentity GetIdentity = new GetIdentity();
+    GetNSWL GetNSWL = new GetNSWL();
+
+}
+
+@if (Model != null && Model.Count() != 0)
+{
+    <div class="modal-body" id="scrollArea2">
+        <table class="table table-hover" style="font-size: 11px;" border="0"  cellspacing="0"  width="100%" >
+            <thead>
+                <tr>
+                    <th colspan="5" style="text-align: center; vertical-align: middle;">
+                        @ViewBag.NamaSyarikat
+                        <br />
+                        (@GlobalResEstate.lblCompanyNo : @ViewBag.NoSyarikat)
+                        <br />
+                        @GlobalResEstate.lblPayrateFull
+                    </th>
+                </tr>
+                <tr>
+                    <th bgcolor="#ffcc80" style="color: black; text-align: center; vertical-align: middle !important; border: 1px solid black; border-top :1px solid black" border="1">@GlobalResEstate.lbljnsAktiviti</th>
+                    <th bgcolor="#ffcc80" style="color: black; text-align: center; vertical-align: middle !important; border: 1px solid black; border-top :1px solid black" border="1">@GlobalResEstate.hdrActvtCode</th>
+                    <th bgcolor="#ffcc80" style="color: black; text-align: center; vertical-align: middle !important; border: 1px solid black; border-top :1px solid black" border="1">@GlobalResEstate.hdrWorkAktvt</th>
+                    <th bgcolor="#ffcc80" style="color: black; text-align: center; vertical-align: middle !important; border: 1px solid black; border-top :1px solid black" border="1">@GlobalResEstate.hdrUnit</th>
+                    <th bgcolor="#ffcc80" style="color: black; text-align: center; vertical-align: middle !important; border: 1px solid black; border-top :1px solid black" border="1">@GlobalResEstate.lblRate</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td align="center" style="vertical-align: middle !important; border: 1px solid black;" border="1">
+                            @getConfig.GetWebConfigDesc(item.fld_KodJenisAktvt, "activityLevel", item.fld_NegaraID, item.fld_SyarikatID)
+                        </td>
+                        <td align="center" style="vertical-align: middle !important; border: 1px solid black;" border="1">
+                            @item.fld_KodAktvt
+                        </td>
+                        <td align="center" style="vertical-align: middle !important; border: 1px solid black;" border="1">
+                            @item.fld_Desc
+                        </td>
+                        <td align="center" style="vertical-align: middle !important; border: 1px solid black;" border="1">
+                            @item.fld_Unit
+                        </td>
+                        <td align="center" style="vertical-align: middle !important; border: 1px solid black;" border="1">
+                            @item.fld_Harga
+                        </td>
+                    </tr>
+
+                }
+            </tbody>
+        </table>
+    </div>
+
+        if (ViewBag.Print == null)
+    {
+    <div style="text-align:right; margin-top:10px" id="AllDownload">
+        <a class="btn btn-default btn-sm" href="#" id="downloadpdf">
+            <span><img src="~/Asset/Images/pdf-icon.png" width="20px" height="20px" /></span> Download PDF
+        </a>
+        <a class="btn btn-default btn-sm" href="#" id="HTMLtoExcel">
+            <span><img src="~/Asset/Images/excel-icon.png" width="20px" height="20px" /></span>download Excel
+        </a>
+    </div>
+
+
+    }
+}
+
+else
+{
+    <div id="scrollArea2" class="modal-body" style="text-align: center">
+        <p style="color: red">@ViewBag.Message</p>
+
+    </div>
+}
+
+<script src="~/Asset/Scripts/FromHTML.js"></script>
+<script src="~/Asset/Scripts/FileSaver.js"></script>
+
+<style>
+    #page td {
+        padding: 2px;
+        margin: 2px;
+    }
+
+    table {
+        page-break-inside: avoid
+    }
+
+    #content {
+        display: table;
+    }
+
+    #pageFooter {
+        display: table-footer-group;
+    }
+
+    #page_number:after {
+        content: "";
+        counter-increment: pagenumber;
+        content: "Page" counter(pagenumber) "of" counter(pagenumber);
+    }
+
+    thead {
+        display: table-header-group
+    }
+
+    tfoot {
+        display: table-row-group
+    }
+
+    tr {
+        page-break-inside: avoid
+    }
+</style>
+
+<script>
+
+    $("#HTMLtoExcel").click(function () {
+
+        var blob = new Blob([document.getElementById('scrollArea2').innerHTML], {
+            type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8"
+        })
+        saveAs(blob, 'PayRatePUP' + ".xls");
+
+    });
+
+    $(document).ready(function () {
+        $("#printpage").click(function () {
+            var DivElement = document.getElementById("scrollArea2").innerHTML;
+            var page_number;
+            var oldPage = document.body.innerHTML;
+            document.body.innerHTML = DivElement;
+            window.print();
+            document.body.innerHTML = oldPage;
+            document.getElementById("content").innerHTML = page_number.toString();
+            window.toLocaleString.print();
+
+        })
+
+        $("#downloadpdf").click(function () {
+            $("#AllDownload").attr("style", "display:none");
+            var ActivityLevelList = $("#ActivityLevelList").val();
+            var FreeText = $("#FreeText").val();
+            var param = '/?ActivityLevelList=' + ActivityLevelList + '&FreeText=' + FreeText ;
+            var controller = 'TableInfo';
+            var action = 'PrintWorkerPdf';
+            
+            var ajxfn = {};
+            ajxfn.url = "@Url.Action("PDFIndetifier", "PdfCreator")";
+            ajxfn.type = "POST";
+            ajxfn.data = JSON.stringify({ controller: controller, action: action, param: param });
+            ajxfn.datatype = "json";
+            ajxfn.contentType = "application/json";
+            ajxfn.success = function (result)
+
+            {
+                //alert("Success!");
+                //var win = window.open(result.link, '_blank');
+                //win.focus();
+                PDFObject.embed(result.link, "#scrollArea2", { height: "450px" });
+            };
+
+            ajxfn.error = function () {
+                alert("Failed!");
+                $.simplyToast('@GlobalResEstate.msgError', 'danger');
+                $("#UpdateProgress1").css("display", "none");
+            };
+            $.ajax(ajxfn);
+
+            return false;
+        });
+    });
+</script>

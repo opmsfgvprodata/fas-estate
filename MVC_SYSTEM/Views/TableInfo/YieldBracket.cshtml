@@ -1,0 +1,62 @@
+﻿    
+@{
+    ViewBag.Title = "Yield Bracket";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+   
+}
+
+<section class="content-wrapper main-content clear-fix">
+
+    @using (Html.BeginForm("YieldBracket", null, FormMethod.Get))
+    {
+        @Html.AntiForgeryToken()
+        <div class="well bottom" style="padding-bottom: 16px">
+            <div class="col-sm-2">
+                @Html.Label(GlobalResEstate.lblLevel)
+                @Html.DropDownList("JnsPktList", null, htmlAttributes: new { @class = "form-control" })
+            </div>
+            <div class="col-sm-2" style="padding-top:25px;">
+                <input class="btn btn-primary btn-block" type="submit" name="btnSrch" id="btnSrch" value=@GlobalResEstate.btnView onclick="return DisplayProgressMessage(this);" />
+            </div>
+        </div>
+        <div id="DataTable" class="well" style="margin-top: 7px">
+            <div class="modal-body">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">@GlobalResEstate.lblYieldBracket.ToUpper()</div>
+                    <div id="divdetail" class="panel-body">
+                        @Html.Action("YieldBracketDetails", "TableInfo")
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a style="text-align:right" href="@Url.Action("Index", "TableInfo")" class="btn btn-warning">@GlobalResEstate.btnBack</a>
+            </div>
+        </div>
+    }
+</section>
+<script>
+    $(document).ready(function () {
+        $("#btnSrch").click(function (e) {
+            e.preventDefault();
+            //console.log(tbl_Pkjmast);
+            var reloadPage = {};
+            reloadPage.url = "@Url.Action("YieldBracketDetails", "TableInfo")";
+            reloadPage.type = "POST";
+            reloadPage.data = { JnsPktList: $("#JnsPktList").val() };
+            reloadPage.datatype = "json";
+            reloadPage.success = function (result) {
+                $("#divdetail").html(result);
+                $("#UpdateProgress1").hide();
+            };
+            reloadPage.error = function () { $.simplyToast('@GlobalResEstate.msgError', 'danger'); };
+            $.ajax(reloadPage);
+            });
+    });
+
+</script>
+
+
+
+
+
+

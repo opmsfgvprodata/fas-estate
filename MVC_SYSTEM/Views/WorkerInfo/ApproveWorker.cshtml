@@ -1,0 +1,54 @@
+﻿@model MVC_SYSTEM.Models.tbl_Pkjmast
+@{
+    ViewBag.Title = "GroupEdit";
+    //Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+<section class="content-wrapper main-content clear-fix">
+
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 class="modal-title">LULUS PEKERJA / JANA CUTI PEKERJA BARU</h3>
+    </div>
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        <div class="modal-body">
+            <div class="form-horizontal">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">Maklumat Pekerja</div>
+                    <div class="panel-body">
+                        <div class="form-group">
+                            <fieldset disabled>
+                                <div class="form-group">
+                                    <label class="control-label col-sm-3">Nama Pekerja:</label>
+                                    <div class="col-sm-5">
+                                        @Html.TextBoxFor(model => model.fld_Nama, null, htmlAttributes: new { @class = "form-control" })
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-sm-3">Nombor Pekerja:</label>
+                                    <div class="col-sm-5">
+                                        @Html.TextBoxFor(model => model.fld_Nopkj, null, htmlAttributes: new { @class = "form-control" })
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <input class="btn btn-primary" type="submit" value=@GlobalResEstate.btnSave />
+            <button class="btn btn-warning" data-dismiss="modal">@GlobalResEstate.btnBack</button>
+        </div>
+    }
+</section>
+
+<script>
+    $("form").removeData("validator");
+    $("form").removeData("unobtrusiveValidation");
+    $.validator.unobtrusive.parse("form");
+</script>
+
+

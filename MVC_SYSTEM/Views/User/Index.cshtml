@@ -1,0 +1,143 @@
+﻿@model MVC_SYSTEM.ViewingModels.PagedList<MVC_SYSTEM.ViewingModels.tblUser>
+@using MVC_SYSTEM.Class;
+@{
+    ViewBag.Title = "User List";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    GetLadang GetLadang = new GetLadang();
+    GetWilayah GetWilayah = new GetWilayah();
+
+    <!-- Fitri 24072020 -->
+    AjaxOptions options = new AjaxOptions
+    {
+        HttpMethod = "Get",
+        UpdateTargetId = "UserDetails",
+        InsertionMode = InsertionMode.Replace,
+        LoadingElementId = "UpdateProgress1"
+    };
+}
+
+<script src="~/Asset/Scripts/jquery.unobtrusive-ajax.min.js"></script> <!-- Fitri 24072020 -->
+<!-- Fitri 24072020 -->
+@section scripts{
+    @Scripts.Render("~/Asset/Scripts/AjaxModal.js")
+}
+
+<!-- Fitri comment 24-7-2020 -->
+@*<section class="content-wrapper main-content clear-fix">
+        <div class="well">
+            @using (Html.BeginForm("index", null, FormMethod.Get))
+            {
+                <div class="row">
+                    <div class="col-sm-5">
+                        <div class="input-group">
+                            <input type="text" name="filter" value="@ViewBag.filter" class="form-control" style="display: inline" placeholder="Search" />
+
+                            <span class="input-group-btn">
+                                <button class="btn btn-default" type="submit">Go</button>
+                            </span>
+
+                        </div>
+                    </div>
+                    <div class="pull-left col-lg-1">
+                        <a class="btn btn-success" data-modal="" href="@Url.Action("Create", "User")" id="btnCreate">
+                            <span class="glyphicon glyphicon-plus"></span>
+                        </a>
+                    </div>
+                </div>
+
+                <div style="margin-top:17px;">
+                    @{
+                              var grid = new WebGrid(
+                                          canPage: true,
+                                          rowsPerPage: Model.PageSize,
+                                          canSort: true,
+                                          ajaxUpdateContainerId: "grid");
+                              grid.Bind(Model.Content, rowCount: Model.TotalRecords, autoSortAndPage: false);
+                              //grid.Pager(WebGridPagerModes.All);
+
+                              @grid.GetHtml(htmlAttributes: new { id = "grid" },   // id for ajaxUpdateContainerId parameter
+                                   fillEmptyRows: false,
+                                   tableStyle: "table table-bordered table-hover",
+                                   mode: WebGridPagerModes.All,
+                                   columns: grid.Columns(
+                                     grid.Column("fldUserName", "Username", style: "col-lg-2"),
+                                     grid.Column("fldUserFullName", "Full Name", style: "col-lg-2"),
+                                     grid.Column("fldWilayahID", "Region Name", style: "col-lg-2", format:@<text>@(GetWilayah.GetWilayahName2(item.fldWilayahID))</text>),
+                                     grid.Column(header: "Action", canSort: false, style: "col-lg-2",
+                                   format: @<text>
+                                      @Html.Raw("<a data-modal='' href='" + @Url.Action("Edit", "User") + "/" + item.fldUserID + "' id='" + item.fldUserID + "' title='Edit'> <span class='glyphicon glyphicon-edit'> </span> </a>")
+                                      @Html.Raw("<a data-modal='' href='" + @Url.Action("Delete", "User") + "/" + item.fldUserID + "' id='" + item.fldUserID + "' title='Delete'> <span class='glyphicon glyphicon-trash'> </span> </a>")
+                                  </text>)));
+                        }
+                </div>
+            }
+        </div>
+    </section>*@
+
+
+<!-- Fitri 24072020 -->
+<section class="content-wrapper main-content clear-fix">
+    <div class="well bottom" style="padding-bottom:16px;">
+        @using (Ajax.BeginForm("_User", "User", null, options, new { @id = "UserSearchDetails" }))
+        {
+            @Html.AntiForgeryToken()
+            <div class="row">
+                <div class="col-sm-4">
+                    @Html.Label(GlobalResEstate.lblSearch)
+                    @Html.TextBox("filter", null, htmlAttributes: new { @class = "form-control", placeholder = GlobalResEstate.lblSearch, @id = "txtfilter", @value = "" })
+                </div>
+                <div class="col-sm-6 btn-group" style="padding-top:24px;">
+                    <input class="btn btn-primary col-sm-3" type="submit" value=@GlobalResEstate.btnView id="btnCari" name="Lihat" />
+                    <input class="btn btn-primary col-sm-3" type="button" value=@GlobalResEstate.btnList onclick="javascript:resetSearch1();" />
+                </div>
+            </div>
+        }
+    </div>
+
+    <div class="well" style="margin-top:7px;">
+        <div class="modal-body">
+            <div class="panel panel-primary">
+                <div class="panel-heading">Maklumat Pengguna</div>
+                <div class="panel-body">
+                    <div id="UserDetails">
+                        @Html.Action("_User")
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer col-md-12">
+            <a data-modal1='' href=@Url.Action("Create", "User") class="btn btn-success" role="button" onclick="return DisplayProgressMessage(this);">@GlobalResEstate.btnAdd</a>
+        </div>
+    </div>
+</section>
+
+<!-- modal placeholder-->
+<div id='myModal' class='modal fade in'>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div id='myModalContent'></div>
+        </div>
+    </div>
+</div>
+
+<!-- Fitri 24072020 -->
+<div id='myModal1' class='modal fade in'>
+    <div class="modal-dialog modal-lg" style="width: 70%">
+        <div class="modal-content">
+            <div id='myModalContent1'></div>
+        </div>
+    </div>
+</div>
+
+<!-- Fitri 24072020 -->
+<script>
+    function resetSearch1() {
+        document.getElementById("txtfilter").value = "";
+        document.getElementById('btnCari').click();
+    }
+</script>
+
+<!-- Fitri 24072020 -->
+@*@section scripts{
+        @Scripts.Render("~/Asset/Scripts/appjs.js")
+    }*@

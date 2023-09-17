@@ -1,0 +1,163 @@
+﻿
+@{
+    ViewBag.Title = "Salary Generator";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+<!-- Styles for Wait Messages -->
+@*<link href="~/Asset/Content/font-awesome.min.css" rel="stylesheet" />*@
+<!--Shah finish process notification-->
+<style>
+    .modal {
+        z-index: 999999 !important;
+    }
+</style>
+<link href="~/Asset/sweetalert2/dist/sweetalert2.css" rel="stylesheet" />
+<script src="~/Asset/sweetalert2/dist/sweetalert2.js"></script>
+
+<div id="GenerateProcess" style="display:none;">
+    <div class="progressTest">
+        <label id="statusprecent"></label>
+        <p style="text-align:center;"><a data-modal1='' href="@Url.Action("_StopProcess","SalaryGenerator")" class="btn btn-danger">Stop Process</a></p>
+    </div>
+</div>
+
+<section class="content-wrapper main-content clear-fix">
+    <div class="well">
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+            <div class="modal-body">
+                <div class="form-horizontal">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">@GlobalResEstate.menuGenerateSalary.ToUpper()</div>
+                        <div class="panel-body">
+                            <div class="form-group">
+                                <div class="col-sm-4">
+                                    <label for="NamaProses">@GlobalResEstate.lblProcessName</label>
+                                    @Html.DropDownList("ProcessList", null, htmlAttributes: new { @class = "form-control" })
+                                </div>
+                                <div class="col-sm-4">
+                                    <label for="BulanProses">@GlobalResEstate.lblMonth</label>
+                                    @Html.DropDownList("MonthList", null, htmlAttributes: new { @class = "form-control" })
+                                </div>
+                                <div class="col-sm-4">
+                                    <label for="TahunProses">@GlobalResEstate.lblYear</label>
+                                    @Html.DropDownList("YearList", null, htmlAttributes: new { @class = "form-control" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer-report">
+                    <input class="btn btn-primary" type="submit" name="viewreport" id="viewreport" value=@GlobalResEstate.btnViewReport />
+                    <input class="btn btn-primary" type="submit" name="generatesalary" id="generatesalary" value=@GlobalResEstate.btnGo />
+                    <a style="text-align:right" href="@Url.Action("Index", "SalaryGenerator")" class="btn btn-warning">@GlobalResEstate.btnBack</a>
+                </div>
+            </div>
+        }
+    </div>
+</section>
+<div id='myModal1' class='modal fade in'>
+    <div class="modal-dialog modal-lg" style="width: 85%">
+        <div class="modal-content">
+            <div id='myModalContent1'></div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+
+        $('#viewreport').click(function (e) {
+            var Populink = "@Url.Action("CheckrollReport", "SalaryGenerator", null, this.Request.Url.Scheme)";
+            window.open(Populink, null, "height=780,width=1000,status=yes,toolbar=no,menubar=no,location=no,scrollbars=yes,resizable=no");
+            e.stopPropagation();
+            e.preventDefault();
+        });
+
+        $("#generatesalary").prop("disabled", true);
+
+        $("#generatesalary").click(function () {
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("SalaryGeneratorIndex", "SalaryGenerator")',
+                data: $("form").serialize(),
+                async: false,
+                success: function (result) {
+                    if (result.success) {
+                        $("#generatesalary").prop("disabled", true);
+                        $.simplyToast(result.msg, result.status);
+                        //} else {
+                        //    $.simplyToast(result.msg, result.status);
+                    }
+                },
+            });
+            return false;
+        });
+
+        var callAjax = function () {
+            $.ajax({
+                method: 'get',
+                url: '@Url.Action("Index", "GetProcessStatus")',
+                success: function (data) {
+                    //$("#sample").html(data);
+                    if (data.status) {
+                        //$("#progress1").show();
+                        $("#generatesalary").prop("disabled", true);
+                        return DisplayProgressMessage(this, 0, data.percentstatus);
+                    }
+                    else {
+                        //$("#progress1").hide();
+                        $("#generatesalary").prop("disabled", false);
+                        return DisplayProgressMessage(this, 1, data.percentstatus);
+                    }
+
+                }
+            });
+        }
+
+        function DisplayProgressMessage(ctl, status, percentstatus) {
+            if (status == 0)
+            {
+                //$("body").addClass("submit-progress-bg");
+                //$(".submit-progress").removeClass("hidden");
+                $("#GenerateProcess").css("display", "");
+                document.getElementById('statusprecent').innerHTML = '@GlobalResEstate.msgWait <br>' + percentstatus;
+            }
+            else
+            {
+                //$("body").removeClass("submit-progress-bg");
+                //$(".submit-progress").addClass("hidden");
+                $("#upload").prop("disabled", false);
+                $("#GenerateProcess").css("display", "none");
+            }
+
+        }
+
+        setInterval(callAjax, 2000);
+    });
+</script>
+<!--Shah finish process notification-->
+@section scripts {
+    @Scripts.Render("~/Asset/Scripts/AjaxModal.js")
+    <script src="~/Asset/Scripts/jquery.signalR-2.2.1.js"></script>
+    <script src="~/signalr/Hubs"></script>
+    <script>
+        (function () {
+            var thisdivid = @ViewBag.DivisionID;
+            var myHub = $.connection.GenerateSalaryHub;
+            $.connection.hub.logging = true;
+            $.connection.hub.start();
+            myHub.client.GenEnd = function (divid, hdrmsg, msg, status) {
+                if (thisdivid === divid) {
+                    Swal.fire(
+                        hdrmsg,
+                        msg,
+                        status
+                    );
+                }
+            };
+        }());
+    </script>
+}
+

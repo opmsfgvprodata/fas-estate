@@ -1,0 +1,162 @@
+﻿@using MVC_SYSTEM.Class;
+@{
+    ViewBag.Title = "Yield Info";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+
+    AjaxOptions options = new AjaxOptions
+    {
+        HttpMethod = "Post",
+        UpdateTargetId = "yieldList",
+        InsertionMode = InsertionMode.Replace,
+        LoadingElementId = "divLoading"
+    };
+
+    var year = DateTime.Now.Year;
+    var month = DateTime.Now.Month-1;
+}
+
+<script src="~/Asset/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+
+<div id="divLoading" style="display:none;">
+    <div class="progressTest">
+        <label>
+            @GlobalResEstate.msgWait
+        </label>
+    </div>
+</div>
+
+<section class="content-wrapper main-content clear-fix">
+    <div class="well bottom" style="padding-bottom:16px">
+        @using (Ajax.BeginForm("_YieldExactCreate", "WorkerInfo", null, options, new { @id = "YieldCreate" }))
+        {
+            <div class="col-sm-3">
+                @Html.Label(GlobalResEstate.lblLevelType)
+                @Html.DropDownList("JenisPeringkatList", null, htmlAttributes: new { @class = "form-control", @id = "jenisPeringkatDdl" })
+            </div>
+            <div class="col-sm-2">
+                @Html.Label(GlobalResEstate.lblMonth)
+                @Html.DropDownList("MonthList", null, htmlAttributes: new { @class = "form-control", @id = "MonthDdl" })
+            </div>
+            <div class="col-sm-2">
+                @Html.Label(GlobalResEstate.lblYear)
+                @Html.DropDownList("YearList", null, htmlAttributes: new { @class = "form-control", @id = "YearDdl" })
+            </div>
+            <div class="col-sm-2" style="padding-top: 25px;">
+                <input class="btn btn-primary btn-block" type="submit" name="Lihat" id="getYield" value=@GlobalResEstate.btnSearch>
+            </div>
+        }
+    </div>
+
+    <div class="well" style="margin-top: 7px">
+        <div class="modal-body">
+            <div class="panel panel-primary">
+                <div class="panel-heading">@GlobalResEstate.lblYieldInfo</div>
+                <div class="panel-body">
+                    <div id="yieldList">
+                        @Html.Action("_populateExactPktList", new { MonthList = month, YearList = year })
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-success generate">@GlobalResEstate.btnGenerate</button>
+            <a href=@Url.Action("Index", "WorkerInfo") class="btn btn-warning" role="button">@GlobalResEstate.btnBack</a>
+        </div>
+
+    </div>
+</section>
+<!-- modal placeholder-->
+<div id='myModal' class='modal fade in'>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div id='myModalContent'></div>
+        </div>
+    </div>
+</div>
+
+<div id='myModal1' class='modal fade in'>
+    <div class="modal-dialog modal-lg" style="width: 85%">
+        <div class="modal-content">
+            <div id='myModalContent1'></div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    @Scripts.Render("~/Asset/Scripts/AjaxModal.js")
+}
+
+<style>
+    .header_table th {
+        text-align: center;
+        vertical-align: middle !important;
+    }
+
+    .kodpkt {
+        width: 220px;
+        font-size: 12px;
+        text-align: center;
+        vertical-align: middle !important;
+    }
+
+    .count {
+        width: 30px;
+        font-size: 12px;
+        text-align: center;
+        vertical-align: middle !important;
+    }
+
+    .luaspkt {
+        width: 220px;
+        font-size: 12px;
+        text-align: center;
+        vertical-align: middle !important;
+    }
+
+    .hasilsawit {
+        width: 220px;
+        font-size: 12px;
+        text-align: center;
+        vertical-align: middle !important;
+    }
+
+    .tindakan {
+        width: 30px !important;
+        text-align: center;
+        vertical-align: middle !important;
+    }
+</style>
+
+<script>
+    function resetSearch1() {
+        document.getElementById("txtfilter").value = "";
+        document.getElementById('btnCari').click();
+    }
+
+    $('.generate').on('click',
+        function () {
+            var jenisPeringkat = $('#jenisPeringkatDdl').val();
+            console.log(jenisPeringkat);
+            var bulan = $('#MonthDdl').val();
+            console.log(bulan);
+            var tahun = $('#YearDdl').val();
+            console.log(tahun);
+
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("generateExactYield", "WorkerInfo")',
+                dataType: 'json',
+                contentType: 'application/json',
+                async: false,
+                success: function(result) {
+                    $.simplyToast(result.msg, result.status);
+                    if (result.status == "success") {
+                        $("#yieldList").load('@Url.Action("_YieldExactCreate", "WorkerInfo")', { JenisPeringkatList: jenisPeringkat, MonthList: bulan, YearList: tahun });
+                    }
+                }
+            });
+        });
+</script>
+
+

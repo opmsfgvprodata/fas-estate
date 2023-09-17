@@ -1,0 +1,65 @@
+﻿@model IEnumerable<MVC_SYSTEM.MasterModels.tblOptionConfigsWeb>
+
+
+@{
+    ViewBag.Title = "Rejectreason";
+    //Layout = "~/Views/Shared/_LayoutMain.cshtml";
+    //var checklist = (IEnumerable<>)ViewBag.poduklist;
+    string nopkj = ViewBag.Nopkj;
+}
+
+
+
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 class="modal-title">PENOLAKAN PERMOHONAN</h3>
+</div>
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div class="modal-body">
+        <div class="form-horizontal">
+            <span id="progress" class="text-center" style="display: none;">
+                <img src="~/Asset/Images/wait.gif" alt="wait" />
+            </span>
+
+            <div class="form-group">
+                <input type="hidden" name="idval" value="@ViewBag.ID" />
+                <label class="control-label col-md-2">No Pekerja</label>
+                <label class="control-label col-md-2" style="text-align:left">@ViewBag.Nopkj</label>
+                @*@Html.TextBox("", nopkj, new { @class = "form-control", @readonly = "readonly" })*@
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-2">Nama</label>
+                <label class="control-label col-md-2" style="text-align:left">@ViewBag.Nama </label>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-2">Sebab Ditolak</label>
+                <div class="col-md-9">
+                    @foreach (var item in Model)
+                    {
+                        <div>
+                            <label class="control-label col-md-4" style="text-align:left">
+                                <input type="checkbox" class="" value="@item.fldOptConfDesc" id="fldOptConfValue" name="ChkVal" />
+                                @item.fldOptConfDesc
+                            </label>
+                        </div>
+                    }
+
+                    @*@Html.ValidationMessageFor(model => model.fldSbbTolak, "", new { @class = "text-danger" })*@
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <input class="btn btn-primary" type="submit" value=@GlobalResEstate.btnSave />
+        @*<a data-modal='' href='@Url.Action("NewWorkerDetail", "Approval")/?fileID=@Model.fldSbbTolak' class='btn btn-primary btn-lg' role='button' style="font-size:10px;">Pilih</a>*@
+        @*<a style="text-align:right" href="@Request.UrlReferrer" class="btn btn-warning" title="Back to list">@GlobalResAdditionalEmail.btnBack</a>*@
+        <button type="button" class="btn btn-warning" data-dismiss="modal">Kembali</button>
+
+                @*<button class="btn btn-warning" data-dismiss="modal">@GlobalResEstate.btnBack</button>*@
+
+    </div>
+}

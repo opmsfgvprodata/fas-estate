@@ -1,0 +1,83 @@
+﻿@model MVC_SYSTEM.ViewingModels.PagedList<MVC_SYSTEM.CustomModels.CustMod_HargaMenuai>
+@using MVC_SYSTEM.Class;
+@{
+    ViewBag.Title = GlobalResEstate.lblTitleHarvestingPriceTable;
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+
+    AjaxOptions options = new AjaxOptions
+    {
+        HttpMethod = "Get",
+        UpdateTargetId = "harvestingTableDetails",
+        InsertionMode = InsertionMode.Replace,
+        LoadingElementId = "UpdateProgress1"
+    };
+}
+
+<script src="~/Asset/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+
+@section scripts{
+    @Scripts.Render("~/Asset/Scripts/AjaxModal.js")
+}
+
+<section class="content-wrapper main-content clear-fix">
+    <div class="well bottom" style="padding-bottom:16px;">
+        @using (Ajax.BeginForm("_HarvestingPriceTable", "TableInfo", null, options, new { @id = "harvestingTableSearchDetails" }))
+        {
+            @Html.AntiForgeryToken()
+            <div class="row">
+                <div class="col-sm-3">
+                    <label>@GlobalResEstate.lblLevel</label>
+                    @Html.DropDownList("PktList", null, htmlAttributes: new { @class = "form-control" })
+                </div>
+                <div class="col-sm-3">
+                    <label>@GlobalResEstate.lblSearch</label>
+                    @Html.TextBox("filter", null, htmlAttributes: new { @class = "form-control", @id = "txtfilter" })
+                </div>
+                <div class="col-sm-4 btn-group" style="padding-top: 24px;">
+                    <input class="btn btn-primary" type="submit" id="btnCari" name="Lihat" value=@GlobalResEstate.btnView />
+                </div>
+            </div>
+        }
+    </div>
+
+    <div class="well" style="margin-top:7px;">
+        <div class="modal-body">
+            <div class="panel panel-primary">
+                <div class="panel-heading">@GlobalResEstate.lblHarvestingPriceInfo</div>
+                <div class="panel-body">
+                    <div id="harvestingTableDetails">
+                        @Html.Action("_HarvestingPriceTable")
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer col-md-12">
+            <a href=@Url.Action("Index", "TableInfo") class="btn btn-warning" role="button" onclick="return DisplayProgressMessage(this);">@GlobalResEstate.btnBack</a>
+        </div>
+    </div>
+</section>
+
+<script>
+    $(document).ready(function () {
+        $("#btnSrch").click(function (e) {
+            e.preventDefault();
+            //console.log(tbl_Pkjmast);
+            console.log(SelectionList);
+            var reloadPage = {};
+            reloadPage.url = "@Url.Action("_HarvestingPriceTable", "TableInfo")";
+            reloadPage.type = "POST";
+            reloadPage.data = { Search: $("#Search").val() , Kategori: $("#SelectionList").val()};
+            reloadPage.datatype = "json";
+            reloadPage.success = function (result) {
+                $("#divdetail").html(result);
+                //$("#UpdateProgress1").hide();
+                //$("#UpdateProgress1").css("display", "none");
+            };
+            reloadPage.error = function () { $.simplyToast('@GlobalResEstate.msgError', 'danger'); };
+            $.ajax(reloadPage);
+        });
+    });
+
+</script>
+
+

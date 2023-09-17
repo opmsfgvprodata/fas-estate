@@ -1,0 +1,49 @@
+﻿@model MVC_SYSTEM.ViewingModels.PagedList<MVC_SYSTEM.ViewingModels.tbl_UpahMenuai>
+@using MVC_SYSTEM.Class;
+
+@{
+    ViewBag.Title = "PayrateDetail";
+    //Layout = "~/Views/Shared/_LayoutMain.cshtml";
+    GetConfig GetConfig = new GetConfig();
+}
+
+<div style="margin-top:17px;">
+    @{
+        var grid = new WebGrid(
+                canPage: true,
+                rowsPerPage: Model.PageSize,
+                canSort: true,
+                ajaxUpdateContainerId: "grid");
+
+        grid.Bind(Model.Content, rowCount: Model.TotalRecords, autoSortAndPage: false);
+        grid.Pager(WebGridPagerModes.All);
+
+        @grid.GetHtml(htmlAttributes: new { id = "grid" },   // id for ajaxUpdateContainerId parameter
+                         fillEmptyRows: false,
+                         tableStyle: "table table-bordered table-hover",
+                         mode: WebGridPagerModes.All,
+                         columns: grid.Columns(
+                             grid.Column(GlobalResEstate.hdrNo, style: "col-lg-1", format: item => item.WebGrid.Rows.IndexOf(item) + 1 + Math.Round(Convert.ToDouble(grid.TotalRowCount / grid.PageCount) / grid.RowsPerPage) * grid.RowsPerPage * grid.PageIndex),
+                           grid.Column("fld_HasilLower", GlobalResEstate.hdrZonHasil +" (Tan/Hek)", style: "col-lg-2",
+                           format: (item) =>
+                           {
+                               if (item.fld_HasilUpper != null)
+                                   return item.fld_HasilLower + " - " + item.fld_HasilUpper;
+                               else
+                                   return item.fld_HasilLower;
+                           }),
+                           grid.Column("fld_Kadar", GlobalResEstate.hdrRate +" (RM/Tan)", style: "col-lg-2"),
+                             grid.Column("fld_Catitan", GlobalResEstate.hdrNote, style: "col-lg-2", format:@<text>@(GetConfig.Insentif(item.fld_Catitan,item.fld_NegaraID,item.fld_SyarikatID))</text>),
+                            grid.Column(GlobalResEstate.hdrAction, canSort: false, style: "col-lg-2",
+                            format: @<text>
+                                @Html.Raw("<a data-modal='' href='" + @Url.Action("PayrateUpdate", "Maintenance") + "/?id=" + item.fld_ID + "' title='Update'> <span class='glyphicon glyphicon-edit'> </span> </a>")
+                                @Html.Raw("<a data-modal='' href='" + @Url.Action("PayrateDelete", "Maintenance") + "/?id=" + item.fld_ID + "' title='Delete'> <span class='glyphicon glyphicon-trash'> </span> </a>")
+                            </text>)
+
+                        ));
+    }
+
+
+</div>
+
+

@@ -1,0 +1,174 @@
+﻿@model IEnumerable<MVC_SYSTEM.Models.tbl_PktUtama>
+@using MVC_SYSTEM.Class;
+@{
+    ViewBag.Title = "AsasPeringkatUtama";
+    //Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    GetConfig GetConfig = new GetConfig();
+}
+@foreach (var item in Model)
+{
+    <tr>
+        <th colspan="2" style="border-bottom:1px solid; border-top:none; border-left:none; border-right:none; border-bottom-color:red">PERINGKAT UTAMA <label style="font-size:small; font-weight:normal;"> @item.fld_PktUtama</label></th>
+    </tr>
+    <tr>
+        <td style="border:none !important; width:50%; vertical-align:top; padding:0px !important">
+            <table style="font-size:12px !important; padding:0px !important">
+                @*<tr>
+                    <td>@GlobalResEstate.lblPktUtama</td>
+                    <td>: @item.fld_PktUtama</td>
+                    <td width="200px"></td>
+                    <td width="200px"></td>
+                    <td width="200px"></td>
+                    <td width="200px"></td>
+                </tr>*@
+                <tr>
+                    <td style="border:none !important;">@GlobalResEstate.lblNamaPkt</td>
+                    <td style="border:none !important;">: @item.fld_NamaPktUtama</td>
+                    <td style="border:none !important;" width="1px"></td>
+                    <td style="border:none !important;" width="1px"></td>
+                    <td style="border:none !important;" width="1px"></td>
+                    <td style="border:none !important;" width="1px"></td>
+                </tr>
+                <tr>
+                    <td style="border:none !important;">@GlobalResEstate.lblElaunSukar</td>
+                    <td style="border:none !important;">a) Menuai&nbsp;: @GetConfig.GetWebConfigDesc(item.fld_KesukaranMenuaiPktUtama, "tahapKesukaran", item.fld_NegaraID, item.fld_SyarikatID)</td>
+                    <td style="border:none !important;" width="1px"></td>
+                    <td style="border:none !important;" width="1px"></td>
+                    <td style="border:none !important;" width="1px"></td>
+                    <td style="border:none !important;" width="1px"></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td style="border:none !important;">b) Membaja&nbsp;: @GetConfig.GetWebConfigDesc(item.fld_KesukaranMembajaPktUtama, "tahapKesukaran", item.fld_NegaraID, item.fld_SyarikatID)</td>
+                    <td style="border:none !important;" width="1px"></td>
+                    <td style="border:none !important;" width="1px"></td>
+                    <td style="border:none !important;" width="1px"></td>
+                    <td style="border:none !important;" width="1px"></td>
+                </tr>
+                <tr>
+                    <td style="border:none !important;">@GlobalResEstate.lblLuasPkt</td>
+                    <td style="border:none !important;">Hektar: @item.fld_LsPktUtama</td>
+                    <td style="border:none !important;" width="1px"></td>
+                    <td style="border:none !important;" width="1px"></td>
+                    <td style="border:none !important;" width="1px"></td>
+                    <td style="border:none !important;" width="1px"></td>
+                </tr>
+                <tr>
+                    <td style="border:none !important;">@GlobalResEstate.lblTanam</td>
+                    <td style="border:none !important;">: @GetConfig.GetWebConfigDesc(item.fld_JnsTnmn, "jnsTanaman", item.fld_NegaraID, item.fld_SyarikatID)</td>
+                    <td style="border:none !important;" width="1px"></td>
+                    <td style="border:none !important;" width="1px"></td>
+                    <td style="border:none !important;" width="1px"></td>
+                    <td style="border:none !important;" width="1px"></td>
+                </tr>
+                <tr>
+                    <td style="border:none !important;">@GlobalResEstate.lblLuasTanam</td>
+                    <td style="border:none !important;">: @item.fld_LuasKawTnman</td>
+                    <td style="border:none !important;" width="1px"></td>
+                    <td style="border:none !important;" width="1px"></td>
+                    <td style="border:none !important;" width="1px"></td>
+                    <td style="border:none !important;" width="1px"></td>
+                </tr>
+                <tr>
+                    <td style="border:none !important;">@GlobalResEstate.lblLuasHasil</td>
+                    <td style="border:none !important;">: @item.fld_LuasBerhasil</td>
+                    <td style="border:none !important;" width="1px"></td>
+                    <td style="border:none !important;" width="1px"></td>
+                    <td style="border:none !important;" width="1px"></td>
+                    <td style="border:none !important;" width="1px"></td>
+                </tr>
+                <tr>
+                    <td style="border:none !important;">@GlobalResEstate.lblLuasBlmHasil</td>
+                    <td style="border:none !important;">: @item.fld_LuasBlmBerhasil</td>
+                    <td style="border:none !important;" width="1px"></td>
+                    <td style="border:none !important;" width="1px"></td>
+                    <td style="border:none !important;" width="1px"></td>
+                    <td style="border:none !important;" width="1px"></td>
+                </tr>
+                <tr>
+                    <td style="border:none !important;">@GlobalResEstate.lblBilPokok</td>
+                    <td style="border:none !important;">: @item.fld_BilPokok</td>
+                    <td style="border:none !important;" width="1px"></td>
+                    <td style="border:none !important;" width="1px"></td>
+                    <td style="border:none !important;" width="1px"></td>
+                    <td style="border:none !important;" width="1px"></td>
+                </tr>
+                <tr>
+                    <td style="border:none !important;">@GlobalResEstate.lblDiriPokok</td>
+                    <td style="border:none !important;">: @item.fld_DirianPokok</td>
+                    <td style="border:none !important;" width="1px"></td>
+                    <td style="border:none !important;" width="1px"></td>
+                    <td style="border:none !important;" width="1px"></td>
+                    <td style="border:none !important;" width="1px"></td>
+                </tr>
+                <tr>
+                    <td style="border:none !important;">@GlobalResEstate.lblStatusTanam</td>
+                    <td style="border:none !important;">: @GetConfig.GetWebConfigDesc(item.fld_StatusTnmn, "statusTanaman", item.fld_NegaraID, item.fld_SyarikatID)</td>
+                    <td style="border:none !important;" width="1px"></td>
+                    <td style="border:none !important;" width="1px"></td>
+                    <td style="border:none !important;" width="1px"></td>
+                    <td style="border:none !important;" width="1px"></td>
+                </tr>
+                <tr>
+                    <td style="border:none !important;"></td>
+                    <td style="border:none !important;"></td>
+                    <td style="border:none !important;" width="1px"></td>
+                    <td style="border:none !important;" width="1px"></td>
+                    <td style="border:none !important;" width="1px"></td>
+                    <td style="border:none !important;" width="1px"></td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+    @*<tr>
+        <td style="border:none !important; width:50%; vertical-align:top; padding:0px !important">
+            <table style="font-size:11px !important; padding:0px !important">
+                <tr>
+                    <td style="border:none !important;">
+                        <label style="font-size:small; font-weight:normal;">@GlobalResEstate.lblIO</label><br />
+                        <label style="font-size:small; font-weight:normal;">@GlobalResEstate.lblPktUtama</label><br />
+                        <label style="font-size:small; font-weight:normal;">@GlobalResEstate.lblNamaPkt</label><br />
+                        <label style="font-size:small; font-weight:normal;">@GlobalResEstate.lblElaunSukar </label><br />
+                        <label style="font-size:small; font-weight:normal;"></label><br />
+                        <label style="font-size:small; font-weight:normal;">@GlobalResEstate.lblLuasPkt</label><br />
+                        <label style="font-size:small; font-weight:normal;">@GlobalResEstate.lblTanam</label><br />
+                    </td>
+                    <td style="border:none !important;">
+                        <label style="font-size:small; font-weight:normal;">: @item.fld_IOcode</label><br />
+                        <label style="font-size:small; font-weight:normal;">: @item.fld_PktUtama</label><br />
+                        <label style="font-size:small; font-weight:normal;">: @item.fld_NamaPktUtama </label><br />          
+                        <label style="font-size:small; font-weight:normal;">a) Menuai: @GetConfig.GetWebConfigDesc(item.fld_KesukaranMenuaiPktUtama, "tahapKesukaran", item.fld_NegaraID, item.fld_SyarikatID)</label><br />
+                        <label style="font-size:small; font-weight:normal;">b) Membaja:  @GetConfig.GetWebConfigDesc(item.fld_KesukaranMembajaPktUtama, "tahapKesukaran", item.fld_NegaraID, item.fld_SyarikatID)</label><br />  
+                        <label style="font-size:small; font-weight:normal;">: @item.fld_LsPktUtama</label><br />
+                        <label style="font-size:small; font-weight:normal;">: @GetConfig.GetWebConfigDesc(item.fld_JnsTnmn, "jnsTanaman", item.fld_NegaraID, item.fld_SyarikatID) </label><br />
+                    </td>
+                </tr>
+            </table>
+        </td>
+        <td style="border:none !important; width:50%">
+            <table style="font-size:11px !important">
+                <tr>
+                    <td style="border:none !important;">
+
+                        <label style="font-size:small; font-weight:normal;">@GlobalResEstate.lblLuasTanam</label><br />
+                        <label style="font-size:small; font-weight:normal;">@GlobalResEstate.lblLuasHasil</label><br />
+                        <label style="font-size:small; font-weight:normal;">@GlobalResEstate.lblLuasBlmHasil</label><br />
+                        <label style="font-size:small; font-weight:normal;">@GlobalResEstate.lblBilPokok</label><br />
+                        <label style="font-size:small; font-weight:normal;">@GlobalResEstate.lblDiriPokok</label><br />
+                        <label style="font-size:small; font-weight:normal;">@GlobalResEstate.lblStatusTanam</label><br />
+                    </td>
+                    <td style="border:none !important;">
+
+                        <label style="font-size:small; font-weight:normal;">: @item.fld_LuasKawTnman</label><br />
+                        <label style="font-size:small; font-weight:normal;">: @item.fld_LuasBerhasil</label><br />
+                        <label style="font-size:small; font-weight:normal;">: @item.fld_LuasBlmBerhasil </label><br />
+                        <label style="font-size:small; font-weight:normal;">: @item.fld_BilPokok</label><br />
+                        <label style="font-size:small; font-weight:normal;">: @item.fld_DirianPokok </label><br />
+                        <label style="font-size:small; font-weight:normal;">: @GetConfig.GetWebConfigDesc(item.fld_StatusTnmn, "statusTanaman", item.fld_NegaraID, item.fld_SyarikatID)</label><br />
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>*@
+}
+

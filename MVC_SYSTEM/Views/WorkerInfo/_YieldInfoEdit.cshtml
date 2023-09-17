@@ -1,0 +1,63 @@
+﻿@using MVC_SYSTEM.Class
+@model MVC_SYSTEM.ViewingModels.vw_HasilSawitPkt
+
+@{
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
+<section class="content-wrapper main-content clear-fix">
+
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 class="modal-title">@GlobalResEstate.lblYieldInfoUpdate</h3>
+    </div>
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        <div class="modal-body">
+            <div class="form-horizontal">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">@GlobalResEstate.lblYieldInfo</div>
+                    <div class="panel-body">
+                        <div class="form-group">
+                            <label class="control-label col-sm-3">@GlobalResEstate.lblLevelCode:</label>
+                            <div class="col-sm-3">
+                                @Html.TextBoxFor(model => model.fld_PktUtama, htmlAttributes: new { @class = "form-control", @disabled = "true" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-3">@GlobalResEstate.lblLevelArea:</label>
+                            <div class="col-sm-3">
+                                @Html.TextBoxFor(model => model.fld_LsPktUtama, htmlAttributes: new { @class = "form-control", @disabled = "true" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-3">@GlobalResEstate.hdrYield:</label>
+                            <div class="col-sm-3">
+                                @Html.TextBoxFor(model => model.fld_HasilTan, htmlAttributes: new { @class = "form-control"})
+                            </div>
+                        </div>
+                        
+                        @Html.HiddenFor(model => model.fld_PktUtama)
+                        @Html.HiddenFor(model => model.fld_Bulan)
+                        @Html.HiddenFor(model => model.fld_Tahun)
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <input class="btn btn-success" type="submit" value=@GlobalResEstate.btnYes>
+            <button class="btn btn-danger" data-dismiss="modal">@GlobalResEstate.btnNo</button>
+        </div>
+    }
+</section>
+
+<script>
+    $("form").removeData("validator");
+    $("form").removeData("unobtrusiveValidation");
+    $.validator.unobtrusive.parse("form");
+</script>
+
+
+
+

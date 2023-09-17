@@ -1,0 +1,106 @@
+﻿@model IEnumerable<MVC_SYSTEM.CustomModels.CustMod_Kerjahdr>
+@using MVC_SYSTEM.Class
+@{
+    int itemno = 1;
+    string date = "";
+    string username = "";
+    GetConfig GetConfig = new GetConfig();
+    decimal? gajiminconfig = decimal.Parse(GetConfig.GetWebConfigValue("gajiMinima", ViewBag.NegaraID, ViewBag.SyarikatID));
+    decimal? gajiterkumpul = 0;
+    string fontcolor = "black";
+    CheckrollFunction CheckrollFunction = new CheckrollFunction();
+    int ButtonColor = 0;
+    string Color = "";
+    string Title = "";
+}
+<thead>
+    <tr>
+        <th bgcolor="#ffcc80" width="2%" style="color:black; text-align:center; vertical-align:middle;border:1px solid black;" border="1">@GlobalResEstate.hdrNo</th>
+        <th bgcolor="#ffcc80" width="10%" style="color:black; text-align:center; vertical-align:middle;border:1px solid black;" border="1">@GlobalResEstate.hdrNoPkj</th>
+        <th bgcolor="#ffcc80" width="10%" style="color:black; text-align:center; vertical-align:middle;border:1px solid black;" border="1">@GlobalResEstate.hdrName</th>
+        <th bgcolor="#ffcc80" width="10%" style="color:black; text-align:center; vertical-align:middle;border:1px solid black;" border="1">@GlobalResEstate.lblGroup</th>
+        <th bgcolor="#ffcc80" width="10%" style="color:black; text-align:center; vertical-align:middle;border:1px solid black;" border="1">@GlobalResEstate.lblAttend / @GlobalResEstate.lblLeave</th>
+        <th bgcolor="#ffcc80" width="10%" style="color:black; text-align:center; vertical-align:middle;border:1px solid black;" border="1">@GlobalResEstate.lblRaining</th>
+        <th bgcolor="#ffcc80" width="10%" style="color:black; text-align:center; vertical-align:middle;border:1px solid black;" border="1">@GlobalResEstate.lblStatus</th>
+        <th bgcolor="#ffcc80" width="10%" style="color:black; text-align:center; vertical-align:middle;border:1px solid black;" border="1">@GlobalResEstate.lblAccumulatedSalary (RM)</th>
+        <th bgcolor="#ffcc80" width="10%" style="color:black; text-align:center; vertical-align:middle;border:1px solid black;" border="1">@GlobalResEstate.lblUserID</th>
+        <th bgcolor="#ffcc80" width="3%" style="color:black; text-align:center; vertical-align:middle;border:1px solid black;" border="1">@GlobalResEstate.hdrAction</th>
+    </tr>
+</thead>
+<tbody>
+    @if (Model.Count() > 0)
+    {
+        foreach (var item in Model)
+        {
+            date = item.fld_CreatedDT != null ? string.Format("{0:dd/MM/yyyy}", item.fld_CreatedDT) : "-";
+            username = item.fld_CreatedBy != null ? item.fld_CreatedBy : "-";
+            if (item.fld_GajiTerkumpul != "-")
+            {
+                gajiterkumpul = decimal.Parse(item.fld_GajiTerkumpul);
+                fontcolor = gajiterkumpul >= gajiminconfig ? "black" : "red";
+            }
+
+            if (item.fld_Status == "Ada rekod")
+            {
+                ButtonColor = CheckrollFunction.GetDataKerjaStatus(item.fld_Nopkj, item.fld_Tarikh, item.fld_NegaraID, item.fld_SyarikatID, item.fld_WilayahID, item.fld_LadangID);
+                switch (ButtonColor)
+                {
+                    case 1:
+                        Color = "red";
+                        Title = "Not Attend";
+                        break;
+                    case 2:
+                        Color = "green";
+                        Title = "Attend & Have Working Data";
+                        break;
+                    case 3:
+                        Color = "red";
+                        Title = "Attend & No Working Data";
+                        break;
+                }
+            }
+            else
+            {
+                Color = "black";
+                Title = "-";
+            }
+
+            <tr>
+                <td align="center" style="vertical-align:middle !important; border:1px solid black;" border="1">@itemno</td>
+                <td align="center" style="vertical-align:middle !important; border:1px solid black;" border="1">@item.fld_Nopkj</td>
+                <td align="center" style="vertical-align:middle !important; border:1px solid black;" border="1">@item.fld_Nama</td>
+                <td align="center" style="vertical-align:middle !important; border:1px solid black;" border="1">@item.fld_Kum</td>
+                <td align="center" style="vertical-align:middle !important; border:1px solid black;" border="1">@item.fld_HdrCt</td>
+                <td align="center" style="vertical-align:middle !important; border:1px solid black;" border="1">@item.fld_Hujan</td>
+                <td align="center" style="vertical-align:middle !important; border:1px solid black;" border="1"><font color="@Color">@Title</font></td>
+                <td align="center" style="vertical-align:middle !important; border:1px solid black;" border="1"><font color="@fontcolor">@item.fld_GajiTerkumpul</font></td>
+                <td align="center" style="vertical-align:middle !important; border:1px solid black;" border="1">@username</td>
+                <td align="center" style="vertical-align:middle !important; border:1px solid black;" border="1">
+                    @if (item.fld_Status == "Ada rekod")
+                    {
+                        if (!ViewBag.CutOfDateStatus)
+                        {
+                            <button id="deleteAtt_@itemno" name="deleteAtt_@itemno" class="btn btn-danger" title="Padam" onclick="return DeleteAttInfo('@item.fld_UniqueID');"><i class='fa fa-trash fa-lg'></i></button>
+                        }
+                        else
+                        {
+                            <p>-</p>
+                        }
+                    }
+                    else
+                    {
+                        @item.fld_HdrCt;
+                    }
+                </td>
+            </tr>
+            itemno++;
+        }
+    }
+    else
+    {
+        <tr>
+            <td align="center" colspan="10" style="vertical-align:middle !important; border:1px solid black;" border="1">@GlobalResEstate.msgNoRecord</td>
+        </tr>
+    }
+
+</tbody>

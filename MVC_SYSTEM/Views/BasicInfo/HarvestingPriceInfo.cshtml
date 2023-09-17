@@ -1,0 +1,148 @@
+﻿@model MVC_SYSTEM.ViewingModels.PagedList<MVC_SYSTEM.CustomModels.CustMod_HargaMenuai>
+@using MVC_SYSTEM.Class;
+@{
+    ViewBag.Title = GlobalResEstate.lblTitleHarvestingPriceInfo;
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+
+    AjaxOptions options = new AjaxOptions
+    {
+        HttpMethod = "Get",
+        UpdateTargetId = "harvestingPriceDetails",
+        InsertionMode = InsertionMode.Replace,
+        LoadingElementId = "UpdateProgress1"
+    };
+}
+
+<script src="~/Asset/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+
+@section scripts{
+    @Scripts.Render("~/Asset/Scripts/AjaxModal.js")
+}
+
+<section class="content-wrapper main-content clear-fix">
+    <div class="well bottom" style="padding-bottom:16px;">
+        @using (Ajax.BeginForm("_HarvestingPriceInfo", "BasicInfo", null, options, new { @id = "harvestingPriceSearchDetails" }))
+        {
+            @Html.AntiForgeryToken()
+            <div class="row">
+                <div class="col-sm-3">
+                    <label>@GlobalResEstate.lblLevel</label>
+                    @Html.DropDownList("PktList", null, htmlAttributes: new { @class = "form-control" })
+                </div>
+                <div class="col-sm-3">
+                    <label>@GlobalResEstate.lblSearch</label>
+                    @Html.TextBox("filter", null, htmlAttributes: new { @class = "form-control", @id = "txtfilter" })
+                </div>
+                <div class="col-sm-4 btn-group" style="padding-top: 24px;">
+                    <input class="btn btn-primary" type="submit" id="btnCari" name="Lihat" value=@GlobalResEstate.btnView />
+                    @*<input class="btn btn-primary" value=@GlobalResEstate.btnList />*@
+                </div>
+            </div>
+        }
+    </div>
+
+    <div class="well" style="margin-top:7px;">
+        <div class="modal-body">
+            <div class="panel panel-primary">
+                <div class="panel-heading">@GlobalResEstate.lblHarvestingPriceInfo</div>
+            <div class="panel-body">
+                <div id="harvestingPriceDetails">
+                    @Html.Action("_HarvestingPriceInfo")
+                </div>
+            </div>
+            </div>
+        </div>
+        <div class="modal-footer col-md-12">
+            <a href=@Url.Action("Index", "BasicInfo") class="btn btn-warning" role="button" onclick="return DisplayProgressMessage(this);">@GlobalResEstate.btnBack</a>
+        </div>
+    </div>
+</section>
+<!-- modal placeholder-->
+<div id='myModal' class='modal fade in'>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div id='myModalContent'></div>
+        </div>
+    </div>
+</div>
+
+<div id='myModal1' class='modal fade in'>
+    <div class="modal-dialog modal-lg" style="width: 70%">
+        <div class="modal-content">
+            <div id='myModalContent1'></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function resetSearch1() {
+        document.getElementById("txtfilter").value = "";
+        document.getElementById('btnCari').click();
+    }
+</script>
+
+<style>
+
+    .header_table th {
+        text-align: center;
+        vertical-align: middle !important;
+    }
+
+    .kodperingkat {
+        width: 100px;
+        font-size: 12px;
+        text-align: center;
+        vertical-align: middle !important;
+    }
+
+    .namaperingkat {
+        width: 150px;
+        font-size: 12px;
+        text-align: center;
+        vertical-align: middle !important;
+    }
+
+    .count {
+        width: 50px;
+        font-size: 12px;
+        text-align: center;
+        vertical-align: middle !important;
+    }
+
+    .rmind {
+        width: 20px;
+        font-size: 12px;
+        text-align: right;
+        vertical-align: middle !important;
+    }
+
+    #nestedT .table td:nth-child(3) {
+        border: none;
+    }
+
+    .hargamenuai {
+        width: 80px;
+        font-size: 12px;
+        text-align: center;
+        vertical-align: middle !important;
+    }
+
+    .tindakan {
+        width: 100px;
+        text-align: center;
+        vertical-align: middle !important;
+    }
+
+    .tindakan2 {
+        width: 50px;
+        text-align: center;
+        vertical-align: middle !important;
+    }
+
+    .borderless {
+        border: none !important;
+        background-color: transparent !important;
+    }
+</style>
+
+

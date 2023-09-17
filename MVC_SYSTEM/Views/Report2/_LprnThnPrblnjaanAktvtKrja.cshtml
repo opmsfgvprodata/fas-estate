@@ -1,0 +1,301 @@
+﻿@model MVC_SYSTEM.CustomModels2.CustMod_RptActvByLvlWorkerNActvitList
+
+@{
+    decimal TotalOverallAmountJan = 0;
+    decimal TotalOverallAmountFeb = 0;
+    decimal TotalOverallAmountMac = 0;
+    decimal TotalOverallAmountApr = 0;
+    decimal TotalOverallAmountMay = 0;
+    decimal TotalOverallAmountJun = 0;
+    decimal TotalOverallAmountJul = 0;
+    decimal TotalOverallAmountOgs = 0;
+    decimal TotalOverallAmountSep = 0;
+    decimal TotalOverallAmountOct = 0;
+    decimal TotalOverallAmountNov = 0;
+    decimal TotalOverallAmountDis = 0;
+    decimal TotalOverallAmount = 0;
+    var GetActvts = Model.CustMod_RptMnthSpendByActvt.OrderBy(o => o.actvtcode).Select(s => new { s.actvtcode, s.actvtdesc }).Distinct().ToList();
+    var GetActvts2 = Model.CustMod_ActvtList.OrderBy(o => o.actvtcode).Select(s => new { s.actvtcode, s.actvtdesc }).Distinct().ToList();
+    int count = 1;
+}
+
+@if (Model.CustMod_RptMnthSpendByActvt != null && Model.CustMod_RptMnthSpendByActvt.Count() != 0)
+{
+    <div id="scrollArea2" class="modal-body">
+        <table class="table table-hover table-bordered" style="font-size: 11px;" border="0" width="100%">
+            <thead>
+                <tr>
+                    <th colspan="17" style="text-align:center;vertical-align:middle;">
+                        @ViewBag.TitleReport
+                        <br />
+                        @ViewBag.NamaSyarikat
+                        <br />
+                        (@ViewBag.NoSyarikat)
+                        <br />
+
+
+                    </th>
+                </tr>
+                <tr>
+                    <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Kod Aktiviti</th>
+                    <th bgcolor="#ffcc80" width="20%" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Keterangan Aktiviti</th>
+                    <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Nama Kod Pusat Peringkat</th>
+                    <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">JAN</th>
+                    <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">FEB</th>
+                    <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">MAC</th>
+                    <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">APR</th>
+                    <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">MEI</th>
+                    <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">JUN</th>
+                    <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">JUL</th>
+                    <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">OGS</th>
+                    <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">SEP</th>
+                    <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">OKT</th>
+                    <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">NOV</th>
+                    <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">DIS</th>
+                    <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">JUMLAH</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var GetActvt in GetActvts.Select(s => s.actvtcode).Distinct().ToList())
+                {
+                    var GetCCDetails = Model.CustMod_RptMnthSpendByActvt.Where(x => x.actvtcode == GetActvt).Select(s => s.costcenter).Distinct().ToList();
+                    var i = 1;
+                    decimal TotalAmountJan = 0;
+                    decimal TotalAmountFeb = 0;
+                    decimal TotalAmountMac = 0;
+                    decimal TotalAmountApr = 0;
+                    decimal TotalAmountMay = 0;
+                    decimal TotalAmountJun = 0;
+                    decimal TotalAmountJul = 0;
+                    decimal TotalAmountOgs = 0;
+                    decimal TotalAmountSep = 0;
+                    decimal TotalAmountOct = 0;
+                    decimal TotalAmountNov = 0;
+                    decimal TotalAmountDis = 0;
+                    decimal TotalOverall = 0;
+                    foreach (var GetCCDetail in GetCCDetails)
+                    {
+                        var DataToDisplay = Model.CustMod_RptMnthSpendByActvt.Where(x => x.costcenter == GetCCDetail && x.actvtcode == GetActvt).ToList();
+                        var AmountJan = DataToDisplay.Where(x => x.month == 1).Sum(s => s.totalspend);
+                        var AmountFeb = DataToDisplay.Where(x => x.month == 2).Sum(s => s.totalspend);
+                        var AmountMac = DataToDisplay.Where(x => x.month == 3).Sum(s => s.totalspend);
+                        var AmountApr = DataToDisplay.Where(x => x.month == 4).Sum(s => s.totalspend);
+                        var AmountMay = DataToDisplay.Where(x => x.month == 5).Sum(s => s.totalspend);
+                        var AmountJun = DataToDisplay.Where(x => x.month == 6).Sum(s => s.totalspend);
+                        var AmountJul = DataToDisplay.Where(x => x.month == 7).Sum(s => s.totalspend);
+                        var AmountOgs = DataToDisplay.Where(x => x.month == 8).Sum(s => s.totalspend);
+                        var AmountSep = DataToDisplay.Where(x => x.month == 9).Sum(s => s.totalspend);
+                        var AmountOct = DataToDisplay.Where(x => x.month == 10).Sum(s => s.totalspend);
+                        var AmountNov = DataToDisplay.Where(x => x.month == 11).Sum(s => s.totalspend);
+                        var AmountDis = DataToDisplay.Where(x => x.month == 12).Sum(s => s.totalspend);
+                        var Total = DataToDisplay.Sum(s => s.totalspend);
+                        TotalAmountJan = TotalAmountJan + AmountJan;
+                        TotalAmountFeb = TotalAmountFeb + AmountFeb;
+                        TotalAmountMac = TotalAmountMac + AmountMac;
+                        TotalAmountApr = TotalAmountApr + AmountApr;
+                        TotalAmountMay = TotalAmountMay + AmountMay;
+                        TotalAmountJun = TotalAmountJun + AmountJun;
+                        TotalAmountJul = TotalAmountJul + AmountJul;
+                        TotalAmountOgs = TotalAmountOgs + AmountOgs;
+                        TotalAmountSep = TotalAmountSep + AmountSep;
+                        TotalAmountOct = TotalAmountOct + AmountOct;
+                        TotalAmountNov = TotalAmountNov + AmountNov;
+                        TotalAmountDis = TotalAmountDis + AmountDis;
+                        TotalOverall = TotalOverall + Total;
+                        <tr>
+                            @if (i == 1)
+                            {
+                                <td align="center" colspan="2" rowspan="@GetCCDetails.Count()" style="vertical-align:middle !important;border:1px solid black;" border="1"></td>
+
+                            }
+                            <td align="left" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @GetCCDetail
+                            </td>
+                            <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @AmountJan
+                            </td>
+                            <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @AmountFeb
+                            </td>
+                            <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @AmountMac
+                            </td>
+                            <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @AmountApr
+                            </td>
+                            <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @AmountMay
+                            </td>
+                            <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @AmountJun
+                            </td>
+                            <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @AmountJul
+                            </td>
+                            <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @AmountOgs
+                            </td>
+                            <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @AmountSep
+                            </td>
+                            <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @AmountOct
+                            </td>
+                            <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @AmountNov
+                            </td>
+                            <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @AmountDis
+                            </td>
+                            <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @Total
+                            </td>
+                        </tr>
+                        count++;
+                        i++;
+
+
+                    }
+                    <tr>
+                        <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">@GetActvt</td>
+                        <td align="left" style="vertical-align:middle !important;border:1px solid black;" border="1">@GetActvts2.Where(x => x.actvtcode == GetActvt).Select(s => s.actvtdesc).FirstOrDefault()</td>
+                        <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                            Total
+                        </td>
+                        <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                            @TotalAmountJan
+                        </td>
+                        <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                            @TotalAmountFeb
+                        </td>
+                        <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                            @TotalAmountMac
+                        </td>
+                        <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                            @TotalAmountApr
+                        </td>
+                        <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                            @TotalAmountMay
+                        </td>
+                        <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                            @TotalAmountJun
+                        </td>
+                        <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                            @TotalAmountJul
+                        </td>
+                        <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                            @TotalAmountOgs
+                        </td>
+                        <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                            @TotalAmountSep
+                        </td>
+                        <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                            @TotalAmountOct
+                        </td>
+                        <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                            @TotalAmountNov
+                        </td>
+                        <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                            @TotalAmountDis
+                        </td>
+                        <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                            @TotalOverall
+                        </td>
+                    </tr>
+                    TotalOverallAmountJan = TotalOverallAmountJan + TotalAmountJan;
+                    TotalOverallAmountFeb = TotalOverallAmountFeb + TotalAmountFeb;
+                    TotalOverallAmountMac = TotalOverallAmountMac + TotalAmountMac;
+                    TotalOverallAmountApr = TotalOverallAmountApr + TotalAmountApr;
+                    TotalOverallAmountMay = TotalOverallAmountMay + TotalAmountMay;
+                    TotalOverallAmountJun = TotalOverallAmountJun + TotalAmountJun;
+                    TotalOverallAmountJul = TotalOverallAmountJul + TotalAmountJul;
+                    TotalOverallAmountOgs = TotalOverallAmountOgs + TotalAmountOgs;
+                    TotalOverallAmountSep = TotalOverallAmountSep + TotalAmountSep;
+                    TotalOverallAmountOct = TotalOverallAmountOct + TotalAmountOct;
+                    TotalOverallAmountNov = TotalOverallAmountNov + TotalAmountNov;
+                    TotalOverallAmountDis = TotalOverallAmountDis + TotalAmountDis;
+                    TotalOverallAmount = TotalOverallAmount + TotalOverall;
+                }
+                <tr>
+                    <td align="right" colspan="3" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                        Total
+                    </td>
+                    <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                        @TotalOverallAmountJan
+                    </td>
+                    <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                        @TotalOverallAmountFeb
+                    </td>
+                    <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                        @TotalOverallAmountMac
+                    </td>
+                    <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                        @TotalOverallAmountApr
+                    </td>
+                    <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                        @TotalOverallAmountMay
+                    </td>
+                    <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                        @TotalOverallAmountJun
+                    </td>
+                    <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                        @TotalOverallAmountJul
+                    </td>
+                    <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                        @TotalOverallAmountOgs
+                    </td>
+                    <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                        @TotalOverallAmountSep
+                    </td>
+                    <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                        @TotalOverallAmountOct
+                    </td>
+                    <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                        @TotalOverallAmountNov
+                    </td>
+                    <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                        @TotalOverallAmountDis
+                    </td>
+                    <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                        @TotalOverallAmount
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+}
+else
+{
+    <div id="scrollArea2" class="modal-body" style="text-align: center">
+        <p style="color: red">No Data.</p>
+    </div>
+}
+
+<div style="text-align:right; margin-top:10px">
+    <a class="btn btn-default btn-sm" href="#" id="printpage">
+        <span class="glyphicon glyphicon-print"> </span> @GlobalResEstate.btnPrint
+    </a>
+    <a class="btn btn-default btn-sm" href="#" onclick="HTMLtoExcel('LprnBlnnByrnAktvt')">
+        <span><img src="~/Asset/Images/excel-icon.png" width="20px" height="20px" /></span> @GlobalResEstate.btnDownloadExcel
+    </a>
+</div>
+<style>
+    #page td {
+        padding: 2px;
+        margin: 2px;
+    }
+</style>
+<script src="~/Asset/Scripts/FromHTML.js"></script>
+<script src="~/Asset/Scripts/FileSaver.js"></script>
+<script>
+    $(document).ready(function () {
+        $("#printpage").click(function () {
+            var DivElement = document.getElementById("scrollArea2").innerHTML;
+            var oldPage = document.body.innerHTML;
+            document.body.innerHTML = DivElement;
+            window.print();
+            document.body.innerHTML = oldPage;
+        })
+    });
+</script>
+

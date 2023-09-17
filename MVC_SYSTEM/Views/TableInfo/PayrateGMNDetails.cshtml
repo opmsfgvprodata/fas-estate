@@ -1,0 +1,68 @@
+﻿@model IEnumerable<MVC_SYSTEM.MasterModels.vw_UpahGMN>
+
+@{
+    ViewBag.Title = "PayrateGMNDetails";
+    //Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+<div id="scrollArea">
+    <logo />
+    <table class="table table-hover table-bordered" style="font-size: 11px;" border="0">
+        <thead>
+            <tr>
+                <th colspan="10" style="text-align:center;vertical-align:middle;">
+                    @ViewBag.NamaSyarikat
+                    <br />
+                    (@GlobalResEstate.lblCompanyNo : @ViewBag.NoSyarikat)
+                    <br />
+                    Jadual Kadar Upah
+                </th>
+            </tr>
+            <tr>
+                <th bgcolor="#ffcc80" style="color: black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">Kod Aktiviti</th>
+                <th bgcolor="#ffcc80" style="color: black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">Kategori Kerja</th>
+                <th bgcolor="#ffcc80" style="color: black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">Perincian</th>
+                <th bgcolor="#ffcc80" style="color: black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">Jenis Kerja</th>
+                <th bgcolor="#ffcc80" style="color: black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">Unit</th>
+                <th bgcolor="#ffcc80" style="color: black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">Harga</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td align="center" style="vertical-align: middle !important; border: 1px solid black;" border="1">
+                        @item.fld_KodAktvt
+                    </td>
+                    <td align="center" style="vertical-align: middle !important; border: 1px solid black;" border="1">
+                        @item.fld_Kategori
+                    </td>
+                    <td align="center" style="vertical-align: middle !important; border: 1px solid black;" border="1">
+                        @item.fld_Desc
+                    </td>
+                    <td align="center" style="vertical-align: middle !important; border: 1px solid black;" border="1">
+                        @item.fld_JnsAktvt
+                    </td>
+                    <td align="center" style="vertical-align: middle !important; border: 1px solid black;" border="1">
+                        @item.fld_Unit
+                    </td>
+                    <td align="center" style="vertical-align: middle !important; border: 1px solid black;" border="1">
+                        @item.fld_Harga
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <newpage />
+</div>
+
+<div style="text-align:right; margin-top:10px">
+    <a class="btn btn-default btn-sm" href="#" id="printpage">
+        <span class="glyphicon glyphicon-print"> </span> @GlobalResEstate.btnPrint
+    </a>
+    <a class="btn btn-default btn-sm" href="#" id="downloadpdf">
+        <span><img src="~/Asset/Images/pdf-icon.png" width="20px" height="20px" /></span> @GlobalResEstate.btnDownloadPdf
+    </a>
+</div>
+
+

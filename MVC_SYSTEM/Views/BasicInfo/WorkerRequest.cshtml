@@ -1,0 +1,881 @@
+﻿@model MVC_SYSTEM.Models.tbl_Pkjmast
+@using System.Web.Script.Serialization
+@using MVC_SYSTEM.Class
+@{
+    ViewBag.Title = "WorkerRequest";
+    //Layout = "~/Views/Shared/_LayoutMain.cshtml";
+    string batchid = ViewBag.fld_Batch;
+    var serializer = new System.Web.Script.Serialization.JavaScriptSerializer();
+    string objJson = serializer.Serialize(Model);
+    GetConfig getconfig = new GetConfig();
+    GetLadang GetLadang = new GetLadang();
+    //string dateformat = "m/d/Y";
+    string dateformat = getconfig.GetData("dateformat3");
+    string codeLdg = GetLadang.GetLadangCode(ViewBag.LdgID);
+    string requestCode = ViewBag.requestCode;
+}
+
+<section class="content-wrapper main-content clear-fix">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 class="modal-title">@GlobalResEstate.titleWorkerRequest</h3>
+    </div>
+    @using (Html.BeginForm("WorkerRequest", "BasicInfo", FormMethod.Get, new { id = "workerequest" }))
+    {
+        @Html.AntiForgeryToken()
+        <div class="modal-body">
+            <div class="form-horizontal">
+                <div class="panel panel-primary">
+                    <div class="panel-body">
+                        <div class="col-sm-2">
+                            @Html.TextBox("fld_Batch", "", new { @class = "form-control", @readonly = "readonly" })
+                            @Html.ValidationMessageFor(model => model.fld_Batch, "", new { @class = "text-danger" })
+                        </div>
+                        <div class="pull-left">
+                            <button class="btn btn-primary" id="btnBatch" name="btnBatch">
+                                <span class="glyphicon glyphicon-plus"></span> @GlobalResEstate.btnBatch
+                            </button>
+                        </div>
+                    </div>
+                    <div class="panel-heading">@GlobalResEstate.lblhdrPersonalInfo</div>
+                    <div class="panel-body" id="mklmtPeribadi">
+                        <div class="row">
+                            <div class="panel-body col-sm-9">
+                                <div class="form-group">
+                                    <div class="col-sm-3">
+                                        <label>@GlobalResEstate.hdrNoPkj</label>
+                                        @Html.TextBox("fld_Nopkj", "", new { @class = "form-control", @readonly = "readonly" })
+                                        @Html.ValidationMessageFor(model => model.fld_Nopkj, "", new { @class = "text-danger" })
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <label>@GlobalResEstate.hdrName</label>
+                                        @Html.EditorFor(model => model.fld_Nama, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.fld_Nama, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-sm-4">
+                                        <label>@GlobalResEstate.hdrNoKp</label>
+                                        @Html.EditorFor(model => model.fld_Nokp, new { htmlAttributes = new { @class = "form-control", @maxlength = "12" } })
+                                        @Html.ValidationMessageFor(model => model.fld_Nokp, "", new { @class = "text-danger" })
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <label>@GlobalResEstate.lblDOB</label>
+                                        <div class='input-group date' id='datetimepicker1'>
+                                            @Html.EditorFor(model => model.fld_Trlhr, new { htmlAttributes = new { @class = "form-control", @type = "text", @placeholder = "dd/mm/yyyy" } })
+                                            <span class="input-group-addon">
+                                                <span class="glyphicon glyphicon-calendar"></span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <label>Umur</label>
+                                        @Html.TextBox("UmurPkj", "", new { @class = "form-control", @readonly = "readonly" })
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-sm-3">
+                                        <label>@GlobalResEstate.lblGender</label>
+                                        @Html.DropDownList("fld_Kdjnt", null, htmlAttributes: new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(model => model.fld_Kdjnt, "", new { @class = "text-danger" })
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <label>@GlobalResEstate.lblMarriageStatus</label>
+                                        @Html.DropDownList("fld_Kdkwn", null, htmlAttributes: new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(model => model.fld_Kdkwn, "", new { @class = "text-danger" })
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <label>@GlobalResEstate.lblPeneroka</label>
+                                        @Html.DropDownList("fld_Kpenrka", null, htmlAttributes: new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(model => model.fld_Kpenrka, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group col-sm-3" style="text-align:center">
+                                <img src="~/Asset/Images/default-user.png" id="image" style="width:200px;height:200px;border:1px solid;cursor:pointer;" />
+                                <input class="form-control btn btn-default btn-file" style="display:none" type="file" name="file" id="file" onchange="changemediacover()" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-2">
+                                <label>@GlobalResEstate.lblRace</label>
+                                @Html.DropDownList("fld_Kdbgsa", null, htmlAttributes: new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.fld_Kdbgsa, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="col-sm-3">
+                                <label>@GlobalResEstate.lblReligion</label>
+                                @Html.DropDownList("fld_Kdagma", null, htmlAttributes: new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.fld_Kdagma, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="col-sm-2">
+                                <label>@GlobalResEstate.lblCitizen</label>
+                                @Html.DropDownList("fld_Kdrkyt", null, htmlAttributes: new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.fld_Kdrkyt, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-5">
+                                <label>@GlobalResEstate.lblAddress</label>
+                                @Html.EditorFor(model => model.fld_Almt1, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.fld_Almt1, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="col-sm-3">
+                                <label>@GlobalResEstate.lblPostcode</label>
+                                @Html.TextBox("fld_Poskod", "", new { @class = "form-control" })
+                                @*@Html.EditorFor(model => model.fld_Poskod, new { htmlAttributes = new { @class = "form-control"} })*@
+                                @Html.ValidationMessageFor(model => model.fld_Poskod, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="col-sm-3">
+                                <label>@GlobalResEstate.lblDistrict</label>
+                                @Html.TextBox("fld_Daerah", "", new { @class = "form-control", @readonly = "readonly" })
+                                @*@Html.EditorFor(model => model.fld_Almt3, new { htmlAttributes = new { @class = "form-control"} })*@
+                                @Html.ValidationMessageFor(model => model.fld_Daerah, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="col-sm-3">
+                                <label>@GlobalResEstate.lblState</label>
+                                @Html.DropDownList("fld_Neg", null, htmlAttributes: new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.fld_Neg, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="col-sm-3">
+                                <label>@GlobalResEstate.lblCountry</label>
+                                @Html.DropDownList("fld_Negara", null, htmlAttributes: new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.fld_Negara, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-5">
+                                <label>Alamat kampung halaman</label>
+                                @Html.EditorFor(model => model.fld_Almt2, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.fld_Almt2, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="col-sm-3">
+                                <label>@GlobalResEstate.lblCountry</label>
+                                @Html.DropDownList("fld_Negara2", null, htmlAttributes: new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.fld_Negara2, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-heading">@GlobalResEstate.lblTotalRecord.ToUpper()</div>
+                    <div class="panel-body" id="mklmtPkj">
+                        <div class="form-group">
+                            <div class="col-sm-2">
+                                <label>@GlobalResEstate.lblWorkerType</label>
+                                @Html.DropDownList("fld_Jenispekerja", null, htmlAttributes: new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.fld_Jenispekerja, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="col-sm-2">
+                                <label>@GlobalResEstate.lblWorkerKtgri</label>
+                                @Html.DropDownList("fld_Ktgpkj", null, htmlAttributes: new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.fld_Ktgpkj, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="col-sm-2">
+                                <label>@GlobalResEstate.lblPermitNo</label>
+                                @Html.EditorFor(model => model.fld_Prmtno, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.fld_Prmtno, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="col-sm-2">
+                                <label>@GlobalResEstate.lblPermitEnd</label>
+                                <div class='input-group date' id='datetimepicker1'>
+                                    @Html.EditorFor(Model => Model.fld_T2prmt, new { htmlAttributes = new { @class = "form-control", @type = "text", @placeholder = "dd/mm/yyyy" } })
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-2">
+                                <label>@GlobalResEstate.lblPassportEnd</label>
+                                <div class='input-group date' id='datetimepicker1'>
+                                    @Html.EditorFor(Model => Model.fld_T2pspt, new { htmlAttributes = new { @class = "form-control", @type = "text", @placeholder = "dd/mm/yyyy" } })
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-sm-2">
+                                <label>@GlobalResEstate.lblDateKLIA</label>
+                                <div class='input-group date' id='datetimepicker1'>
+                                    @Html.EditorFor(Model => Model.fld_Trmlkj, new { htmlAttributes = new { @class = "form-control", @type = "text", @placeholder = "dd/mm/yyyy" } })
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-sm-2">
+                                <label>@GlobalResEstate.lblStartWork</label>
+                                <div class='input-group date' id='datetimepicker1'>
+                                    @Html.EditorFor(Model => Model.fld_Trshjw, new { htmlAttributes = new { @class = "form-control", @type = "text", @placeholder = "dd/mm/yyyy" } })
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <label>@GlobalResEstate.lblSupplier</label>
+                                @Html.DropDownList("fld_Kodbkl", null, htmlAttributes: new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.fld_Kodbkl, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-2">
+                                <label>Insurans Expired Date</label>
+                                <div class='input-group date' id='datetimepicker1'>
+                                    @Html.EditorFor(Model => Model.fld_T2visa, new { htmlAttributes = new { @class = "form-control", @type = "text", @placeholder = "dd/mm/yyyy" } })
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <label>Division</label>
+                                @Html.DropDownList("fld_DivisionID", null, htmlAttributes: new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.fld_DivisionID, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="panel-heading">Dokumen Sokongan</div>
+                    <div class="panel-body">
+                        <div id="pdfdoc">
+
+                        </div>
+
+                        <input class="form-control btn btn-default btn-file" type="file" name="file1" id="file1" style="display:none" />
+                        <button class="btn btn-primary" id="btnUploadFile" name="btnUploadFile">Upload Dokumen</button>
+                        <button class="btn btn-primary" id="btnTmbh" name="btnTmbh" onclick="return DisplayProgressMessage(this);">
+                            @GlobalResEstate.btnApply
+                        </button>
+                    </div>
+                </div>
+                <div id="content">
+                    @*@RenderBody()*@
+                    @*@{Html.RenderAction("WorkerRequestList", "BasicInfo", new { batch = ViewBag.fld_Batch });}*@
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            @*<input class="btn btn-primary" type="submit" value="Selesai" />*@
+            @*<button class="btn btn-success" id="btnAdd" name="btnAdd"></button>*@
+            <button class="btn btn-primary" type="submit" id="btnSend">@GlobalResEstate.btnSendEmel</button>
+            <button class="btn btn-warning" data-dismiss="modal">@GlobalResEstate.btnBack</button>
+        </div>
+    }
+</section>
+
+<!-- modal placeholder-->
+@*<div id='myModal1' class='modal fade in'>
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div id='myModalContent1'></div>
+            </div>
+        </div>
+    </div>*@
+@*@section scripts{
+        @Scripts.Render("~/Asset/Scripts/Appjs.js")
+    }*@
+@*<script src="~/Asset/Scripts/jquery.datetimepicker.js" type="text/javascript"></script>*@
+<script type="text/javascript">
+    $(function () {
+        $('#fld_Trlhr').datetimepicker({
+            timepicker: false,
+            format: '@dateformat'
+        });
+        $('#fld_T1prmt').datetimepicker({
+            timepicker: false,
+            format: '@dateformat'
+        });
+        $('#fld_T2prmt').datetimepicker({
+            timepicker: false,
+            format: '@dateformat'
+        });
+        $('#fld_T1pspt').datetimepicker({
+            timepicker: false,
+            format: '@dateformat'
+        });
+        $('#fld_T2pspt').datetimepicker({
+            timepicker: false,
+            format: '@dateformat'
+        });
+        $('#fld_Trmlkj').datetimepicker({
+            timepicker: false,
+            format: '@dateformat'
+        });
+        $('#fld_Trshjw').datetimepicker({
+            timepicker: false,
+            format: '@dateformat'
+        });
+        $('#fld_T2visa').datetimepicker({
+            timepicker: false,
+            format: '@dateformat'
+        });
+    });
+
+    function changemediacover() {
+        var selectedImg = $('#file')[0].files[0];
+        var selectedImgsize = ($("#file")[0].files[0].size / 1024);
+        var selectedImgtype = $("#file")[0].files[0];
+        selectedImgtype = selectedImgtype.name.substr((selectedImgtype.name.lastIndexOf('.') + 1));
+        //alert(selectedImgtype);
+        if (selectedImg) {
+            var previewId = document.getElementById('image');
+            previewId.src = '';
+
+            var oReader = new FileReader();
+            oReader.onload = function (e) {
+                previewId.src = e.target.result;
+            }
+            oReader.readAsDataURL(selectedImg);
+        }
+    }
+
+    function uploadImage() {
+         if (window.FormData !== undefined) {
+            var fileupload = $('#file').get(0);
+            var files = fileupload.files;
+            var nopkj = $("#fld_Nopkj").val();
+            var ext = "";
+            var filenewname = "";
+            var fileData = new FormData();
+            for (var i = 0; i < files.length; i++) {
+                ext = files[i].name.split(".").pop();
+                filenewname = nopkj.trim() + "_ProfPic." + ext;
+                fileData.append(files[i].name, files[i], filenewname);
+                console.log(ext);
+                console.log(filenewname);
+            }
+            $.ajax({
+                url: '@Url.Action("UploadFiles", "BasicInfo")',
+                type: "POST",
+                contentType: false,
+                processData: false,
+                data: fileData,
+                success: function (result) {
+                    //alert(result);
+                },
+                error: function (err) {
+                    alert(err.statusText);
+                }
+            });
+        }
+        else {
+            alert("Formdata is not supported.")
+        }
+    }
+
+    function uploadSupportedFile() {
+         if (window.FormData !== undefined) {
+            var fileupload = $('#file1').get(0);
+            var files = fileupload.files;
+            var nopkj = $("#fld_Nopkj").val();
+            var ext = "";
+            var filenewname = "";
+            var fileData = new FormData();
+            for (var i = 0; i < files.length; i++) {
+                ext = files[i].name.split(".").pop();
+                filenewname = nopkj.trim() + "_" + files[i].name;
+                fileData.append(files[i].name, files[i], filenewname);
+                console.log(ext);
+                console.log(filenewname);
+            }
+            $.ajax({
+                url: '@Url.Action("UploadSupportedFiles", "BasicInfo")',
+                type: "POST",
+                contentType: false,
+                processData: false,
+                data: fileData,
+                success: function (result) {
+                    //alert(result);
+                    //viewDoc();
+                },
+                error: function (err) {
+                    alert(err.statusText);
+                }
+            });
+        }
+        else {
+            alert("Formdata is not supported.")
+        }
+    }
+
+</script>
+<script>
+    $(document).ready(function () {
+
+        var personalInfo = $("#mklmtPeribadi").find(":input");
+        var workerlInfo = $("#mklmtPkj").find(":input");
+        var acclInfo = $("#mklmtAkaun").find(":input");
+        var heirslInfo = $("#mklmtWaris").find(":input");
+        personalInfo.prop("disabled", true);
+        workerlInfo.prop("disabled", true);
+        acclInfo.prop("disabled", true);
+        heirslInfo.prop("disabled", true);
+        $("#pkjKahwin").hide();
+        $("#pkjKahwin2").hide();
+        //$("#btnUploadFile").prop("disabled", true);
+
+        function titleCase(str) {
+            var splitStr = str.toLowerCase().split(' ');
+            for (var i = 0; i < splitStr.length; i++) {
+                // You do not need to check if i is larger than splitStr length, as your for does that for you
+                // Assign it back to the array
+                splitStr[i] = splitStr[i].charAt(0).toUpperCase() + splitStr[i].substring(1);
+            }
+            // Directly return the joined string
+            return splitStr.join(' ');
+        }
+
+
+        $("#fld_Trlhr").change(function () {
+            var Getumur = {};
+            var disableoption = "";
+            Getumur.url = "@Url.Action("GetUmurPkj", "BasicInfo")";
+            Getumur.type = "POST";
+            Getumur.data = JSON.stringify({ sdate: $("#fld_Trlhr").val()  });
+            Getumur.datatype = "json";
+            Getumur.contentType = "application/json";
+            Getumur.success = function (result) {
+                $("#UmurPkj").val(result);
+            };
+            Getumur.error = function () { $.simplyToast('@GlobalResEstate.msgError', 'danger'); };
+            $.ajax(Getumur);
+        });
+
+        if ($("#fld_Kdrkyt").val() == 0) {
+            var Kdrkyt = {};
+            var disableoption = "";
+            Kdrkyt.url = "@Url.Action("GetNopkj", "BasicInfo")";
+            Kdrkyt.type = "POST";
+            Kdrkyt.data = JSON.stringify({ krkytn: $("#fld_Kdrkyt").val() });
+            Kdrkyt.datatype = "json";
+            Kdrkyt.contentType = "application/json";
+            Kdrkyt.success = function (nopkjnew) {
+                $("#fld_Nopkj").empty();
+                $("#fld_Nopkj").val(nopkjnew);
+                if ($("#fld_Kdrkyt").val() == "MA") {
+                    document.getElementById('fld_Prmtno').disabled = true;
+                    document.getElementById('fld_T1prmt').disabled = true;
+                    document.getElementById('fld_T2prmt').disabled = true;
+                    document.getElementById('fld_T1pspt').disabled = true;
+                    document.getElementById('fld_T2pspt').disabled = true;
+                    document.getElementById('fld_Kodbkl').disabled = true;
+                }
+            };
+            Kdrkyt.error = function () { $.simplyToast('@GlobalResEstate.msgError', 'danger'); };
+            $.ajax(Kdrkyt);
+        }
+        $("#fld_Kdrkyt").change(function () {
+            var Stspkt = {};
+            var disableoption = "";
+            Kdrkyt.url = "@Url.Action("GetNopkj", "BasicInfo")";
+            Kdrkyt.type = "POST";
+            Kdrkyt.data = JSON.stringify({ krkytn: $("#fld_Kdrkyt").val() });
+            Kdrkyt.datatype = "json";
+            Kdrkyt.contentType = "application/json";
+            Kdrkyt.success = function (nopkjnew) {
+                $("#fld_Nopkj").empty();
+                $("#fld_Nopkj").val(nopkjnew);
+                if ($("#fld_Kdrkyt").val() == "MA") {
+                    document.getElementById('fld_Prmtno').disabled = true;
+                    document.getElementById('fld_T2prmt').disabled = true;
+                    document.getElementById('fld_T2pspt').disabled = true;
+                    document.getElementById('fld_Kodbkl').disabled = true;
+                }
+                else {
+                    document.getElementById('fld_Prmtno').disabled = false;
+                    document.getElementById('fld_T2prmt').disabled = false;
+                    document.getElementById('fld_T2pspt').disabled = false;
+                    document.getElementById('fld_Kodbkl').disabled = false;
+                }
+            };
+            Kdrkyt.error = function () { $.simplyToast('@GlobalResEstate.msgError', 'danger'); };
+            $.ajax(Kdrkyt);
+        });
+
+        if ($("#fld_Poskod").val() == 0 && $("#fld_Neg").val() == 0 && $("#fld_Negara").val() == 0) {
+            var Poskod = {};
+            var disableoption = "";
+            Poskod.url = "@Url.Action("GetDaerah", "BasicInfo")";
+            Poskod.type = "POST";
+            Poskod.data = JSON.stringify({ poskod: $("#fld_Poskod").val(), negeri: $("#fld_Neg").val(), negara: $("#fld_Negara").val() });
+            Poskod.datatype = "json";
+            Poskod.contentType = "application/json";
+            Poskod.success = function (daerah) {
+                $("#fld_Daerah").empty();
+                $("#fld_Daerah").val(daerah);
+            };
+            Poskod.error = function () { $.simplyToast('@GlobalResEstate.msgError', 'danger'); };
+            $.ajax(Poskod);
+        }
+
+        function getdaerah() {
+             var Poskod = {};
+            var disableoption = "";
+            Poskod.url = "@Url.Action("GetDaerah", "BasicInfo")";
+            Poskod.type = "POST";
+            Poskod.data = JSON.stringify({ poskod: $("#fld_Poskod").val(), negeri: $("#fld_Neg").val(), negara: $("#fld_Negara").val() });
+            Poskod.datatype = "json";
+            Poskod.contentType = "application/json";
+            Poskod.success = function (daerah) {
+                $("#fld_Daerah").empty();
+                $("#fld_Daerah").val(daerah);
+            };
+            Poskod.error = function () { $.simplyToast('@GlobalResEstate.msgError', 'danger'); };
+            $.ajax(Poskod);
+        }
+
+        $("#fld_Poskod").change(function () {
+           getdaerah();
+        });
+
+        $("#fld_Neg").change(function () {
+            getdaerah();
+        });
+
+        $("#fld_Negara").change(function () {
+            getdaerah();
+        });
+
+        $("#btnBatch").click(function (e) {
+            e.preventDefault();
+            var Batch = {};
+            var disableoption = "";
+            Batch.url = "@Url.Action("GetBatch", "BasicInfo")";
+            Batch.type = "POST";
+            Batch.data = JSON.stringify(/*{ krkytn: $("#fld_Kdrkyt").val() }*/);
+            Batch.datatype = "json";
+            Batch.contentType = "application/json";
+            Batch.success = function (newbatch) {
+                personalInfo.prop("disabled", false);
+                workerlInfo.prop("disabled", false);
+                acclInfo.prop("disabled", false);
+                heirslInfo.prop("disabled", false);
+                $("#fld_Batch").empty();
+                $("#fld_Batch").val(newbatch);
+                //$("#fld_Batch").prop("disabled", true);
+
+                //for (var i = 0; i < newbatch.length){
+                //    if ($("#CreateBatch").val == 0) {
+                //        disableoption = "disabled";
+                //    }
+                //}
+            };
+            Batch.error = function () { $.simplyToast('@GlobalResEstate.msgError', 'danger'); };
+            $.ajax(Batch);
+        });
+
+        $("#fld_T1prmt").change(function () {
+            //var mulaPermit = new Date($('#tarikh_mula').val);
+
+            //document.getElementById('#tarikh_tamat').val = mulaPermit.setFullYear(mulaPermit.getFullYear() + 1);
+            //var mulaPermit = new Date($("#fld_T1prmt").val());
+            //var tamatPermit = dateAdd(mulaPermit, 1, 'year');
+            //$("#fld_T2prmt").empty();
+            //$("#fld_T2prmt").val(tamatPermit);
+            var TmtPermit = {};
+            var disableoption = "";
+            TmtPermit.url = "@Url.Action("GetPermitExpired", "BasicInfo")";
+            TmtPermit.type = "POST";
+            TmtPermit.data = JSON.stringify({ permitDate: $("#fld_T1prmt").val() });
+            TmtPermit.datatype = "json";
+            TmtPermit.contentType = "application/json";
+            TmtPermit.success = function (exprdDate) {
+                var tarikhTamat = new Date(parseInt(exprdDate.substr(6)));
+                var month = tarikhTamat.getMonth() + 1;
+                var day = tarikhTamat.getDate();
+                var year = tarikhTamat.getFullYear();
+                var result = ("0" + tarikhTamat.getDate()).slice(-2) + '/' + ("0" + (tarikhTamat.getMonth()+1)).slice(-2) + '/' + year;
+                //var str = tarikhTamat.toString('dd/mm/yyyy');
+                $("#fld_T2prmt").empty();
+                $("#fld_T2prmt").val(result.toString());
+
+                console.log(result);
+                console.log(tarikhTamat);
+                console.log(month);
+                console.log(year);
+                console.log(day);
+                console.log(exprdDate);
+
+
+                //$("#fld_T2prmt").datetimepicker.format("dd/mm/yyyy", new Date(parseInt(exprdDate.substr(6))));
+            };
+            TmtPermit.error = function () { $.simplyToast('@GlobalResEstate.msgError', 'danger'); };
+            $.ajax(TmtPermit);
+        });
+
+        $('#btnTmbh').click(function () {
+            mklmtWaris();
+            @*var mklmt_waris = {
+                nama_waris: $("#NamaWaris").val(),
+                hubungan: $("#Hubungan").val(),
+                no_tel: $("#NoTel").val(),
+                nama_isteri: $("#NamaIsteri").val(),
+                bil_anak: $("#BilAnak").val(),
+                nama_anak: $("#NamaWaris").val(),
+                umur_anak: $("#fld_Nopkj").val(),
+
+            }
+            var reloadPage1 = {};
+            reloadPage1.url = "@Url.Action("WorkerRequestWaris", "BasicInfo")";
+            reloadPage1.type = "POST";
+            reloadPage1.data = { nopkj: $("#fld_Nopkj").val(), nama: $("#NamaWaris").val() };
+            reloadPage1.datatype = "json";
+            reloadPage1.success = function () {
+                mklmtWaris();
+            };
+            reloadPage1.error = function () { $.simplyToast('@GlobalResEstate.msgError', 'danger'); };
+            $.ajax(reloadPage1);*@
+        });
+
+
+        $("#fld_Kdjnt").change(function () {
+            var jantina = $("#fld_Kdjnt").val();
+            var kdkawin = $("#fld_Kdkwn").val();
+            console.log(jantina);
+            console.log(kdkawin);
+            //$("#mklmtWaris").load('url.action("WorkerRequestWaris", "BasicInfo",new{ jantina=$("#fld_Kdjnt").val(), kdkawin=$("#fld_Kdkwn").val() })');
+            var jantina = $("#fld_Kdjnt").val();
+            var kdkawin = $("#fld_Kdkwn").val();
+            var reloadPage = {};
+            reloadPage.url = "@Url.Action("WorkerRequestWaris", "BasicInfo")";
+            reloadPage.type = "POST";
+            reloadPage.data = { jantina: jantina, kdkawin: kdkawin };
+            reloadPage.datatype = "json";
+            reloadPage.success = function (result) {
+                $("#mklmtWaris").html(result);
+                //$("#fld_Nopkj").val("");
+            };
+        });
+
+        if ($("#fld_Kdjnt").val() != 0 && $("#fld_Kdkwn").val() != 0) {
+            @*var jantina = $("#fld_Kdjnt").val();
+            var kdkawin = $("#fld_Kdkwn").val();
+             reloadPage.url = "@Url.Action("WorkerRequestWaris", "BasicInfo")";
+            reloadPage.type = "POST";
+            reloadPage.data = { jantina: jantina, kdkawin: kdkawin };
+            reloadPage.datatype = "json";
+            reloadPage.success = function (result) {
+                $("#mklmtWaris").html(result);
+                $("#fld_Nopkj").val("");*@
+            //$("mklmtWaris").load('url.action("WorkerRequestWaris", "BasicInfo",new{jantina=jantina, kdkawin=kdkawin})')
+            //if (jantina == "L" && kdkawin == "K") {
+            //    $("#pkjKahwin").show();
+            //    $("#pkjKahwin2").show();
+            //}
+        };
+
+        function mklmtWaris() {
+            var flag = 0;
+            if (flag === 0) {
+                $("#UpdateProgress1").css("display", "");
+                var tbl_Pkjmast = {
+                    fld_Batch: $("#fld_Batch").val(),
+                    fld_Nopkj: $("#fld_Nopkj").val(),
+                    fld_Nama: $("#fld_Nama").val(),
+                    fld_Nokp: $("#fld_Nokp").val(),
+                    fld_Trlhr: $("#fld_Trlhr").val(),
+                    fld_Kdjnt: $("#fld_Kdjnt").val(),
+                    fld_Kdkwn: $("#fld_Kdkwn").val(),
+                    fld_Kpenrka: $("#fld_Kpenrka").val(),
+                    fld_Kdbgsa: $("#fld_Kdbgsa").val(),
+                    fld_Kdagma: $("#fld_Kdagma").val(),
+                    fld_Kdrkyt: $("#fld_Kdrkyt").val(),
+                    fld_Almt1: $("#fld_Almt1").val(),
+                    fld_Poskod: $("#fld_Poskod").val(),
+                    fld_Daerah: $("#fld_Daerah").val(),
+                    fld_Neg: $("#fld_Neg").val(),
+                    fld_Negara: $("#fld_Negara").val(),
+                    fld_Jenispekerja: $("#fld_Jenispekerja").val(),
+                    fld_Ktgpkj: $("#fld_Ktgpkj").val(),
+                    fld_Prmtno: $("#fld_Prmtno").val(),
+                    fld_T1prmt: $("#fld_T1prmt").val(),
+                    fld_T2prmt: $("#fld_T2prmt").val(),
+                    fld_T1pspt: $("#fld_T1pspt").val(),
+                    fld_T2pspt: $("#fld_T2pspt").val(),
+                    fld_Trmlkj: $("#fld_Trmlkj").val(),
+                    fld_Trshjw: $("#fld_Trshjw").val(),
+                    fld_Kodbkl: $("#fld_Kodbkl").val(),
+                    fld_Almt2: $("#fld_Almt2").val(),
+                    fld_Negara2: $("#fld_Negara2").val(),
+                    fld_T2visa: $("#fld_T2visa").val(),
+                    fld_DivisionID: $("#fld_DivisionID").val()
+                };
+
+
+                if (tbl_Pkjmast.fld_Nopkj == "" || tbl_Pkjmast.fld_Nama == "" || tbl_Pkjmast.fld_Trlhr == "" || tbl_Pkjmast.fld_Kdjnt == 0 || tbl_Pkjmast.fld_Kdkwn == 0 || tbl_Pkjmast.fld_Kpenrka == 0 || tbl_Pkjmast.fld_Kdbgsa == 0 || tbl_Pkjmast.fld_Kdagma == 0 || tbl_Pkjmast.fld_Kdrkyt == 0 || tbl_Pkjmast.fld_Almt1 == "" || tbl_Pkjmast.fld_Poskod == "" || tbl_Pkjmast.fld_Daerah == "" || tbl_Pkjmast.fld_Neg == 0 || tbl_Pkjmast.fld_Negara == 0) {
+                    $("#UpdateProgress1").css("display", "none");
+                    $.simplyToast("Data tidak lengkap", "danger");
+                }
+                else {
+                    if (tbl_Pkjmast.fld_Jenispekerja == 0 || tbl_Pkjmast.fld_Ktgpkj == 0 || tbl_Pkjmast.fld_Trmlkj == "" || tbl_Pkjmast.fld_Trshjw == "") {
+                        $.simplyToast('Data tidak lengkap2', 'danger');
+                        $("#UpdateProgress1").css("display", "none");
+                    }
+                    else {
+                        if (tbl_Pkjmast.fld_Jenispekerja != "AS" && tbl_Pkjmast.fld_Kdrkyt != "MA" && (tbl_Pkjmast.fld_T2pspt == "" || tbl_Pkjmast.fld_Kodbkl == 0)) {
+                            $.simplyToast('Data tidak lengkap3', 'danger');
+                            $("#UpdateProgress1").css("display", "none");
+                        }
+                        else {
+                            if (tbl_Pkjmast.fld_Jenispekerja != "AS" && (tbl_Pkjmast.fld_Nokp == "")) {
+                                $.simplyToast('Data tidak lengkap4', 'danger');
+                                $("#UpdateProgress1").css("display", "none");
+                            }
+                            else {
+                                var reloadPage = {};
+                            console.log(tbl_Pkjmast);
+                            reloadPage.url = "@Url.Action("WorkerRequest", "BasicInfo")";
+                            reloadPage.type = "POST";
+                            reloadPage.data = { Pkjmast: tbl_Pkjmast, jnsPermohonan: "PB", wlyhAsal: 0, pkjAsal: "" };
+                            reloadPage.datatype = "json";
+                            reloadPage.success = function (result) {
+                                uploadImage();
+                                $("#content").html(result.bodyview);
+                                $("#fld_Nopkj").val("");
+                                $("#fld_Nama").val("");
+                                $("#fld_Nokp").val("");
+                                $("#fld_Trlhr").val("");
+                                $("#fld_Kdjnt").val(0);
+                                $("#fld_Kdkwn").val(0);
+                                $("#fld_Kpenrka").val(0);
+                                $("#fld_Kdbgsa").val(0);
+                                $("#fld_Kdagma").val(0);
+                                $("#fld_Kdrkyt").val(0);
+                                $("#fld_Almt1").val("");
+                                $("#fld_Poskod").val("");
+                                $("#fld_Daerah").val("");
+                                $("#fld_Neg").val(0);
+                                $("#fld_Negara").val(0);
+                                $("#fld_Jenispekerja").val(0);
+                                $("#fld_Ktgpkj").val(0);
+                                $("#fld_Prmtno").val("");
+                                $("#fld_T1prmt").val("");
+                                $("#fld_T2prmt").val("");
+                                $("#fld_T1pspt").val("");
+                                $("#fld_T2pspt").val("");
+                                $("#fld_Trmlkj").val("");
+                                $("#fld_Trshjw").val("");
+                                $("#fld_Kodbkl").val(0);
+                                $("#fld_Almt2").val("");
+                                $("#fld_Negara2").val(0);
+                                $("#fld_DivisionID").val(0);
+                                $("#UpdateProgress1").css("display", "none");
+                                $.simplyToast(result.msg, result.statusmsg);
+                            };
+                            reloadPage.error = function () { $.simplyToast('@GlobalResEstate.msgError', 'danger'); };
+                            $.ajax(reloadPage);
+                            }
+                        }
+                    }
+                }
+            }
+
+             @*var reloadPage1 = {};
+            reloadPage1.url = "@Url.Action("WorkerRequestWaris", "BasicInfo")";
+            reloadPage1.type = "POST";
+            reloadPage1.data = { nopkj: $("#fld_Nopkj").val() };
+            reloadPage1.datatype = "json";
+            reloadPage1.success = function () { };
+            reloadPage1.error = function () { $.simplyToast('@GlobalResEstate.msgError', 'danger'); };
+            $.ajax(reloadPage1);*@
+        };
+
+        $("#btnSend").click(function (e) {
+            $("#UpdateProgress1").css("display", "");
+            e.preventDefault();
+            console.log(  $("#fld_Batch").val());
+            var SendMail = {};
+            var disableoption = "";
+            SendMail.url = "@Url.Action("SendEmailForAppNewWorker2", "SendEmail")";
+            SendMail.type = "POST";
+            SendMail.data = JSON.stringify({ kdldg: @codeLdg, filename: $("#fld_Batch").val(), kdprmhnan: '@requestCode' });
+            SendMail.datatype = "json";
+            SendMail.contentType = "application/json";
+            SendMail.success = function (returndata) {
+                $.simplyToast(returndata.msg, returndata.statusmsg);
+                $("#UpdateProgress1").css("display", "none");
+            };
+            SendMail.error = function () { $.simplyToast('@GlobalResEstate.msgError', 'danger'); };
+            $.ajax(SendMail);
+            $("#myModal1").hide();
+        });
+
+        $("#image").click(function () {
+            document.getElementById('file').click();
+        });
+
+        $("#fld_Nokp").keydown(function (e) {
+            var nokp = $("#fld_Nokp").val();
+            if (e.keyCode == 32 || e.which == 32) {
+                return false;
+            }
+            else if ((e.which >= 106 && e.which <= 111) || (e.which >= 186 && e.which <= 222)) {
+                return false;
+            }
+            else {
+                console.log(e);
+            }
+        });
+
+        $("#fld_Nokp").keyup(function (e) {
+            var nokp = $("#fld_Nokp").val();
+            nokp = nokp.replace(/\s/g, '');
+            $("#fld_Nokp").val(nokp.toUpperCase());
+
+        });
+
+        $("#fld_Nama").keyup(function (e) {
+            var nama = $("#fld_Nama").val();
+            var namaNew = titleCase(nama);
+            $("#fld_Nama").val(namaNew);
+        });
+
+        $("#fld_Almt1").keyup(function (e) {
+            var nama = $("#fld_Almt1").val();
+            var namaNew = titleCase(nama);
+            $("#fld_Almt1").val(namaNew);
+        });
+
+        $("#fld_Almt2").keyup(function (e) {
+            var nama1 = $("#fld_Almt2").val();
+            var namaNew1 = titleCase(nama1);
+            $("#fld_Almt2").val(namaNew1);
+        });
+
+        $("#btnUploadFile").click(function () {
+            document.getElementById('file1').click();
+            uploadSupportedFile();
+            viewDoc();
+
+        });
+
+        //$("#fld_Nopkj").change(function () {
+        //    if ($("#fld_Nopkj").val() != "") {
+        //        $("#btnUploadFile").prop("disabled", false);
+        //    }
+        //    else {
+        //        $("#btnUploadFile").prop("disabled", true);
+        //    }
+
+        //});
+
+        function viewDoc() {
+            console.log($("#fld_Nopkj").val());
+             var reloadPage2 = {};
+                            //console.log(tbl_Pkjmast);
+                            reloadPage2.url = "@Url.Action("WorkerDoc", "BasicInfo")";
+                            reloadPage2.type = "POST";
+                            reloadPage2.data = { nopkj: $("#fld_Nopkj").val() };
+                            reloadPage2.datatype = "json";
+                            reloadPage2.success = function (result) {
+                                $("#pdfdoc").html(result);
+                                $("#UpdateProgress1").css("display", "none");
+                            };
+                            reloadPage2.error = function () {
+                                $("#UpdateProgress1").css("display", "none");
+                                $.simplyToast('@GlobalResEstate.msgError', 'danger');
+                            };
+                            $.ajax(reloadPage2);
+        }
+    });
+</script>

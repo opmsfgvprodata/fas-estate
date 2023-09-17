@@ -1,0 +1,206 @@
+﻿@model IEnumerable<MVC_SYSTEM.CustomModels.CustMod_DebtWorker>
+@using MVC_SYSTEM.Class
+@{
+    string worker = ViewBag.WorkerList; 
+    GetConfig GetConfig = new GetConfig();
+    int bil = 0;
+}
+
+@if (Model != null && Model.Count() != 0)
+{
+    <div id="scrollArea2" class="modal-body">
+        <logo />
+        <table class="table table-hover table-bordered" style="font-size: 11px;" border="0">
+            <thead>
+                <tr>
+                    <th colspan="18" style="text-align: center; vertical-align: middle; border: none;">
+                        @ViewBag.NamaSyarikat
+                        <br />
+                        (@GlobalResEstate.lblCompanyNo : @ViewBag.NoSyarikat)
+                        <br />
+                        @GlobalResEstate.lblDebtReport
+                    </th>
+                </tr>
+                <tr>
+                    <th rowspan="2" width="1%" bgcolor="#ffcc80" style="color:black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">@GlobalResEstate.hdrNo</th>
+                    <th rowspan="2" width="3%" bgcolor="#ffcc80" style="color:black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">@GlobalResEstate.hdrNoPkj</th>
+                    <th rowspan="2" width="3%" bgcolor="#ffcc80" style="color:black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">@GlobalResEstate.hdrName</th>
+                    <th rowspan="2" width="3%" bgcolor="#ffcc80" style="color:black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">@GlobalResEstate.lblLoanTpe</th>
+                    
+                    <th rowspan="1" colspan="12" width="3%" bgcolor="#ffcc80" style="color:black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">@GlobalResEstate.lblBayarSemasa</th>
+                    <th rowspan="2" width="3%" bgcolor="#ffcc80" style="color:black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">@GlobalResEstate.lblBayarkini</th>
+                    <th rowspan="2" width="2%" bgcolor="#ffcc80" style="color:black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">@GlobalResEstate.lblTotalkini</th>
+
+                </tr>
+                <tr>
+                    <th rowspan="1" width="1%" bgcolor="#ffcc80" style="color:black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">@GlobalResGeneral.hdrM1</th>
+                    <th rowspan="1" width="1%" bgcolor="#ffcc80" style="color:black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">@GlobalResGeneral.hdrM2</th>
+                    <th rowspan="1" width="1%" bgcolor="#ffcc80" style="color:black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">@GlobalResGeneral.hdrM3</th>
+                    <th rowspan="1" width="1%" bgcolor="#ffcc80" style="color:black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">@GlobalResGeneral.hdrM4</th>
+                    <th rowspan="1" width="1%" bgcolor="#ffcc80" style="color:black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">@GlobalResGeneral.hdrM5</th>
+                    <th rowspan="1" width="1%" bgcolor="#ffcc80" style="color:black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">@GlobalResGeneral.hdrM6</th>
+                    <th rowspan="1" width="1%" bgcolor="#ffcc80" style="color:black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">@GlobalResGeneral.hdrM7</th>
+                    <th rowspan="1" width="1%" bgcolor="#ffcc80" style="color:black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">@GlobalResGeneral.hdrM8</th>
+                    <th rowspan="1" width="1%" bgcolor="#ffcc80" style="color:black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">@GlobalResGeneral.hdrM9</th>
+                    <th rowspan="1" width="1%" bgcolor="#ffcc80" style="color:black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">@GlobalResGeneral.hdrM10</th>
+                    <th rowspan="1" width="1%" bgcolor="#ffcc80" style="color:black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">@GlobalResGeneral.hdrM11</th>
+                    <th rowspan="1" width="1%" bgcolor="#ffcc80" style="color:black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">@GlobalResGeneral.hdrM12</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    bil = bil + 1;                    
+                    decimal totalLoan = 0;
+                    decimal totalAmtIns =+ 0;
+                    var JumlahLoan = Math.Round(((Decimal)item.JumLoan), 2);
+                    
+                    <tr>
+                        <td align="center" style="vertical-align: middle !important; border: 1px solid black;" border="1" rowspan="2">@bil</td>
+                        <td align="center" style="vertical-align: middle !important; border: 1px solid black;" border="1" rowspan="2">@item.Pkjmast.fld_NoPkj</td>
+                        <td align="center" style="vertical-align: middle !important; border: 1px solid black;" border="1" rowspan="2">@item.Pkjmast.fld_Nama</td>
+                        
+                        @foreach (var Medical in item.MLoan)
+                        {
+                            if (Medical != null)
+                            {
+                                <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                    @GetConfig.GetHutang(Medical.fld_KodHutang, Medical.fld_NegaraID.Value, Medical.fld_SyarikatID.Value) : RM @Medical.fld_NilaiHutang
+                                </td>
+                            }
+                            else
+                            {
+                                <td align="center" style="vertical-align: middle !important; border: 1px solid black;" border="1">
+                                    0.00
+                                </td>
+                            }
+                        }
+
+                        
+
+                        @foreach (var byran in item.LoanDeducList)
+                        {
+                            if (byran != null)
+                            {
+                                totalAmtIns = totalAmtIns + (decimal)byran.fld_NilaiInsentif;
+                                <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1" rowspan="2">
+                                    @byran.fld_NilaiInsentif                                     
+                                </td>
+                            }
+                            else
+                            {
+                                <td align="center" style="vertical-align: middle !important; border: 1px solid black;" border="1" rowspan="2">
+                                    0.00
+                                </td>
+                            }
+                        }
+                        <td align="center" style="vertical-align: middle !important; border: 1px solid black;" border="1" rowspan="2">@totalAmtIns</td>
+                        <td align="center" style="vertical-align: middle !important; border: 1px solid black;" border="1" rowspan="2">
+                            @(JumlahLoan - totalAmtIns) 
+                        </td>
+                    </tr>
+
+                    <tr>
+                        
+                        @foreach (var house in item.HLoan)
+                        {
+                            if (house != null)
+                            {
+                                <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                    @GetConfig.GetHutang(house.fld_KodHutang, house.fld_NegaraID.Value, house.fld_SyarikatID.Value) : RM @house.fld_NilaiHutang
+                                </td>
+                            }
+
+                            else
+                            {
+                                <td align="center" style="vertical-align: middle !important; border: 1px solid black;" border="1">
+                                    0.00
+                                </td>
+                            }
+                        }
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <newpage />
+    </div>
+    if (ViewBag.Print == null)
+    {
+        <div style="text-align:right; margin-top:10px">
+            <a class="btn btn-default btn-sm" href="#" id="printpage">
+                <span class="glyphicon glyphicon-print"> </span> @GlobalResEstate.btnPrint
+            </a>
+            <a class="btn btn-default btn-sm" href="#" id="downloadpdf">
+                <span><img src="~/Asset/Images/pdf-icon.png" width="20px" height="20px" /></span> @GlobalResEstate.btnDownloadPdf
+            </a>
+            <a class="btn btn-default btn-sm" href="#" onclick="HTMLtoExcel('')">
+                <span><img src="~/Asset/Images/excel-icon.png" width="20px" height="20px" /></span> @GlobalResEstate.btnDownloadExcel
+            </a>
+        </div>
+    }
+}
+
+@if (Model.Count() == 0)
+{
+    <div id="scrollArea2" class="modal-body" style="text-align: center">
+        <p style="color: red">@ViewBag.Message</p>
+
+    </div>
+}
+<style>
+    #page td {
+        padding: 2px;
+        margin: 2px;
+    }
+</style>
+
+<script>
+    $(document).ready(function () {
+        $("#printpage").click(function () {
+            var DivElement = document.getElementById("scrollArea2").innerHTML;
+            var oldPage = document.body.innerHTML;
+            document.body.innerHTML = DivElement;
+            window.print();
+            document.body.innerHTML = oldPage;
+        })
+
+        $("#downloadpdf").click(function () {
+            var RadioGroup = $('input[name=RadioGroup]:checked').val();
+            //var MonthList = $("#MonthList").val();
+            var YearList = $("#YearList").val();
+            var SelectionList = $("#SelectionList").val();
+            //var StatusList = $("#StatusList").val();
+            //var WorkCategoryList = $("#WorkCategoryList").val();
+
+            var StatusList = '';
+            var WorkCategoryList = '';
+
+            var param = '/?RadioGroup=' + RadioGroup + '&YearList=' + YearList + '&SelectionList=' + SelectionList + '&WorkCategoryList=' + WorkCategoryList;
+            var controller = 'Report';
+            var action = 'PrintLeavePdf';
+
+            var ajxfn = {};
+            ajxfn.url = "@Url.Action("PDFIndetifier", "PdfCreator")";
+            ajxfn.type = "POST";
+            ajxfn.data = JSON.stringify({ controller: controller, action: action, param: param });
+            ajxfn.datatype = "json";
+            ajxfn.contentType = "application/json";
+            ajxfn.success = function (result) {
+                //var win = window.open(result.link, '_blank');
+                //win.focus();
+                PDFObject.embed(result.link, "#searchResultWorkerLeaveRptInfo", { height: "450px" });
+            };
+
+            ajxfn.error = function () {
+                $.simplyToast('@GlobalResEstate.msgError', 'danger');
+                $("#UpdateProgress1").css("display", "none");
+            };
+            $.ajax(ajxfn);
+
+            return false;
+        });
+    });
+</script>
+
+
+

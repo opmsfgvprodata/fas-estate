@@ -1,0 +1,185 @@
+﻿@using MVC_SYSTEM.Class
+@model MVC_SYSTEM.ViewingModels.PagedList<MVC_SYSTEM.ViewingModels.vw_HasilSawitPkt>
+
+<div id="pktYield">
+
+    @{
+        GetConfig getConfig = new GetConfig();
+
+        var grid = new WebGrid(
+            canPage: true,
+            rowsPerPage: Model.PageSize,
+            canSort: false,
+            ajaxUpdateContainerId: "grid",
+            ajaxUpdateCallback: "callBackPkt");
+
+        grid.Bind(Model.Content, rowCount: Model.TotalRecords, autoSortAndPage: false);
+        //grid.Pager(WebGridPagerModes.All);
+
+        if (@grid.TotalRowCount > 0)
+        {
+            <div class="text-center">@grid.TotalRowCount @Html.Label(GlobalResEstate.lblTabLevel)</div>
+
+            @grid.GetHtml(htmlAttributes: new { id = "grid" }, // id for ajaxUpdateontainerId parameter
+                     tableStyle: "table table-bordered table-striped table-list table-hover",
+                     headerStyle: "header_table",
+                     alternatingRowStyle: "Grid-alt",
+                     selectedRowStyle: "Grid-selected",
+                     rowStyle: "Grid-rowstyle",
+                     footerStyle: "table-pager",
+                     mode: WebGridPagerModes.All,
+                     columns: grid.Columns(
+                         grid.Column(header: GlobalResEstate.hdrNo
+                             , format: item => item.WebGrid.Rows.IndexOf(item) + 1
+                                               + Math.Round(Convert.ToDouble(grid.TotalRowCount / grid.PageCount) / grid.RowsPerPage)
+                                               * grid.RowsPerPage * grid.PageIndex, style: "count"),
+                         grid.Column(columnName: "fld_PktUtama", header: GlobalResEstate.lblLevelCode, style: "kodpkt"),
+                         grid.Column(columnName: "fld_LsPktUtama", header: GlobalResEstate.lblLevelArea, style: "luaspkt"),
+                         grid.Column(
+                             header: GlobalResEstate.hdrYield + "(Tan)", style: "hasilsawit",
+                             format: @<text>
+                                <span id="hasilTan1" class="display-mode">@item.fld_HasilTan</span>
+                                @Html.TextBox("fld_hasilTan", (int?)item.fld_HasilTan, htmlAttributes: new { @class = "edit-mode form-control", Style = "display:none; text-align: center;", size = 10, @Value = @item.fld_HasilTan })
+                            </text>),
+                         grid.Column(header: "Tan / Hektar", format: item => Math.Round((@item.fld_HasilTan/@item.fld_LsPktUtama),2), style: "luaspkt"),
+
+                             grid.Column(GlobalResEstate.hdrAction, format: (item) =>
+                             {
+                                 if (item.fld_HasilTan != 0)
+                                 {
+                                     var pktUtama = item.ID2;
+                                     var bulan = item.fld_Bulan;
+                                     var tahun = item.fld_Tahun;
+
+                                     var tindakan = "<a data-modal1='' href='" + @Url.Action("_YieldInfoEdit", "WorkerInfo") + "/?id=" + pktUtama + "' class='btn btn-success' role='button' title='" + GlobalResEstate.btnUpdate + "' onclick='return DisplayProgressMessage(this);'><i class='fa fa-pencil-square-o  fa-lg'></i></a>&nbsp;" +
+                                                    "<a data-modal1='' href='" + @Url.Action("_YieldInfoDelete", "WorkerInfo") + "/?id=" + pktUtama + "' class='btn btn-danger' role='button' title='" + GlobalResEstate.btnDelete + "' onclick='return DisplayProgressMessage(this);'><i class='fa fa-trash fa-lg'></i></a>&nbsp;";
+                                     return @Html.Raw(tindakan);
+                                 }
+
+                                 else
+                                 {
+                                     //var pktUtama = @item.fld_PktUtama;
+                                     var tindakan = "";
+                                     return @Html.Raw(tindakan);
+                                 }
+                             }, canSort: false, style: "tindakan")
+                             ));
+            }
+            else
+            {
+            <hr />
+            <div class="text-center">
+                @Html.Label(GlobalResEstate.msgErrorSearch)
+            </div>
+            <hr />
+        }
+    }
+</div>
+
+<script>
+
+    function callBackSubPkt() {
+        $('.edit-mode').hide();
+        $('.edit-book').on('click',
+            function () {
+                var tr = $(this).parents('tr:first');
+                tr.find('.edit-mode, .display-mode').toggle();
+            });
+        $('.cancel').on('click',
+            function () {
+                var tr = $(this).parents('tr:first');
+                tr.find('.edit-mode, .display-mode').toggle();
+            });
+        $('.save-book').on('click',
+            function () {
+                var tr = $(this).parents('tr:first');
+                var kodPkt = $(this).prop('id');
+                console.log(kodPkt);
+                var hasilTan = tr.find('#fld_hasilTan').val();
+                console.log(hasilTan);
+                var jenisPeringkat = $('#jenisPeringkatDdl').val();
+                console.log(jenisPeringkat);
+                var bulan = $('#MonthDdl').val();
+                console.log(bulan);
+                var tahun = $('#YearDdl').val();
+                console.log(tahun);
+                //var TH = hasilTan / tr.find('fld_LsPktUtama').val();
+                //console.log(TH);
+
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("addPktYieldInfo", "WorkerInfo")',
+                    dataType: 'json',
+                    contentType: 'application/json',
+                    async: false,
+                    data: JSON.stringify({ kodPkt: kodPkt, hasilTan: hasilTan, month: bulan, year: tahun }),
+                    success: function(result) {
+                        $.simplyToast(result.msg, result.status);
+                        if (result.status == "success") {
+                            $("#pktYield").load('@Url.Action("_YieldCreate", "WorkerInfo")', { JenisPeringkatList: jenisPeringkat, MonthList: bulan, YearList: tahun });
+                        }
+                    }
+                });
+            });
+    }
+</script>
+
+
+<script>
+    $(function afterRefresh () {
+        $('.edit-mode').hide();
+        $('.edit-book').on('click',
+            function () {
+                var tr = $(this).parents('tr:first');
+                tr.find('.edit-mode, .display-mode').toggle();
+            });
+        $('.cancel').on('click',
+            function () {
+                var tr = $(this).parents('tr:first');
+                tr.find('.edit-mode, .display-mode').toggle();
+            });
+        $('.save-book').on('click',
+            function () {
+                var tr = $(this).parents('tr:first');
+                var kodPkt = $(this).prop('id');
+                console.log(kodPkt);
+                var hasilTan = tr.find('#fld_hasilTan').val();
+                console.log(hasilTan);
+                var jenisPeringkat = $('#jenisPeringkatDdl').val();
+                console.log(jenisPeringkat);
+                var bulan = $('#MonthDdl').val();
+                console.log(bulan);
+                var tahun = $('#YearDdl').val();
+                console.log(tahun);
+                //var hektar = tr.find('fld_LsPktUtama').val();
+                //console.log(hektar);
+                //var tph = $('#TPH').val();
+                //console.log(tph);
+                //var TpH = hasilTan / $('#fld_LsPktUtama').val();
+                //console.log(TpH);
+
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("addPktYieldInfo", "WorkerInfo")',
+                    dataType: 'json',
+                    contentType: 'application/json',
+                    async: false,
+                    data: JSON.stringify({ kodPkt: kodPkt, hasilTan: hasilTan, month: bulan, year: tahun }),
+                    success: function(result) {
+                        $.simplyToast(result.msg, result.status);
+                        if (result.status == "success") {
+                            $("#pktYield").load('@Url.Action("_YieldCreate", "WorkerInfo")', { JenisPeringkatList: jenisPeringkat, MonthList: bulan, YearList: tahun });
+                        }
+                    }
+                });
+            });
+    });
+
+</script>
+
+
+
+
+
+
+

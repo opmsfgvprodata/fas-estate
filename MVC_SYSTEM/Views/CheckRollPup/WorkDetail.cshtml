@@ -1,0 +1,83 @@
+﻿<div class="form-horizontal">
+    <div id="workinfoinfo" class="col-sm-12">
+        <div class="panel panel-success">
+            <div class="panel-heading">@GlobalResEstate.menuWorkInfo <label id="name3"></label></div>
+            <div class="panel-body">
+                <div class="form-group">
+                    <div class="col-sm-2">
+                        <label id="catsel">@GlobalResEstate.lblAktvtType</label>
+                        @Html.DropDownList("JnisAktvt", null, htmlAttributes: new { @class = "form-control" })
+                    </div>
+                    @*<div class="col-sm-3">
+                        <label id="catsel">@GlobalResEstate.hdrLejar</label>
+                        @Html.DropDownList("Lejar", null, htmlAttributes: new { @class = "form-control" })
+                    </div>*@
+                    <div class="col-sm-3">
+                        <label id="catsel">@GlobalResEstate.lblLevelType</label>
+                        @Html.DropDownList("JnisPkt", null, htmlAttributes: new { @class = "form-control" })
+                    </div>
+                    <div class="col-sm-4">
+                        <label id="catsel">@GlobalResEstate.lblLevelSelection</label>
+                        @Html.DropDownList("PilihanPkt", null, htmlAttributes: new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-2">
+                        <label id="LblNNCC">Network No/Cost Center</label>
+                        @Html.DropDownList("NNCC", null, htmlAttributes: new { @class = "form-control" })
+                        @Html.Hidden("SelectionNNCC")
+                    </div>
+                    <div class="col-sm-2">
+                        <label id="catsel">SAP Code Activity</label>
+                        @Html.DropDownList("SAPPilihanAktvt", null, htmlAttributes: new { @class = "form-control" })
+                    </div>
+                    <div class="col-sm-2">
+                        <label id="catsel">@GlobalResEstate.hdrActvtCode</label>
+                        @Html.DropDownList("PilihanAktvt", null, htmlAttributes: new { @class = "form-control" })
+                    </div>
+                    <div class="col-sm-5">
+                        <p><font color="red">**Additional rates for areas are difficult to calculate automatically.</font> <input type="hidden" name="statusvalidkwsnskr" id="statusvalidkwsnskr" value="3" /></p>
+                        @*<p><label>Membaja :</label><b id="KesukaranMembaja">RM @ViewBag.GetKesukaranMembaja</b> <input type="hidden" name="CdKesukaranMembaja" id="CdKesukaranMembaja" value="@ViewBag.CdKesukaranMembaja" /> <input type="hidden" name="hargaKesukaranMembaja" id="hargaKesukaranMembaja" value="@ViewBag.GetKesukaranMembaja" /></p>
+                        <p><label>Menuai :</label><b id="KesukaranMenuai">RM @ViewBag.GetKesukaranMenuai</b>  <input type="hidden" name="CdKesukaranMenuai" id="CdKesukaranMenuai" value="@ViewBag.CdKesukaranMenuai" />  <input type="hidden" name="hargaKesukaranMenuai" id="hargaKesukaranMenuai" value="@ViewBag.GetKesukaranMenuai" /></p>*@
+                        <p><label id="OtherDiff">Additional Rates : </label><b id="KesukaranLain"> RM 0</b> <button type="button" class="btn btn-success addksranlain" id="addksranlain">Enter Value</button> <input type="hidden" name="CdKesukaranLain" id="CdKesukaranLain" value="OR" />  <input type="hidden" name="hargaKesukaranLain" id="hargaKesukaranLain" value="0" /> <input type="hidden" id="MngrID" name="MngrID" value="0" /> <input type="hidden" id="DTApp" name="DTApp" value="" /> </p>
+                    </div>
+                </div>
+                <div class="panel panel-success">
+                    <div class="panel-heading">@GlobalResEstate.lblWorkRecordEntry <label id="name4"></label></div>
+                    <div class="panel-body">
+                        <div id="workdata" style="display:none;padding-bottom:45px;">
+                            <div class="form-group" id="allcheckbookdiv">
+                                <div class="col-sm-12" id="allcheckbook"><label style="float:left;" id="sapgl"> </label><label style="float:right;">@GlobalResEstate.chkAllSame <input type="checkbox" name="allsame" id="allsame" value="1" /></label></div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-12" id="ListofDetail3">
+                                </div>
+                            </div>
+                            <div class="col-sm-12" style="margin-bottom:10px;margin-top:-22px" id="SaveWrkbtndiv">
+                                <button class="btn btn-success" style="float:right;margin-right:-15px;" name="SaveWrk" id="SaveWrk" type="button">@GlobalResEstate.btnSave</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-success">
+                    <div class="panel-heading">@GlobalResEstate.lblWorkRecordInfo <label id="name5"></label></div>
+                    <div class="panel-body">
+                        <div class="form-group">
+                            <div class="col-sm-12" id="ListofDetail4">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id='myModal2' class='modal fade in'>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div id='myModalContent2'>
+                @Html.Action("_OtherDifficulty", "CheckRollPUP")
+            </div>
+        </div>
+    </div>
+</div>

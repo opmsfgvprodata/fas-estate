@@ -1,0 +1,40 @@
+﻿@using MVC_SYSTEM.Class;
+@{
+    ViewBag.Title = "LevelsInfoBlok";
+    //Layout = "~/Views/Shared/_LayoutMain.cshtml";
+    GetStatus GetStatus = new GetStatus();
+
+    var grid = new WebGrid(
+        canPage: true,
+        rowsPerPage: Model.PageSize,
+        canSort: false,
+        ajaxUpdateContainerId: "grid");
+
+    grid.Bind(Model.Content, rowCount: Model.TotalRecords, autoSortAndPage: false);
+}
+
+<div class="text-center">@grid.TotalRowCount @Html.Label(GlobalResEstate.lblTotalRecord)</div>
+<div>
+    @{
+        @grid.GetHtml(htmlAttributes: new { id = "grid" }, // id for ajaxUpdateContainerId parameter
+                                fillEmptyRows: false,
+                                tableStyle: "table table-bordered table-striped table-list table-hover",
+                                headerStyle: "header_table",
+                                alternatingRowStyle: "Grid-alt",
+                                selectedRowStyle: "Grid-selected",
+                                rowStyle: "Grid-rowstyle",
+                                footerStyle: "table-pager",
+                                mode: WebGridPagerModes.All,
+                                columns: grid.Columns(
+                                    grid.Column(GlobalResEstate.hdrNo, canSort: false, format: item => item.WebGrid.Rows.IndexOf(item) + 1 + Math.Round(Convert.ToDouble(grid.TotalRowCount / grid.PageCount) / grid.RowsPerPage) * grid.RowsPerPage * grid.PageIndex, style: "count"),
+                                    grid.Column("fld_Blok",GlobalResEstate.lblBlockCode, style: "nopkj"),
+                                    grid.Column("fld_NamaBlok", GlobalResEstate.lblBlockName, style: "namapkj"),
+                                    grid.Column("fld_LsBlok", GlobalResEstate.lblArea, style: "nokp"),
+                                    grid.Column(GlobalResEstate.hdrAction, canSort: false, style: "tindakan",
+                                        format: @<text>
+                                        @Html.Raw("<a data-modal='' href='" + @Url.Action("LevelsBlokUpdate", "BasicInfo") + "/?id=" + item.fld_Blok + "' class='btn btn-success' title='Update Worker' onclick='return DisplayProgressMessage(this);'><i class='fa fa-edit fa-lg'></i></a>")
+                                        @Html.Raw("<a data-modal='' href='" + @Url.Action("LevelsBlokDelete", "BasicInfo") + "/?id=" + item.fld_Blok + "' class='btn btn-danger' title='Worker Status' onclick='return DisplayProgressMessage(this);'><i class='fa fa-trash fa-lg'></i></a>")
+                                        </text>)
+                                    ))
+    }
+</div>

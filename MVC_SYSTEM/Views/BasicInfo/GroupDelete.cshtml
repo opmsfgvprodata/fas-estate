@@ -1,0 +1,64 @@
+﻿
+@model MVC_SYSTEM.Models.tbl_KumpulanKerja
+@{
+    GetConfig getConfig = new GetConfig();
+}
+
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 class="modal-title">@GlobalResEstate.titleDeleteGroup</h3>
+</div>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div class="modal-body">
+
+        <div class="form-horizontal">
+            <div class="panel panel-primary">
+                <div class="panel-heading">@GlobalResEstate.lblTotalRecordGroup</div>
+                <fieldset class="panel-body">
+                    <fieldset disabled>
+                        <div class="form-group">
+                            <label class="control-label col-sm-3">@GlobalResEstate.hdrGroupCode:</label>
+                            <div class="col-sm-8">
+                                @Html.TextBoxFor(model => model.fld_DivisionID, htmlAttributes: new { @class = "form-control", @Value = getConfig.GetDivisionName(Model.fld_DivisionID, Model.fld_NegaraID, Model.fld_SyarikatID, Model.fld_WilayahID, Model.fld_LadangID) })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-3">@GlobalResEstate.hdrGroupCode</label>
+                            <div class="col-sm-4">
+                                @Html.TextBoxFor(model => model.fld_KodKumpulan, htmlAttributes: new { @class = "form-control" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-3">@GlobalResEstate.hdrWorkAktvt:</label>
+                            <div class="col-sm-8">
+                                @Html.TextBoxFor(model => model.fld_KodKerja, htmlAttributes: new { @class = "form-control" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-3">@GlobalResEstate.hdrDesc</label>
+                            <div class="col-md-8">
+                                @Html.TextBoxFor(model => model.fld_Keterangan, htmlAttributes: new { @class = "form-control" })
+                            </div>
+                        </div>
+                    </fieldset>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-12 text-center">
+                    <h3>
+                        <span class="label label-danger">
+                            @GlobalResEstate.msgDelete
+                        </span>
+                    </h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-footer">
+        <input class="btn btn-success" type="submit" value=@GlobalResEstate.btnYes />
+        <button class="btn btn-danger" data-dismiss="modal">@GlobalResEstate.btnNo</button>
+    </div>
+}

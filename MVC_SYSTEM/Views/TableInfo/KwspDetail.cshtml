@@ -1,0 +1,84 @@
+﻿@model IEnumerable<MVC_SYSTEM.MasterModels.tbl_Kwsp>
+@using MVC_SYSTEM.Class;
+
+@{
+    ViewBag.Title = "KwspDetail";
+    //Layout = "~/Views/Shared/_LayoutMain.cshtml";
+    GetTriager GetTriager = new GetTriager();
+    string KdrGaji = "";
+    decimal Jumlah = 0;
+    int bil = 0;
+}
+
+@if (Model.Count() > 0)
+{
+    <div id="scrollArea" class="modal-body">
+        <logo />
+        <table class="table table-hover table-bordered" style="font-size: 11px;" border="0" id="tblSample">
+            <thead>
+                <tr>
+                    <th colspan="10" style="text-align:center;vertical-align:middle;">
+                        @ViewBag.NamaSyarikat
+                        <br />
+                        (@GlobalResEstate.lblCompanyNo : @ViewBag.NoSyarikat)
+                        <br />
+                        @GlobalResEstate.lblKwsp
+                    </th>
+                </tr>
+                <tr>
+                    <th bgcolor="#ffcc80" style="color: black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">@GlobalResEstate.hdrNo</th>
+                    <th bgcolor="#ffcc80" style="color: black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">@GlobalResEstate.lblSalaryRange (RM)</th>
+                    <th bgcolor="#ffcc80" style="color: black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">@GlobalResEstate.lblEmloyerShare (RM)</th>
+                    <th bgcolor="#ffcc80" style="color: black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">@GlobalResEstate.lblEmployeeShare (RM)</th>
+                    <th bgcolor="#ffcc80" style="color: black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">@GlobalResEstate.lblTotalContribution (RM)</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    bil = bil + 1;
+                    Jumlah = item.fld_Mjkn.GetValueOrDefault() + item.fld_Pkj.GetValueOrDefault();
+                    if (item.fld_KdrUpper != null)
+                    {
+                        KdrGaji = GetTriager.GetTotalForMoney(item.fld_KdrLower) + " - " + GetTriager.GetTotalForMoney(item.fld_KdrUpper);
+                    }
+                    else
+                    {
+                        KdrGaji = GetTriager.GetTotalForMoney(item.fld_KdrLower);
+                    }
+                    <tr>
+                        <td align="center" style="vertical-align: middle !important; border: 1px solid black;" border="1">
+                            @bil
+                        </td>
+                        <td align="center" style="vertical-align: middle !important; border: 1px solid black;" border="1">
+                            @KdrGaji.ToString()
+                        </td>
+                        <td align="center" style="vertical-align: middle !important; border: 1px solid black;" border="1">
+                            @GetTriager.GetTotalForMoney(item.fld_Mjkn)
+                        </td>
+                        <td align="center" style="vertical-align: middle !important; border: 1px solid black;" border="1">
+                            @GetTriager.GetTotalForMoney(item.fld_Pkj)
+                        </td>
+                        <td align="center" style="vertical-align: middle !important; border: 1px solid black;" border="1">
+                            @GetTriager.GetTotalForMoney(Jumlah)
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <newpage />
+    </div>
+    <div style="text-align:right; margin-top:10px">
+        <a class="btn btn-default btn-sm" href="#" id="printpage">
+            <span class="glyphicon glyphicon-print"> </span> @GlobalResEstate.btnPrint
+        </a>
+        <a class="btn btn-default btn-sm" href="#" id="downloadpdf">
+            <span><img src="~/Asset/Images/pdf-icon.png" width="20px" height="20px" /></span> @GlobalResEstate.btnDownloadPdf
+        </a>
+    </div>
+}
+else
+{
+    <p style="color:red">@GlobalResEstate.msgErrorSearch</p>
+}
+

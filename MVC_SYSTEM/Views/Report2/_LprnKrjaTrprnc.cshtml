@@ -1,0 +1,160 @@
+﻿@model MVC_SYSTEM.CustomModels2.detailsreport
+
+@if (Model.CustMod_DetailWork2 != null)
+{
+    ReportLogic ReportLogic = new ReportLogic();
+    var getcolumn = Model.coloumgroup;
+    decimal totalkongpay = 0;
+    decimal totalottime = 0;
+    decimal totalototpay = 0;
+    decimal totalpieceratepay = 0;
+    decimal totalincentive = 0;
+    decimal totalotherincome = 0;
+    decimal totaltotalincome = 0;
+    decimal totaltotaldeduction = 0;
+    decimal totalnetincome = 0;
+    int i = 1;
+    int span = getcolumn.Count() + 1;
+    int span2 = getcolumn.Count() + 11;
+    int span3 = getcolumn.Count() + 6;
+    int span4 = getcolumn.Count() + 5;
+    <div id="scrollArea2" class="modal-body">
+        <table class="table table-hover table-bordered" style="font-size: 11px;" border="0" width="100%">
+            <thead>
+                <tr>
+                    <th colspan="@span2" style="text-align:center;vertical-align:middle;">
+                        @ViewBag.NamaSyarikat
+                        <br />
+                        (@ViewBag.NoSyarikat)
+                        <br />
+                    </th>
+                </tr>
+                <tr>
+                    <th colspan="@span3" style="text-align:left;vertical-align:top;">
+                        TAJUK&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: @ViewBag.TitleReport
+                        <br />
+                        WILAYAH/LADANG&nbsp;&nbsp;&nbsp;&nbsp;: @ViewBag.NamaLadang
+                        <br />
+                        Pilihan&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: @ViewBag.Pilihan
+                    </th>
+                    <th colspan="@span4" style="text-align:left;vertical-align:top;">
+                        TEMPOH&nbsp;&nbsp;&nbsp;&nbsp;: @ViewBag.Tempoh
+                    </th>
+                </tr>
+                <tr>
+                    <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">No</th>
+                    @foreach (var column in getcolumn)
+                    {
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">@column.name</th>
+                    }
+                    <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Kong</th>
+                    <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Overtime Hour</th>
+                    <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Overtime RM</th>
+                    <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Piece-Rate Qty</th>
+                    <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Piece-Rate RM</th>
+                    <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Insentif</th>
+                    <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Pendapatan Lain-Lain</th>
+                    <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Pendapatan Kasar</th>
+                    <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Potongan</th>
+                    <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Jumlah</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in ReportLogic.DetailReport(Model.CustMod_DetailWork2, Model.coloumgroup))
+                {
+                    <tr>
+                        <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">@i</td>
+                        @Html.Raw(item.columnheader)
+                        <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">@item.kongpay</td>
+                        <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">@item.ottime</td>
+                        <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">@item.otpay</td>
+                        <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">@item.piecerateqnty</td>
+                        <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">@item.pieceratepay</td>
+                        <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">@item.incentive</td>
+                        <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">@item.otherincome</td>
+                        <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">@item.totalincome</td>
+                        <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">@item.totaldeduction</td>
+                        <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">@item.netincome</td>
+                    </tr>
+                    i++;
+                    totalkongpay += item.kongpay;
+                    totalottime += item.ottime;
+                    totalototpay += item.otpay;
+                    totalpieceratepay += item.pieceratepay;
+                    totalincentive += item.incentive;
+                    totalotherincome += item.otherincome;
+                    totaltotalincome += item.totalincome;
+                    totaltotaldeduction += item.totaldeduction;
+                    totalnetincome += item.netincome;
+                }
+
+                <tr>
+                    <td align="right" colspan="@span" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                        Total(RM)
+                    </td>
+                    <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                        @totalkongpay
+                    </td>
+                    <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                        @totalottime
+                    </td>
+                    <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                        @totalototpay
+                    </td>
+                    <td align="right" colspan="2" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                        @totalpieceratepay
+                    </td>
+                    <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                        @totalincentive
+                    </td>
+                    <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                        @totalotherincome
+                    </td>
+                    <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                        @totaltotalincome
+                    </td>
+                    <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                        @totaltotaldeduction
+                    </td>
+                    <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                        @totalnetincome
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+}
+else
+{
+    <div id="scrollArea2" class="modal-body" style="text-align: center">
+        <p style="color: red">No Data.</p>
+    </div>
+}
+
+<div style="text-align:right; margin-top:10px">
+    <a class="btn btn-default btn-sm" href="#" id="printpage">
+        <span class="glyphicon glyphicon-print"> </span> @GlobalResEstate.btnPrint
+    </a>
+    <a class="btn btn-default btn-sm" href="#" onclick="HTMLtoExcel('LAPORAN AGIHAN PERBELANJAAN AKTIVITI KERJA')">
+        <span><img src="~/Asset/Images/excel-icon.png" width="20px" height="20px" /></span> @GlobalResEstate.btnDownloadExcel
+    </a>
+</div>
+<style>
+    #page td {
+        padding: 2px;
+        margin: 2px;
+    }
+</style>
+<script src="~/Asset/Scripts/FromHTML.js"></script>
+<script src="~/Asset/Scripts/FileSaver.js"></script>
+<script>
+    $(document).ready(function () {
+        $("#printpage").click(function () {
+            var DivElement = document.getElementById("scrollArea2").innerHTML;
+            var oldPage = document.body.innerHTML;
+            document.body.innerHTML = DivElement;
+            window.print();
+            document.body.innerHTML = oldPage;
+        })
+    });
+</script>

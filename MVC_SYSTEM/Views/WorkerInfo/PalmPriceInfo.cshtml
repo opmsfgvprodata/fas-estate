@@ -1,0 +1,70 @@
+﻿@using Microsoft.Ajax.Utilities
+@using MVC_SYSTEM.Class;
+@using MVC_SYSTEM.MasterModels
+@{
+    ViewBag.Title = "PalmPriceInfo";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+
+    AjaxOptions options = new AjaxOptions
+    {
+        HttpMethod = "Get",
+        UpdateTargetId = "searchResultPalmPriceInfo",
+        InsertionMode = InsertionMode.Replace,
+        LoadingElementId = "divLoading"
+    };
+}
+
+<script src="~/Asset/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+
+<div id="divLoading" style="display:none;">
+    <div class="progressTest">
+        <label>
+            @GlobalResEstate.msgWait
+        </label>
+    </div>
+</div>
+
+<section class="content-wrapper main-content clear-fix">
+    <div class="well bottom" style="padding-bottom: 16px">
+        @using (Ajax.BeginForm("_PalmPriceSearch", "WorkerInfo", null, options, new { @id = "palmPriceSearch" }))
+        {
+            @Html.AntiForgeryToken()
+            <div class="row">
+                <div class="col-sm-2">
+                    @Html.Label("Jenis Tanaman")
+                    @Html.DropDownList("JenisTanamanList", null, htmlAttributes: new { @class = "form-control" })
+                </div>
+                <div class="col-sm-2" style="padding-top:24px;">
+                    <input class="btn btn-primary btn-block" type="submit" name="Lihat" value="Lihat" />
+                </div>
+            </div>
+        }
+    </div>
+    <div class="well" id="addPalmPrice" style="margin-top: 7px">
+        <div id="searchResultPalmPriceInfo">
+            @Html.Action("_PalmPriceSearch")
+        </div>        
+    </div>
+</section>
+<!-- modal placeholder-->
+<div id='myModal' class='modal fade in'>
+    <div class="modal-dialog" style="width: 60%">
+        <div class="modal-content">
+            <div id='myModalContent'></div>
+        </div>
+    </div>
+</div>
+
+<div id='myModal1' class='modal fade in'>
+    <div class="modal-dialog modal-lg" style="width: 60%">
+        <div class="modal-content">
+            <div id='myModalContent1'></div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    @Scripts.Render("~/Asset/Scripts/AjaxModal.js")
+}
+
+

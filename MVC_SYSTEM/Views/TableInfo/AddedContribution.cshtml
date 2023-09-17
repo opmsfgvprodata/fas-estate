@@ -1,0 +1,138 @@
+﻿
+@{
+    ViewBag.Title = "AddedContribution";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+<section class="content-wrapper main-content clear-fix">
+    @using (Html.BeginForm("AddedContribution", null, FormMethod.Get))
+    {
+        <div class="well bottom" style="padding-bottom: 16px">
+            <div class="col-sm-4">
+                @Html.Label("Jenis Caruman")
+                @Html.DropDownList("ContList", null, htmlAttributes: new { @class = "form-control" })
+            </div>
+            <div  id="sublist" class="col-sm-4">
+                @Html.Label("Jenis Sub Caruman")
+                @Html.DropDownList("SubContList", null, htmlAttributes: new { @class = "form-control" })
+            </div>
+            <div class="col-sm-2" style="padding-top:25px;">
+                <input class="btn btn-primary btn-block" type="submit" name="btnSrch" id="btnSrch" value=@GlobalResEstate.btnView onclick="return DisplayProgressMessage(this);" />
+            </div>
+        </div>
+        <div id="DataTable" class="well" style="margin-top: 7px">
+            <div class="modal-body">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">@GlobalResEstate.lblAddedContribution.ToUpper()</div>
+                    <div id="divdetail" class="panel-body">
+
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a style="text-align:right" href="@Url.Action("Index", "TableInfo")" class="btn btn-warning">@GlobalResEstate.btnBack</a>
+            </div>
+        </div>
+    }
+</section>
+<script>
+    $(document).ready(function () {
+        var selectedSubcont = "";
+        var SubList = {};
+            SubList.url = "@Url.Action("GetSubContribution", "TableInfo")";
+            SubList.type = "POST";
+            SubList.data = JSON.stringify({ cont: $("#ContList").val() });
+            SubList.datatype = "json";
+            SubList.contentType = "application/json";
+            SubList.success = function (result) {
+                selectedSubcont = result.subcont;
+                $("#SubContList").empty();
+                if (result.SubContList.length != 0) {
+                    $("#sublist").removeClass("hidden");
+                    for (var i = 0; i < result.SubContList.length; i++) {
+                        $("#SubContList").append("<option value=" + result.SubContList[i].Value + ">" + result.SubContList[i].Text + "</option>");
+                        loadDiv(selectedSubcont);
+                    }
+                }
+                else {
+                    $("#SubContList").empty();
+                    $("#sublist").addClass("hidden");
+                }
+            };
+            SubList.error = function () { $.simplyToast('@GlobalResEstate.msgError', 'error'); };
+            $.ajax(SubList);
+
+            function loadDiv(selectedSubcont) {
+                var reloadPage = {};
+            reloadPage.url = "@Url.Action("AddedContributionDetail", "TableInfo")";
+            reloadPage.type = "POST";
+            reloadPage.data = { subcont: selectedSubcont };
+            reloadPage.datatype = "json";
+            reloadPage.success = function (result) {
+                $("#divdetail").html(result);
+                $("#UpdateProgress1").hide();
+            };
+            reloadPage.error = function () { $.simplyToast('@GlobalResEstate.msgError', 'danger'); };
+            $.ajax(reloadPage);
+            };
+
+        $("#ContList").change(function () {
+            var SubList = {};
+            SubList.url = "@Url.Action("GetSubContribution", "TableInfo")";
+            SubList.type = "POST";
+            SubList.data = JSON.stringify({ cont: $("#ContList").val() });
+            SubList.datatype = "json";
+            SubList.contentType = "application/json";
+            @*SubList.success = function (sublist) {
+                $("#SubContList").empty();
+                if (sublist.length != 0) {
+                    $("#sublist").removeClass("hidden");
+                    for (var i = 0; i < sublist.length; i++) {
+                        $("#SubContList").append("<option value=" + sublist[i].Value + ">" + sublist[i].Text + "</option>");
+                    }
+                }
+                else {
+                    $("#SubContList").empty();
+                    $("#sublist").addClass("hidden");
+                }
+            };
+            SubList.error = function () { $.simplyToast('@GlobalResEstate.msgError', 'error'); };
+            $.ajax(SubList);*@
+
+            /*add by wani 7.5.2021*/
+             SubList.success = function (result) {
+                selectedSubcont = result.subcont;
+                $("#SubContList").empty();
+                if (result.SubContList.length != 0) {
+                    $("#sublist").removeClass("hidden");
+                    for (var i = 0; i < result.SubContList.length; i++) {
+                        $("#SubContList").append("<option value=" + result.SubContList[i].Value + ">" + result.SubContList[i].Text + "</option>");
+                    }
+                }
+                else {
+                    $("#SubContList").empty();
+                    $("#sublist").addClass("hidden");
+                }
+            };
+            SubList.error = function () { $.simplyToast('@GlobalResEstate.msgError', 'error'); };
+            $.ajax(SubList);
+			/*end add by wani 7.5.2021*/
+        });
+
+        $("#btnSrch").click(function (e) {
+            e.preventDefault();
+            var reloadPage = {};
+            reloadPage.url = "@Url.Action("AddedContributionDetail", "TableInfo")";
+            reloadPage.type = "POST";
+            reloadPage.data = { subcont: $("#SubContList").val() };
+            reloadPage.datatype = "json";
+            reloadPage.success = function (result) {
+                $("#divdetail").html(result);
+                $("#UpdateProgress1").hide();
+            };
+            reloadPage.error = function () { $.simplyToast('@GlobalResEstate.msgError', 'danger'); };
+            $.ajax(reloadPage);
+            });
+    });
+
+</script>

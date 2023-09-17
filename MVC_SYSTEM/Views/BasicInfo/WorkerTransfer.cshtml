@@ -1,0 +1,724 @@
+﻿@model MVC_SYSTEM.Models.tbl_Pkjmast
+@using MVC_SYSTEM.Class
+@{
+    ViewBag.Title = "WorkerTransfer";
+    //Layout = "~/Views/Shared/_LayoutMain.cshtml";
+    GetConfig getconfig = new GetConfig();
+    string dateformat = getconfig.GetData("dateformat3");
+}
+
+<section class="content-wrapper main-content clear-fix">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 class="modal-title">@GlobalResEstate.titleWorkerTransfer</h3>
+    </div>
+    @using (Ajax.BeginForm("WorkerTransfer", "BasicInfo", null, new AjaxOptions() { HttpMethod = "Post", InsertionMode = InsertionMode.Replace }, new { enctype = "multipart/form-data" }))
+    {
+        @Html.AntiForgeryToken()
+        <div class="modal-body">
+            <div class="form-horizontal">
+                <div class="panel panel-primary">
+                    <div class="panel-body">
+                        <div class="col-sm-2">
+                            <label>Batch</label>
+                            @Html.TextBox("fld_Batch", "", new { @class = "form-control", @readonly = "readonly" })
+                            @Html.ValidationMessageFor(model => model.fld_Batch, "", new { @class = "text-danger" })
+                        </div>
+                        <div class="pull-left" style="padding-top:25px;">
+                            <button class="btn btn-primary" id="btnBatch1" name="btnBatch1">
+                                @*<button class="btn btn-primary btnBatch1" name="btnBatch">*@
+                                <span class="glyphicon glyphicon-plus"></span>@GlobalResEstate.btnBatch
+                            </button>
+                        </div>
+                        <div class="col-sm-2">
+                            <label>Syarikat</label>
+                            @Html.DropDownList("fld_SyarikatID", null, htmlAttributes: new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.fld_SyarikatID, "", new { @class = "text-danger" })
+                        </div>
+                        <div class="col-sm-2">
+                            <label>@GlobalResEstate.lblRegion</label>
+                            @Html.DropDownList("fld_WilayahID", null, htmlAttributes: new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.fld_WilayahID, "", new { @class = "text-danger" })
+                        </div>
+                        <div class="col-sm-3">
+                            <label>@GlobalResEstate.lblPkjLama</label>
+                            @Html.TextBox("PkjTransfer", "", new { @class = "form-control" })
+                            @*@Html.ValidationMessageFor(model => model.fld_Kdjnt, "", new { @class = "text-danger" })*@
+                        </div>
+                        <div class="col-sm-1" style="padding-top:25px;">
+                            @*<input class="btn btn-primary" id="btnFind" value="Teruskan" name="btnFind" />*@
+                            <button class="btn btn-primary" id="btnFind" name="btnFind">@GlobalResEstate.btnGo</button>
+                        </div>
+                    </div>
+
+                    <div class="panel-heading">@GlobalResEstate.lblhdrPersonalInfo</div>
+                    <div class="panel-body" id="mklmtPeribadi">
+
+                        @*<div class="form-group" style="text-align:center">
+                                <img src="~/Asset/Images/default-user.png" id="image" style="width:300px;height:300px" />
+                                <input type="file" name="file" id="file" onchange="changemediacover()" style="text-align:center" />
+                            </div>*@
+                        <div class="form-group">
+                            @*@Html.HiddenFor(Model => Model.fld_ID)
+                                @Html.HiddenFor(model => model.fld_WlyhID)*@
+                            @Html.HiddenFor(model => model.fld_IDpkj)
+                            <div class="col-sm-2">
+                                <label>@GlobalResEstate.lblPkjBaru</label>
+                                @Html.TextBox("fld_Nopkj", "", new { @class = "form-control", @readonly = "readonly" })
+                                @Html.ValidationMessageFor(model => model.fld_Nopkj, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="col-sm-5">
+                                <label>@GlobalResEstate.hdrName</label>
+                                @Html.EditorFor(model => model.fld_Nama, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.fld_Nama, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="col-sm-4">
+                                <label>@GlobalResEstate.hdrNoKp</label>
+                                @Html.EditorFor(model => model.fld_Nokp, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                                @Html.ValidationMessageFor(model => model.fld_Nokp, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-2">
+                                <label>@GlobalResEstate.lblDOB</label>
+                                <div class='input-group date' id='datetimepicker1'>
+                                    @Html.EditorFor(Model => Model.fld_Trlhr, new { htmlAttributes = new { @class = "form-control", @type = "text" } })
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <label>@GlobalResEstate.lblGender</label>
+                                @Html.DropDownList("fld_Kdjnt", null, htmlAttributes: new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.fld_Kdjnt, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="col-sm-2">
+                                <label>@GlobalResEstate.lblMarriageStatus</label>
+                                @Html.DropDownList("fld_Kdkwn", null, htmlAttributes: new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.fld_Kdkwn, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="col-sm-2">
+                                <label>@GlobalResEstate.lblPeneroka</label>
+                                @Html.DropDownList("fld_Kpenrka", null, htmlAttributes: new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.fld_Kpenrka, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-2">
+                                <label>@GlobalResEstate.lblRace</label>
+                                @Html.DropDownList("fld_Kdbgsa", null, htmlAttributes: new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.fld_Kdbgsa, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="col-sm-3">
+                                <label>@GlobalResEstate.lblReligion</label>
+                                @Html.DropDownList("fld_Kdagma", null, htmlAttributes: new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.fld_Kdagma, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="col-sm-2">
+                                <label>@GlobalResEstate.lblCitizen</label>
+                                @Html.DropDownList("fld_Kdrkyt", null, htmlAttributes: new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.fld_Kdrkyt, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-5">
+                                <label>@GlobalResEstate.lblAddress</label>
+                                @Html.EditorFor(model => model.fld_Almt1, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.fld_Almt1, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="col-sm-3">
+                                <label>@GlobalResEstate.lblPostcode</label>
+                                @Html.TextBox("fld_Poskod", "", new { @class = "form-control" })
+                                @*@Html.EditorFor(model => model.fld_Poskod, new { htmlAttributes = new { @class = "form-control"} })*@
+                                @Html.ValidationMessageFor(model => model.fld_Poskod, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="col-sm-3">
+                                <label>@GlobalResEstate.lblDistrict</label>
+                                @Html.TextBox("fld_Daerah", "", new { @class = "form-control", @readonly = "readonly" })
+                                @*@Html.EditorFor(model => model.fld_Almt3, new { htmlAttributes = new { @class = "form-control"} })*@
+                                @Html.ValidationMessageFor(model => model.fld_Daerah, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="col-sm-3">
+                                <label>@GlobalResEstate.lblState</label>
+                                @Html.DropDownList("fld_Neg", null, htmlAttributes: new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.fld_Neg, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="col-sm-3">
+                                <label>@GlobalResEstate.lblCountry</label>
+                                @Html.DropDownList("fld_Negara", null, htmlAttributes: new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.fld_Negara, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-heading">@GlobalResEstate.lblTotalRecord.ToUpper()</div>
+                    <div class="panel-body" id="mklmtPkj">
+                        <div class="form-group">
+                            <div class="col-sm-2">
+                                <label>@GlobalResEstate.lblWorkerType</label>
+                                @Html.DropDownList("fld_Jenispekerja", null, htmlAttributes: new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.fld_Jenispekerja, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="col-sm-2">
+                                <label>@GlobalResEstate.lblWorkerKtgri</label>
+                                @Html.DropDownList("fld_Ktgpkj", null, htmlAttributes: new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.fld_Ktgpkj, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="col-sm-2">
+                                <label>@GlobalResEstate.lblPermitNo</label>
+                                @Html.EditorFor(model => model.fld_Prmtno, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.fld_Prmtno, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            @*<div class="col-sm-2">
+                                    <label>@GlobalResEstate.lblPermitStart</label>
+                                    <div class='input-group date' id='datetimepicker1'>
+                                        @Html.EditorFor(Model => Model.fld_T1prmt, new { htmlAttributes = new { @class = "form-control", @type = "text" } })
+                                        <span class="input-group-addon">
+                                            <span class="glyphicon glyphicon-calendar"></span>
+                                        </span>
+                                    </div>
+                                </div>*@
+                            <div class="col-sm-2">
+                                <label>@GlobalResEstate.lblPermitEnd</label>
+                                @Html.TextBox("fld_T2prmt", "", new { @class = "form-control", @readonly = "readonly" })
+                                @Html.ValidationMessageFor(model => model.fld_T2prmt, "", new { @class = "text-danger" })
+                            </div>
+                            @*<div class="col-sm-2">
+                                    <label>@GlobalResEstate.lblPassportStart</label>
+                                    <div class='input-group date' id='datetimepicker1'>
+                                        @Html.EditorFor(Model => Model.fld_T1pspt, new { htmlAttributes = new { @class = "form-control", @type = "text" } })
+                                        <span class="input-group-addon">
+                                            <span class="glyphicon glyphicon-calendar"></span>
+                                        </span>
+                                    </div>
+                                </div>*@
+                            <div class="col-sm-2">
+                                <label>@GlobalResEstate.lblPassportEnd</label>
+                                <div class='input-group date' id='datetimepicker1'>
+                                    @Html.EditorFor(Model => Model.fld_T2pspt, new { htmlAttributes = new { @class = "form-control", @type = "text" } })
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-2">
+                                <label>@GlobalResEstate.lblDateKLIA</label>
+                                @Html.TextBox("fld_Trmlkj", "", new { @class = "form-control", @readonly = "readonly" })
+                                @Html.ValidationMessageFor(model => model.fld_Trmlkj, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="col-sm-2">
+                                <label>@GlobalResEstate.lblStartWork</label>
+                                <div class='input-group date' id='datetimepicker1'>
+                                    @Html.EditorFor(Model => Model.fld_Trshjw, new { htmlAttributes = new { @class = "form-control", @type = "text" } })
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <label>@GlobalResEstate.lblSupplier</label>
+                                @Html.DropDownList("fld_Kodbkl", null, htmlAttributes: new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.fld_Kodbkl, "", new { @class = "text-danger" })
+                            </div>
+                            @*<div class="col-sm-2">
+                                    <label>Status Pekerja</label>
+                                    @Html.TextBox("fld_Kdaktf", "Aktif", new { @class = "form-control", @readonly = "readonly" })
+                                    @Html.DropDownList("fld_Kdaktf", null, htmlAttributes: new { @class = "form-control", @readonly = "readonly" })
+                                    @Html.ValidationMessageFor(model => model.fld_Kdaktf, "", new { @class = "text-danger" })
+                                </div>*@
+                        </div>
+                        <button class="btn btn-primary" id="btnTmbh" name="btnTmbh">
+                            @GlobalResEstate.btnApply
+                        </button>
+                    </div>
+                    @*<div class="panel-heading">Maklumat Akaun Pekerja</div>
+                        <div class="panel-body" id="mklmtAkaun">
+                            <div class="form-group">
+                                <div class="col-sm-5">
+                                    <label>Nama Bank</label>
+                                    @Html.DropDownList("fld_Kdbank", null, htmlAttributes: new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.fld_Kdbank, "", new { @class = "text-danger" })
+                                </div>
+                                <div class="col-sm-4">
+                                    <label>No Akaun</label>
+                                    @Html.EditorFor(model => model.fld_NoAkaun, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.fld_NoAkaun, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-3">
+                                    <label>No KWSP</label>
+                                    @Html.EditorFor(model => model.fld_Nokwsp, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.fld_Nokwsp, "", new { @class = "text-danger" })
+                                </div>
+                                <div class="col-sm-3">
+                                    <label>No SOCSO</label>
+                                    @Html.EditorFor(model => model.fld_Noperkeso, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.fld_Noperkeso, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <button class="btn btn-primary" id="btnTmbh" name="btnTmbh">
+                                Mohon
+                            </button>
+                        </div>*@
+                </div>
+                <div id="content">
+                    @* view table *@
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            @*<input class="btn btn-primary" type="submit" value="Selesai" />*@
+            @*<button class="btn btn-success" id="btnAdd" name="btnAdd"></button>*@
+            <button class="btn btn-warning" data-dismiss="modal">@GlobalResEstate.btnBack</button>
+        </div>
+    }
+</section>
+
+<!-- modal placeholder-->
+<div id='myModal' class='modal fade in'>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div id='myModalContent'></div>
+        </div>
+    </div>
+</div>
+@*@section scripts{
+        @Scripts.Render("~/Asset/Scripts/appjs.js")
+    }*@
+@*<script src="~/Asset/Scripts/jquery.datetimepicker.js" type="text/javascript"></script>*@
+<script type="text/javascript">
+    $(function () {
+        $('#fld_Trlhr').datetimepicker({
+            timepicker: false,
+            format: '@dateformat'
+        });
+        $('#fld_T1prmt').datetimepicker({
+            timepicker: false,
+            format: '@dateformat'
+        });
+        //$('#fld_T2prmt').datetimepicker({
+        //    timepicker: false,
+        //    format: 'd/m/Y'
+        //});
+        $('#fld_T1pspt').datetimepicker({
+            timepicker: false,
+            format: '@dateformat'
+        });
+        $('#fld_T2pspt').datetimepicker({
+            timepicker: false,
+            format: '@dateformat'
+        });
+        $('#fld_Trmlkj').datetimepicker({
+            timepicker: false,
+            format: '@dateformat'
+        });
+        $('#fld_Trshjw').datetimepicker({
+            timepicker: false,
+            format: '@dateformat'
+        });
+
+
+    });
+
+    @*function changemediacover() {
+        var selectedImg = $('#file')[0].files[0];
+        var selectedImgsize = ($("#file")[0].files[0].size / 1024);
+        var selectedImgtype = $("#file")[0].files[0];
+        selectedImgtype = selectedImgtype.name.substr((selectedImgtype.name.lastIndexOf('.') + 1));
+        alert(selectedImgtype);
+        if (selectedImg) {
+            var previewId = document.getElementById('image');
+            previewId.src = '';
+
+            var oReader = new FileReader();
+            oReader.onload = function (e) {
+                previewId.src = e.target.result;
+            }
+            oReader.readAsDataURL(selectedImg);
+
+            //$('#uploadbutton').removeClass('disabled');
+        }
+
+        $.ajax({
+            url: '@Url.Action("WorkerRequest", "BasicInfo")',
+            type: 'POST',
+            data: file,
+            cache: false,
+            processData: false,
+            contentType: false,
+            //success: function (color) {
+            //    ;
+            //},
+            //error: function () {
+            //    alert('Error occured');
+            //}
+        });
+    }*@
+
+</script>
+<script>
+    $(document).ready(function () {
+        var personalInfo = $("#mklmtPeribadi").find(":input");
+        var workerlInfo = $("#mklmtPkj").find(":input");
+        var acclInfo = $("#mklmtAkaun").find(":input");
+        personalInfo.prop("disabled", true);
+        workerlInfo.prop("disabled", true);
+        acclInfo.prop("disabled", true);
+
+        if ($("#fld_Kdrkyt").val() == 0) {
+            var Kdrkyt = {};
+            var disableoption = "";
+            Kdrkyt.url = "@Url.Action("GetNopkj", "BasicInfo")";
+            Kdrkyt.type = "POST";
+            Kdrkyt.data = JSON.stringify({ krkytn: $("#fld_Kdrkyt").val() });
+            Kdrkyt.datatype = "json";
+            Kdrkyt.contentType = "application/json";
+            Kdrkyt.success = function (nopkjnew) {
+                $("#fld_Nopkj").empty();
+                $("#fld_Nopkj").val(nopkjnew);
+            };
+            Kdrkyt.error = function () { $.simplyToast('@GlobalResEstate.msgError', 'danger'); };
+            $.ajax(Kdrkyt);
+        }
+        $("#fld_Kdrkyt").change(function () {
+            var Stspkt = {};
+            var disableoption = "";
+            Kdrkyt.url = "@Url.Action("GetNopkj", "BasicInfo")";
+            Kdrkyt.type = "POST";
+            Kdrkyt.data = JSON.stringify({ krkytn: $("#fld_Kdrkyt").val() });
+            Kdrkyt.datatype = "json";
+            Kdrkyt.contentType = "application/json";
+            Kdrkyt.success = function (nopkjnew) {
+                $("#fld_Nopkj").empty();
+                $("#fld_Nopkj").val(nopkjnew);
+            };
+            Kdrkyt.error = function () { $.simplyToast('@GlobalResEstate.msgError', 'danger'); };
+            $.ajax(Kdrkyt);
+        });
+
+        if ($("#fld_Poskod").val() == 0 && $("#fld_Neg").val() == 0 && $("#fld_Negara").val() == 0) {
+            var Poskod = {};
+            var disableoption = "";
+            Poskod.url = "@Url.Action("GetDaerah", "BasicInfo")";
+            Poskod.type = "POST";
+            Poskod.data = JSON.stringify({ poskod: $("#fld_Poskod").val(), negeri: $("#fld_Neg").val(), negara: $("#fld_Negara").val() });
+            Poskod.datatype = "json";
+            Poskod.contentType = "application/json";
+            Poskod.success = function (daerah) {
+                $("#fld_Daerah").empty();
+                $("#fld_Daerah").val(daerah);
+            };
+            Poskod.error = function () { $.simplyToast('@GlobalResEstate.msgError', 'danger'); };
+            $.ajax(Poskod);
+        }
+        $("#fld_Poskod").change(function () {
+            var Poskod = {};
+            var disableoption = "";
+            Poskod.url = "@Url.Action("GetDaerah", "BasicInfo")";
+            Poskod.type = "POST";
+            Poskod.data = JSON.stringify({ poskod: $("#fld_Poskod").val(), negeri: $("#fld_Neg").val(), negara: $("#fld_Negara").val() });
+            Poskod.datatype = "json";
+            Poskod.contentType = "application/json";
+            Poskod.success = function (daerah) {
+                $("#fld_Daerah").empty();
+                $("#fld_Daerah").val(daerah);
+            };
+            Poskod.error = function () { $.simplyToast('@GlobalResEstate.msgError', 'danger'); };
+            $.ajax(Poskod);
+        });
+
+        $("#fld_Neg").change(function () {
+            console.log($("#fld_Neg").val())
+            var Negeri = {};
+            var disableoption = "";
+            Negeri.url = "@Url.Action("GetDaerah", "BasicInfo")";
+            Negeri.type = "POST";
+            Negeri.data = JSON.stringify({ poskod: $("#fld_Poskod").val(), negeri: $("#fld_Neg").val(), negara: $("#fld_Negara").val() });
+            Negeri.datatype = "json";
+            Negeri.contentType = "application/json";
+            Negeri.success = function (daerah) {
+                if (daerah != null && daerah != "") {
+                    $("#fld_Daerah").empty();
+                    $("#fld_Daerah").val(daerah);
+                }
+                else {
+                    $("#fld_Daerah").val("");
+                }
+
+            };
+            Negeri.error = function () { $.simplyToast('@GlobalResEstate.msgError', 'danger'); };
+            $.ajax(Negeri);
+        });
+
+        $("#fld_Negra").change(function () {
+            var Negra = {};
+            var disableoption = "";
+            Negra.url = "@Url.Action("GetDaerah", "BasicInfo")";
+            Negra.type = "POST";
+            Negra.data = JSON.stringify({ poskod: $("#fld_Poskod").val(), negeri: $("#fld_Neg").val(), negara: $("#fld_Negara").val() });
+            Negra.datatype = "json";
+            Negra.contentType = "application/json";
+            Negra.success = function (daerah) {
+                $("#fld_Daerah").empty();
+                $("#fld_Daerah").val(daerah);
+            };
+            Negra.error = function () { $.simplyToast('@GlobalResEstate.msgError', 'danger'); };
+            $.ajax(Negra);
+        });
+
+        $("#btnBatch1").click(function () {
+            var Batch = {};
+            var disableoption = "";
+            Batch.url = "@Url.Action("GetBatchNo", "BasicInfo")";
+            Batch.type = "POST";
+            Batch.data = JSON.stringify({ pkjmstbatchno: 'pkjmstbatchno' });
+            Batch.datatype = "json";
+            Batch.contentType = "application/json";
+            Batch.success = function (newbatch) {
+                $("#fld_Batch").empty();
+                $("#fld_Batch").val(newbatch);
+                //for (var i = 0; i < newbatch.length){
+                //    if ($("#CreateBatch").val == 0) {
+                //        disableoption = "disabled";
+                //    }
+                //}
+            };
+            Batch.error = function () { $.simplyToast('@GlobalResEstate.msgError', 'danger'); };
+            $.ajax(Batch);
+        });
+
+        $("#fld_SyarikatID").change(function () {
+           var WilayahIDList = {};
+            var disableoption = "";
+            WilayahIDList.url = "@Url.Action("GetWilayahList", "BasicInfo")";
+            WilayahIDList.type = "POST";
+            WilayahIDList.data = JSON.stringify({ syrktID: $("#fld_SyarikatID").val() });
+            WilayahIDList.datatype = "json";
+            WilayahIDList.contentType = "application/json";
+            WilayahIDList.success = function (wilayahlist) {
+                $("#fld_WilayahID").empty();
+                for (var i = 0; i < wilayahlist.length; i++) {
+                    $("#fld_WilayahID").append("<option value=" + wilayahlist[i].Value + " " + disableoption + ">" + wilayahlist[i].Text + "</option>");
+                }
+                if ($("#fld_WilayahID").val() == 0) {
+                    $("#PkjTransfer").prop("disabled", true);
+                }
+                else {
+                    $("#PkjTransfer").prop("disabled", false)
+                }
+            };
+            WilayahIDList.error = function () { $.simplyToast('@GlobalResEstate.msgError', 'danger'); };
+            $.ajax(WilayahIDList);
+        });
+
+        if ($("#fld_WilayahID").val() == 0) {
+            $("#PkjTransfer").prop("disabled", true);
+        }
+
+        $("#fld_WilayahID").change(function () {
+            if ($("#fld_WilayahID").val() == 0) {
+                $("#PkjTransfer").prop("disabled", true);
+            }
+            else {
+                $("#PkjTransfer").prop("disabled", false)
+            }
+        });
+
+        $("#btnFind").click(function (e) {
+            console.log("state");
+            e.preventDefault();
+            var Batch = {};
+            var disableoption = "";
+            Batch.url = "@Url.Action("GetPkjPindah", "BasicInfo")";
+            Batch.type = "POST";
+            Batch.data = JSON.stringify({ wlyh: $("#fld_WilayahID").val(), syrkt: $("#fld_SyarikatID").val(), pkj: $("#PkjTransfer").val() });
+            Batch.datatype = "json";
+            Batch.contentType = "application/json";
+            Batch.success = function (result) {
+                if (result.Pkjmast == null){
+                    @*alert('@GlobalResEstate.msgWorkerTransfer');*@
+                    $.simplyToast('@GlobalResEstate.msgWorkerTransfer', 'danger');
+                }
+                else {
+                    //alert(result.nopkjnew);
+                    console.log(result.Pkjmast.fld_Neg);
+                    personalInfo.prop("disabled", false);
+                    workerlInfo.prop("disabled", false);
+                    acclInfo.prop("disabled", false);
+                $("#fld_IDpkj").val(result.Pkjmast.fld_IDpkj);
+                $("#fld_Nama").val(result.Pkjmast.fld_Nama);
+                $("#fld_Nokp").val(result.Pkjmast.fld_Nokp);
+                $("#fld_Trlhr").val(moment(result.Pkjmast.fld_Trlhr).format("DD/MM/YYYY"));
+                $("#fld_Kdjnt").val(result.Pkjmast.fld_Kdjnt);
+                $("#fld_Kdkwn").val(result.Pkjmast.fld_Kdkwn);
+                $("#fld_Kpenrka").val(result.Pkjmast.fld_Kpenrka);
+                $("#fld_Kdbgsa").val(result.Pkjmast.fld_Kdbgsa);
+                $("#fld_Kdagma").val(result.Pkjmast.fld_Kdagma);
+                $("#fld_Kdrkyt").val(result.Pkjmast.fld_Kdrkyt);
+                $("#fld_Almt1").val(result.Pkjmast.fld_Almt1);
+                $("#fld_Poskod").val(result.Pkjmast.fld_Poskod);
+                $("#fld_Daerah").val(result.Pkjmast.fld_Daerah);
+                $("#fld_Neg").val(result.Pkjmast.fld_Neg.trim());
+                $("#fld_Negara").val(result.Pkjmast.fld_Negara.trim());
+                $("#fld_Jenispekerja").val(result.Pkjmast.fld_Jenispekerja);
+                $("#fld_Ktgpkj").val(result.Pkjmast.fld_Ktgpkj.trim());
+                $("#fld_Prmtno").val(result.Pkjmast.fld_Prmtno);
+
+                $("#fld_T1prmt").val(moment(result.Pkjmast.fld_T1prmt).format("DD/MM/YYYY"));
+                $("#fld_T2prmt").val(moment(result.Pkjmast.fld_T2prmt).format("DD/MM/YYYY"));
+                $("#fld_T1pspt").val(moment(result.Pkjmast.fld_T1pspt).format("DD/MM/YYYY"));
+                $("#fld_T2pspt").val(moment(result.Pkjmast.fld_T2pspt).format("DD/MM/YYYY"));
+                $("#fld_Trmlkj").val(moment(result.Pkjmast.fld_Trmlkj).format("DD/MM/YYYY"));
+                $("#fld_Kodbkl").val(result.Pkjmast.fld_Kodbkl);
+                $("#fld_Kdaktf").val(result.Pkjmast.fld_Kdaktf);
+                $("#fld_Nopkj").val(result.nopkjnew);
+
+                if (result.Pkjmast.fld_T1prmt == null) {
+                    $("#fld_T1prmt").val("");
+                }
+                if (result.Pkjmast.fld_T2prmt == null) {
+                    $("#fld_T2prmt").val("");
+                }
+
+                if (result.Pkjmast.fld_T1pspt == null) {
+                    $("#fld_T1pspt").val("");
+                }
+
+                if (result.Pkjmast.fld_T2pspt == null) {
+                    $("#fld_T2pspt").val("");
+                }
+
+                if (result.Pkjmast.fld_Trmlkj == null) {
+                    $("#fld_Trmlkj").val("");
+                }
+                }
+            };
+            Batch.error = function () { $.simplyToast('@GlobalResEstate.msgError', 'danger'); };
+            $.ajax(Batch);
+        });
+
+         $("#fld_T1prmt").change(function () {
+            var TmtPermit = {};
+            var disableoption = "";
+            TmtPermit.url = "@Url.Action("GetPermitExpired", "BasicInfo")";
+            TmtPermit.type = "POST";
+            TmtPermit.data = JSON.stringify({ permitDate: $("#fld_T1prmt").val() });
+            TmtPermit.datatype = "json";
+            TmtPermit.contentType = "application/json";
+            TmtPermit.success = function (exprdDate) {
+                var tarikhTamat = new Date(parseInt(exprdDate.substr(6)));
+                var month = tarikhTamat.getMonth() + 1;
+                var day = tarikhTamat.getDate();
+                var year = tarikhTamat.getFullYear();
+                var result = ("0" + tarikhTamat.getDate()).slice(-2) + '/' + ("0" + (tarikhTamat.getMonth()+1)).slice(-2) + '/' + year;
+                $("#fld_T2prmt").empty();
+                $("#fld_T2prmt").val(result.toString());
+                //console.log(result);
+                //console.log(tarikhTamat);
+                //console.log(month);
+                //console.log(year);
+                //console.log(day);
+                //console.log(exprdDate);
+            };
+            TmtPermit.error = function () { $.simplyToast('@GlobalResEstate.msgError', 'danger'); };
+            $.ajax(TmtPermit);
+        });
+
+        $('#btnTmbh').click(function () {
+            var flag = 0;
+            @*$('form').find('input').each(function () {
+                if (!$(this).val()) {
+                    console.log(this);
+                    alert('@GlobalResEstate.msgErrorSubmit');
+                    flag = 1;
+                    return false;
+                }
+            });*@
+            if (flag === 0)
+            {
+                var tbl_Pkjmast = {
+                fld_Batch: $("#fld_Batch").val(),
+                fld_Nopkj: $("#fld_Nopkj").val(),
+                fld_Nama: $("#fld_Nama").val(),
+                fld_Nokp: $("#fld_Nokp").val(),
+                fld_Trlhr: $("#fld_Trlhr").val(),
+                fld_Kdjnt: $("#fld_Kdjnt").val(),
+                fld_Kdkwn: $("#fld_Kdkwn").val(),
+                fld_Kpenrka: $("#fld_Kpenrka").val(),
+                fld_Kdbgsa: $("#fld_Kdbgsa").val(),
+                fld_Kdagma: $("#fld_Kdagma").val(),
+                fld_Kdrkyt: $("#fld_Kdrkyt").val(),
+                fld_Almt1: $("#fld_Almt1").val(),
+                fld_Poskod: $("#fld_Poskod").val(),
+                fld_Daerah: $("#fld_Daerah").val(),
+                fld_Neg: $("#fld_Neg").val(),
+                fld_Negara: $("#fld_Negara").val(),
+                fld_Jenispekerja: $("#fld_Jenispekerja").val(),
+                fld_Ktgpkj: $("#fld_Ktgpkj").val(),
+                fld_Prmtno: $("#fld_Prmtno").val(),
+                //fld_T1prmt: $("#fld_T1prmt").val(),
+                fld_T2prmt: $("#fld_T2prmt").val(),
+                //fld_T1pspt: $("#fld_T1pspt").val(),
+                fld_T2pspt: $("#fld_T2pspt").val(),
+                fld_Trmlkj: $("#fld_Trmlkj").val(),
+                fld_Trshjw: $("#fld_Trshjw").val(),
+                fld_Kodbkl: $("#fld_Kodbkl").val(),
+                fld_Kdaktf: $("#fld_Kdaktf").val(),
+                //fld_Kdbank: $("#fld_Kdbank").val(),
+                //fld_NoAkaun: $("#fld_NoAkaun").val(),
+                //fld_Nokwsp: $("#fld_Nokwsp").val(),
+                //fld_Noperkeso: $("#fld_Noperkeso").val()
+            };
+             var reloadPage = {};
+            console.log(tbl_Pkjmast);
+            reloadPage.url = "@Url.Action("WorkerRequest", "BasicInfo")";
+            reloadPage.type = "POST";
+            reloadPage.data = { Pkjmast: tbl_Pkjmast, jnsPermohonan: "PL", wlyhAsal: $("#fld_WilayahID").val(), pkjAsal: $("#PkjTransfer").val()};
+            reloadPage.datatype = "json";
+            reloadPage.success = function (result) {
+                $("#content").html(result.bodyview);
+                //$("#fld_Batch").val();
+                $("#fld_Nopkj").val("");
+                $("#fld_Nama").val("");
+                $("#fld_Nokp").val("");
+                $("#fld_Trlhr").val("");
+                $("#fld_Kdjnt").val(0);
+                $("#fld_Kdkwn").val(0);
+                $("#fld_Kpenrka").val(0);
+                $("#fld_Kdbgsa").val(0);
+                $("#fld_Kdagma").val(0);
+                $("#fld_Kdrkyt").val(0);
+                $("#fld_Almt1").val("");
+                $("#fld_Poskod").val("");
+                $("#fld_Daerah").val("");
+                $("#fld_Neg").val(0);
+                $("#fld_Negara").val(0);
+                $("#fld_Jenispekerja").val(0);
+                $("#fld_Ktgpkj").val(0);
+                $("#fld_Prmtno").val("");
+                $("#fld_T1prmt").val("");
+                $("#fld_T2prmt").val("");
+                $("#fld_T1pspt").val("");
+                $("#fld_T2pspt").val("");
+                $("#fld_Trmlkj").val("");
+                $("#fld_Trshjw").val("");
+                $("#fld_Kodbkl").val(0);
+                $.simplyToast(result.msg, result.statusmsg);
+                //$("#fld_Kdaktf").val();
+                //$("#fld_Kdbank").val(0);
+                //$("#fld_NoAkaun").val("");
+                //$("#fld_Nokwsp").val("");
+                //$("#fld_Noperkeso").val("");
+                //$.simplyToast('Sistem Berjaya', 'danger');
+            };
+            reloadPage.error = function () { $.simplyToast('@GlobalResEstate.msgError', 'danger'); };
+            $.ajax(reloadPage);
+            }
+        });
+    });
+</script>

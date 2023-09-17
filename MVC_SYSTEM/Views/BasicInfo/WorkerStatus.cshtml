@@ -1,0 +1,171 @@
+﻿@model MVC_SYSTEM.Models.tbl_Pkjmast
+@using MVC_SYSTEM.Class
+
+@{
+    ViewBag.Title = "WorkerStatus";
+    //Layout = "~/Views/Shared/_LayoutMain.cshtml";
+    GetConfig getconfig = new GetConfig();
+    string dateformat = getconfig.GetData("dateformat3");
+}
+
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 class="modal-title">@GlobalResEstate.titleUpdate</h3>
+</div>
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div class="modal-body">
+        <div class="form-horizontal">
+            <span id="progress" class="text-center" style="display: none;">
+                <img src="~/Asset/Images/wait.gif" alt="wait" />
+            </span>
+
+            <div class="form-group">
+                <label class="control-label col-md-2">@GlobalResEstate.hdrNoPkj</label>
+                <div class="col-md-9">
+                    @Html.TextBoxFor(model => model.fld_Nopkj, new { @class = "form-control", @readonly = "readonly" })
+                    @Html.ValidationMessageFor(model => model.fld_Nopkj, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-2">@GlobalResEstate.hdrName</label>
+                <div class="col-md-9">
+                    @Html.TextBoxFor(model => model.fld_Nama, new { @class = "form-control", @readonly = "readonly" })
+                    @Html.ValidationMessageFor(model => model.fld_Nama, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-2">@GlobalResEstate.hdrNoKp</label>
+                <div class="col-md-9">
+                    @Html.TextBoxFor(model => model.fld_Nokp, new { @class = "form-control", @readonly = "readonly" })
+                    @Html.ValidationMessageFor(model => model.fld_Nokp, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-2">@GlobalResEstate.lblWorkerStatus</label>
+                <div class="col-md-9">
+                    @Html.DropDownList("fld_Kdaktf", null, htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.fld_Kdaktf, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-2">@GlobalResEstate.lblReason</label>
+                <div class="col-md-9">
+                    @*@Html.EditorFor(model => model.fld_Sbtakf, new { htmlAttributes = new { @class = "form-control" } })*@
+                    @Html.DropDownList("fld_Sbtakf", null, htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.fld_Sbtakf, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-2">Tarikh</label>
+                <div class='input-group date col-md-9' id='datetimepicker1'>
+                    @Html.EditorFor(Model => Model.fld_Trtakf, new { htmlAttributes = new { @class = "form-control", @type = "text" } })
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-2">Catatan</label>
+                <div class="col-md-9">
+                    @Html.TextAreaFor(model => model.fld_Remarks, new { @class = "form-control" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-2">@GlobalResEstate.lblPkjLamaBaru</label>
+                <div class="col-md-9">
+                    @Html.DropDownList("pkjLamaBaru", null, htmlAttributes: new { @class = "form-control" })
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-md-2">@GlobalResEstate.lblPkjBaru</label>
+                <div class="col-md-9">
+                    @Html.TextBox("nopkjnew", "", new { @class = "form-control", @readonly = "readonly" })
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="modal-footer">
+        <input class="btn btn-primary" type="submit" value=@GlobalResEstate.btnSave />
+        <button class="btn btn-warning" data-dismiss="modal">@GlobalResEstate.btnBack</button>
+    </div>
+}
+<script>
+    $("form").removeData("validator");
+    $("form").removeData("unobtrusiveValidation");
+    $.validator.unobtrusive.parse("form");
+</script>
+<script>
+    $(document).ready(function () {
+        $(function () {
+            $('#fld_Trtakf').datetimepicker({
+            timepicker: false,
+            format: '@dateformat'
+        });
+        });
+
+        $("#pkjLamaBaru").prop("disabled", true);
+        $("#fld_Sbtakf").prop("disabled", true);
+
+        if ($("#fld_Kdaktf").val() == "1") {
+            $("#pkjLamaBaru").prop("disabled", false);
+            $("#fld_Sbtakf").prop("disabled", true);
+            $("#fld_Trtakf").prop("disabled", true);
+            $("#fld_Remarks").prop("disabled", true);
+            $("#fld_Sbtakf").val("");
+            $("#fld_Trtakf").val("");
+            $("#fld_Remarks").val("");
+        }
+        else {
+            $("#pkjLamaBaru").prop("disabled", true);
+            $("#fld_Sbtakf").prop("disabled", false);
+            $("#fld_Trtakf").prop("disabled", false);
+            $("#fld_Remarks").prop("disabled", false);
+        }
+
+        $("#fld_Kdaktf").change(function () {
+            if ($("#fld_Kdaktf").val() == "1") {
+                $("#pkjLamaBaru").prop("disabled", false);
+                $("#fld_Sbtakf").prop("disabled", true);
+                $("#fld_Trtakf").prop("disabled", true);
+                $("#fld_Remarks").prop("disabled", true);
+                $("#fld_Sbtakf").val("");
+                $("#fld_Trtakf").val("");
+                $("#fld_Remarks").val("");
+
+            }
+            else {
+                $("#pkjLamaBaru").prop("disabled", true);
+                $("#fld_Sbtakf").prop("disabled", false);
+                $("#fld_Trtakf").prop("disabled", false);
+                $("#fld_Remarks").prop("disabled", false);
+            }
+        });
+
+        $("#pkjLamaBaru").change(function () {
+            var pkjLamaBaru = {};
+            var disableoption = "";
+            pkjLamaBaru.url = "@Url.Action("GetNopkjReplace", "BasicInfo")";
+            pkjLamaBaru.type = "POST";
+            pkjLamaBaru.data = JSON.stringify({ nopkjlama: $("#fld_Nopkj").val(), pilihanNopkj: $("#pkjLamaBaru").val() });
+            pkjLamaBaru.datatype = "json";
+            pkjLamaBaru.contentType = "application/json";
+            pkjLamaBaru.success = function (nopkjnew) {
+                $("#nopkjnew").empty();
+                $("#nopkjnew").val(nopkjnew);
+            };
+            pkjLamaBaru.error = function () { $.simplyToast('@GlobalResEstate.msgError', 'danger'); };
+            $.ajax(pkjLamaBaru);
+        });
+    });
+</script>
+

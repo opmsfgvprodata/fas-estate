@@ -1,0 +1,112 @@
+﻿@model IEnumerable<MVC_SYSTEM.MasterModels.tbl_MapGL>
+@using MVC_SYSTEM.Class;
+@{
+    ViewBag.Title = "KodMappingAktivitiPaysheet";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+    System.Globalization.DateTimeFormatInfo mfi = new System.Globalization.DateTimeFormatInfo();
+    GetConfig GetConfig = new GetConfig();
+    int bill = 0;
+}
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <section class="content-wrapper main-content clear-fix">
+        <div class="well bottom" style="padding-bottom:16px;">
+            <div class="row">
+                <div class="col-sm-2" id="divlist">
+                    @Html.Label(GlobalResEstate.lblPaysheetCode)
+                    @Html.DropDownList("Paysheetlist", null, htmlAttributes: new { @class = "form-control" })
+                </div>
+                <div class="col-sm-2" style="padding-top:25px;">
+                    <input class="btn btn-primary btn-block" type="submit" name="Lihat" id="Lihat" value="@GlobalResEstate.btnView" onclick="return DisplayProgressMessage(this);" />
+                </div>
+
+            </div>
+        </div>
+        <div class="well" style="margin-top:7px;">
+            <div class="panel panel-primary">
+                <div class="panel-heading">@GlobalResEstate.lblPaysheetCode.ToUpper()</div>
+                <div class="panel-body">
+                    @if (ViewBag.getflag == 1)
+                    {
+                        <p style="color:red">@GlobalResEstate.msgKodPaysheet</p>
+                    }
+                    else
+                    {
+                        <div id="scrollArea" class="modal-body">
+                            <logo />
+                            <table class="table table-hover table-bordered" style="font-size: 11px;" border="0">
+                                @foreach (var pkjGL in Model.Select(s => new { s.fld_Paysheet, s.fld_WilayahID, s.fld_NegaraID, s.fld_SyarikatID, s.fld_LadangID }).Distinct())
+                                {
+                                    bill = 0;
+                                    //kodGL = GetConfig.GetGLCode(pkjGL.fld_KodGL,pkjGL.fld_NegaraID.Value, pkjGL.fld_SyarikatID.Value);
+                                    <thead>
+                                        <tr>
+                                            <th colspan="10" style="text-align:center;vertical-align:middle;">
+                                                @ViewBag.NamaSyarikat
+                                                <br />
+                                                (@GlobalResEstate.lblCompanyNo : @ViewBag.NoSyarikat)
+                                                <br />
+
+                                            </th>
+                                        </tr>
+                                        <tr>
+                                            <th colspan="10" bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">
+                                                @GlobalResEstate.lblGLCodeGL : @pkjGL.fld_Paysheet
+                                            </th>
+                                        </tr>
+                                        <tr>
+                                            <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">@GlobalResEstate.hdrNo</th>
+                                            <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">@GlobalResEstate.hdrActvtCode</th>
+                                            <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">@GlobalResEstate.hdrDesc</th>
+                                            @*<th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">@GlobalResEstate.lblGLjnsPay</th>*@
+
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var item in Model.Where(x => x.fld_Paysheet == pkjGL.fld_Paysheet))
+                                        {
+                                            //string Amt = @GetTriager.GetTotalForMoney(item.fldKredit);
+                                            bill = bill + 1;
+                                            <tr>
+                                                <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                                    @bill
+                                                </td>
+
+                                                <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                                    @item.fld_KodAktvt
+                                                </td>
+                                                <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                                    @GetConfig.GetAktvt(item.fld_KodAktvt, item.fld_NegaraID.Value, item.fld_SyarikatID.Value)
+                                                </td>
+                                                @*<td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                                    @GetConfig.GetWebConfigDesc(item.fld_Paysheet, "jnsPaysheet", item.fld_NegaraID, item.fld_SyarikatID)
+                                                </td>*@
+
+                                            </tr>
+                                        }
+                                    </tbody>
+                                }
+                            </table>
+                            <newpage />
+                        </div>
+                        <div style="text-align:right; margin-top:10px">
+                            <a class="btn btn-default btn-sm" href="#" id="printpage">
+                                <span class="glyphicon glyphicon-print"> </span> @GlobalResEstate.btnPrint
+                            </a>
+                            <a class="btn btn-default btn-sm" href="#" id="downloadpdf">
+                                <span><img src="~/Asset/Images/pdf-icon.png" width="20px" height="20px" /></span> @GlobalResEstate.btnDownloadPdf
+                            </a>
+                            <a class="btn btn-default btn-sm" href="#" onclick="HTMLtoExcel('')">
+                                <span><img src="~/Asset/Images/excel-icon.png" width="20px" height="20px" /></span> @GlobalResEstate.btnDownloadExcel
+                            </a>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </section>
+}
+

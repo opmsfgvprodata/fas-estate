@@ -1,0 +1,86 @@
+﻿@model MVC_SYSTEM.ViewingModels.PagedList<MVC_SYSTEM.ViewingModels.tbl_UpahMenuai>
+
+@{
+    ViewBag.Title = "PayrateMaintenance";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+<section class="content-wrapper main-content clear-fix">
+
+    @using (Html.BeginForm("PayrateMaintenance", null, FormMethod.Get))
+    {
+        <div class="well bottom" style="padding-bottom: 16px">
+            <div class="row">
+                <div class="col-sm-2">
+                    @*manual,mekanikal*@
+                    @Html.Label(GlobalResEstate.lblHarvestType)
+                    @Html.DropDownList("MenuaiList", null, htmlAttributes: new { @class = "form-control" })
+                </div>
+                <div class="col-sm-2" style="padding-top:25px;">
+                    <input class="btn btn-primary btn-block" type="submit" name="Lihat" id="btnSubmit" value="@GlobalResEstate.btnView" />
+                    @*<input class="btn btn-primary btn-block" type="submit" name="Lihat" id="btnSubmit" value="@GlobalResNoSkb.btnViewName" />*@
+                </div>
+            </div>
+        </div>
+
+        <div class="well" style="margin-top: 7px">
+            <div class="panel panel-primary">
+                @*<div class="row">
+                        <div class="pull-left col-lg-1">
+                            <a class="btn btn-success" data-modal="" href="@Url.Action("EstateDetailInsert", "GeneralConfigs")" id="btnCreate">
+                                <span class="glyphicon glyphicon-plus"></span> @GlobalResEstate.btnAdd
+                            </a>
+
+                        </div>
+
+                    </div>*@
+                <div id="divheader" class="panel-heading">@GlobalResEstate.lblPayrateMaintenance</div>
+                <div class="panel-body" id="content">
+                    @*table*@
+                    <p>@GlobalResEstate.msgChooseHarvest</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a style="text-align:right" data-modal="" href="@Url.Action("PayrateInsert", "Maintenance")" class="btn btn-warning">@GlobalResEstate.btnAdd</a>
+                <a style="text-align:right" href="@Request.UrlReferrer" class="btn btn-primary" title="Back to list">@GlobalResEstate.btnBack</a>
+            </div>
+        </div>
+    }
+</section>
+
+<!-- modal placeholder-->
+<div id='myModal' class='modal fade in'>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div id='myModalContent'></div>
+        </div>
+    </div>
+</div>
+@section scripts{
+    @Scripts.Render("~/Asset/Scripts/appjs.js")
+}
+
+
+<script>
+     $(document).ready(function () {
+         $("#btnSubmit").click(function (e) {
+             console.log($("#MenuaiList :selected").text());
+             var jnsupah = $("#MenuaiList :selected").text();
+             var lblHeading = @GlobalResEstate.lblPayrateMaintenance +" (" + jnsupah.toUpperCase() + ")";
+             e.preventDefault();
+            var Submit = {};
+            var disableoption = "";
+            Submit.url = "@Url.Action("PayrateDetail", "Maintenance")";
+            Submit.type = "POST";
+            Submit.data = JSON.stringify({ MenuaiList: $("#MenuaiList").val() });
+            Submit.datatype = "json";
+            Submit.contentType = "application/json";
+            Submit.success = function (result) {
+                $("#content").html(result);
+                $("#divheader").html(lblHeading);
+            };
+            Submit.error = function () { $.simplyToast('@GlobalResEstate.msgError', 'danger'); };
+            $.ajax(Submit);
+         });
+    });
+</script>

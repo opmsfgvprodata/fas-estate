@@ -1,0 +1,195 @@
+﻿@using MVC_SYSTEM.Class
+@using MVC_SYSTEM.Models
+@model IEnumerable<MVC_SYSTEM.Models.tbl_Pkjmast>
+@{
+    ViewBag.Title = "AccountReport";
+    //Layout = "~/Views/Shared/_LayoutMain.cshtml";
+    GetConfig GetConfig = new GetConfig();
+    //DateTime printdate = DateTime.Now.Date;
+    //DateTime printtime = DateTime.Now.ToShortTimeString;
+    ChangeTimeZone ChangeTimeZone = new ChangeTimeZone();
+    DateTime Todaydate = ChangeTimeZone.gettimezone();
+    string uniquefilename = "AccountReport_" + ViewBag.UserID + "_" + Todaydate.Year.ToString() + Todaydate.Month.ToString() + Todaydate.Day.ToString() + Todaydate.Hour.ToString() + Todaydate.Minute.ToString() + Todaydate.Second.ToString();
+
+}
+@if (Model != null && Model.Count() != 0)
+{
+    @*@if (ViewBag.getflag == 1)
+        {
+            <p style="color:red">@GlobalResEstate.lblChooseAcc</p>
+        }
+        else
+        {*@
+    <div id="scrollArea" class="modal-body">
+        <logo />
+        <table id="reportTable" class="table table-bordered" style="font-size: 11px !important; border-spacing:0px;" border="0" width="100%">
+            <thead>
+
+                <tr>
+                    <th colspan="6" style="text-align:center;vertical-align:middle; border:none !important;">
+                        @ViewBag.NamaSyarikat
+                        <br />
+                        (@GlobalResEstate.lblCompanyNo : @ViewBag.NoSyarikat)
+                        <br />
+                        @GlobalResEstate.WorkerAccReport
+                        <br />
+                        <label style="font-size:small">
+
+                        </label>
+                    </th>
+                </tr>
+                <tr>
+                    @*<td colspan="2" style="text-align:left; border:none !important;">
+                            <label style="font-size:small; font-weight:normal;margin-left:85%">Dicetak Oleh  : Nurul Izzati <br />Tarikh Dicetak: 08/12/2017 <br /> Masa Dicetak  : 12:15 PM</label><br />
+                            <label style="font-size:small; font-weight:normal;">&nbsp;&nbsp;&nbsp;Masa Dicetak: 12:15 PM</label>
+                        </td>*@
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+
+                    <tr>
+                        <th colspan="2" style="border-bottom:1px solid !important; border-top:none !important; border-left:none !important; border-right:none !important; border-bottom-color:red !important">@item.fld_Nopkj - @item.fld_Nama</th>
+                    </tr>
+                    <tr>
+                        @*<td>
+                                <label style="font-size:small; font-weight:normal;">No Pekerja</label><br />
+                                <label style="font-size:small; font-weight:normal;">Nama Pekerja</label><br />
+                                <label style="font-size:small; font-weight:normal;">No KP/Passport</label><br />
+                            </td>
+                            <td>
+                                <label style="font-size:small; font-weight:normal;">: @item.fld_Nopkj</label><br />
+                                <label style="font-size:small; font-weight:normal;">: @item.fld_Nama</label><br />
+                                <label style="font-size:small; font-weight:normal;">: @item.fld_Nokp </label><br />
+                            </td>*@
+                        <td style="border:none !important; width:50%; vertical-align:top; padding:0px !important">
+                            <table style="font-size:11px !important; padding:0px !important">
+                                <tr>
+                                    <td style="border:none !important;">
+                                        <label style="font-size:small; font-weight:normal;">@GlobalResEstate.hdrNoPkj</label><br />
+                                        <label style="font-size:small; font-weight:normal;">@GlobalResEstate.hdrName</label><br />
+                                        <label style="font-size:small; font-weight:normal;">@GlobalResEstate.hdrNoKp</label><br />
+
+                                    </td>
+                                    <td style="border:none !important;">
+                                        <label style="font-size:small; font-weight:normal;">: @item.fld_Nopkj</label><br />
+                                        <label style="font-size:small; font-weight:normal;">: @item.fld_Nama</label><br />
+                                        <label style="font-size:small; font-weight:normal;">: @item.fld_Nokp </label><br />
+
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td style="border:none !important; width:50%">
+                            <table style="font-size:11px !important">
+                                <tr>
+                                    <td style="border:none !important;">
+                                        <label style="font-size:small; font-weight:normal;">@GlobalResEstate.lblBankName</label><br />
+                                        <label style="font-size:small; font-weight:normal;">@GlobalResEstate.lblNoAcc</label><br />
+                                        <label style="font-size:small; font-weight:normal;">@GlobalResEstate.lblAccStatus</label><br />
+                                    </td>
+                                    <td style="border:none !important;">
+                                        <label style="font-size:small; font-weight:normal;">: @GetConfig.GetBank(item.fld_Kdbank, item.fld_NegaraID.Value, item.fld_SyarikatID.Value)</label><br />
+                                        <label style="font-size:small; font-weight:normal;">: @item.fld_NoAkaun</label><br />
+                                        <label style="font-size:small; font-weight:normal;">: @GetConfig.GetWebConfigDesc(item.fld_StatusAkaun, "statusaktif", item.fld_NegaraID, item.fld_SyarikatID)</label><br />
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+            @*<tfoot>
+                    <tr>
+                        <td colspan="2" style="text-align:left; border:none; margin-bottom:0px;">
+                            <label style="font-size:small; font-weight:normal;">Dicetak Oleh: Nurul Izzati bt. Roslan</label>
+                            <label style="font-size:small; font-weight:normal;">&nbsp;&nbsp;&nbsp;Tarikh Dicetak: 08/12/2017</label>
+                            <label style="font-size:small; font-weight:normal;">&nbsp;&nbsp;&nbsp;Masa Dicetak: 12:15 PM</label>
+                        </td>
+                    </tr>
+                </tfoot>*@
+        </table>
+        <newpage />
+    </div>
+    if (ViewBag.Print == null)
+    {
+    <div style="text-align:right; margin-top:10px">
+        @*<a href="#" id="printpage">Cetak Laporan</a>*@
+        @*<a href="#" id="downloadpdf2">Download PDF</a>
+            <a href="#" onclick="HTMLtoExcel('@uniquefilename')">Download Excel</a>*@
+
+        <a class="btn btn-default btn-sm" href="#" id="printpage">
+            <span class="glyphicon glyphicon-print"> </span> @GlobalResEstate.btnPrint
+        </a>
+        <a class="btn btn-default btn-sm" href="#" id="downloadpdf">
+            <span><img src="~/Asset/Images/pdf-icon.png" width="20px" height="20px" /></span> @GlobalResEstate.btnDownloadPdf
+        </a>
+        <a class="btn btn-default btn-sm" href="#" onclick="HTMLtoExcel('@uniquefilename')">
+            <span><img src="~/Asset/Images/excel-icon.png" width="20px" height="20px" /></span> @GlobalResEstate.btnDownloadExcel
+        </a>
+    </div>
+    }
+}
+@if (Model.Count() == 0)
+{
+    <div id="scrollArea2" class="modal-body" style="text-align: center">
+        <p style="color: red">@ViewBag.Message</p>
+
+    </div>
+}
+<style>
+    #page td {
+        padding: 2px;
+        margin: 2px;
+    }
+</style>
+
+<script>
+    $(document).ready(function () {
+
+        $("#printpage").click(function () {
+            var DivElement = document.getElementById("scrollArea").innerHTML;
+            var oldPage = document.body.innerHTML;
+            document.body.innerHTML = DivElement;
+            window.print();
+            document.body.innerHTML = oldPage;
+        })
+
+        $("#downloadpdf").click(function () {
+            //var RadioGroup = $('input[name=RadioGroup]:checked').val();
+            //var MonthList = $("#MonthList").val();
+            //var YearList = $("#YearList").val();
+            //var GroupList = $("#GroupList").val();
+            var StatusList = $("#StatusList").val();
+            //var WorkCategoryList = $("#WorkCategoryList").val();
+
+            //var StatusList = '';
+            //var WorkCategoryList = '';
+
+            var param = '/?StatusList=' + StatusList;
+            var controller = 'Report';
+            var action = 'PrintAccPdf';
+
+            var ajxfn = {};
+            ajxfn.url = "@Url.Action("PDFIndetifier", "PdfCreator")";
+            ajxfn.type = "POST";
+            ajxfn.data = JSON.stringify({ controller: controller, action: action, param: param });
+            ajxfn.datatype = "json";
+            ajxfn.contentType = "application/json";
+            ajxfn.success = function (result) {
+                //var win = window.open(result.link, '_blank');
+                //win.focus();
+                PDFObject.embed(result.link, "#searchAccReport", { height: "450px" });
+            };
+
+            ajxfn.error = function () {
+                $.simplyToast('@GlobalResEstate.msgError', 'danger');
+                $("#UpdateProgress1").css("display", "none");
+            };
+            $.ajax(ajxfn);
+
+            return false;
+        });
+    });
+</script>

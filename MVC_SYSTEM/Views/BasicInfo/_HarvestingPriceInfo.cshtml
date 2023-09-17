@@ -1,0 +1,62 @@
+﻿@{
+    var grid = new WebGrid(
+        canPage: true,
+        rowsPerPage: @ViewBag.PageSize,
+        canSort: false,
+        ajaxUpdateContainerId: "grid");
+
+    grid.Bind(Model.Content, rowCount: Model.TotalRecords, autoSortAndPage: false);
+
+    //grid.Pager(WebGridPagerModes.All);
+
+    if (@grid.TotalRowCount > 0)
+    {
+        <div class="text-center">@grid.TotalRowCount @Html.Label(GlobalResEstate.lblTabLevel)</div>
+
+        @grid.GetHtml(
+            htmlAttributes: new {id = "grid"},
+            tableStyle: "table table-striped table-bordered table-list table-hover",
+            headerStyle: "header_table",
+            alternatingRowStyle: "Grid-alt",
+            selectedRowStyle: "Grid-selected",
+            rowStyle: "Grid-rowstyle",
+            mode: WebGridPagerModes.All,
+            columns: grid.Columns(
+                grid.Column(header: GlobalResEstate.hdrNo
+                    , format: item => item.WebGrid.Rows.IndexOf(item) + 1
+                                      + Math.Round(Convert.ToDouble(grid.TotalRowCount / grid.PageCount) / grid.RowsPerPage)
+                                      * grid.RowsPerPage * grid.PageIndex, style: "count"),
+                grid.Column("KodPeringkat", GlobalResEstate.lblLevelCode, style: "kodperingkat"),
+                grid.Column("NamaPeringkat", GlobalResEstate.lblLevelName, style: "namaperingkat"),
+                grid.Column("HargaMenuai", GlobalResEstate.lblHarvestingPrice, style: "hargamenuai"),
+                grid.Column(GlobalResEstate.hdrAction, format: (item) =>
+                {
+                    if (item.ID != null)
+                    {
+                        var tindakan = "<a data-modal1='' href='" + @Url.Action("_HarvestingPriceInfoEdit", "BasicInfo") + "/?id=" + item.ID + "&jenisPeringkat=" + item.JenisPeringkat + "' class='btn btn-success' role='button' title='" + GlobalResEstate.lblIncentiveValueAdd + "' onclick='return DisplayProgressMessage2(this);'><i class='fa fa-edit fa-lg'></i></a>";
+                        return @Html.Raw(tindakan);
+                    }
+
+                    else
+                    {
+                        var tindakan = "<a data-modal1='' href='" + @Url.Action("_HarvestingPriceInfoCreate", "BasicInfo") + "/?kodPeringkat=" + item.KodPeringkat + "&jenisPeringkat=" + item.JenisPeringkat + "' class='btn btn-success' role='button' title='" + GlobalResEstate.lblIncentiveValueAdd + "' onclick='return DisplayProgressMessage2(this);'><i class='fa fa-plus fa-lg'></i></a>";
+                        return @Html.Raw(tindakan);
+                    }
+
+                }, canSort: false, style: "tindakan")
+
+                )
+            )
+    }
+
+    else
+    {
+        <hr/>
+        <div class="text-center">
+            @Html.Label((string) @ViewBag.Message)
+        </div>
+        <hr/>
+    }
+}
+
+

@@ -1,0 +1,205 @@
+﻿
+@{
+    ViewBag.Title = "Levels Info GMN";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+    AjaxOptions options = new AjaxOptions
+    {
+        HttpMethod = "Get",
+        UpdateTargetId = "searchResult",
+        InsertionMode = InsertionMode.Replace,
+        LoadingElementId = "UpdateProgress1"
+    };
+}
+
+
+<script src="~/Asset/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+
+@section scripts{
+    @Scripts.Render("~/Asset/Scripts/AjaxModal.js")
+}
+
+<section class="content-wrapper main-content clear-fix">
+    <div class="well bottom" style="padding-bottom:16px">
+        @using (Ajax.BeginForm("_LevelsInfoGMNSearch", "BasicInfo", null, options, new { @id = "LevelsInfoGMNSearch" }))
+        {
+            <div class="row">
+                <div class="col-sm-4">
+                    @*<label>Cost Centre</label>
+                    @Html.DropDownList("PktSearch", null, htmlAttributes: new { @class = "form-control" })*@
+
+                    @Html.Label(GlobalResEstate.lblSearch)
+                    @Html.TextBox("PktSearch", null, htmlAttributes: new { @class = "form-control", placeholder = "Free Type" })
+                </div>
+            </div>
+        }
+    </div>
+
+    <div class="well" style="margin-top: 7px;">
+        <div class="modal-body">
+            <div class="panel panel-primary">
+               
+                <div class="panel-heading">Level Basic</div>
+                <div class="panel-body">
+                    <div id="searchResult">
+                        @Html.Action("_LevelsInfoGMNSearch", new { CostCentreSearch = "0" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <a class="btn btn-success" data-modal1="" href="@Url.Action("PktOthrCreate", "BasicInfo")" id="btnCreate" onclick="return DisplayProgressMessage2(this);">Level Registration</a>
+            <a href=@Url.Action("Index", "BasicInfo") class="btn btn-warning" role="button" onclick="return DisplayProgressMessage2(this);">@GlobalResEstate.btnBack</a>
+        </div>
+    </div>
+</section>
+<!-- modal placeholder-->
+<div id='myModal1' class='modal fade in'>
+    <div class="modal-dialog" style="width: 75%">
+        <div class="modal-content">
+            <div id='myModalContent1'></div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .header_table th {
+        text-align: center;
+        vertical-align: middle !important;
+    }
+
+    .webGridClmn1 {
+        width: 100px;
+        font-size: 12px;
+        text-align: center;
+        vertical-align: middle !important;
+    }
+
+    .webGridClmn2 {
+        width: 100px;
+        font-size: 12px;
+        text-align: center;
+        vertical-align: middle !important;
+    }
+
+
+
+    .count {
+        width: 30px;
+        font-size: 12px;
+        text-align: center;
+        vertical-align: middle !important;
+    }
+
+    .checkbox {
+        width: 20px;
+        height: 20px;
+        vertical-align: middle !important;
+    }
+
+    .delete {
+        width: 50px;
+        font-size: 12px;
+        vertical-align: middle !important;
+    }
+
+    .tindakan {
+        width: 30px;
+        text-align: center;
+        vertical-align: middle !important;
+    }
+
+    .height {
+        height: 50px !important;
+    }
+</style>
+
+<script>
+    function resetSearch1() {
+        document.getElementById("PktSearch").value = "";
+        document.getElementById('btnCari').click();
+    }
+</script>
+
+
+
+
+@*<link href="~/Asset/ConfirmAlert/css/jquery-confirm.css" rel="stylesheet" />
+    <script src="~/Asset/ConfirmAlert/js/jquery-confirm.js"></script>
+    <div id="UpdateProgress1" style="display:none;">
+        <div class="progressTest">
+            <label>
+                @GlobalResEstate.msgWait
+            </label>
+        </div>
+    </div>
+    <section class="content-wrapper main-content clear-fix">
+        <div class="well" id="well">
+            @using (Html.BeginForm("LevelsInfoGMN", "BasicInfo", FormMethod.Post, new { id = "LevelsInfoGMN" }))
+            {
+                @Html.AntiForgeryToken()
+                <div class="form-horizontal">
+                    <div class="col-sm-12" id="selectionsection">
+                        <div class="panel panel-primary">
+                            <div class="panel-heading">MAKLUMAT ASAS PERINGKAT</div>
+                            <div class="panel-body">
+                                <div class="form-group">
+                                    <div class="col-sm-2">
+                                        <label>Cost Centre</label>
+                                        @Html.DropDownList("CostCentre", null, htmlAttributes: new { @class = "form-control" })
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <label>Kod Peringkat</label>
+                                        @Html.TextBox("KodPkt", "", new { @class = "form-control", @readonly = "readonly" })
+                                        @Html.Hidden("KodPktH", "")
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <label>Nama Peringkat</label>
+                                        @Html.TextBox("NamaPkt", "", new { @class = "form-control"})
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <label>Luas</label>
+                                        @Html.TextBox("Luas", "", new { @class = "form-control" })
+                                    </div>
+                                    <div class="col-sm-1" style="padding-top:30px;">
+                                        <label id="day"></label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer col-md-12" style="margin-top: 20px;">
+                    <a style="text-align:right" href="@Url.Action("Index", "CheckRollGMN")" class="btn btn-warning">@GlobalResEstate.btnBack</a>
+                </div>
+            }
+        </div>
+    </section>
+    <script>
+        $("#CostCentre").change(function () {
+            var CostCentre = $("#CostCentre").val();
+            if (CostCentre != 0) {
+                $("#UpdateProgress1").css("display", "");
+                var ajxfn = {};
+                ajxfn.url = "@Url.Action("GetKodPeringkat", "BasicInfo")";
+                ajxfn.type = "POST";
+                ajxfn.data = JSON.stringify({ CostCentre: CostCentre });
+                ajxfn.datatype = "json";
+                ajxfn.contentType = "application/json";
+                ajxfn.success = function (result) {
+                    $("#KodPkt").val(result.newpkt);
+                    $("#KodPktH").val(result.newpkt);
+                    $("#UpdateProgress1").css("display", "none");
+                };
+                ajxfn.error = function () {
+                    $.simplyToast('@GlobalResEstate.msgError', 'danger');
+                    $("#UpdateProgress1").css("display", "none");
+                };
+                $.ajax(ajxfn);
+            }
+            else {
+                $("#KodPkt").val('');
+                $("#KodPktH").val('');
+            }
+        });
+    </script>*@
+

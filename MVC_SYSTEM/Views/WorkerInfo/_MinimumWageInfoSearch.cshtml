@@ -1,0 +1,138 @@
+﻿@using MVC_SYSTEM.Class
+
+@{
+    GetTriager triager = new GetTriager();
+    GetConfig config = new GetConfig();
+}
+
+@{
+    var grid1 = new WebGrid(
+        canPage: true,
+        rowsPerPage: Model.PageSize,
+        canSort: false,
+        ajaxUpdateContainerId: "grid1");
+
+    grid1.Bind(Model.Content, rowCount: Model.TotalRecords, autoSortAndPage: false);
+    grid1.Pager(WebGridPagerModes.All);
+
+    if (@grid1.TotalRowCount > 0)
+    {
+        <div class="text-center">@grid1.TotalRowCount @Html.Label(GlobalResEstate.lblTotalRecord)</div>
+
+        @grid1.GetHtml(htmlAttributes: new { id = "grid1" }, // id for ajaxUpdateContainerId parameter
+            tableStyle: "table table-bordered table-striped table-list",
+            headerStyle: "header_table",
+            alternatingRowStyle: "Grid-alt",
+            selectedRowStyle: "Grid-selected",
+            rowStyle: "Grid-rowstyle",
+            mode: WebGridPagerModes.All,
+            columns: grid1.Columns(
+                grid1.Column(header: GlobalResEstate.hdrNo
+                    , format: item => item.WebGrid.Rows.IndexOf(item) + 1
+                                      + Math.Round(Convert.ToDouble(grid1.TotalRowCount / grid1.PageCount) / grid1.RowsPerPage)
+                                      * grid1.RowsPerPage * grid1.PageIndex, style: "count"),
+                grid1.Column(columnName: "NoPkj", header: GlobalResEstate.hdrNoPkj, style: "nopkj"),
+                grid1.Column(columnName: "Nama", header: GlobalResEstate.hdrName, style: "namapkj"),
+                grid1.Column(columnName: "Nokp", header: GlobalResEstate.hdrNoKp, style: "nokp"),
+                grid1.Column(
+                    GlobalResEstate.hdrWorkAktvt, style: "jeniskerja",
+                    format: (item) => config.GetWebConfigDesc(item.KategoriKerja, "designation", item.NegaraID, item.SyarikatID)
+                    ),
+                grid1.Column(columnName: "JumlahHariBekerja", header:GlobalResEstate.hdrTotalWorkingDay, style: "haribekerja"),
+                grid1.Column(columnName: "GajiBulanan", header: GlobalResEstate.hdrGrossSalary +"(RM)", style: "nokp"),
+                grid1.Column(columnName: "Sebab", header: GlobalResEstate.hdrAction, style: "sebab", 
+                    format: @<text>
+                                <span id="reason" class="display-mode">@config.GetWebConfigDesc(item.Sebab, "sebabGajiMinima", item.NegaraID, item.SyarikatID)</span>
+                                @Html.DropDownList("ReasonLists", new SelectList(ViewBag.ReasonList, "Value", "Text", item.Sebab), htmlAttributes: new { @class = "edit-mode form-control", Style = "display:none" })
+                            </text>),
+                grid1.Column(columnName: "PelanTindakan", header: GlobalResEstate.hdrActionPlan, style: "sebab", 
+                    format: @<text>
+                                <span id="action" class="display-mode">@config.GetWebConfigDesc(item.PelanTindakan, "tindakanGajiMinima", item.NegaraID, item.SyarikatID)</span>
+                                @Html.DropDownList("ActionLists", new SelectList(ViewBag.ActionList, "Value", "Text", item.PelanTindakan), htmlAttributes: new { @class = "edit-mode form-control", Style = "display:none" })
+                             </text>),
+                grid1.Column(GlobalResEstate.hdrAction, format: (item) =>
+                {
+                    if (item.PelanTindakan != null && item.Sebab != null)
+                    {
+                        var nopkj = @item.NoPkj;
+                        var tindakan = "<button class='edit-book display-mode btn btn-success btn-block' title='Kemaskini Sebab Gaji Minima Pekerja'><i class='fa fa-edit fa-lg'></i></button>" +
+                                        "<button class='save-book edit-mode btn btn-success btn-block' id='" + nopkj + "' style='display: none;' title='Simpan Sebab Gaji Minima Pekerja'><i class='fa fa-check fa-lg'></i></button>" +
+                                        "<button class='edit-mode cancel btn btn-danger btn-block' style='display: none;' title='Batal'><i class='fa fa-remove fa-lg'></i></button>";
+                        return @Html.Raw(tindakan);
+                    }
+                    else
+                    {
+                        var nopkj = @item.NoPkj;
+                        var tindakan = "<button class='edit-book display-mode btn btn-success btn-block' title='Tambah Sebab Gaji Minima Pekerja'><i class='fa fa-plus fa-lg'></i></button>" +
+                                       "<button class='save-book edit-mode btn btn-success btn-block' id='" + nopkj + "' style='display: none;' title='Simpan Sebab Gaji Minima Pekerja'><i class='fa fa-check fa-lg'></i></button>" +
+                                       "<button class='edit-mode cancel btn btn-danger btn-block' style='display: none;' title='Batal'><i class='fa fa-remove fa-lg'></i></button>";
+                        return @Html.Raw(tindakan);
+                    }
+                }, canSort: false, style: "tindakan")
+                ));
+        ;
+    }
+    else
+    {
+        <hr />
+        <div class="text-center">
+            @Html.Label(GlobalResEstate.msgErrorSearch)
+        </div>
+
+        <hr />
+    }
+}
+
+<script>
+    function displayError() {
+        $.simplyToast('Kumpulan yang masih mempunyai ahli tidak boleh dihapuskan', 'danger');
+    }
+</script>
+
+<script>
+    $(function () {
+        $('.edit-mode').hide();
+        $('.edit-book').on('click',
+            function () {
+                var tr = $(this).parents('tr:first');
+                tr.find('.edit-mode, .display-mode').toggle();
+            });
+        $('.cancel').on('click',
+            function () {
+                var tr = $(this).parents('tr:first');
+                tr.find('.edit-mode, .display-mode').toggle();
+            });
+        $('.save-book').on('click',
+            function () {
+                var tr = $(this).parents('tr:first');
+                var nopkj = $(this).prop('id');
+                console.log(nopkj);
+                var idsebab = $(this).prop('data-field');
+                console.log(idsebab);
+                var reason = tr.find('#ReasonLists').val();
+                console.log(reason);
+                var action = tr.find('#ActionLists').val();
+                console.log(action);
+                var month = $('#MonthDdl').val();
+                console.log(month);
+                var year = $('#YearDdl').val();
+                console.log(year);
+
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("addReasonInfo", "WorkerInfo")',
+                    dataType: 'json',
+                    contentType: 'application/json',
+                    async: false,
+                    data: JSON.stringify({ nopkj: nopkj, reason: reason, action: action, month: month, year: year }),
+                    success: function(result) {
+                        $.simplyToast(result.msg, result.status);
+                        if (result.status == "success") {
+                            //tr.find('.edit-mode, .display-mode').toggle();
+                            $("#minimumWageList").load('@Url.Action("_MinimumWageInfoSearch", "WorkerInfo")', { MonthList: month, YearList: year });
+                        }
+                    }
+                });
+            });
+    });
+</script>

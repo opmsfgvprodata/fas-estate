@@ -1,0 +1,115 @@
+﻿@model MVC_SYSTEM.Models.tbl_PkjmastEditKwsp
+@using MVC_SYSTEM.Class;
+
+@{
+    ViewBag.Title = "KwspSocsoAcc";
+    GetConfig GetConfig = new GetConfig();
+    string statusPkj = GetConfig.GetWebConfigDesc(Model.fld_Kdaktf, "statusaktif", Model.fld_NegaraID, Model.fld_SyarikatID);
+}
+
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 class="modal-title">@GlobalResEstate.titleUpdate</h3>
+</div>
+<section class="content-wrapper main-content clear-fix">
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        <div class="modal-body">
+            <div class="form-horizontal">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">@GlobalResEstate.lblWorkerKwspAcc</div>
+                    <div class="panel-body">
+                        <div class="form-group">
+                            <div class="col-sm-5">
+                                <label class="control-label col-md-3">@GlobalResEstate.hdrNoPkj</label>
+                                <div class="col-md-9">
+                                    @Html.TextBoxFor(model => model.fld_Nopkj, new { @class = "form-control", @readonly = "readonly" })
+                                    @Html.ValidationMessageFor(model => model.fld_Nopkj, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="col-sm-5">
+                                <label class="control-label col-md-3">@GlobalResEstate.hdrNoKp</label>
+                                <div class="col-md-9">
+                                    @Html.TextBoxFor(model => model.fld_Nokp, new { @class = "form-control", @readonly = "readonly" })
+                                    @Html.ValidationMessageFor(model => model.fld_Nokp, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-sm-5">
+                                <label class="control-label col-md-3">@GlobalResEstate.hdrName</label>
+                                <div class="col-md-9">
+                                    @Html.TextBoxFor(model => model.fld_Nama, new { @class = "form-control", @readonly = "readonly" })
+                                    @Html.ValidationMessageFor(model => model.fld_Nama, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="col-sm-5">
+                                <label class="control-label col-md-3">@GlobalResEstate.lblWorkerStatus</label>
+                                <div class="col-md-9">
+                                    @Html.TextBox("fld_Kdaktf2", statusPkj, new { @class = "form-control", @readonly = "readonly" })
+                                </div>
+                            </div>
+                        </div>
+
+                        @if (Model.fld_Kdrkyt == "MA")
+                        {
+                            <div class="form-group">
+                                <div class="col-sm-5">
+                                    <label class="control-label col-md-3">@GlobalResEstate.lblKwspSocsoStatus</label>
+                                    <div class="col-md-9">
+                                        @Html.DropDownList("fld_StatusKwspSocso", null, htmlAttributes: new { @class = "form-control" })
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-sm-5">
+                                    <label class="control-label col-md-3">KWSP Code</label>
+                                    <div class="col-md-9">
+                                        @Html.DropDownListFor(model => model.fld_KodKWSP, new SelectList(ViewBag.KwspContributionList, "Value", "Text", Model.fld_KodKWSP), htmlAttributes: new { @class = "form-control" })
+                                    </div>
+                                </div>
+                                <div class="col-sm-5">
+                                    <label class="control-label col-md-3">@GlobalResEstate.lblNoKwsp</label>
+                                    <div class="col-md-9">
+                                        @Html.TextBoxFor(model => model.fld_Nokwsp, new { @class = "form-control" })
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                        <div class="form-group">
+                            @if (Model.fld_Kdrkyt == "MA")
+                            {
+                                <div class="col-sm-5">
+                                    <label class="control-label col-md-3">Socso Code</label>
+                                    <div class="col-md-9">
+                                        @Html.DropDownListFor(model => model.fld_KodSocso, new SelectList(ViewBag.SocsoContributionList, "Value", "Text", Model.fld_KodSocso), htmlAttributes: new { @class = "form-control" })
+                                    </div>
+                                </div>
+                            }
+                            <div class="col-sm-5">
+                                <label class="control-label col-md-3">@GlobalResEstate.lblNoSocso</label>
+                                <div class="col-md-9">
+                                    @Html.TextBoxFor(model => model.fld_Noperkeso, new { @class = "form-control" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <input class="btn btn-primary" type="submit" value=@GlobalResEstate.btnSave />
+            <button class="btn btn-warning" data-dismiss="modal">@GlobalResEstate.btnBack</button>
+        </div>
+    }
+</section>
+
+<script>
+    $("form").removeData("validator");
+    $("form").removeData("unobtrusiveValidation");
+    $.validator.unobtrusive.parse("form");
+</script>

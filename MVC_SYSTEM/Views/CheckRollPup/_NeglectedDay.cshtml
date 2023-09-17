@@ -1,0 +1,74 @@
+﻿
+<section class="content-wrapper main-content clear-fix">
+    <div class="modal-body">
+        <div class="form-horizontal">
+            <div class="panel panel-primary">
+                <div class="panel-heading">Rainning</div>
+                <div class="panel-body">
+                    <div class="form-group">
+                        <div class="col-sm-2">
+                            <label id="catsel">Type Charge</label>
+                            @Html.DropDownList("JenisChargeHT", null, htmlAttributes: new { @class = "form-control" })
+                        </div>
+                        <div class="col-sm-3">
+                            <label id="catsel">Period Working</label>
+                            @Html.DropDownList("PilihanMasaHT", null, htmlAttributes: new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-2">
+                            <label id="catsel">@GlobalResEstate.lblAktvtType</label>
+                            @Html.DropDownList("JnisAktvtHT", null, htmlAttributes: new { @class = "form-control" })
+                        </div>
+                        <div class="col-sm-3">
+                            <label id="catsel">@GlobalResEstate.lblLevelType</label>
+                            @Html.DropDownList("JnisPktHT", null, htmlAttributes: new { @class = "form-control" })
+                        </div>
+                        <div class="col-sm-4">
+                            <label id="catsel">@GlobalResEstate.lblLevelSelection</label>
+                            @Html.DropDownList("PilihanPktHT", null, htmlAttributes: new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-2">
+                            <label id="LblNNCCHT">Network No/Cost Center</label>
+                            @Html.DropDownList("NNCCHT", null, htmlAttributes: new { @class = "form-control" })
+                            @Html.Hidden("SelectionNNCCHT")
+                        </div>
+                        <div class="col-sm-2">
+                            <label id="catsel">SAP Code Activity</label>
+                            @Html.DropDownList("SAPPilihanAktvtHT", null, htmlAttributes: new { @class = "form-control" })
+                        </div>
+                        <div class="col-sm-2">
+                            <label id="catsel">@GlobalResEstate.hdrActvtCode</label>
+                            @Html.DropDownList("PilihanAktvtHT", null, htmlAttributes: new { @class = "form-control" })
+                        </div>
+                        <div class="col-sm-6">
+                            <label style="float:left;" id="sapglneg"> </label>
+                        </div>
+                        @*<div class="col-sm-1" id="descactvtydiv">
+                            <a href="#" id="descactvtykong" name="descactvtykong" title="@GlobalResEstate.msgInfo"><span class="glyphicon glyphicon-question-sign"></span></a>
+                        </div>*@
+                    </div>
+                </div>
+                <div class="panel-heading">Manager Approval</div>
+                <div class="panel-body">
+                    <div class="form-group">
+                        <div class="col-sm-3">
+                            <label>Manager ID</label>
+                            <input type="text" id="ManagerID" name="ManagerID" class="form-control" value="" required />
+                        </div>
+                        <div class="col-sm-3">
+                            <label>Manager Password</label>
+                            <input type="password" id="ManagerPassword" name="ManagerPassword" value="" class="form-control" required />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer" style="margin-top: -20px;">
+        <button class="btn btn-success" name="SaveNeg" id="SaveNeg" type="button">@GlobalResEstate.btnSave</button>
+        <button class="btn btn-warning" data-dismiss="modal" id="back">@GlobalResEstate.btnBack</button>
+    </div>
+</section>

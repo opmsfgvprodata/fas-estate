@@ -1,0 +1,96 @@
+﻿@model MVC_SYSTEM.ViewingModels.PagedList<MVC_SYSTEM.ViewingModels.vw_KumpulanKerja>
+
+@using MVC_SYSTEM.Class;
+@{
+    AjaxOptions options = new AjaxOptions
+    {
+        HttpMethod = "Get",
+        UpdateTargetId = "searchResultWorkerGroupSelection",
+        InsertionMode = InsertionMode.Replace,
+        LoadingElementId = "UpdateProgress1"
+    };
+}
+
+<script src="~/Asset/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+
+<div class="modal-header">
+<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+<h3 class="modal-title">SENARAI PILIHAN KUMPULAN</h3>
+</div>
+
+<div class="modal-body">
+    <div class="form-horizontal">
+        
+        @using (Ajax.BeginForm("_WorkerGroupSearch", "WorkerInfo", null, options, new {@id = "_WorkerGroupSearchForm" }))
+        {
+            <div class="form-group">
+                <label class="control-label col-sm-3">Carian Kumpulan:</label>
+                <div class="col-sm-6">
+                    @Html.TextBox("filter", null, htmlAttributes: new {@class = "form-control", placeholder = "Sila Masukkan Kod Kumpulan atau Jenis Kerja atau Keterangan Kumpulan", @id = "txtfilter1"})
+
+                    <input id="workerid" 
+                           name="workerid" 
+                           type="hidden" 
+                           value="@ViewBag.workerid" />
+                </div>
+                <div class="col-sm-3 btn-group">
+                    <button type="submit" id="btnCariKumpulan" class="btn btn-primary"><span class="glyphicon glyphicon-search"></span> Cari</button>
+                    <input type="button" id="btnResetCarian" class="btn btn-primary" value="Senarai Penuh" onclick="javascript:resetSearch();" />
+                </div>
+            </div>
+        }
+
+        <div class="panel-body">
+                <div id="searchResultWorkerGroupSelection">
+                    @Html.Action("_WorkerGroupSearch", new { filter = @ViewBag.filter })
+                </div>     
+        </div>
+    </div>
+</div>
+<div class="modal-footer" style="margin-top: -35px;">
+    <button class="btn btn-warning" data-dismiss="modal">@GlobalResEstate.btnBack</button>
+</div>
+
+<style>
+    .header_table th {
+        text-align: center;
+    }
+
+    .count {
+        width: 60px;
+        font-size: 12px;
+        text-align: center;
+    }
+
+    .kodkmpln {
+        width: 150px;
+        font-size: 12px;
+        text-align: center;
+    }
+
+    .jeniskerja {
+        width: 230px;
+        font-size: 12px;
+        text-align: center;
+    }
+
+    .bilanganahli {
+        width: 80px;
+        font-size: 12px;
+        text-align: center;
+    }
+
+    .tindakan {
+        width: 100px;
+        text-align: center;
+    }
+</style>
+
+
+
+<script>
+    function resetSearch() {
+        document.getElementById("txtfilter1").value = "";
+        document.getElementById('btnCariKumpulan').click();
+    }
+</script>

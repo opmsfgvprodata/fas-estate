@@ -1,0 +1,73 @@
+﻿@model MVC_SYSTEM.Models.vw_PkjCarumanTambahan
+
+@if (Model != null)
+{
+    <div id="divLoading1" style="display:none;">
+        <div class="progressTest">
+            <label>
+                @GlobalResEstate.msgWait
+            </label>
+        </div>
+    </div>
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 class="modal-title">Caruman Tambahan</h3>
+    </div>
+
+    using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        <div class="modal-body">
+            <div class="panel panel-primary">
+                <div class="panel-heading">Aktifkan Untuk Caruman @Model.fld_KodCaruman Untuk @Model.fld_Nopkj - @Model.fld_Nama</div>
+                <div class="panel-body">
+                    <div class="form-horizontal">
+                        <div class="form-group">
+                            <label class="control-label col-md-3">No Pekerja : </label>
+                            <div class="col-md-2">
+                                @Html.EditorFor(model => model.fld_Nopkj, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-3">Nama Perkerja : </label>
+                            <div class="col-md-5">
+                                @Html.EditorFor(model => model.fld_Nama, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            @Html.HiddenFor(model => model.fld_ID)
+            <input class="btn btn-success" type="submit" value=@GlobalResEstate.btnGo />
+            <button class="btn btn-danger" id="incentiveAddBackButton" data-dismiss="modal">@GlobalResEstate.btnBack</button>
+        </div>
+    }
+}
+else
+{
+    <div class="modal-body">
+        <div class="panel panel-primary">
+            <div class="panel-heading">Wrong Request</div>
+            <div class="panel-body">
+                <p>You entered wrong request</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-footer">
+        <button class="btn btn-danger" id="incentiveAddBackButton" data-dismiss="modal">@GlobalResEstate.btnBack</button>
+    </div>
+}
+
+<script src="~/Asset/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+
+<script>
+    $("form").removeData("validator");
+    $("form").removeData("unobtrusiveValidation");
+    $.validator.unobtrusive.parse("form");
+</script>
+
+

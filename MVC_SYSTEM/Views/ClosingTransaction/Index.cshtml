@@ -1,0 +1,91 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+<section class="content-wrapper main-content clear-fix">
+    <div class="well">
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+            <div class="modal-body">
+                <div class="form-horizontal">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">Business Transaction</div>
+                        <div class="panel-body">
+                            <div class="form-group">
+                                <div class="col-sm-6">
+                                    <label for="ListReport">Transaction Information List</label>
+                                    @Html.DropDownList("CloseTransactionList", null, htmlAttributes: new { @class = "form-control" })
+                                </div>
+                                <div id="sublist" class="col-sm-6">
+                                    <label for="ListReport">Transaction Information Sub List</label>
+                                    @Html.DropDownList("CloseTransactionSubList", null, htmlAttributes: new { @class = "form-control" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer-report">
+                    <input class="btn btn-primary" type="submit" name="upload" id="upload" value=@GlobalResEstate.btnGo onclick="return DisplayProgressMessage(this);" />
+                </div>
+            </div>
+        }
+    </div>
+</section>
+
+<script>
+    $(document).ready(function () {
+        console.log($("#CloseTransactionList").val());
+        var SubList = {};
+        //var disableoption = "";
+        SubList.url = "@Url.Action("GetSubList", "ClosingTransaction")";
+        SubList.type = "POST";
+        SubList.data = JSON.stringify({ ListID: $("#CloseTransactionList").val() });
+        SubList.datatype = "json";
+        SubList.contentType = "application/json";
+        SubList.success = function (sublist) {
+            $("#CloseTransactionSubList").empty();
+            if (sublist.length != 0) {
+                $("#sublist").removeClass("hidden");
+                $.simplyToast('@GlobalResEstate.msgSubMenu', 'success');
+                for (var i = 0; i < sublist.length; i++) {
+                    $("#CloseTransactionSubList").append("<option value=" + sublist[i].Value + ">" + sublist[i].Text + "</option>");
+                }
+            }
+            else {
+                $("#CloseTransactionSubList").empty();
+                $("#sublist").addClass("hidden");
+            }
+        };
+        SubList.error = function () { $.simplyToast('@GlobalResEstate.msgError', 'error'); };
+        $.ajax(SubList);
+
+        $("#CloseTransactionList").change(function () {
+            var SubList = {};
+            //var disableoption = "";
+            SubList.url = "@Url.Action("GetSubList", "ClosingTransaction")";
+            SubList.type = "POST";
+            SubList.data = JSON.stringify({ ListID: $("#CloseTransactionList").val() });
+            SubList.datatype = "json";
+            SubList.contentType = "application/json";
+            SubList.success = function (sublist) {
+                $("#CloseTransactionSubList").empty();
+                if (sublist.length != 0) {
+                    $("#sublist").removeClass("hidden");
+                    $.simplyToast('@GlobalResEstate.msgSubMenu', 'success');
+                    for (var i = 0; i < sublist.length; i++) {
+                        $("#CloseTransactionSubList").append("<option value=" + sublist[i].Value + ">" + sublist[i].Text + "</option>");
+                    }
+                }
+                else {
+                    $("#CloseTransactionSubList").empty();
+                    $("#sublist").addClass("hidden");
+                }
+            };
+            SubList.error = function () { $.simplyToast('@GlobalResEstate.msgError', 'error'); };
+            $.ajax(SubList);
+        });
+    });
+</script>

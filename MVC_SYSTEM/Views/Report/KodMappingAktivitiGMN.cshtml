@@ -1,0 +1,237 @@
+﻿@using MVC_SYSTEM.Class;
+@model IEnumerable<MVC_SYSTEM.MasterModels.vw_GmnMapping>
+
+@{
+    ViewBag.Title = "KodMappingAktivitiGMN";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+    System.Globalization.DateTimeFormatInfo mfi = new System.Globalization.DateTimeFormatInfo();
+    GetConfig GetConfig = new GetConfig();
+    int bill = 0;
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <section class="content-wrapper main-content clear-fix">
+        <div class="well bottom" style="padding-bottom:16px;">
+            <div class="row">
+                <div class="col-sm-2" id="divlist">
+                    @Html.Label(GlobalResEstate.lblGmnAktiviti)
+                    @Html.DropDownList("KategoriAktiviti", null, htmlAttributes: new { @class = "form-control" })
+                   
+                </div>
+                <div class="col-sm-2" id="divlist2">
+                    @Html.Label(GlobalResEstate.lblGmnCostC)
+                    @Html.DropDownList("Costcnt", null, htmlAttributes: new { @class = "form-control" })
+                   
+                </div>
+                <div class="col-sm-2" style="padding-top:25px;">
+                    <input class="btn btn-primary btn-block" type="submit" name="Lihat" id="Lihat" value="@GlobalResEstate.btnView" onclick="return DisplayProgressMessage(this);" />
+                </div>
+            </div>
+        </div>
+        <div class="well" style="margin-top:7px;">
+            <div class="panel panel-primary">
+                <div class="panel-heading">@GlobalResEstate.lblGmnCode.ToUpper()</div>
+                <div class="panel-body">
+                    @if (ViewBag.getflag == 1)
+                    {
+                        <p style="color:red">@GlobalResEstate.msgKodGmn</p>
+                    }
+                    else
+                    {
+                        <div id="scrollArea" class="modal-body">
+                            <logo />
+                            <table class="table table-hover table-bordered" style="font-size: 11px;" border="0" id="tblSample">
+                                @foreach (var pkjCC in Model.Select(s => new { s.fld_KodGL,s.fld_WilayahID, s.fld_NegaraID, s.fld_SyarikatID, s.fld_LadangID }).Distinct())
+                                {
+                                    bill = 0;
+                                    <thead>
+                                        <tr>
+                                            <th colspan="10" style="text-align:center;vertical-align:middle;">
+                                                @ViewBag.NamaSyarikat
+                                                <br />
+                                                (@GlobalResEstate.lblCompanyNo : @ViewBag.NoSyarikat)
+                                                <br />
+                                            </th>
+                                        </tr>
+                                        <tr>
+                                            <th colspan="10" bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">
+                                                @GlobalResEstate.lblGLCodeGL : @pkjCC.fld_KodGL 
+                                            </th>
+                                        </tr>
+                                        <tr>
+                                            @* bil| cost center |kategori |GL |Kod Aktiviti *@
+                                            <th bgcolor="#ffcc80" style="color:black; text-align:center; vertical-align:middle !important; border:1px solid black;" border="1">@GlobalResEstate.hdrNo</th>
+                                            <th bgcolor="#ffcc80" style="color:black; text-align:center; vertical-align:middle !important; border:1px solid black;" border="1">@GlobalResEstate.lblEstateName</th>
+                                            <th bgcolor="#ffcc80" style="color:black; text-align:center; vertical-align:middle !important; border:1px solid black;" border="1" >@GlobalResEstate.lblCostC</th>
+                                            <th bgcolor="#ffcc80" style="color:black; text-align:center; vertical-align:middle !important; border:1px solid black;" border="1">@GlobalResEstate.lblKat</th>
+                                            <th bgcolor="#ffcc80" style="color:black; text-align:center; vertical-align:middle !important; border:1px solid black;" border="1">@GlobalResEstate.lblGL</th>
+                                            <th bgcolor="#ffcc80" style="color:black; text-align:center; vertical-align:middle !important; border:1px solid black;" border="1">@GlobalResEstate.lblGmnAktivitiCode</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var item in Model.Where(x => x.fld_KodGL == pkjCC.fld_KodGL))
+                                        {
+                                            //string Amt = @GetTriager.GetTotalForMoney(item.fldKredit);
+                                            bill = bill + 1;
+                                            <tr>
+                                                <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                                    @bill
+                                                    
+                                                </td>
+                                                <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                                    @item.fld_LdgName
+                                                </td>
+                                                <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                                    @item.fld_CostCentre
+                                                </td>
+                                                <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                                   @item.fld_Kategori
+                                                </td>
+                                                <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                                    @item.fld_KodAktvt
+                                                </td>
+                                                <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                                    @item.fld_Desc
+                                                   
+                                                </td>                                              
+                                            </tr>
+                                        }
+                                    </tbody>
+                                }
+                            </table>
+                            <newpage />
+                        </div>
+                        <div style="text-align:right; margin-top:10px">
+                            <a class="btn btn-default btn-sm" href="#" id="printpage">
+                                <span class="glyphicon glyphicon-print"> </span> @GlobalResEstate.btnPrint
+                            </a>
+                            <a class="btn btn-default btn-sm" href="#" id="downloadpdf">
+                                <span><img src="~/Asset/Images/pdf-icon.png" width="20px" height="20px" /></span> @GlobalResEstate.btnDownloadPdf
+                            </a>
+                            <a class="btn btn-default btn-sm" href="#" onclick="HTMLtoExcel('')">
+                                <span><img src="~/Asset/Images/excel-icon.png" width="20px" height="20px" /></span> @GlobalResEstate.btnDownloadExcel
+                            </a>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </section>
+}
+
+<script>
+    $("#KategoriAktiviti").change(function () {
+        console.log($("#KategoriAktiviti").val());
+            $("#UpdateProgress1").css("display", "");
+            $("#workdata").css("display", "none");
+            var ajxfn = {};
+            ajxfn.url = "@Url.Action("GetReportGMN", "Report")";
+            ajxfn.type = "POST";
+            ajxfn.data = JSON.stringify({ KategoriAktiviti: $("#KategoriAktiviti").val() });
+            ajxfn.datatype = "json";
+            ajxfn.contentType = "application/json";
+            ajxfn.success = function (result) {
+                $('#Costcnt').empty();
+                $('#Costcnt').empty();
+                for (var i = 0; i < result.PilihAktiviti.length; i++) {
+                    $("#Costcnt").append("<option value=" + result.PilihAktiviti[i].Value + ">" + result.PilihAktiviti[i].Text + "</option>");
+                }
+                $("#UpdateProgress1").css("display", "none");
+            };
+            ajxfn.error = function () {
+                $.simplyToast('@GlobalResEstate.msgError', 'danger');
+                $("#UpdateProgress1").css("display", "none");
+            };
+            $.ajax(ajxfn);
+        });
+</script>
+
+@*<script type="text/javascript">
+    function findBlocks(theTable) {
+        if ($(theTable).data('hasblockrows') == null) {
+            //console.log('findBlocks'); // to prove we only run this once
+
+            // we will loop through the rows but skip the ones not in a block
+            var rows = $(theTable).find('tr');
+            for (var i = 0; i < rows.length;) {
+
+                var firstRow = rows[i];
+
+                // find max rowspan in this row - this represents the size of the block
+                var maxRowspan = 1;
+                $(firstRow).find('td').each(function () {
+                    var attr = parseInt($(this).attr('rowspan') || '1', 10)
+                    if (attr > maxRowspan) maxRowspan = attr;
+                });
+
+                // set to the index in rows we want to go up to
+                maxRowspan += i;
+
+                // build up an array and store with each row in this block
+                // this is still memory-efficient, as we are just storing a pointer to the same array
+                // ... which is also nice becuase we can build the array up in the same loop
+                var blockRows = [];
+                for (; i < maxRowspan; i++) {
+                    $(rows[i]).data('blockrows', blockRows);
+                    blockRows.push(rows[i]);
+                }
+
+                // i is now the start of the next block
+            }
+
+            // set data against table so we know it has been inited (for if we call it in the hover event)
+            $(theTable).data('hasblockrows', 1);
+        }
+    }
+
+    $("td").hover(function () {
+        $el = $(this);
+        //findBlocks($el.closest('table')); // you can call it here or onload as below
+        $.each($el.parent().data('blockrows'), function () {
+            $(this).find('td').addClass('hover');
+        });
+    }, function () {
+        $el = $(this);
+        $.each($el.parent().data('blockrows'), function () {
+            $(this).find('td').removeClass('hover');
+        });
+    });
+
+    findBlocks($('#tblSample'));
+</script>*@
+
+
+@*<script>
+    //function MergeCommonRows($('#tblSample')) {
+    var firstColumnBrakes = [];
+    // iterate through the columns instead of passing each column as function parameter:
+    for (var i = 1; i <= $('#tblSample').find('th').length; i++) {
+        var previous = null, cellToExtend = null, rowspan = 1;
+        $('#tblSample').find("td:nth-child(" + i + ")").each(function (index, e) {            
+                if (i !== 1 && i !== 5 && i !== 6) {
+                    console.log(i);
+                    var jthis = $(this), content = jthis.text();
+                    // check if current row "break" exist in the array. If not, then extend rowspan:
+                    if (previous == content && content !== "" && $.inArray(index, firstColumnBrakes) == -1) {
+                        // hide the row instead of remove(), so the DOM index won't "move" inside loop.
+                        jthis.addClass('hidden');
+                        cellToExtend.attr("rowspan", (rowspan = rowspan + 1));
+                    } else {
+
+                        if (i == 1) firstColumnBrakes.push(index);
+                        rowspan = 1;
+                        previous = content;
+                        cellToExtend = jthis;
+                    }
+                }
+                
+        });
+    }
+    $('td.hidden').remove();
+
+    $(document).ready(function () {
+    });
+
+</script>*@

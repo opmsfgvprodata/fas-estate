@@ -1,0 +1,127 @@
+﻿@model IEnumerable<MVC_SYSTEM.Models.sp_YieldBracketTable_Result>
+@using MVC_SYSTEM.Class;
+
+@{
+    ViewBag.Title = "YieldBracketDetails";
+    //Layout = "~/Views/Shared/_LayoutMain.cshtml";
+    System.Globalization.DateTimeFormatInfo mfi = new System.Globalization.DateTimeFormatInfo();
+    GetConfig GetConfig = new GetConfig();
+    var monthname = "";
+    decimal? HasilSum = 0;
+    decimal HargaManual = 0;
+    decimal HargaMesin = 0;
+}
+
+@if (Model.Count() > 0)
+{
+    <div id="scrollArea">
+        <logo />
+        <table class="table table-bordered" style="font-size: 11px;" border="0" id="tblSample">
+            <thead>
+                <tr>
+                    <th colspan="10" style="text-align:center;vertical-align:middle;">
+                        @ViewBag.NamaSyarikat
+                        <br />
+                        (@GlobalResEstate.lblCompanyNo : @ViewBag.NoSyarikat)
+                        <br />
+                        @GlobalResEstate.lblYieldBracket
+                    </th>
+                </tr>
+                <tr>
+                    <th bgcolor="#ffcc80" style="color: black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">@GlobalResEstate.lblLevel</th>
+                    <th bgcolor="#ffcc80" style="color: black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">@GlobalResEstate.lblYear</th>
+                    <th bgcolor="#ffcc80" style="color: black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">@GlobalResEstate.lblMonth</th>
+                    <th bgcolor="#ffcc80" style="color: black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">@GlobalResEstate.hdrOutcome (Tan/Hek)</th>
+                    <th bgcolor="#ffcc80" style="color: black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">@GlobalResEstate.hdrTotalOutcome (Tan/Hek)</th>
+                    <th bgcolor="#ffcc80" style="color: black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">@GlobalResEstate.hdrManualValue</th>
+                    <th bgcolor="#ffcc80" style="color: black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">@GlobalResEstate.hdrMachineValue</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var kod in Model.Select(s => s.fldKod).Distinct())
+                {
+                    int totalmonth = Model.Where(x => x.fldKod == kod).Select(s => s.fldBulan).Count();
+                    if (totalmonth == 12)
+                    {
+                        foreach (var item in Model.Where(x => x.fldKod == kod))
+                        {
+                            monthname = mfi.GetAbbreviatedMonthName(Convert.ToInt32(item.fldBulan));
+                            HasilSum = Model.Where(x => x.fldKod == kod).Select(s => s.fldHasilTan).Sum();
+                            HargaManual = GetConfig.UpahManual(HasilSum.Value, item.fldNegaraID, item.fldSyarikatID).Value;
+                            HargaMesin = GetConfig.UpahMesin(HasilSum.Value, item.fldNegaraID, item.fldSyarikatID).Value;
+                            <tr>
+                                <td align="center" style="vertical-align: middle !important; border: 1px solid black;" border="1">
+                                    @item.fldKod
+                                </td>
+                                <td align="center" style="vertical-align: middle !important; border: 1px solid black;" border="1">
+                                    @item.fldTahun
+                                </td>
+                                <td align="center" style="vertical-align: middle !important; border: 1px solid black;" border="1">
+                                    @monthname
+                                </td>
+                                <td align="center" style="vertical-align: middle !important; border: 1px solid black;" border="1">
+                                    @item.fldHasilTan
+                                </td>
+                                <td align="center" style="vertical-align: middle !important; border: 1px solid black;" border="1">
+                                    @HasilSum
+                                </td>
+                                <td align="center" style="vertical-align: middle !important; border: 1px solid black;" border="1">
+                                    @HargaManual
+                                </td>
+                                <td align="center" style="vertical-align: middle !important; border: 1px solid black;" border="1">
+                                    @HargaMesin
+                                </td>
+                            </tr>
+                        }
+                    }
+                }
+            </tbody>
+        </table>
+        <newpage />
+    </div>
+
+    <div style="text-align:right; margin-top:10px">
+        <a class="btn btn-default btn-sm" href="#" id="printpage">
+            <span class="glyphicon glyphicon-print"> </span> @GlobalResEstate.btnPrint
+        </a>
+        <a class="btn btn-default btn-sm" href="#" id="downloadpdf">
+            <span><img src="~/Asset/Images/pdf-icon.png" width="20px" height="20px" /></span> @GlobalResEstate.btnDownloadPdf
+        </a>
+    </div>
+}
+else
+{
+    <p style="color:red">@GlobalResEstate.msgErrorSearch</p>
+}
+
+
+<script>
+    //function MergeCommonRows($('#tblSample')) {
+        var firstColumnBrakes = [];
+        // iterate through the columns instead of passing each column as function parameter:
+        for (var i = 1; i <= $('#tblSample').find('th').length; i++) {
+            var previous = null, cellToExtend = null, rowspan = 1;
+            $('#tblSample').find("td:nth-child(" + i + ")").each(function (index, e) {
+                if (i !== 3 && i !== 4) {
+                    console.log(i);
+                    var jthis = $(this), content = jthis.text();
+                    // check if current row "break" exist in the array. If not, then extend rowspan:
+                    if (previous == content && content !== "" && $.inArray(index, firstColumnBrakes) === -1) {
+                        // hide the row instead of remove(), so the DOM index won't "move" inside loop.
+                        jthis.addClass('hidden');
+                        cellToExtend.attr("rowspan", (rowspan = rowspan + 1));
+                    } else {
+                        // store row breaks only for the first column:
+                        if (i === 1) firstColumnBrakes.push(index);
+                        rowspan = 1;
+                        previous = content;
+                        cellToExtend = jthis;
+                    }
+                }
+
+            });
+        }
+        // now remove hidden td's (or leave them hidden if you wish):
+        $('td.hidden').remove();
+    //}
+</script>

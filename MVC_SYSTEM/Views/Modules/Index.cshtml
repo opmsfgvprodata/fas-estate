@@ -1,0 +1,137 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutModules.cshtml";
+}
+<style>
+    .modal-dialog {
+        width: unset !important;
+        padding-top: 10px !important;
+        height: 100%;
+    }
+
+    .modal-content {
+        height: 100%;
+    }
+
+    .row-centered {
+        text-align: center;
+    }
+
+    .col-centered {
+        display: inline-block;
+        float: none;
+        /* reset the text-align */
+        text-align: left;
+        /* inline-block space fix */
+        margin-right: -4px;
+    }
+
+    @@media (min-width: 768px) {
+        .zoom {
+            /*padding: 5%;*/
+            padding-left: 1%;
+            background-color: lightgray;
+            transition: transform .2s; /* Animation */
+            height: 180px;
+            width: 180px;
+            margin: 20px;
+            border-radius: 25px;
+            background-size: auto; /* <------ */
+            background-repeat: no-repeat;
+            background-position: center center;
+        }
+
+            .zoom:hover {
+                transform: scale(1.1); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
+                background-color: darkgray;
+            }
+
+            .zoom > .atext {
+                position: static;
+                padding-top: 156px;
+                font-family: Arial;
+                color: black;
+            }
+    }
+
+    @@media (min-width: 600px) {
+        .zoom {
+            /*padding: 5%;*/
+            padding-left: 1%;
+            background-color: lightgray;
+            transition: transform .2s; /* Animation */
+            height: 150px;
+            width: 150px;
+            margin: 20px;
+            border-radius: 10px;
+            background-size: auto; /* <------ */
+            background-repeat: no-repeat;
+            background-position: center center;
+        }
+
+            .zoom:hover {
+                transform: scale(1.1); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
+                background-color: darkgray;
+            }
+
+            .zoom > .atext {
+                position: static;
+                padding-top: 130px;
+                font-family: Arial;
+                color: black;
+            }
+    }
+
+    @@media (max-width: 599px) {
+        .zoom {
+            /*padding: 5%;*/
+            padding-left: 1%;
+            background-color: lightgray;
+            transition: transform .2s; /* Animation */
+            height: 130px;
+            width: 130px;
+            margin: 20px;
+            border-radius: 10px;
+            background-size: auto; /* <------ */
+            background-repeat: no-repeat;
+            background-position: center center;
+        }
+
+            .zoom:hover {
+                transform: scale(1.1); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
+                background-color: darkgray;
+            }
+
+            .zoom > .atext {
+                position: static;
+                padding-top: 110px;
+                font-family: Arial;
+                font-size: 12px;
+                color: black;
+            }
+    }
+</style>
+<div id="UpdateProgress1" style="display:none;">
+    <div class="progressTest">
+        <label>
+            @GlobalResEstate.msgWait
+        </label>
+    </div>
+</div>
+
+<div class="modal-dialog animated fadeInRight">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h1 class="text-center"><img class="logo" /></h1>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <div class="row row-centered">
+                    <a href="@Url.Action("ModulesSelection", "Modules", new { Modules = "checkroll"}, this.Request.Url.Scheme)"><div class="col-lg-2 col-centered zoom" style="background-image: url('../Asset/Images/checkroll.png'); "><p class="atext">Checkroll</p></div></a>
+                    <a href="@Url.Action("ModulesSelection", "Modules", new { Modules = "labour"}, this.Request.Url.Scheme)"><div class="col-lg-2 col-centered zoom" style="background-image: url('../Asset/Images/labour.png'); "><p class="atext">Labour</p></div></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,63 @@
+﻿@model MVC_SYSTEM.MasterModels.tbl_SokPermhnWang
+<section class="content-wrapper main-content clear-fix">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 class="modal-title">Estate Verify</h3>
+    </div>
+    @using (Html.BeginForm("RegionVerify", "ApprovalSalary"))
+    {
+        <div class="modal-body">
+            <div class="form-horizontal">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">Salary Application</div>
+                    <div class="panel-body">
+                        @Html.HiddenFor(model => model.fld_PostingID)
+                        @* added by faeza 30.09.2021 *@
+                        @Html.HiddenFor(model => model.fld_JumlahWorkerNet)
+                        @Html.HiddenFor(model => model.fld_JumlahCash)
+                        @Html.HiddenFor(model => model.fld_JumlahCheque)
+                        @Html.HiddenFor(model => model.fld_JumlahEwallet)
+                        @Html.HiddenFor(model => model.fld_JumlahCdmas)
+                        @Html.HiddenFor(model => model.fld_JumlahLain)
+
+                        @*<div class="form-group">
+            <label class="control-label col-sm-2">Total Worker</label>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.fld_TotalWorker, new { htmlAttributes = new { @class = "form-control", @readonly = true } })
+                @Html.ValidationMessageFor(model => model.fld_TotalWorker, "", new { @class = "text-danger" })
+            </div>
+        </div>*@
+
+                        <div class="form-group">
+                            <label class="control-label col-sm-2">Salary Amount (RM)</label>
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.fld_JumlahPermohonan, new { htmlAttributes = new { @class = "form-control", @readonly = true } })
+                                @Html.ValidationMessageFor(model => model.fld_JumlahPermohonan, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label col-sm-2">Month</label>
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.fld_Month, new { htmlAttributes = new { @class = "form-control", @readonly = true } })
+                                @Html.ValidationMessageFor(model => model.fld_Month, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label col-sm-2">Year</label>
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.fld_Year, new { htmlAttributes = new { @class = "form-control", @readonly = true } })
+                                @Html.ValidationMessageFor(model => model.fld_Year, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <input class="btn btn-primary" type="submit" value=@GlobalResEstate.btnSave />
+            <button class="btn btn-warning" data-dismiss="modal">@GlobalResEstate.btnBack</button>
+        </div>
+    }
+</section>

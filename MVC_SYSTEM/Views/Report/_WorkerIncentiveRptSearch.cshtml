@@ -1,0 +1,296 @@
+﻿@using Itenso.TimePeriod
+@using MVC_SYSTEM.Class
+@model IEnumerable<MVC_SYSTEM.ViewingModels.vw_MaklumatInsentifPekerja>
+
+@{
+    int? month = ViewBag.MonthList;
+    int? year = ViewBag.YearList;
+    string worker = ViewBag.WorkerList;
+    int incomeCount = 0;
+    int deductionCount = 0;
+
+}
+
+@if (Model != null && Model.Count() != 0)
+{
+    <div id="scrollArea2" class="modal-body">
+        @foreach (var item in Model)
+        {
+            int bil = 0;
+
+            <logo />
+            <table class="table table-bordered" style="font-size: 11px; border-collapse: collapse" border="0">
+                <thead>
+                    <tr>
+                        <th colspan="6" style="text-align: center; vertical-align: middle; border: none;">
+                            @ViewBag.NamaSyarikat
+                            <br />
+                            (@GlobalResEstate.lblCompanyNo : @ViewBag.NoSyarikat)
+                            <br />
+                            @GlobalResEstate.lblIncentiveReport
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th colspan="3" style="border-bottom: 1px solid; border-top: none; border-left: none; border-right: none; border-bottom-color: red">@GlobalResEstate.lblTotalRecord.ToUpper()</th>
+                    </tr>
+                    <tr>
+                        <td style="border: none;">
+                            <table>
+                                <tr>
+                                    <td style="border: none;">
+                                        <label style="font-size: small; font-weight: normal;">@GlobalResEstate.hdrNoPkj</label><br />
+                                        <label style="font-size: small; font-weight: normal;">@GlobalResEstate.hdrName</label><br />
+                                    </td>
+                                    <td style="border: none;">
+                                        <label style="font-size: small; font-weight: normal;">: @item.Pkjmast.fld_Nopkj</label><br />
+                                        <label style="font-size: small; font-weight: normal;">: @item.Pkjmast.fld_Nama</label><br />
+                                    </td>
+                                </tr>
+                            </table>
+
+                        </td>
+                        <td style="border: none;"></td>
+                        <td style="border: none;">
+                            <table>
+                                <tr>
+                                    <td style="border: none;">
+                                        <label style="font-size: small; font-weight: normal;">@GlobalResEstate.hdrNoKp</label><br />
+                                        <label style="font-size: small; font-weight: normal;">@GlobalResEstate.lblStatus</label><br />
+                                    </td>
+                                    <td style="border: none;">
+                                        <label style="font-size: small; font-weight: normal;">: @item.Pkjmast.fld_Nokp</label><br />
+                                        @if (item.Pkjmast.fld_Kdaktf == "1")
+                                        {
+                                            <label style="font-size: small; font-weight: normal;">: AKTIF</label>
+                                            <br />
+                                        }
+                                        else
+                                        {
+                                            <label style="font-size: small; font-weight: normal;">: TIDAK AKTIF</label>
+                                            <br />
+                                        }
+                                </tr>
+                            </table>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <th colspan="1" style="width: 50%; border-bottom: 1px solid; border-top: none; border-left: none; border-right: none; border-bottom-color: red;">@GlobalResEstate.lblEarning</th>
+                        <th colspan="1" style="border-bottom: none; border-top: none; border-left: none; border-right: none;"></th>
+                        <th colspan="1" style="width: 50%; border-bottom: 1px solid; border-top: none; border-left: none; border-right: none; border-bottom-color: red;">@GlobalResEstate.lblDeduction</th>
+                    </tr>
+
+                    <tr>
+                        <td style="border: none;">
+                            <table>
+                                <tr>
+                                    <td style="border: none; width: 70%">
+                                        @if (item.Pendapatan.Count == 0)
+                                        {
+                                            <label style="font-size: small; font-weight: normal;">@GlobalResEstate.msgNoRecord</label>
+                                        }
+                                        else
+                                        {
+                                            foreach (var insentif in item.Pendapatan)
+                                            {
+
+                                                incomeCount += 1;
+                                                bil = bil + 1;
+
+                                                <label style="font-size: small; font-weight: normal;">@bil. @insentif.fld_KodInsentif - @insentif.fld_Keterangan</label>
+                                                <br />
+
+                                            }
+                                        }
+                                        @{
+                                            incomeCount = 0;
+                                        }
+                                    </td>
+
+                                    <td style="border: none;">
+                                        @foreach (var insentif in item.Pendapatan)
+                                        {
+
+                                            <label style="font-size: small; font-weight: normal;">: RM</label>
+                                            <br />
+                                        }
+                                    </td>
+                                    <td style="border: none; text-align: right">
+                                        @foreach (var insentif in item.Pendapatan)
+                                        {
+                                            <label style="font-size: small; font-weight: normal;">@insentif.fld_NilaiInsentif</label>
+                                            <br />
+
+                                        }
+                                    </td>
+                                </tr>
+                                @if (item.Pendapatan.Count > 0)
+                                {
+                                    <tr>
+                                        <td style="border: none; text-align: right">
+                                            <label style="font-size: small; font-weight: bold">@GlobalResEstate.lblTotal</label>
+                                        </td>
+                                        <td style="border-bottom: none; border-top: 2px solid; border-left: none; border-right: none;">
+                                            <label style="font-size: small; font-weight: normal;">: RM</label>
+                                        </td>
+
+                                        <td style="border-bottom: none; border-top: 2px solid; border-left: none; border-right: none; text-align: right">
+
+                                            <label style="font-size: small; font-weight: bold;">
+                                                @GetTriager.GetTotalForMoneyList(item.Pendapatan.Select(s => s.fld_NilaiInsentif).ToList())
+                                            </label>
+                                        </td>
+                                    </tr>
+                                }
+                            </table>
+                        </td>
+                        <th colspan="1" style="border-bottom: none; border-top: none; border-left: none; border-right: none;"></th>
+                        <td style="border: none;">
+                            <table>
+                                <tr>
+                                    <td style="border: none; width: 70%">
+                                        @if (item.Potongan.Count == 0)
+                                        {
+                                            <label style="font-size: small; font-weight: normal;">@GlobalResEstate.msgNoRecord</label>
+                                        }
+                                        else
+                                        {
+                                            foreach (var insentif in item.Potongan)
+                                            {
+
+                                                deductionCount += 1;
+                                                bil = bil + 1;
+
+                                                <label style="font-size: small; font-weight: normal;">@bil. @insentif.fld_KodInsentif - @insentif.fld_Keterangan</label>
+                                                <br />
+
+                                            }
+                                        }
+                                        @{
+                                            deductionCount = 0;
+                                        }
+                                    </td>
+
+                                    <td style="border: none;">
+                                        @foreach (var insentif in item.Potongan)
+                                        {
+
+                                            <label style="font-size: small; font-weight: normal;">: RM</label>
+                                            <br />
+                                        }
+                                    </td>
+                                    <td style="border: none; text-align: right">
+                                        @foreach (var insentif in item.Potongan)
+                                        {
+                                            <label style="font-size: small; font-weight: normal;">@insentif.fld_NilaiInsentif</label>
+                                            <br />
+
+                                        }
+                                    </td>
+                                </tr>
+                                @if (item.Potongan.Count > 0)
+                                {
+                                    <tr>
+                                        <td style="border: none; text-align: right">
+                                            <label style="font-size: small; font-weight: bold">@GlobalResEstate.lblTotal</label>
+                                        </td>
+                                        <td style="border-bottom: none; border-top: 2px solid; border-left: none; border-right: none;">
+                                            <label style="font-size: small; font-weight: normal;">: RM</label>
+                                        </td>
+
+                                        <td style="border-bottom: none; border-top: 2px solid; border-left: none; border-right: none; text-align: right">
+
+                                            <label style="font-size: small; font-weight: bold;">
+                                                @GetTriager.GetTotalForMoneyList(item.Potongan.Select(s => s.fld_NilaiInsentif).ToList())
+                                            </label>
+                                        </td>
+                                    </tr>
+                                }
+                            </table>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            @*<newpage />*@
+        }
+    </div>
+    if (ViewBag.Print == null)
+    {
+    <div style="text-align:right; margin-top:10px">
+        <a class="btn btn-default btn-sm" href="#" id="printpage">
+            <span class="glyphicon glyphicon-print"> </span> @GlobalResEstate.btnPrint
+        </a>
+        <a class="btn btn-default btn-sm" href="#" id="downloadpdf">
+            <span><img src="~/Asset/Images/pdf-icon.png" width="20px" height="20px" /></span> @GlobalResEstate.btnDownloadPdf
+        </a>
+        <a class="btn btn-default btn-sm" href="#" onclick="HTMLtoExcel('')">
+            <span><img src="~/Asset/Images/excel-icon.png" width="20px" height="20px" /></span> @GlobalResEstate.btnDownloadExcel
+        </a>
+    </div>
+    }
+ }
+
+@if (Model.Count() == 0)
+{
+    <div id="scrollArea2" class="modal-body" style="text-align: center">
+        <p style="color: red">@ViewBag.Message</p>
+
+    </div>
+}
+
+<style>
+    #page td {
+        padding: 2px;
+        margin: 2px;
+    }
+</style>
+
+<script>
+    $(document).ready(function () {
+        $("#printpage").click(function () {
+            var DivElement = document.getElementById("scrollArea2").innerHTML;
+            var oldPage = document.body.innerHTML;
+            document.body.innerHTML = DivElement;
+            window.print();
+            document.body.innerHTML = oldPage;
+        })
+
+        $("#downloadpdf").click(function () {
+            var RadioGroup = $('input[name=RadioGroup]:checked').val();
+            var MonthList = $("#MonthList").val();
+            var YearList = $("#YearList").val();
+            var SelectionList = $("#SelectionList").val();
+            //var StatusList = $("#StatusList").val();
+            //var WorkCategoryList = $("#WorkCategoryList").val();
+
+            var StatusList = '';
+            var WorkCategoryList = '';
+
+            var param = '/?RadioGroup=' + RadioGroup + '&MonthList=' + MonthList + '&YearList=' + YearList + '&SelectionList=' + SelectionList + '&StatusList=' + StatusList + '&WorkCategoryList=' + WorkCategoryList;
+            var controller = 'Report';
+            var action = 'PrintWorkerInsentifPdf';
+
+            var ajxfn = {};
+            ajxfn.url = "@Url.Action("PDFIndetifier", "PdfCreator")";
+            ajxfn.type = "POST";
+            ajxfn.data = JSON.stringify({ controller: controller, action: action, param: param });
+            ajxfn.datatype = "json";
+            ajxfn.contentType = "application/json";
+            ajxfn.success = function (result) {
+                //var win = window.open(result.link, '_blank');
+                //win.focus();
+                PDFObject.embed(result.link, "#searchResultWorkerIncentiveRptInfo", { height: "450px" });
+            };
+
+            ajxfn.error = function () {
+                $.simplyToast('@GlobalResEstate.msgError', 'danger');
+                $("#UpdateProgress1").css("display", "none");
+            };
+            $.ajax(ajxfn);
+
+            return false;
+        });
+    });
+</script>

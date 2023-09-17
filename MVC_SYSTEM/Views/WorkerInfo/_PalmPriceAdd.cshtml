@@ -1,0 +1,52 @@
+﻿@using MVC_SYSTEM.Class
+@model MVC_SYSTEM.MasterModels.vw_HargaSawitSemasa
+
+@{
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
+<section class="content-wrapper main-content clear-fix">
+
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 class="modal-title">DAFTAR HARGA SEMASA</h3>
+    </div>
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        <div class="modal-body">
+            <div class="form-horizontal">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">MAKLUMAT HARGA SEMASA</div>
+                    <div class="panel-body">
+                        <div class="form-group">
+                            <label class="control-label col-sm-3">Jenis Tanaman:</label>
+                            <div class="col-sm-8">
+                                @Html.DropDownList("JenisTanamanLists", new SelectList(ViewBag.JenisTanamanList, "Value", "Text", ViewBag.JenisTanamanSelectedValue), htmlAttributes: new { @class = "form-control", @disabled = true })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-3">Harga Semasa (RM):</label>
+                            <div class="col-sm-8">
+                                @Html.TextBoxFor(model => model.fld_HargaSemasa, htmlAttributes: new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.fld_HargaSemasa, "", new { @class = "text-danger" })
+                                @Html.Hidden("jenisTanaman", (string)@ViewBag.JenisTanamanSelectedValue)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <input class="btn btn-success" type="submit" value="Tambah" />
+            <button class="btn btn-warning" data-dismiss="modal">@GlobalResEstate.btnBack</button>
+        </div>
+    }
+</section>
+
+<script>
+    $("form").removeData("validator");
+    $("form").removeData("unobtrusiveValidation");
+    $.validator.unobtrusive.parse("form");
+</script>

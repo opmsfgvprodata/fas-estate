@@ -1,0 +1,87 @@
+﻿@*@model MVC_SYSTEM.ViewingModels.PagedList<MVC_SYSTEM.MasterModels.tbl_UpahAktiviti>
+@using MVC_SYSTEM.Class;*@
+
+@model IEnumerable<MVC_SYSTEM.MasterModels.tbl_UpahAktiviti>
+
+@{
+    ViewBag.Title = GlobalResEstate.lblPayrateFull;
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+
+    GetIdentity GetIdentity = new GetIdentity();
+    GetNSWL GetNSWL = new GetNSWL();
+    //GeneralFunc GeneralFunc = new GeneralFunc();
+    GetTriager GetTriager = new GetTriager();
+
+    AjaxOptions options = new AjaxOptions
+    {
+        HttpMethod = "Get",
+        UpdateTargetId = "payrateTableDetails",
+        InsertionMode = InsertionMode.Replace,
+        LoadingElementId = "divLoading"
+    };
+}
+
+<script src="~/Asset/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+<div id="divLoading" style="display:none;">
+    <div class="progressTest">
+        <label>
+            @GlobalResEstate.msgWait
+        </label>
+    </div>
+</div>
+<section class="content-wrapper main-content clear-fix">
+    <div class="well bottom" style="padding-bottom:16px;">
+        @using (Ajax.BeginForm("_PayratePUP", "TableInfo", null, options, new { @id = "payrateTableSearchDetails" }))
+        {
+            @Html.AntiForgeryToken()
+            <div class="row">
+                <div class="col-sm-3">
+                    <label>@GlobalResEstate.lblAktvtType</label>
+                    @Html.DropDownList("ActivityLevelList", null, htmlAttributes: new { @class = "form-control" })
+                </div>
+                <div class="col-sm-3">
+                    <label>@GlobalResEstate.lblSearch</label>
+                    @Html.TextBox("FreeText", null, htmlAttributes: new { @class = "form-control" })
+
+                </div>
+                <div class="col-sm-4 btn-group" style="padding-top: 24px;">
+                    <input class="btn btn-primary" type="submit" id="btnSrch" name="Lihat" value=@GlobalResEstate.btnView />
+                </div>
+            </div>
+        }
+    </div>
+
+    <div class="well" style="margin-top:7px;">
+        <div class="modal-body">
+            <div class="panel panel-primary">
+                <div class="panel-heading">@GlobalResEstate.lblPayrateFull</div>
+                <div class="panel-body">
+                    <div id="payrateTableDetails">
+                        @Html.Action("_PayratePUP")
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer col-md-12">
+            <a href=@Url.Action("Index", "TableInfo") class="btn btn-warning" role="button" onclick="return DisplayProgressMessage(this);">@GlobalResEstate.btnBack</a>
+        </div>
+    </div>
+</section>
+<style>
+    #page td {
+        padding: 2px;
+        margin: 2px;
+    }
+
+    table {
+        page-break-inside: auto
+    }
+
+    thead, tfoot {
+        display: table-row-group
+    }
+
+    tr {
+        page-break-inside: avoid
+    }
+</style>

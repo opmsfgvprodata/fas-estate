@@ -1,0 +1,47 @@
+﻿@model MVC_SYSTEM.ViewingModels.PagedList<MVC_SYSTEM.MasterModels.tbl_CutiMaintenance>
+@using MVC_SYSTEM.Class;
+@{
+    ViewBag.Title = GlobalResEstate.lblTitleAllocatedYearHolidayTable;
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+
+    AjaxOptions options = new AjaxOptions
+    {
+        HttpMethod = "Get",
+        UpdateTargetId = "allocatedAnnualLeaveTableDetails",
+        InsertionMode = InsertionMode.Replace,
+        LoadingElementId = "UpdateProgress1"
+    };
+}
+
+<script src="~/Asset/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+
+@section scripts{
+    @Scripts.Render("~/Asset/Scripts/AjaxModal.js")
+}
+
+<section class="content-wrapper main-content clear-fix">
+    <div class="well">
+        <div class="modal-body">
+            <div class="panel panel-primary">
+                <div class="panel-heading">@GlobalResEstate.lblTitleAllocatedYearHolidayTable</div>
+                <div class="panel-body">
+                    <div id="allocatedAnnualLeaveTableDetails">
+                        @Html.Action("_AllocatedYearlyHolidayTable")
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer col-md-12">
+            <a href=@Url.Action("Index", "TableInfo") class="btn btn-warning" role="button" onclick="return DisplayProgressMessage(this);">@GlobalResEstate.btnBack</a>
+        </div>
+    </div>
+</section>
+
+<script>
+    function resetSearch1() {
+        document.getElementById("txtfilter").value = "";
+        document.getElementById('btnCari').click();
+    }
+</script>
+
+

@@ -1,0 +1,147 @@
+﻿@using MVC_SYSTEM.Class
+@using MVC_SYSTEM.Models
+@model IEnumerable<MVC_SYSTEM.CustomModels.CustMod_CustSatisfaction>
+@{
+    ViewBag.Title = "CustomerReport";
+    //Layout = "~/Views/Shared/_LayoutMain.cshtml";
+    GetConfig GetConfig = new GetConfig();
+    GetIdentity GetIdentity = new GetIdentity();
+    GetEstateDetail GetGroup = new GetEstateDetail();
+    ChangeTimeZone ChangeTimeZone = new ChangeTimeZone();
+    //string namaKump = "";
+    //int? getuserid = GetIdentity.ID(User.Identity.Name);
+    //string getusername = User.Identity.Name;
+    //int year = ChangeTimeZone.gettimezone().Year;
+    //int month = ChangeTimeZone.gettimezone().Month;
+    //int day = ChangeTimeZone.gettimezone().Day;
+    //int hour = ChangeTimeZone.gettimezone().Hour;
+    //int minute = ChangeTimeZone.gettimezone().Minute;
+    //int second = ChangeTimeZone.gettimezone().Second;
+    //string uniquefilename = "GroupReport_" + ViewBag.UserID + "_" + year.ToString() + month.ToString() + day.ToString() + hour.ToString() + minute.ToString() + second.ToString();
+    int bil = 0;
+    //int? SelectionList = ViewBag.GroupList;
+}
+
+@if (Model != null && Model.Count() != 0)
+{
+    <div id="scrollArea2" class="modal-body">
+        <logo />
+        <table class="table table-hover table-bordered" style="font-size: 11px;" border="0">
+            <thead>
+                @*<tr>
+                    <th colspan="18" style="text-align: center; vertical-align: middle; border: none;">
+                        @ViewBag.NamaSyarikat
+                        <br />
+                        (@GlobalResEstate.lblCompanyNo : @ViewBag.NoSyarikat)
+                        <br />
+                    </th>
+                </tr>*@
+                <tr>
+                    <th rowspan="2" width="1%" bgcolor="#ffcc80" style="color:black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">@GlobalResEstate.hdrNo</th>
+                    <th rowspan="2" width="3%" bgcolor="#ffcc80" style="color:black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">@GlobalResEstate.lblCompanyFirstUserName</th>
+                    <th rowspan="2" width="3%" bgcolor="#ffcc80" style="color:black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">@GlobalResEstate.lblEstateCode</th>
+                    <th rowspan="2" width="3%" bgcolor="#ffcc80" style="color:black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">@GlobalResEstate.hdrCustLevel</th>
+                    <th rowspan="2" width="3%" bgcolor="#ffcc80" style="color:black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">@GlobalResEstate.hdrCatat</th>
+
+                </tr>
+            </thead>
+            <tbody>
+
+                @foreach (var item in Model)
+                {
+                    bil = bil + 1;
+
+                    <tr>
+                        <td align="center" style="vertical-align: middle !important; border: 1px solid black;" border="1" >@bil</td>
+                        <td align="center" style="vertical-align: middle !important; border: 1px solid black;" border="1" >@item.UIDNama</td>
+                        <td align="center" style="vertical-align: middle !important; border: 1px solid black;" border="1" >@item.LdgNama</td>
+                        <td align="center" style="vertical-align: middle !important; border: 1px solid black;" border="1" >@item.Satis</td>
+                        <td align="center" style="vertical-align: middle !important; border: 1px solid black;" border="1" >@item.Note</td>
+                    </tr>
+                    
+                }
+
+
+
+            </tbody>
+        </table>
+        <newpage />
+    </div>
+    if (ViewBag.Print == null)
+    {
+        <div style="text-align:right; margin-top:10px">
+            <a class="btn btn-default btn-sm" href="#" id="printpage">
+                <span class="glyphicon glyphicon-print"> </span> @GlobalResEstate.btnPrint
+            </a>
+            <a class="btn btn-default btn-sm" href="#" id="downloadpdf">
+                <span><img src="~/Asset/Images/pdf-icon.png" width="20px" height="20px" /></span> @GlobalResEstate.btnDownloadPdf
+            </a>
+            <a class="btn btn-default btn-sm" href="#" onclick="HTMLtoExcel('')">
+                <span><img src="~/Asset/Images/excel-icon.png" width="20px" height="20px" /></span> @GlobalResEstate.btnDownloadExcel
+            </a>
+        </div>
+    }
+}
+
+@if (Model == null || Model.Count() == 0)
+{
+    <div id="scrollArea2" class="modal-body" style="text-align: center">
+        <p style="color: red">@ViewBag.Message</p>
+
+    </div>
+}
+<style>
+    #page td {
+        padding: 2px;
+        margin: 2px;
+    }
+</style>
+
+@*<script>
+        $(document).ready(function () {
+            $("#printpage").click(function () {
+                var DivElement = document.getElementById("scrollArea").innerHTML;
+                var oldPage = document.body.innerHTML;
+                document.body.innerHTML = DivElement;
+                window.print();
+                document.body.innerHTML = oldPage;
+            })
+
+            $("#downloadpdf").click(function () {
+                //var RadioGroup = $('input[name=RadioGroup]:checked').val();
+                //var MonthList = $("#MonthList").val();
+                //var YearList = $("#YearList").val();
+                var GroupList = $("#GroupList").val();
+                //var StatusList = $("#StatusList").val();
+                //var WorkCategoryList = $("#WorkCategoryList").val();
+
+                //var StatusList = '';
+                //var WorkCategoryList = '';
+
+                var param = '/?GroupList=' + GroupList;
+                var controller = 'Report';
+                var action = 'PrintGrpWorkerPdf';
+
+                var ajxfn = {};
+                ajxfn.url = "@Url.Action("PDFIndetifier", "PdfCreator")";
+                ajxfn.type = "POST";
+                ajxfn.data = JSON.stringify({ controller: controller, action: action, param: param });
+                ajxfn.datatype = "json";
+                ajxfn.contentType = "application/json";
+                ajxfn.success = function (result) {
+                    //var win = window.open(result.link, '_blank');
+                    //win.focus();
+                    PDFObject.embed(result.link, "#searchGrpWork", { height: "450px" });
+                };
+
+                ajxfn.error = function () {
+                    $.simplyToast('@GlobalResEstate.msgError', 'danger');
+                    $("#UpdateProgress1").css("display", "none");
+                };
+                $.ajax(ajxfn);
+
+                return false;
+            });
+        });
+    </script>*@
+

@@ -1,0 +1,45 @@
+﻿<div class="form-horizontal">
+    <div id="attinfo" class="col-sm-8">
+        <div class="panel panel-success">
+            <div class="panel-heading">@GlobalResEstate.lblAttendanceInfo <label id="name0"></label> <label id="day1"></label></div>
+            <div class="panel-body">
+                <div class="form-group">
+                    <div class="col-sm-4">
+                        <label id="catsel">@GlobalResEstate.lblAttend / @GlobalResEstate.lblLeave</label>
+                        @Html.DropDownList("WorkCode", null, htmlAttributes: new { @class = "form-control" })
+                    </div>
+                    <div class="col-sm-2">
+                        <label id="catsel">@GlobalResEstate.lblRaining</label>
+                        @Html.DropDownList("Rainning", null, htmlAttributes: new { @class = "form-control" })
+                    </div>
+                    <div class="col-sm-2" style="padding-top:25px;">
+                        <input type="hidden" id="atteditstatus" name="atteditstatus" />
+                        <button class="btn btn-success" name="SaveAtt" id="SaveAtt" type="button">@GlobalResEstate.btnSave</button>
+                    </div>
+                    <div class="col-sm-2" style="padding-top:25px;">
+                        <button class="btn btn-warning" name="WorkData" id="WorkData" type="button">@GlobalResEstate.menuWorkInfo</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-success">
+            <div class="panel-heading">@GlobalResEstate.lblAttendanceStatus <label id="name1"></label></div>
+            <div class="panel-body">
+                <div class="form-group">
+                    <div class="col-sm-12 ListofDetail" id="ListofDetail">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="panel panel-success">
+            <div class="panel-heading">@GlobalResEstate.lblAttendanceInfo <label id="name2"></label></div>
+            <div class="panel-body">
+                <div class="form-group">
+                    <div class="col-sm-12" id="ListofDetail2"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

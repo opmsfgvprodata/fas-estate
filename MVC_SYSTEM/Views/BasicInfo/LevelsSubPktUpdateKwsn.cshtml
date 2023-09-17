@@ -1,0 +1,90 @@
+﻿
+@using MVC_SYSTEM.Class;
+
+@{
+    ViewBag.Title = "LevelsSubPktUpdateKwsn";
+    //Layout = "~/Views/Shared/_LayoutMain.cshtml";
+    GetConfig GetConfig = new GetConfig();
+
+    var grid = new WebGrid(
+        canPage: true,
+        rowsPerPage: Model.PageSize,
+        canSort: false,
+        ajaxUpdateContainerId: "grid");
+
+    grid.Bind(Model.Content, rowCount: Model.TotalRecords, autoSortAndPage: false);
+}
+
+@*<div class="text-center">@grid.TotalRowCount @Html.Label(GlobalResEstate.lblTotalRecord)</div>*@
+<div>
+    @{
+        @grid.GetHtml(htmlAttributes: new { id = "grid" }, // id for ajaxUpdateContainerId parameter
+                                     fillEmptyRows: false,
+                                     tableStyle: "table table-bordered table-striped table-list table-hover",
+                                     headerStyle: "header_table",
+                                     alternatingRowStyle: "Grid-alt",
+                                     selectedRowStyle: "Grid-selected",
+                                     rowStyle: "Grid-rowstyle",
+                                     footerStyle: "table-pager",
+                                     mode: WebGridPagerModes.All,
+                                     columns: grid.Columns(
+                                         grid.Column(GlobalResEstate.hdrNo, canSort: false, format: item => item.WebGrid.Rows.IndexOf(item) + 1 + Math.Round(Convert.ToDouble(grid.TotalRowCount / grid.PageCount) / grid.RowsPerPage) * grid.RowsPerPage * grid.PageIndex, style: "count"),
+                                         grid.Column("fld_JnsKaw", "Jenis Kawasan", style: "nopkj", format: @<text>@( GetConfig.GetWebConfigDesc(item.fld_JnsKaw, "jnsKawasan", item.fld_NegaraID, item.fld_SyarikatID))</text>),
+                                             grid.Column("fld_LuasKaw", "Luas Kawasan", style: "namapkj"),
+                                             grid.Column(GlobalResEstate.hdrAction, canSort: false, style: "tindakan",
+                                                 format: @<text>
+                                                    @Html.Raw("<a data-modal='' id='btnDelete' class='btn btn-danger' title='Worker Status' onclick='deleteKaw(" + item.fld_KodPkt + ", " + item.fld_JnsKaw + ");'><i class='fa fa-trash fa-lg'></i></a>")
+                                                </text>)
+                                                 ))
+    }
+</div>
+
+<script>
+    function deleteKaw(kodpkt, jnskaw) {
+        event.preventDefault()
+                //btnClickPkt += 1;
+                var Kawasan = {};
+            var disableoption = "";
+            Kawasan.url = "@Url.Action("RemoveKaw", "BasicInfo")";
+            Kawasan.type = "POST";
+            Kawasan.data = JSON.stringify({ kodpkt: kodpkt, jnskaw: jnskaw });
+            Kawasan.datatype = "json";
+            Kawasan.contentType = "application/json";
+            Kawasan.success = function (result) {
+                if (result == 2) {
+                    $.simplyToast('Data berjaya dihapuskan', 'success');
+                }
+                else if (result == 1) {
+                    $.simplyToast('Data telah dihapuskan', 'danger');
+                }
+            };
+            Kawasan.error = function () { $.simplyToast('@GlobalResEstate.msgError', 'danger'); };
+            $.ajax(Kawasan);
+    }
+
+
+
+
+
+    @*$("#btnDelete").click(function (e) {
+                event.preventDefault()
+                //btnClickPkt += 1;
+                var Kawasan = {};
+            var disableoption = "";
+            Kawasan.url = "@Url.Action("RemoveKaw", "BasicInfo")";
+            Kawasan.type = "POST";
+            Kawasan.data = JSON.stringify({ kodpkt });
+            Kawasan.datatype = "json";
+            Kawasan.contentType = "application/json";
+            Kawasan.success = function (result) {
+                if (result == 1) {
+                    $.simplyToast('Data berjaya dihapuskan', 'danger');
+                }
+                else if (result == 2) {
+                    $.simplyToast('Data telah dihapuskan', 'danger');
+                }
+            };
+            Kawasan.error = function () { $.simplyToast('@GlobalResEstate.msgError', 'danger'); };
+            $.ajax(Kawasan);
+        });*@
+</script>

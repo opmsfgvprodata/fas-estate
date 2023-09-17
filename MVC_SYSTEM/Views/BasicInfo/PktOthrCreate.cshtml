@@ -1,0 +1,198 @@
+﻿@model MVC_SYSTEM.Models.tbl_PktUtama
+
+@{
+    ViewBag.Title = "PktOthrCreate";
+
+    @Scripts.Render("~/bundles/jqueryval")
+
+}
+
+<section class="content-wrapper main-content clear-fix">
+
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 class="modal-title">Level Register</h3>
+    </div>
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        <div class="modal-body">
+            <div class="form-horizontal">
+                <div class="col-sm-12" id="selectionsection">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">Main Level Info</div>
+                        <div class="panel-body">
+                            <div class="form-group">
+                                <label class="control-label col-sm-3">Activity Type</label>
+                                <div class="col-sm-3">
+                                    @*@Html.EditorFor(model => model.fld_JnsLot, new { htmlAttributes = new { @class = "form-control required" } })*@
+                                    @Html.DropDownList("fld_JnsLot", null, htmlAttributes: new { @class = "form-control required" })
+                                    @Html.ValidationMessageFor(model => model.fld_JnsLot, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-sm-3">Activity Category</label>
+                                <div class="col-sm-3">
+                                    @Html.DropDownList("fld_IOref", null, htmlAttributes: new { @class = "form-control required" })
+                                    @Html.ValidationMessageFor(model => model.fld_IOref, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-sm-3">Cost Centre:</label>
+                                <div class="col-sm-3">
+                                    @Html.DropDownList("fld_IOcode", null, htmlAttributes: new { @class = "form-control required" })
+                                    @Html.ValidationMessageFor(model => model.fld_IOcode, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-sm-3">Level Code</label>
+                                <div class="col-sm-3">
+                                    @Html.TextBoxFor(model => model.fld_PktUtama, htmlAttributes: new { @class = "form-control col-sm-3", @readonly = "true" })
+                                    @Html.ValidationMessageFor(model => model.fld_PktUtama, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            @*<div class="form-group">
+                                    <label class="control-label col-sm-3">Kategori:</label>
+                                    <div class="col-sm-8">
+                                        @Html.TextBox("KategoriAktiviti", "", new { @class = "form-control", @readonly = "readonly" })
+                                    </div>
+                                </div>*@
+                            <div class="form-group">
+                                <label class="control-label col-sm-3">Level Name</label>
+                                <div class="col-sm-8">
+                                    @Html.TextBoxFor(model => model.fld_NamaPktUtama, htmlAttributes: new { @class = "form-control col-sm-8" })
+                                    @Html.ValidationMessageFor(model => model.fld_NamaPktUtama, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            @*<div class="form-group">
+                                    <label class="control-label col-sm-3">Luas/Bilangan/Berat:</label>
+                                    <div class="col-sm-3">
+                                        @Html.TextBoxFor(model => model.fld_Luas, htmlAttributes: new { @class = "form-control col-sm-3" })
+                                        @Html.ValidationMessageFor(model => model.fld_Luas, "", new { @class = "text-danger" })
+                                    </div>
+                                    <label class="control-label col-sm-2">Unit Luas:</label>
+                                    <div class="col-sm-3">
+                                        @Html.DropDownListFor(model => model.fld_UnitLuas, new SelectList(ViewBag.UnitLuas, "Value", "Text"), new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(model => model.fld_UnitLuas, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-sm-3">Nama Penyelia:</label>
+                                    <div class="col-sm-8">
+                                        @Html.TextBoxFor(model => model.fld_NamaPenyelia, htmlAttributes: new { @class = "form-control col-sm-3" })
+                                        @Html.ValidationMessageFor(model => model.fld_NamaPenyelia, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>*@
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <input class="btn btn-success" type="submit" value=@GlobalResEstate.btnAddGroup />
+            <button class="btn btn-warning" data-dismiss="modal">@GlobalResEstate.btnBack</button>
+        </div>
+    }
+</section>
+
+<script>
+    @*$("#fld_CostCentreCode").change(function () {
+        var CostCentre = $("#fld_CostCentreCode").val();
+            if (CostCentre != 0) {
+                $("#UpdateProgress1").css("display", "");
+                var ajxfn = {};
+                ajxfn.url = "@Url.Action("GetKodPeringkat", "BasicInfo")";
+                ajxfn.type = "POST";
+                ajxfn.data = JSON.stringify({ CostCentre: CostCentre });
+                ajxfn.datatype = "json";
+                ajxfn.contentType = "application/json";
+                ajxfn.success = function (result) {
+                    $("#fld_PktCode").val(result.newpkt);
+                    $("#KodPktH").val(result.newpkt);
+                    $("#KategoriAktiviti").val(result.ktgriAxtvt);
+
+                    $("#UpdateProgress1").css("display", "none");
+                };
+                ajxfn.error = function () {
+                    $.simplyToast('@GlobalResEstate.msgError', 'danger');
+                    $("#UpdateProgress1").css("display", "none");
+                };
+                $.ajax(ajxfn);
+            }
+            else {
+                $("#KodPkt").val('');
+                $("#KodPktH").val('');
+            }
+    });*@
+
+    $("form").removeData("validator");
+    $("form").removeData("unobtrusiveValidation");
+    $.validator.unobtrusive.parse("form");
+
+    $(document).ready(function () {
+        @*if ($("#fld_JnsLot").val() == 0) {
+            var Stspkt = {};
+            var disableoption = "";
+            Stspkt.url = "@Url.Action("GetPktUtama", "BasicInfo")";
+            Stspkt.type = "POST";
+            Stspkt.data = JSON.stringify({ JnsTnmn: $("#fld_JnsTnmn").val(), StatusTnmn: $("#fld_StatusTnmn").val(), LotPeneroka: $("#jnsLot").val() });
+            Stspkt.datatype = "json";
+            Stspkt.contentType = "application/json";
+            Stspkt.success = function (newpkt) {
+                $("#KatAktvt").empty();
+                $("#KatAktvt").append("<option value=0>@GlobalResEstate.lblChoose</option>");
+            };
+            Stspkt.error = function () { $.simplyToast('@GlobalResEstate.msgError', 'danger'); };
+            $.ajax(Stspkt);
+        }*@
+        $("#fld_JnsLot").change(function () {
+           var Jnstnm = {};
+            var disableoption = "";
+            Jnstnm.url = "@Url.Action("GetKatAktvtCC", "BasicInfo")";
+            Jnstnm.type = "POST";
+            Jnstnm.data = JSON.stringify({ JnsLot: $("#fld_JnsLot").val() });
+            Jnstnm.datatype = "json";
+            Jnstnm.contentType = "application/json";
+            Jnstnm.success = function (statuslist) {
+                $("#fld_IOref").empty();
+                $("#fld_IOref").append("<option value=0>@GlobalResEstate.lblChoose</option>");
+                for (var i = 0; i < statuslist.length; i++) {
+                    if ($("#fld_JnsLot").val() == 0) {
+                        disableoption = "disabled";
+                    }
+                    $("#fld_IOref").append("<option value=" + statuslist[i].Value + " " + disableoption + ">" + statuslist[i].Text + "</option>");
+                }
+            };
+            Jnstnm.error = function () { $.simplyToast('@GlobalResEstate.msgError', 'danger'); };
+            $.ajax(Jnstnm);
+        });
+
+        $("#fld_IOref").change(function () {
+           var Jnstnm = {};
+            var disableoption = "";
+            Jnstnm.url = "@Url.Action("GetPktUtamaCC", "BasicInfo")";
+            Jnstnm.type = "POST";
+            Jnstnm.data = JSON.stringify({ Prefix: $("#fld_IOref").val() });
+            Jnstnm.datatype = "json";
+            Jnstnm.contentType = "application/json";
+            Jnstnm.success = function (newpkt) {
+               $("#fld_PktUtama").empty();
+                $("#fld_PktUtama").val(newpkt);
+            };
+            Jnstnm.error = function () { $.simplyToast('@GlobalResEstate.msgError', 'danger'); };
+            $.ajax(Jnstnm);
+        });
+
+
+
+    });
+
+
+
+
+</script>
+
+
+

@@ -1,0 +1,218 @@
+﻿@model MVC_SYSTEM.CustomModels2.detailsreport
+
+
+@if (Model.CustMod_DetailWork2 != null)
+{
+    ReportLogic ReportLogic = new ReportLogic();
+    int Selection1 = ViewBag.Selection1;
+    var getcolumn = Model.coloumgroup;
+    decimal TotalOverallAmountJan = 0;
+    decimal TotalOverallAmountFeb = 0;
+    decimal TotalOverallAmountMac = 0;
+    decimal TotalOverallAmountApr = 0;
+    decimal TotalOverallAmountMay = 0;
+    decimal TotalOverallAmountJun = 0;
+    decimal TotalOverallAmountJul = 0;
+    decimal TotalOverallAmountOgs = 0;
+    decimal TotalOverallAmountSep = 0;
+    decimal TotalOverallAmountOct = 0;
+    decimal TotalOverallAmountNov = 0;
+    decimal TotalOverallAmountDis = 0;
+    decimal TotalOverallAmount = 0;
+    int i = 1;
+    int span = getcolumn.Count() + 1;
+    int span2 = getcolumn.Count() + 14;
+    int span3 = getcolumn.Count() + 7;
+    int span4 = getcolumn.Count() + 7;
+<div id="scrollArea2" class="modal-body">
+    <table class="table table-hover table-bordered" style="font-size: 11px;" border="0" width="100%">
+        <thead>
+            <tr>
+                <th colspan="@span2" style="text-align:center;vertical-align:middle;">
+                    @ViewBag.NamaSyarikat
+                    <br />
+                    (@ViewBag.NoSyarikat)
+                    <br />
+                </th>
+            </tr>
+            <tr>
+                <th colspan="@span3" style="text-align:left;vertical-align:top;">
+                    TAJUK&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: @ViewBag.TitleReport
+                    <br />
+                    WILAYAH/LADANG&nbsp;&nbsp;&nbsp;&nbsp;: @ViewBag.NamaLadang
+                    <br />
+                    Pilihan&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: @ViewBag.Pilihan
+                </th>
+                <th colspan="@span4" style="text-align:left;vertical-align:top;">
+                    TEMPOH&nbsp;&nbsp;&nbsp;&nbsp;: @ViewBag.Tempoh
+                </th>
+            </tr>
+            <tr>
+                <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">No</th>
+                @foreach (var column in getcolumn)
+                {
+                <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">@column.name</th>
+                }
+                <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">JAN</th>
+                <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">FEB</th>
+                <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">MAC</th>
+                <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">APR</th>
+                <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">MEI</th>
+                <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">JUN</th>
+                <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">JUL</th>
+                <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">OGS</th>
+                <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">SEP</th>
+                <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">OKT</th>
+                <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">NOV</th>
+                <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">DIS</th>
+                <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">JUMLAH</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in ReportLogic.DetailReport2(Model.CustMod_DetailWork2, Model.coloumgroup, Selection1.ToString()))
+            {
+            <tr>
+                <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">@i</td>
+                @Html.Raw(item.columnheader)
+                <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                    @item.getjan
+                </td>
+                <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                    @item.getfeb
+                </td>
+                <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                    @item.getmac
+                </td>
+                <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                    @item.getapr
+                </td>
+                <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                    @item.getmay
+                </td>
+                <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                    @item.getjun
+                </td>
+                <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                    @item.getjul
+                </td>
+                <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                    @item.getaug
+                </td>
+                <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                    @item.getsep
+                </td>
+                <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                    @item.getoct
+                </td>
+                <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                    @item.getnov
+                </td>
+                <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                    @item.getdec
+                </td>
+                <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                    @item.gettotal
+                </td>
+            </tr>
+            i++;
+
+            TotalOverallAmountJan += item.getjan;
+            TotalOverallAmountFeb += item.getfeb;
+            TotalOverallAmountMac += item.getmac;
+            TotalOverallAmountApr += item.getapr;
+            TotalOverallAmountMay += item.getmay;
+            TotalOverallAmountJun += item.getjun;
+            TotalOverallAmountJul += item.getjul;
+            TotalOverallAmountOgs += item.getaug;
+            TotalOverallAmountSep += item.getsep;
+            TotalOverallAmountOct += item.getoct;
+            TotalOverallAmountNov += item.getnov;
+            TotalOverallAmountDis += item.getdec;
+            TotalOverallAmount += item.gettotal;
+
+            }
+            @if (Selection1 == 0)
+            {
+            <tr>
+                <td align="right" colspan="@span" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                    Total(RM)
+                </td>
+                <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                    @TotalOverallAmountJan
+                </td>
+                <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                    @TotalOverallAmountFeb
+                </td>
+                <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                    @TotalOverallAmountMac
+                </td>
+                <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                    @TotalOverallAmountApr
+                </td>
+                <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                    @TotalOverallAmountMay
+                </td>
+                <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                    @TotalOverallAmountJun
+                </td>
+                <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                    @TotalOverallAmountJul
+                </td>
+                <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                    @TotalOverallAmountOgs
+                </td>
+                <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                    @TotalOverallAmountSep
+                </td>
+                <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                    @TotalOverallAmountOct
+                </td>
+                <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                    @TotalOverallAmountNov
+                </td>
+                <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                    @TotalOverallAmountDis
+                </td>
+                <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                    @TotalOverallAmount
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+</div>
+}
+else
+{
+<div id="scrollArea2" class="modal-body" style="text-align: center">
+    <p style="color: red">No Data.</p>
+</div>
+}
+
+<div style="text-align:right; margin-top:10px">
+    <a class="btn btn-default btn-sm" href="#" id="printpage">
+        <span class="glyphicon glyphicon-print"> </span> @GlobalResEstate.btnPrint
+    </a>
+    <a class="btn btn-default btn-sm" href="#" onclick="HTMLtoExcel('LprnBlnnByrnAktvt')">
+        <span><img src="~/Asset/Images/excel-icon.png" width="20px" height="20px" /></span> @GlobalResEstate.btnDownloadExcel
+    </a>
+</div>
+<style>
+    #page td {
+        padding: 2px;
+        margin: 2px;
+    }
+</style>
+<script src="~/Asset/Scripts/FromHTML.js"></script>
+<script src="~/Asset/Scripts/FileSaver.js"></script>
+<script>
+    $(document).ready(function () {
+        $("#printpage").click(function () {
+            var DivElement = document.getElementById("scrollArea2").innerHTML;
+            var oldPage = document.body.innerHTML;
+            document.body.innerHTML = DivElement;
+            window.print();
+            document.body.innerHTML = oldPage;
+        })
+    });
+</script>

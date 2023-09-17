@@ -1,0 +1,231 @@
+﻿@model MVC_SYSTEM.MasterModels.tbl_AuditTrail
+@{
+    ViewBag.Title = "Audit Trail";
+    Layout = "~/Views/Shared/_LayoutPopup.cshtml";
+    string divstatus = "";
+}
+
+<div id="UpdateProgress1" style="display:none;">
+    <div class="progressTest">
+        <label>
+            @GlobalResEstate.msgWait
+        </label>
+    </div>
+</div>
+
+@using (Html.BeginForm("AuditTrail", "ClosingTransaction", FormMethod.Post, new { id = "AuditTrail" }))
+{
+    @Html.AntiForgeryToken()
+<section class="content-wrapper main-content clear-fix">
+    <div class="well2 bottom2">
+        <div class="row">
+            <div class="col-sm-2">
+                <label for="Tahun">Tahun</label>
+                @Html.DropDownList("YearList", null, htmlAttributes: new { @class = "form-control" })
+            </div>
+            <div class="col-sm-2" style="padding-top:25px;">
+                <input class="btn btn-primary btn-block" type="submit" name="Lihat" id="Lihat" value="Lihat" onclick="return DisplayProgressMessage(this);" />
+            </div>
+        </div>
+    </div>
+    <div class="well2">
+        <div id="scrollArea2" class="modal-body" style="max-height: 475px;">
+            <table class="table table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th colspan="15" style="text-align: center; vertical-align: middle; border: none;">
+                            @ViewBag.NamaSyarikat
+                            <br />
+                            (@GlobalResEstate.lblCompanyNo : @ViewBag.NoSyarikat)
+                            <br />
+                            @GlobalResEstate.lblAuditTrailRpt @ViewBag.Tahun
+                        </th>
+                    </tr>
+                    <tr>
+                        <th class="text-center">
+                            <b>@GlobalResGeneral.hdrM1.ToUpper()</b>
+                        </th>
+                        <th class="text-center">
+                            <b>@GlobalResGeneral.hdrM2.ToUpper()</b>
+                        </th>
+                        <th class="text-center">
+                            <b>@GlobalResGeneral.hdrM3.ToUpper()</b>
+                        </th>
+                        <th class="text-center">
+                            <b>@GlobalResGeneral.hdrM4.ToUpper()</b>
+                        </th>
+                        <th class="text-center">
+                            <b>@GlobalResGeneral.hdrM5.ToUpper()</b>
+                        </th>
+                        <th class="text-center">
+                            <b>@GlobalResGeneral.hdrM6.ToUpper()</b>
+                        </th>
+                        <th class="text-center">
+                            <b>@GlobalResGeneral.hdrM7.ToUpper()</b>
+                        </th>
+                        <th class="text-center">
+                            <b>@GlobalResGeneral.hdrM8.ToUpper()</b>
+                        </th>
+                        <th class="text-center">
+                            <b>@GlobalResGeneral.hdrM9.ToUpper()</b>
+                        </th>
+                        <th class="text-center">
+                            <b>@GlobalResGeneral.hdrM10.ToUpper()</b>
+                        </th>
+                        <th class="text-center">
+                            <b>@GlobalResGeneral.hdrM11.ToUpper()</b>
+                        </th>
+                        <th class="text-center">
+                            <b>@GlobalResGeneral.hdrM12.ToUpper()</b>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        @if (Model != null)
+                        {
+                    <td align="center">
+                        @if (Model.fld_Bln1 == 1)
+                        {
+                            divstatus = "okstatus";
+                        }
+                        else
+                        {
+                            divstatus = "kostatus";
+                        }
+                        <div class="@divstatus">&nbsp;</div>
+                    </td>
+                    <td align="center">
+                        @if (Model.fld_Bln2 == 1)
+                        {
+                            divstatus = "okstatus";
+                        }
+                        else
+                        {
+                            divstatus = "kostatus";
+                        }
+                        <div class="@divstatus">&nbsp;</div>
+                    </td>
+                    <td align="center">
+                        @if (Model.fld_Bln3 == 1)
+                        {
+                            divstatus = "okstatus";
+                        }
+                        else
+                        {
+                            divstatus = "kostatus";
+                        }
+                        <div class="@divstatus">&nbsp;</div>
+                    </td>
+                    <td align="center">
+                        @if (Model.fld_Bln4 == 1)
+                        {
+                            divstatus = "okstatus";
+                        }
+                        else
+                        {
+                            divstatus = "kostatus";
+                        }
+                        <div class="@divstatus">&nbsp;</div>
+                    </td>
+                    <td align="center">
+                        @if (Model.fld_Bln5 == 1)
+                        {
+                            divstatus = "okstatus";
+                        }
+                        else
+                        {
+                            divstatus = "kostatus";
+                        }
+                        <div class="@divstatus">&nbsp;</div>
+                    </td>
+                    <td align="center">
+                        @if (Model.fld_Bln6 == 1)
+                        {
+                            divstatus = "okstatus";
+                        }
+                        else
+                        {
+                            divstatus = "kostatus";
+                        }
+                        <div class="@divstatus">&nbsp;</div>
+                    </td>
+                    <td align="center">
+                        @if (Model.fld_Bln7 == 1)
+                        {
+                            divstatus = "okstatus";
+                        }
+                        else
+                        {
+                            divstatus = "kostatus";
+                        }
+                        <div class="@divstatus">&nbsp;</div>
+                    </td>
+                    <td align="center">
+                        @if (Model.fld_Bln8 == 1)
+                        {
+                            divstatus = "okstatus";
+                        }
+                        else
+                        {
+                            divstatus = "kostatus";
+                        }
+                        <div class="@divstatus">&nbsp;</div>
+                    </td>
+                    <td align="center">
+                        @if (Model.fld_Bln9 == 1)
+                        {
+                            divstatus = "okstatus";
+                        }
+                        else
+                        {
+                            divstatus = "kostatus";
+                        }
+                        <div class="@divstatus">&nbsp;</div>
+                    </td>
+                    <td align="center">
+                        @if (Model.fld_Bln10 == 1)
+                        {
+                            divstatus = "okstatus";
+                        }
+                        else
+                        {
+                            divstatus = "kostatus";
+                        }
+                        <div class="@divstatus">&nbsp;</div>
+                    </td>
+                    <td align="center">
+                        @if (Model.fld_Bln11 == 1)
+                        {
+                            divstatus = "okstatus";
+                        }
+                        else
+                        {
+                            divstatus = "kostatus";
+                        }
+                        <div class="@divstatus">&nbsp;</div>
+                    </td>
+                    <td align="center">
+                        @if (Model.fld_Bln12 == 1)
+                        {
+                            divstatus = "okstatus";
+                        }
+                        else
+                        {
+                            divstatus = "kostatus";
+                        }
+                        <div class="@divstatus">&nbsp;</div>
+                    </td>
+                        }
+                        else
+                        {
+                            <td align="center" colspan="12">Tiada Data</td>
+                        }
+
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+}

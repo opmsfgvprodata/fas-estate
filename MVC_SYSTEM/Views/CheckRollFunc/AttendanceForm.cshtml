@@ -1,0 +1,255 @@
+﻿@using MVC_SYSTEM.Class
+@{
+    ViewBag.Title = "Attendance Form";
+    Layout = "~/Views/Shared/_LayoutCheckRollFunc.cshtml";
+    GetConfig getconfig = new GetConfig();
+    string dateformat = getconfig.GetData("dateformat");
+    DateTime DateTimeNow = ViewBag.DateTimeNow;
+}
+
+<style>
+    body {
+        padding-top: 5px !important;
+    }
+
+    section {
+        padding-left: 5px !important;
+        padding-right: 5px !important;
+    }
+    img.status {
+        width: 30px;
+    }
+    .modal-body {
+        padding: 0px;
+    }
+    .tableFloatingHeaderOriginal {
+        z-index: 2 !important;
+    }
+    .panel {
+        margin-bottom: 0px !important;
+    }
+    #myModal1 .modal-dialog {
+        width: 90% !important;
+    }
+    #myModal2 .modal-dialog {
+        width: 90% !important;
+    }
+</style>
+
+<div id="UpdateProgress1" style="display:none;">
+    <div class="progressTest">
+        <label>
+            @GlobalResEstate.msgWait
+        </label>
+    </div>
+</div>
+
+<section class="content-wrapper main-content clear-fix">
+    <div class="form-horizontal">
+        <div class="panel panel-primary">
+            <div class="panel-heading">@GlobalResEstate.lblAttendanceInfo.ToUpper()</div>
+            <div class="panel-body">
+                <div class="form-group">
+                    <div class="col-lg-6 col-md-6 col-xs-12 col-sm-12">
+                        <label>Tarikh</label>
+                        <div class='input-group date' id='datetimepicker1'>
+                            <input type="datetime" class="form-control" name="SelectedDate" id="SelectedDate" />
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-calendar"></span>
+                            </span>
+                        </div>
+                    </div>
+                    @*<div class="col-lg-6 col-md-6 col-xs-12 col-sm-12">
+                        <label>Kumpulan</label>
+                        @Html.DropDownList("GroupSelection", null, htmlAttributes: new { @class = "form-control" })
+                    </div>*@
+                </div>
+            </div>
+            <div class="panel-body" id="_AttendanceForm">
+                @Html.Action("_AttendanceForm", "CheckRollFunc", new { GroupSelection = "ALL", SelectedDate = DateTimeNow })
+            </div>
+        </div>
+    </div>
+</section>
+<div id='myModal1' class='modal fade in'>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="form-horizontal">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">Attendance Status</div>
+                        <div class="panel-body">
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    <label id="catsel">Absent Type</label>
+                                    @Html.DropDownList("KodTakHadirCuti1", null, htmlAttributes: new { @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    @Html.Hidden("PkjNoTakHadir")
+                                    <button class="btn btn-success" name="SaveNeg" id="SaveNeg" type="button" onclick="TakHadirSave();">@GlobalResEstate.btnSave</button>
+                                    <button class="btn btn-warning" data-dismiss="modal" id="back">@GlobalResEstate.btnBack</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id='myModal2' class='modal fade in'>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="form-horizontal">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">Attendance Status</div>
+                        <div class="panel-body">
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    <label id="catsel">Attendance Status</label>
+                                    @Html.DropDownList("KodTakHadirCuti2", null, htmlAttributes: new { @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    @Html.Hidden("PkjNoHadir")
+                                    <button class="btn btn-success" name="SaveNeg" id="SaveNeg" type="button" onclick="HadirSave();">@GlobalResEstate.btnSave</button>
+                                    <button class="btn btn-warning" data-dismiss="modal" id="back">@GlobalResEstate.btnBack</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    
+    $('#datetimepicker1').datetimepicker({
+        defaultDate: new Date(),
+        format: '@dateformat',
+        useCurrent: false
+    });
+    function HadirStatus(Status, NoPkj) {
+        if (Status === 1) {
+            $('#myModal2').modal({
+                backdrop: 'static', keyboard: false
+            }, 'show');
+            $("#PkjNoHadir").val(NoPkj);
+            //alert("Hadir : " + NoPkj + " - Date : " + SelectedDate + " - Kod " + KodHadirCuti);
+
+        } else {
+            $('#myModal1').modal({
+                backdrop: 'static', keyboard: false
+            }, 'show');
+            $("#PkjNoTakHadir").val(NoPkj);
+            //alert("Tak Hadir : " + NoPkj + " - Date : " + SelectedDate + " - Kod " + KodHadirCuti);
+        }
+    }
+
+    function HadirSave() {
+        var SelectedDate = $('#datetimepicker1').data("DateTimePicker").date();
+        var GroupSelection = $("#GroupSelection").val();
+        var KodHadirCuti = $("#KodTakHadirCuti2").val();
+        var NoPkj = $("#PkjNoHadir").val();
+        $("#UpdateProgress1").css("display", "");
+        var ajxfn = {};
+        ajxfn.url = "@Url.Action("_AttendanceFormSave", "CheckRollFunc")";
+        ajxfn.type = "POST";
+        ajxfn.async = false;
+        ajxfn.data = JSON.stringify({ NoPkj: NoPkj, KodHadirCuti: KodHadirCuti, SelectedDate: SelectedDate, StatusHadir: 1, GroupSelection: GroupSelection });
+        ajxfn.datatype = "json";
+        ajxfn.contentType = "application/json";
+        ajxfn.success = function (result) {
+            //alert("Link : " + result.urlLoad);
+            $('#_AttendanceForm').load(result.UrlLoad);
+            $.simplyToast(result.Msg, result.StatusMsg);
+            $("#UpdateProgress1").css("display", "none");
+            $('#myModal2').modal('hide');
+        };
+        ajxfn.error = function () {
+            $("#UpdateProgress1").css("display", "none");
+        };
+        $.ajax(ajxfn);
+    }
+
+    function TakHadirSave() {
+        var SelectedDate = $('#datetimepicker1').data("DateTimePicker").date();
+        var GroupSelection = $("#GroupSelection").val();
+        var KodHadirCuti = $("#KodTakHadirCuti1").val();
+        var NoPkj = $("#PkjNoTakHadir").val();
+        $("#UpdateProgress1").css("display", "");
+        var ajxfn = {};
+        ajxfn.url = "@Url.Action("_AttendanceFormSave", "CheckRollFunc")";
+        ajxfn.type = "POST";
+        ajxfn.async = false;
+        ajxfn.data = JSON.stringify({ NoPkj: NoPkj, KodHadirCuti: KodHadirCuti, SelectedDate: SelectedDate, StatusHadir: 2, GroupSelection: GroupSelection });
+        ajxfn.datatype = "json";
+        ajxfn.contentType = "application/json";
+        ajxfn.success = function (result) {
+            //alert("Link : " + result.urlLoad);
+            $('#_AttendanceForm').load(result.UrlLoad);
+            $.simplyToast(result.Msg, result.StatusMsg);
+            $("#UpdateProgress1").css("display", "none");
+            $('#myModal1').modal('hide');
+        };
+        ajxfn.error = function () {
+            $("#UpdateProgress1").css("display", "none");
+        };
+        $.ajax(ajxfn);
+    }
+
+    function DeleteAttInfo(Data) {
+        var SelectedDate = $('#datetimepicker1').data("DateTimePicker").date();
+        var GroupSelection = $("#GroupSelection").val();
+        $("#UpdateProgress1").css("display", "");
+        var ajxfn = {};
+        ajxfn.url = "@Url.Action("_AttendanceFormDelete", "CheckRollFunc")";
+        ajxfn.type = "POST";
+        ajxfn.async = false;
+        ajxfn.data = JSON.stringify({ Data: Data, SelectedDate: SelectedDate, StatusHadir: 2, GroupSelection: GroupSelection });
+        ajxfn.datatype = "json";
+        ajxfn.contentType = "application/json";
+        ajxfn.success = function (result) {
+            //alert("Link : " + result.urlLoad);
+            $('#_AttendanceForm').load(result.UrlLoad);
+            $.simplyToast(result.Msg, result.StatusMsg);
+            $("#UpdateProgress1").css("display", "none");
+            $('#myModal1').modal('hide');
+        };
+        ajxfn.error = function () {
+            $("#UpdateProgress1").css("display", "none");
+        };
+        $.ajax(ajxfn);
+    }
+
+    $("#datetimepicker1").on("dp.change", function (e) {
+        var SelectedDate = $('#datetimepicker1').data("DateTimePicker").date();
+        var GroupSelection = $("#GroupSelection").val();
+
+        $("#UpdateProgress1").css("display", "");
+        var ajxfn = {};
+        ajxfn.url = "@Url.Action("_AttendanceFormChange", "CheckRollFunc")";
+        ajxfn.type = "POST";
+        ajxfn.async = false;
+        ajxfn.data = JSON.stringify({ SelectedDate: SelectedDate, GroupSelection: GroupSelection });
+        ajxfn.datatype = "json";
+        ajxfn.contentType = "application/json";
+        ajxfn.success = function (result) {
+            //alert("Link : " + result.urlLoad);
+            $('#_AttendanceForm').load(result.UrlLoad);
+            $.simplyToast(result.Msg, result.StatusMsg);
+            $("#UpdateProgress1").css("display", "none");
+            $('#myModal1').modal('hide');
+        };
+        ajxfn.error = function () {
+            $("#UpdateProgress1").css("display", "none");
+        };
+        $.ajax(ajxfn);
+    });
+</script>

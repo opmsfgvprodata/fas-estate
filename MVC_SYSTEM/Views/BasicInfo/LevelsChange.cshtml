@@ -1,0 +1,153 @@
+﻿@model MVC_SYSTEM.Models.tbl_PktUtama
+
+@{
+    ViewBag.Title = "LevelsChange";
+    //Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div class="modal-header">@GlobalResEstate.lblOldLevel</div>
+    <div class="modal-body">
+        <div class="form-horizontal">
+            <span id="progress" class="text-center" style="display: none;">
+                <img src="~/Asset/Images/wait.gif" alt="wait" />
+            </span>
+
+            <div class="form-group">
+                <label class="control-label col-md-2">@GlobalResEstate.lblLevelMain</label>
+                <div class="col-md-9">
+                    @*@Html.EditorFor(model => model.fld_PktUtama, new { htmlAttributes = new { @class = "form-control required" } })*@
+                    @Html.DropDownList("fld_PktUtama1", null, htmlAttributes: new { @class = "form-control required" })
+                    @*@Html.ValidationMessageFor(model => model.fld_PktUtama, "", new { @class = "text-danger" })*@
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-2">@GlobalResEstate.lblPlantType</label>
+                <div class="col-md-9">
+                    @Html.TextBox("fld_JnsTnmn1", "", new { @class = "form-control", @readonly = "readonly" })
+                    @*@Html.DropDownList("fld_JnsTnmn", null, htmlAttributes: new { @class = "form-control required" })*@
+                    @*@Html.ValidationMessageFor(model => model.fld_JnsTnmn, "", new { @class = "text-danger" })*@
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-2">@GlobalResEstate.lblPlantStatus</label>
+                <div class="col-md-9">
+                    @Html.TextBox("fld_StatusTnmn1", "", new { @class = "form-control", @readonly = "readonly" })
+                    @*@Html.DropDownList("fld_StatusTnmn", null, htmlAttributes: new { @class = "form-control required" })*@
+                    @*@Html.ValidationMessageFor(model => model.fld_StatusTnmn, "", new { @class = "text-danger" })*@
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-2">@GlobalResEstate.lblLevelMainArea</label>
+                <div class="col-md-9">
+                    @Html.TextBox("fld_LsPktUtama1", "", new { @class = "form-control", @readonly = "readonly" })
+                    @*@Html.ValidationMessageFor(model => model.fld_LsPktUtama, "", new { @class = "text-danger" })*@
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="modal-footer"></div>
+    <div class="modal-header">@GlobalResEstate.lblNewLevel</div>
+    <div class="modal-body">
+        <div class="form-horizontal">
+            <span id="progress" class="text-center" style="display: none;">
+                <img src="~/Asset/Images/wait.gif" alt="wait" />
+            </span>
+
+            <div class="form-group">
+                <label class="control-label col-md-2">@GlobalResEstate.lblLevelMain</label>
+                <div class="col-md-9">
+                    @*@Html.EditorFor(model => model.fld_PktUtama, new { htmlAttributes = new { @class = "form-control required" } })*@
+                    @Html.DropDownList("fld_PktUtama2", null, htmlAttributes: new { @class = "form-control required" })
+                    @*@Html.ValidationMessageFor(model => model.fld_PktUtama, "", new { @class = "text-danger" })*@
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-2">@GlobalResEstate.lblPlantType</label>
+                <div class="col-md-9">
+                    @Html.TextBox("fld_JnsTnmn2", "", new { @class = "form-control", @readonly = "readonly" })
+                    @*@Html.DropDownList("fld_JnsTnmn", null, htmlAttributes: new { @class = "form-control required" })*@
+                    @*@Html.ValidationMessageFor(model => model.fld_JnsTnmn, "", new { @class = "text-danger" })*@
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-2">@GlobalResEstate.lblPlantStatus</label>
+                <div class="col-md-9">
+                    @Html.TextBox("fld_StatusTnmn2", "", new { @class = "form-control", @readonly = "readonly" })
+                    @*@Html.DropDownList("fld_StatusTnmn", null, htmlAttributes: new { @class = "form-control required" })*@
+                    @*@Html.ValidationMessageFor(model => model.fld_StatusTnmn, "", new { @class = "text-danger" })*@
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-2">@GlobalResEstate.lblLevelMainArea</label>
+                <div class="col-md-9">
+                    @Html.TextBox("fld_LsPktUtama2", "", new { @class = "form-control", @readonly = "readonly" })
+                    @*@Html.ValidationMessageFor(model => model.fld_LsPktUtama, "", new { @class = "text-danger" })*@
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="modal-footer">
+        <input class="btn btn-primary" formaction="LevelsChange" formmethod="post" type="submit" id="save2" value=@GlobalResEstate.btnSave />
+        <a style="text-align:right" href="@Request.UrlReferrer" class="btn btn-warning" >@GlobalResEstate.btnBack</a>
+    </div>
+}
+<script>
+    $(document).ready(function () {
+        if ($("#fld_PktUtama1").val() == 0) {
+            $("#fld_JnsTnmn1").empty();
+            $("#fld_StatusTnmn1").empty();
+            $("#fld_LsPktUtama1").empty();
+        }
+
+        $("#fld_PktUtama1").change(function () {
+            var PktUtamaOld = {};
+            var disableoption = "";
+            PktUtamaOld.url = "@Url.Action("GetPktChange", "BasicInfo")";
+            PktUtamaOld.type = "POST";
+            PktUtamaOld.data = JSON.stringify({ pktUtama: $("#fld_PktUtama1").val() });
+            PktUtamaOld.datatype = "json";
+            PktUtamaOld.contentType = "application/json";
+            PktUtamaOld.success = function (result) {
+                $("#fld_JnsTnmn1").val(result.jnsTnmn);
+                $("#fld_StatusTnmn1").val(result.statusTnmn);
+                $("#fld_LsPktUtama1").val(result.luas);
+            };
+            PktUtamaOld.error = function () { $.simplyToast('@GlobalResEstate.msgError', 'danger'); };
+            $.ajax(PktUtamaOld);
+        });
+
+        if ($("#fld_PktUtama2").val() == 0) {
+            $("#fld_JnsTnmn2").empty();
+            $("#fld_StatusTnmn2").empty();
+            $("#fld_LsPktUtama2").empty();
+        }
+
+        $("#fld_PktUtama2").change(function () {
+            var PktUtamaNew = {};
+            var disableoption = "";
+            PktUtamaNew.url = "@Url.Action("GetPktChange", "BasicInfo")";
+            PktUtamaNew.type = "POST";
+            PktUtamaNew.data = JSON.stringify({ pktUtama: $("#fld_PktUtama2").val() });
+            PktUtamaNew.datatype = "json";
+            PktUtamaNew.contentType = "application/json";
+            PktUtamaNew.success = function (result) {
+                $("#fld_JnsTnmn2").val(result.jnsTnmn);
+                $("#fld_StatusTnmn2").val(result.statusTnmn);
+                $("#fld_LsPktUtama2").val(result.luas);
+            };
+            PktUtamaNew.error = function () { $.simplyToast('@GlobalResEstate.msgError', 'danger'); };
+            $.ajax(PktUtamaNew);
+        });
+    });
+</script>

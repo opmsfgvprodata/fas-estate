@@ -1,0 +1,235 @@
+﻿@model MVC_SYSTEM.CustomModels2.detailsreport
+<style>
+    .panel-primary {
+        border-color: white !important;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    td, th {
+        padding: 20px;
+        border: 1px solid black;
+    }
+
+    .hover {
+        background: #b0b0b0;
+    }
+</style>
+@if (Model.CustMod_DetailWork2 != null)
+{
+    ReportLogic ReportLogic = new ReportLogic();
+    int Selection1 = ViewBag.Selection1;
+    var getcolumn = Model.coloumgroup;
+    int i = 1;
+    int span = getcolumn.Count() + 1;
+    int span2 = getcolumn.Count() + 14 + 19;
+    int span3 = span2 - 1;
+    int span4 = getcolumn.Count() + 7 + 10;
+    int span5 = getcolumn.Count() + 7 + 9;
+    decimal grandtotal = 0;
+    <div id="scrollArea2" class="modal-body">
+        <table class="table table-hover table-bordered" style="font-size: 11px;" border="0" width="100%">
+            <thead>
+                <tr>
+                    <th colspan="@span2" style="text-align:center;vertical-align:middle;">
+                        @ViewBag.NamaSyarikat
+                        <br />
+                        (@ViewBag.NoSyarikat)
+                        <br />
+                    </th>
+                </tr>
+                <tr>
+                    <th colspan="@span4" style="text-align:left;vertical-align:top;">
+                        TAJUK&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: @ViewBag.TitleReport
+                        <br />
+                        WILAYAH/LADANG&nbsp;&nbsp;&nbsp;&nbsp;: @ViewBag.NamaLadang
+                        <br />
+                        Pilihan&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: @ViewBag.Pilihan
+                    </th>
+                    <th colspan="@span5" style="text-align:left;vertical-align:top;">
+                        TEMPOH&nbsp;&nbsp;&nbsp;&nbsp;: @ViewBag.Tempoh
+                    </th>
+                </tr>
+                <tr>
+                    <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">No</th>
+                    @foreach (var column in getcolumn)
+                    {
+                        <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">@column.name</th>
+                    }
+                    <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">1</th>
+                    <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">2</th>
+                    <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">3</th>
+                    <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">4</th>
+                    <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">5</th>
+                    <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">6</th>
+                    <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">7</th>
+                    <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">8</th>
+                    <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">9</th>
+                    <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">10</th>
+                    <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">11</th>
+                    <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">12</th>
+                    <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">13</th>
+                    <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">14</th>
+                    <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">15</th>
+                    <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">16</th>
+                    <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">17</th>
+                    <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">18</th>
+                    <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">19</th>
+                    <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">20</th>
+                    <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">21</th>
+                    <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">22</th>
+                    <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">23</th>
+                    <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">24</th>
+                    <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">25</th>
+                    <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">26</th>
+                    <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">27</th>
+                    <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">28</th>
+                    <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">29</th>
+                    <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">30</th>
+                    <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">31</th>
+                    <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">JUMLAH</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in ReportLogic.DetailReport3(Model.CustMod_DetailWork2, Model.coloumgroup, Selection1.ToString()))
+                {
+                    <tr>
+                        <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">@i</td>
+                        @Html.Raw(item.columnheader)
+                        <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1"> @item.day1</td>
+                        <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1"> @item.day2</td>
+                        <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1"> @item.day3</td>
+                        <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1"> @item.day4</td>
+                        <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1"> @item.day5</td>
+                        <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1"> @item.day6</td>
+                        <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1"> @item.day7</td>
+                        <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1"> @item.day8</td>
+                        <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1"> @item.day9</td>
+                        <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1"> @item.day10</td>
+                        <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1"> @item.day11</td>
+                        <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1"> @item.day12</td>
+                        <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1"> @item.day13</td>
+                        <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1"> @item.day14</td>
+                        <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1"> @item.day15</td>
+                        <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1"> @item.day16</td>
+                        <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1"> @item.day17</td>
+                        <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1"> @item.day18</td>
+                        <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1"> @item.day19</td>
+                        <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1"> @item.day20</td>
+                        <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1"> @item.day21</td>
+                        <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1"> @item.day22</td>
+                        <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1"> @item.day23</td>
+                        <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1"> @item.day24</td>
+                        <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1"> @item.day25</td>
+                        <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1"> @item.day26</td>
+                        <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1"> @item.day27</td>
+                        <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1"> @item.day28</td>
+                        <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1"> @item.day29</td>
+                        <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1"> @item.day30</td>
+                        <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1"> @item.day31</td>
+                        <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1"> @item.gettotal</td>
+                    </tr>
+                    i++;
+                    grandtotal += item.gettotal;
+                }
+                @if (Selection1 == 0)
+                {
+                    <tr>
+                        <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1" colspan="@span3">Total(RM)</td>
+                        <td align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">@grandtotal</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+else
+{
+    <div id="scrollArea2" class="modal-body" style="text-align: center">
+        <p style="color: red">No Data.</p>
+    </div>
+}
+
+<div style="text-align:right; margin-top:10px">
+    <a class="btn btn-default btn-sm" href="#" id="printpage">
+        <span class="glyphicon glyphicon-print"> </span> @GlobalResEstate.btnPrint
+    </a>
+    <a class="btn btn-default btn-sm" href="#" onclick="HTMLtoExcel('LprnKrjaHarian')">
+        <span><img src="~/Asset/Images/excel-icon.png" width="20px" height="20px" /></span> @GlobalResEstate.btnDownloadExcel
+    </a>
+</div>
+<style>
+    #page td {
+        padding: 2px;
+        margin: 2px;
+    }
+</style>
+<script src="~/Asset/Scripts/FromHTML.js"></script>
+<script src="~/Asset/Scripts/FileSaver.js"></script>
+<script>
+    $(document).ready(function () {
+        $("#printpage").click(function () {
+            var DivElement = document.getElementById("scrollArea2").innerHTML;
+            var oldPage = document.body.innerHTML;
+            document.body.innerHTML = DivElement;
+            window.print();
+            document.body.innerHTML = oldPage;
+        })
+    });
+</script>
+<script type="text/javascript">
+    function findBlocks(theTable) {
+        if ($(theTable).data('hasblockrows') == null) {
+            //console.log('findBlocks'); // to prove we only run this once
+
+            // we will loop through the rows but skip the ones not in a block
+            var rows = $(theTable).find('tr');
+            for (var i = 0; i < rows.length;) {
+
+                var firstRow = rows[i];
+
+                // find max rowspan in this row - this represents the size of the block
+                var maxRowspan = 1;
+                $(firstRow).find('td').each(function () {
+                    var attr = parseInt($(this).attr('rowspan') || '1', 10)
+                    if (attr > maxRowspan) maxRowspan = attr;
+                });
+
+                // set to the index in rows we want to go up to
+                maxRowspan += i;
+
+                // build up an array and store with each row in this block
+                // this is still memory-efficient, as we are just storing a pointer to the same array
+                // ... which is also nice becuase we can build the array up in the same loop
+                var blockRows = [];
+                for (; i < maxRowspan; i++) {
+                    $(rows[i]).data('blockrows', blockRows);
+                    blockRows.push(rows[i]);
+                }
+
+                // i is now the start of the next block
+            }
+
+            // set data against table so we know it has been inited (for if we call it in the hover event)
+            $(theTable).data('hasblockrows', 1);
+        }
+    }
+
+    $("td").hover(function () {
+        $el = $(this);
+        //findBlocks($el.closest('table')); // you can call it here or onload as below
+        $.each($el.parent().data('blockrows'), function () {
+            $(this).find('td').addClass('hover');
+        });
+    }, function () {
+        $el = $(this);
+        $.each($el.parent().data('blockrows'), function () {
+            $(this).find('td').removeClass('hover');
+        });
+    });
+
+    findBlocks($('table'));
+</script>

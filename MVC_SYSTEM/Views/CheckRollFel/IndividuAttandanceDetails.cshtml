@@ -1,0 +1,57 @@
+﻿@model IEnumerable<MVC_SYSTEM.Models.vw_Kerjahdr>
+@using MVC_SYSTEM.Class
+@{
+    int itemno = 1;
+    string date = "";
+    GetConfig getconfig = new GetConfig();
+    string dateformat = getconfig.GetData("dateformat2");
+    CheckrollFunction CheckrollFunction = new CheckrollFunction();
+    int ButtonColor = 0;
+    string Color = "";
+    string Title = "";
+}
+<thead>
+    <tr>
+        <th bgcolor="#ffcc80" width="2%" style="color:black; text-align:center; vertical-align:middle;border:1px solid black;" border="1">@GlobalResEstate.hdrNo</th>
+        <th bgcolor="#ffcc80" width="10%" style="color:black; text-align:center; vertical-align:middle;border:1px solid black;" border="1">@GlobalResEstate.lblDate</th>
+        <th bgcolor="#ffcc80" width="10%" style="color:black; text-align:center; vertical-align:middle;border:1px solid black;" border="1">@GlobalResEstate.lblChoose</th>
+    </tr>
+</thead>
+<tbody>
+    @if (Model.Count() > 0)
+    {
+        foreach (var item in Model)
+        {
+            date = item.fld_Tarikh != null ? string.Format("{0:dd/MM/yyyy}", item.fld_Tarikh) : "-";
+            ButtonColor = CheckrollFunction.GetDataKerjaStatus(item.fld_Nopkj, item.fld_Tarikh, item.fld_NegaraID, item.fld_SyarikatID, item.fld_WilayahID, item.fld_LadangID);
+            switch (ButtonColor)
+            {
+                case 1:
+                    Color = "danger";
+                    Title = "Tidak Hadir";
+                    break;
+                case 2:
+                    Color = "success";
+                    Title = "Hadir Dan Ada Data Kerja";
+                    break;
+                case 3:
+                    Color = "warning";
+                    Title = "Hadir Dan Tiada Data Kerja";
+                    break;
+            }
+            <tr>
+                <td align="center" style="vertical-align:middle !important; border:1px solid black;" border="1">@itemno</td>
+                <td align="center" style="vertical-align:middle !important; border:1px solid black;" border="1">@date</td>
+                <td align="center" style="vertical-align:middle !important; border:1px solid black;" border="1"><a href="#" class="btn btn-@Color" onclick="return dateselectedit('@string.Format("{0:"+dateformat+"}", item.fld_Tarikh)');" id="selectdateedit" name="selectdateedit" title="@Title"><i class='fa fa-edit fa-lg'></i></a></td>
+            </tr>
+            itemno++;
+        }
+    }
+    else
+    {
+        <tr>
+            <td align="center" colspan="3" style="vertical-align:middle !important; border:1px solid black;" border="1">@GlobalResEstate.msgNoRecord</td>
+        </tr>
+    }
+
+</tbody>

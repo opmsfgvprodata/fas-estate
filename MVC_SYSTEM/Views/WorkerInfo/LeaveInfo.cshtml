@@ -1,0 +1,182 @@
+﻿@model MVC_SYSTEM.ViewingModels.PagedList<MVC_SYSTEM.ViewingModels.tbl_Pkjmast>
+@using MVC_SYSTEM.Class;
+@{
+    ViewBag.Title = "WorkerGroupInfo";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+    GetLadang GetLadang = new GetLadang();
+    GetWilayah GetWilayah = new GetWilayah();
+}
+
+@*<script src="~/Asset/Scripts/jquery.unobtrusive-ajax.min.js"></script>*@
+
+<div id="divLoading" style="display:none;">
+    <div class="progressTest">
+        <label>
+            @GlobalResDataEntry.WaitMsg
+        </label>
+    </div>
+</div>
+
+<section class="content-wrapper main-content clear-fix">
+    <div class="well bottom">
+        <div class="modal-body">
+            @*<div class="form-horizontal">
+                @using (Ajax.BeginForm("WorkerSearch", new { id = "workerSearchForm" }, options))
+                {
+                    <div class="form-group">
+                        <label class="control-label col-sm-2">Kata Kunci:</label>
+                        <div class="col-sm-7">
+                            @Html.TextBox("filter", null, htmlAttributes: new { @class = "form-control", placeholder = "Sila Masukkan Nombor Pekerja atau Nama Pekerja", @id = "txtfilter" })
+
+                            @*                            @Html.TextBox("filter", null, htmlAttributes: new {@class = "form-control", placeholder = "Sila Masukkan Kod Kumpulan atau Jenis Kerja atau Keterangan Kumpulan", @data_val = "true", @data_val_required = "Sila Masukkan Kata Kunci", @id = "txtfilter"})*@
+                            @*@Html.ValidationMessage("filter", new {@class = "text-danger"})
+
+                        </div>
+                        <div class="col-sm-3 btn-group">
+                            <input type="submit" name="submit" value="Save" />
+                                <input type="submit" name="submit" value="Cancel" />
+
+                            <button type="submit" id="btnCari" class="btn btn-primary"><span class="glyphicon glyphicon-search"></span> Cari</button>
+                            @*<button id="btnReset" class="btn btn-primary" onclick="resetSearch();"> Reset Carian</button>
+                            <input type="button" class="btn btn-primary" value="Senarai Penuh" onclick="javascript:resetSearch1();" />
+                            @*<a href=@Url.Action("searchGroup", "BasicInfo", new { filter = "" }) class="btn btn-primary" role="button">Reset Carian</a>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-2"></label>
+                        <div class="col-sm-7">
+
+                        </div>
+                        <div class="col-sm-3 btn-group">
+                        </div>
+                    </div>
+                }
+            </div>*@
+            <div class="panel panel-primary">
+
+
+                <div class="panel-heading">MAKLUMAT KUMPULAN PEKERJA PENDING APPROVAL</div>
+
+                <div class="panel-body">
+
+                    
+
+                    @{
+                        var grid = new WebGrid(
+                            canPage: true,
+                            rowsPerPage: Model.PageSize,
+                            canSort: true,
+                            ajaxUpdateContainerId: "grid");
+
+                        grid.Bind(Model.Content, rowCount: Model.TotalRecords, autoSortAndPage: false);
+                        grid.Pager(WebGridPagerModes.All);
+
+                        if (@grid.TotalRowCount > 0)
+                        {
+                            <div class="text-center">@grid.TotalRowCount @Html.Label("maklumat pekerja")</div>
+
+                            @grid.GetHtml(htmlAttributes: new { id = "grid" }, // id for ajaxUpdateContainerId parameter
+                                tableStyle: "table table-bordered table-striped table-list table-hover",
+                                headerStyle: "Grid-Header",
+                                alternatingRowStyle: "Grid-alt",
+                                selectedRowStyle: "Grid-selected",
+                                rowStyle: "Grid-rowstyle",
+                                columns: grid.Columns(
+                                    grid.Column(header: "No."
+                                        , format: item => item.WebGrid.Rows.IndexOf(item) + 1
+                                                          + Math.Round(Convert.ToDouble(grid.TotalRowCount / grid.PageCount) / grid.RowsPerPage)
+                                                          * grid.RowsPerPage * grid.PageIndex, style: "count"),
+                                    grid.Column(columnName: "fld_Nopkj", header: "Nombor Pekerja"),
+                                    grid.Column(columnName: "fld_Nama", header: "Nama Pekerja"),
+                                    grid.Column(columnName: "fld_StatusApproved", header: "Status"),
+                                    grid.Column(columnName: "fld_Trmlkj", header: "Tarikh Sampai KLIA"),
+                                    grid.Column(GlobalResEstate.hdrAction, format: (item) =>
+                                    {
+                                        //if (item.fld_KodKumpulan != "N/A")
+                                        //{
+                                        var tindakan = "<a data-modal1='' href='" + @Url.Action("GenerateWorkerLeave", "WorkerInfo") + "/?id=" + item.fld_UniqueID + "' class='btn btn-success btn-xs' role='button' title='Jana Cuti Pekerja Tahun Hadapan'><span class='glyphicon glyphicon-ok'></span></a>" +
+                                                       "&nbsp;<a data-modal1='' href='" + @Url.Action("ApproveWorker", "WorkerInfo") + "/?id=" + item.fld_UniqueID + "' class='btn btn-primary btn-xs' role='button' title='Approve Pekerja'><span class='glyphicon glyphicon-ok'></span></a>";
+                                        //"<button type='button' class='btn btn-warning btn-xs' title='Pekerja ini sudah mempunyai kumpulan' onclick='displayError();'><span class='glyphicon glyphicon-plus'></span></button>" +
+                                        //"<button type='button' data-toggle='modal' class='btn btn-danger btn-xs' onclick='GetKmplnValue(this.value);' value='" + item.fld_UniqueID + "' title='Tambah Pekerja Ke Dalam Kumpulan'> <span class='glyphicon glyphicon-trash'></span></button>";
+                                        return @Html.Raw(tindakan);
+                                        //}
+                                        //else
+                                        //{
+                                        //var tindakan = "<a data-modal='' href='" + @Url.Action("WorkerGroupSelection", "WorkerInfo") + "/?workerid=" + item.fld_UniqueID + "' class='btn btn-success btn-xs' role='button' title='Tambah pekerja ke dalam kumpulan'><span class='glyphicon glyphicon-plus'></span></a>" +
+                                        //"&nbsp;<button type='button' class='btn btn-warning btn-xs' title='Pekerja ini tidak mempunyai kumpulan' onclick='displayErrorNotExist();'><span class='glyphicon glyphicon-trash'></span></button>";
+
+                                        //var tindakan = "<a data-modal='' href='" + @Url.Action("GroupEdit", "BasicInfo") + "/?id=" + item.fld_KumpulanID + "' class='btn btn-primary btn-xs' role='button' title='Kemaskini Kumpulan'> <span class='glyphicon glyphicon-pencil'></span></a>" +
+                                        //               "&nbsp;<a data-modal='' href='" + @Url.Action("GroupMemberInfo", "BasicInfo") + "/?id=" + item.fld_KumpulanID + "' class='btn btn-success btn-xs' role='button' title='Maklumat Ahli Kumpulan'> <span class='glyphicon glyphicon glyphicon-user'></span></a>" +
+                                        //               "&nbsp;<a data-modal='' href='" + @Url.Action("GroupDelete", "BasicInfo") + "/?id=" + item.fld_KumpulanID + "' class='btn btn-danger btn-xs' role='button' title='Buang Kumpulan'><span class='glyphicon glyphicon-trash'></span></a>" +
+                                        //               "<button type='button' class='btn btn-primary btn-xs' onclick='GetTdValue(this.value);' value='" + item.fld_UniqueID + "' title='Tambah Pekerja Ke Dalam Kumpulan'> <span class='glyphicon glyphicon-plus'></span></button>" +
+                                        //               "<button type='button' data-toggle='modal' class='btn btn-danger btn-xs' onclick='GetKmplnValue(this.value);' value='" + item.fld_UniqueID + "' title='Tambah Pekerja Ke Dalam Kumpulan'> <span class='glyphicon glyphicon-trash'></span></button>";
+                                        //return @Html.Raw(tindakan);
+                                        //}
+                                    }, canSort:false)
+                                    ));
+                        }
+                        else
+                        {
+                            <hr />
+                            <div class="text-center">
+                                @Html.Label("Tiada maklumat dijumpai")
+                            </div>
+
+                            <hr />
+                        }
+                    }
+                </div>
+
+            </div>
+        </div>
+        <div class="modal-footer col-md-12 " style="margin-top:-5px;">
+            <a href=@Url.Action("Index", "WorkerInfo") class="btn btn-warning" role="button">Kembali</a>
+        </div>
+
+    </div>
+</section>
+<!-- modal placeholder-->
+<div id='myModal' class='modal fade in'>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div id='myModalContent'></div>
+        </div>
+    </div>
+</div>
+
+<div id='myModal1' class='modal fade in'>
+    <div class="modal-dialog modal-lg" style="width: 85%">
+        <div class="modal-content">
+            <div id='myModalContent1'></div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    @Scripts.Render("~/Asset/Scripts/AjaxModal.js")
+}
+
+<style>
+    .count {
+        width: 50px;
+        font-size: 12px;
+    }
+</style>
+
+<script>
+    function resetSearch1() {
+        document.getElementById("txtfilter").value = "";
+        document.getElementById('btnCari').click();
+    }
+
+        function displayErrorExist() {
+            $.simplyToast('Pekerja ini sudah mempunyai kumpulan.', 'danger');
+        }
+
+    function displayErrorNotExist() {
+        $.simplyToast('Pekerja ini tidak mempunyai kumpulan.', 'danger');
+    }
+
+</script>
+
+

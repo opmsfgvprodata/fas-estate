@@ -1,0 +1,52 @@
+﻿@*@model MVC_SYSTEM.ViewingModels.PagedList<MVC_SYSTEM.ViewingModels.tbl_PktUtamaOthrList>*@
+
+@{
+    var grid = new WebGrid(
+        canPage: true,
+        rowsPerPage: Model.PageSize,
+        canSort: false,
+        ajaxUpdateContainerId: "grid");
+
+    grid.Bind(Model.Content, rowCount: Model.TotalRecords, autoSortAndPage: false);
+    //grid.Pager(WebGridPagerModes.All);
+
+    if (@grid.TotalRowCount > 0)
+    {
+        <div class="text-center">@grid.TotalRowCount @Html.Label("Maklumat Peringkat")</div>
+
+        @grid.GetHtml(htmlAttributes: new { id = "grid" }, // id for ajaxUpdateontainerId parameter
+            tableStyle: "table table-bordered table-striped table-list table-hover",
+            headerStyle: "header_table",
+            alternatingRowStyle: "Grid-alt",
+            selectedRowStyle: "Grid-selected",
+            rowStyle: "Grid-rowstyle",
+            footerStyle: "table-pager",
+            mode: WebGridPagerModes.All,
+            columns: grid.Columns(
+                grid.Column(header: GlobalResEstate.hdrNo
+                    , format: item => item.WebGrid.Rows.IndexOf(item) + 1
+                                      + Math.Round(Convert.ToDouble(grid.TotalRowCount / grid.PageCount) / grid.RowsPerPage)
+                                      * grid.RowsPerPage * grid.PageIndex, style: "count height"),
+                grid.Column(columnName: "fld_IOcode", header: "Cost Centre", style: "webGridClmn1 height"),
+                grid.Column(columnName: "fld_PktUtama", header: "Kod Peringkat", style: "webGridClmn1 height"),
+                grid.Column(columnName: "fld_NamaPktUtama", header: "Keterangan", style: "webGridClmn1 height"),
+                grid.Column(GlobalResEstate.hdrAction, format: (item) =>
+                {
+
+                    var tindakan = "<a data-modal1='' href='" + @Url.Action("PktOthrEdit", "BasicInfo") + "/?id=" + item.fld_PktUtama + "' class='btn btn-success' role='button' title='" + GlobalResEstate.btnUpdate + "' onclick='return DisplayProgressMessage2(this);'><i class='fa fa-edit fa-lg'></i></a>&nbsp;" +
+                                   "<a data-modal1='' href='" + @Url.Action("PktOthrDelete", "BasicInfo") + "/?id=" + item.fld_PktUtama + "' class='btn btn-danger' role='button' title='" + GlobalResEstate.btnDelete + "' onclick='return DisplayProgressMessage(this);'><i class='fa fa-trash fa-lg'></i></a>&nbsp;";
+
+                    return @Html.Raw(tindakan);
+                }, canSort: false, style: "tindakan height")
+                ))
+    }
+    else
+    {
+        <hr />
+        <div class="text-center">
+            @Html.Label(GlobalResEstate.msgErrorSearch)
+        </div>
+
+        <hr />
+    }
+}

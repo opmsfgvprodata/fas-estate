@@ -1,0 +1,82 @@
+﻿@model IEnumerable<MVC_SYSTEM.Models.tbl_Pkjmast>
+@using MVC_SYSTEM.Class
+
+@{
+    ViewBag.Title = "_PaySlipRptSearch";
+    //Layout = "~/Views/Shared/_LayoutMain.cshtml";
+
+    ChangeTimeZone ChangeTimeZone = new ChangeTimeZone();
+
+    int year1 = ChangeTimeZone.gettimezone().Year;
+    int month1 = ChangeTimeZone.gettimezone().Month;
+    int day = ChangeTimeZone.gettimezone().Day;
+    int hour = ChangeTimeZone.gettimezone().Hour;
+    int minute = ChangeTimeZone.gettimezone().Minute;
+    int second = ChangeTimeZone.gettimezone().Second;
+    string uniquefilename = "PaySlipRpt_" + ViewBag.UserID + "_" + year1.ToString() + month1.ToString() + day.ToString() + hour.ToString() + minute.ToString() + second.ToString();
+}
+
+@if (Model.Count() <= 0)
+{
+    <div id="scrollArea2" class="modal-body" style="text-align: center">
+        <p style="color: red">@ViewBag.Message</p>
+
+    </div>
+}
+else
+{
+    <div id="scrollArea2" class="modal-body">
+        @foreach (var pkj in Model.Select(s => s.fld_Nopkj).Distinct())
+        {
+            @Html.Action("_PaySlipRptDetail", "Report", new { pkj = pkj, month = ViewBag.SelectedMonth, year = ViewBag.SelectedYear })
+        }
+    </div>
+
+    if (ViewBag.Print == null)
+    {
+        <div style="text-align:right; margin-top:10px">
+            @*<a href="#" id="printpage">Cetak Laporan</a>*@
+            @*<a href="#" id="downloadpdf2">Download PDF</a>
+                <a href="#" onclick="HTMLtoExcel('@uniquefilename')">Download Excel</a>*@
+
+            <a class="btn btn-default btn-sm" href="#" id="printpage">
+                <span class="glyphicon glyphicon-print"> </span> @GlobalResEstate.btnPrint
+            </a>
+            <a class="btn btn-default btn-sm" href="#" id="downloadpdf">
+                <span><img src="~/Asset/Images/pdf-icon.png" width="20px" height="20px" /></span> @GlobalResEstate.btnDownloadPdf
+            </a>
+            @*<a class="btn btn-default btn-sm" href="#" onclick="HTMLtoExcel('@uniquefilename')">
+                <span><img src="~/Asset/Images/excel-icon.png" width="20px" height="20px" /></span> @GlobalResEstate.btnDownloadExcel
+            </a>*@
+        </div>
+    }
+}
+
+<script>
+    $(document).ready(function () {
+
+        $("#printpage").click(function () {
+            var DivElement = document.getElementById("scrollArea2").innerHTML;
+            var oldPage = document.body.innerHTML;
+            document.body.innerHTML = DivElement;
+            window.print();
+            document.body.innerHTML = oldPage;
+        })
+
+        $("#downloadpdf").click(function () {
+            var RadioGroup = $('input[name=RadioGroup]:checked').val();
+            var MonthList = $("#MonthList").val();
+            var YearList = $("#YearList").val();
+            var StatusList = $("#StatusList").val();
+            var SelectionList = $("#SelectionList").val();
+            var JnsPkjList = $("#JnsPkjList").val();
+
+            var param = '/?RadioGroup=' + RadioGroup + '&MonthList=' + MonthList + '&YearList=' + YearList + '&StatusList=' + StatusList + '&SelectionList=' + SelectionList + '&JnsPkjList=' + JnsPkjList;
+            PDFObject.embed("@Url.Action("PaySlipPdf", "ReportPdf")" + param, "#searchResultWorkerPaySlipRptInfo", { height: "450px" });
+
+            return false;
+        });
+    });
+</script>
+
+

@@ -1,0 +1,58 @@
+﻿@model MVC_SYSTEM.Models.tbl_KeluargaPkj
+@using MVC_SYSTEM.Class;
+
+@{
+    ViewBag.Title = "DependentsInfoDelete";
+    //Layout = "~/Views/Shared/_LayoutMain.cshtml";
+    GetConfig GetConfig = new GetConfig();
+    string Hubungan = GetConfig.GetWebConfigDesc(Model.fld_Hubungan, "Waris", Model.fld_NegaraID, Model.fld_SyarikatID);
+    //GetEstateDetail GetEstateDetail = new GetEstateDetail();
+    //string NamaPkj = GetEstateDetail.Name(Model.fld_Nopkj, Model.fld_WilayahID.Value, Model.fld_SyarikatID.Value, Model.fld_NegaraID.Value, Model.fld_LadangID.Value);
+}
+
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 class="modal-title">@GlobalResEstate.titleDelete</h3>
+</div>
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div class="modal-body">
+
+        <div class="form-horizontal">
+            <span id="progress" class="text-center" style="display: none;">
+                <img src="~/Asset/Images/wait.gif" alt="wait" />
+            </span>
+            @Html.Hidden("IDkeluarga", Model.fld_ID)
+            <div class="form-group">
+                <label class="control-label col-md-2">Nama Waris</label>
+                <div class="col-md-9">
+                    @Html.TextBox("fld_NamaKeluarga", null, new { @class = "form-control", disabled = "disabled" })
+                    @Html.ValidationMessageFor(model => model.fld_NamaKeluarga, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-md-2">Hubungan Waris</label>
+                <div class="col-md-9">
+                    @Html.TextBox("fld_Hubungan", Hubungan, new { @class = "form-control", disabled = "disabled" })
+                    @Html.ValidationMessageFor(model => model.fld_Hubungan, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-9 col-sm-offset-3">
+                    <h3>
+                        <span class="label label-danger">
+                            @GlobalResEstate.msgDelete
+                        </span>
+                    </h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal-footer">
+        <button class="btn btn-primary" data-dismiss="modal">@GlobalResEstate.btnNo</button>
+        <input class="btn btn-danger" type="submit" value=@GlobalResEstate.btnYes />
+    </div>
+}

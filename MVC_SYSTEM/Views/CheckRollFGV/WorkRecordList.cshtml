@@ -1,0 +1,80 @@
+﻿@model IEnumerable<MVC_SYSTEM.CustomModels.CustMod_WorkerWork>
+@{
+    int itemno = 1;
+    int loopitem = 1;
+    var kodaktvts = Model.Select(s => new { s.fld_KodAktvt, s.fld_KodGL, s.fld_KodPkt, s.fld_Unit }).Distinct().ToList();
+    string trstrt = "<tr>";
+    string trend = "</tr>";
+    CheckrollFunction CheckrollFunction = new CheckrollFunction();
+}
+<thead>
+    <tr>
+        <th bgcolor="#ffcc80" width="2%" style="color:black; text-align:center; vertical-align:middle;border:1px solid black;" border="1">@GlobalResEstate.hdrNo</th>
+        @*<th bgcolor="#ffcc80" width="3%" style="color:black; text-align:center; vertical-align:middle;border:1px solid black;" border="1">@GlobalResEstate.hdrLejar</th>*@
+        <th bgcolor="#ffcc80" width="5%" style="color:black; text-align:center; vertical-align:middle;border:1px solid black;" border="1">@GlobalResEstate.lblLevel</th>
+        <th bgcolor="#ffcc80" width="5%" style="color:black; text-align:center; vertical-align:middle;border:1px solid black;" border="1">@GlobalResEstate.hdrActvtCode</th>
+        <th bgcolor="#ffcc80" width="10%" style="color:black; text-align:center; vertical-align:middle;border:1px solid black;" border="1">@GlobalResEstate.hdrNoPkj</th>
+        <th bgcolor="#ffcc80" width="10%" style="color:black; text-align:center; vertical-align:middle;border:1px solid black;" border="1">@GlobalResEstate.hdrName</th>
+        <th bgcolor="#ffcc80" width="10%" style="color:black; text-align:center; vertical-align:middle;border:1px solid black;" border="1">@GlobalResEstate.hdrOutcome</th>
+        <th bgcolor="#ffcc80" width="10%" style="color:black; text-align:center; vertical-align:middle;border:1px solid black;" border="1">Daily Wage (RM)</th> @*Modified by faeza 14.12.2021 change Daily Incentive to Daily Wage*@
+        <th bgcolor="#ffcc80" width="10%" style="color:black; text-align:center; vertical-align:middle;border:1px solid black;" border="1">@GlobalResEstate.lblOvertime (Hours)</th>
+        <th bgcolor="#ffcc80" width="10%" style="color:black; text-align:center; vertical-align:middle;border:1px solid black;" border="1">@GlobalResEstate.lblTotal (RM)</th>
+        <th bgcolor="#ffcc80" width="10%" style="color:black; text-align:center; vertical-align:middle;border:1px solid black;" border="1">@GlobalResEstate.hdrAction</th>
+    </tr>
+</thead>
+<tbody>
+    @if (Model.Count() > 0)
+    {
+        foreach (var kodaktvt in kodaktvts)
+        {
+            loopitem = 1;
+            var datakrjas = Model.Where(x => x.fld_KodAktvt == kodaktvt.fld_KodAktvt && x.fld_KodPkt == kodaktvt.fld_KodPkt).ToList();
+    <tr class="fullrow row_@itemno" data-id="@itemno">
+        <td align="center" rowspan="@datakrjas.Count()" style="vertical-align:middle !important; border:1px solid black;" border="1">@itemno</td>
+        @*<td align="center" rowspan="@datakrjas.Count()" style="vertical-align:middle !important; border:1px solid black;" border="1">@kodaktvt.fld_KodGL</td>*@
+        <td align="center" rowspan="@datakrjas.Count()" style="vertical-align:middle !important; border:1px solid black;" border="1">@kodaktvt.fld_KodPkt</td>
+        <td align="center" rowspan="@datakrjas.Count()" style="vertical-align:middle !important; border:1px solid black;" border="1">@kodaktvt.fld_KodAktvt</td>
+        @foreach (var datakrja in datakrjas)
+        {
+            trstrt = "<tr class=\"fullrow row_" + itemno + "\" data-id=\"" + itemno + "\">";
+            if (loopitem >= 2)
+            {
+                @Html.Raw(trstrt);
+            }
+            <td align="center" style="vertical-align:middle !important; border:1px solid black;" border="1">@datakrja.fld_Nopkj</td>
+            <td align="center" style="vertical-align:middle !important; border:1px solid black;" border="1">@datakrja.fld_NamaPkj</td>
+            <td align="center" style="vertical-align:middle !important; border:1px solid black;" border="1">@datakrja.fld_JumlahHasil @kodaktvt.fld_Unit</td>
+            <td align="center" style="vertical-align:middle !important; border:1px solid black;" border="1">@datakrja.fld_DailyIncentive</td>
+            <td align="center" style="vertical-align:middle !important; border:1px solid black;" border="1">@datakrja.fld_JamOT</td>
+            <td align="center" style="vertical-align:middle !important; border:1px solid black;" border="1">@datakrja.fld_AmountOA</td>
+            if (loopitem == 1)
+            {
+                <td align="center" rowspan="@datakrjas.Count()" style="vertical-align:middle !important; border:1px solid black;" border="1">
+                    @if (!ViewBag.CutOfDateStatus && !CheckrollFunction.CheckHariTerabai(datakrja.fld_Nopkj, datakrja.fld_Tarikh, datakrja.fld_NegaraID, datakrja.fld_SyarikatID, datakrja.fld_WilayahID, datakrja.fld_LadangID))
+                    {
+                        <button id="delete_@itemno" name="delete_@itemno" class="btn btn-danger" title="Padam" onclick="return DeleteWorkInfo('@kodaktvt.fld_KodPkt','@kodaktvt.fld_KodAktvt');"><i class='fa fa-trash fa-lg'></i></button>
+                    }
+                    else
+                    {
+                        <p>-</p>
+                    }
+                </td>
+            }
+            if (loopitem >= 2)
+            {
+                @Html.Raw(trend);
+            }
+            loopitem++;
+        }
+    </tr>
+            itemno++;
+        }
+    }
+    else
+    {
+        <tr>
+            <td align="center" colspan="11" style="vertical-align:middle !important; border:1px solid black;" border="1">@GlobalResEstate.msgNoRecord</td>
+        </tr>
+    }
+
+</tbody>

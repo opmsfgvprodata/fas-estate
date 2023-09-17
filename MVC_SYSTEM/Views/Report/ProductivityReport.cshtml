@@ -1,0 +1,141 @@
+﻿@using MVC_SYSTEM.Class;
+@{
+    ViewBag.Title = "Productivity Report";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+
+    AjaxOptions options = new AjaxOptions
+    {
+        HttpMethod = "Get",
+        UpdateTargetId = "searchResultProductivityRptInfo",
+        InsertionMode = InsertionMode.Replace,
+        LoadingElementId = "divLoading"
+    };
+}
+
+<script src="~/Asset/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+
+<div id="divLoading" style="display:none;">
+    <div class="progressTest">
+        <label>
+            @GlobalResEstate.msgWait
+        </label>
+    </div>
+</div>
+
+<section class="content-wrapper main-content clear-fix">
+    <div class="well bottom" style="padding-bottom: 16px">
+        @using (Ajax.BeginForm("_ProductivityRptSearch", "Report", null, options, new { @id = "productivityRptSearch" }))
+        {
+            @Html.AntiForgeryToken()
+            <div class="row">
+                <div class="col-sm-1">
+                    @Html.Label("Bulan")
+                    @Html.DropDownList("MonthList", null, htmlAttributes: new { @class = "form-control" })
+                </div>
+                <div class="col-sm-1">
+                    @Html.Label("Tahun")
+                    @Html.DropDownList("YearList", null, htmlAttributes: new { @class = "form-control" })
+                </div>
+                <div class="col-sm-2">
+                    <label id="SelectionLabel">Pekerja</label>
+                    @Html.DropDownList("SelectionList", null, htmlAttributes: new { @class = "form-control" })
+                </div>
+                <div class="col-sm-3"> <!--Fitri Add 17-08-2020-->
+                    @Html.Label("Kod Aktiviti")
+                    @Html.DropDownList("PilihanAktvt", null, htmlAttributes: new { @class = "form-control" })
+                </div>
+                <div class="col-sm-2" id="divlist"> <!--Fitri Add 17-08-2020-->
+                    @Html.Label("GL Akaun")
+                    @Html.DropDownList("PilihanGL", null, htmlAttributes: new { @class = "form-control" })
+                </div>
+                <div class="col-sm-2">
+                    @Html.Label("Unit")
+                    @Html.DropDownList("UnitList", null, htmlAttributes: new { @class = "form-control" })
+                </div>
+                <div class="col-sm-2">
+                    @Html.Label("Peringkat")
+                    @Html.DropDownList("AllPeringkatList", null, htmlAttributes: new { @class = "form-control" })
+                </div>
+                <div class="col-sm-2">
+                    <input class="btn btn-primary btn-block" type="submit" name="Lihat" value="Lihat" />
+                    <a data-modal1='' href="@Url.Action("_ProductivityRptAdvanceSearch", "Report")" id='btnAdvanceSearch' class='btn btn-primary btn-block' role='button'>Carian Tambahan</a>
+                </div>
+            </div>
+        }
+    </div>
+
+    <div class="well" style="margin-top: 7px">
+        <div class="modal-body">
+            <div class="panel panel-primary">
+                <div class="panel-heading">LAPORAN PRODUKTIVITI</div>
+                <div class="panel-body">
+                    <div id="searchResultProductivityRptInfo">
+                        @Html.Action("_ProductivityRptSearch")
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="modal-footer">
+            <a href=@Url.Action("Index", "Report") class="btn btn-warning" role="button">Kembali</a>
+        </div>
+
+    </div>
+</section>
+
+<!-- modal placeholder-->
+<div id='myModal1' class='modal fade in'>
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div id='myModalContent1'></div>
+        </div>
+    </div>
+</div>
+
+<div id='myModal' class='modal fade in'>
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div id='myModalContent'></div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    @Scripts.Render("~/Asset/Scripts/AjaxModal.js")
+}
+
+<script>
+    //function resetSearch1() {
+    //    document.getElementById("txtfilter").value = "";
+    //    document.getElementById('btnCari').click();
+    //}
+
+    $(document).ready(function () {
+        $("#btnSubmit").click(function (e) {
+            $("#UpdateProgress1").css("display", "");
+            //$("#workdata").css("display", "none");
+            var ajxfn = {};
+            ajxfn.url = "@Url.Action("GetList", "Report")";
+            ajxfn.type = "POST";
+            // edit by fitri 24-08-2020
+            ajxfn.data = JSON.stringify({ MonthList: $("#MonthList").val(), YearList: $("#YearList").val(), SelectionList: $("#SelectionList").val(), PilihanAktvt: $("#PilihanAktvt").val(), PilihanGL: $("#PilihanGL").val(), UnitList: $("#UnitList").val(), AllPeringkatList: $("#AllPeringkatList").val() });
+            ajxfn.datatype = "json";
+            ajxfn.contentType = "application/json";
+            ajxfn.success = function (result) {
+            //$('#ListofDetail3').empty();
+            //    $('#PilihanPkt').empty();
+            //for (var i = 0; i < result.length; i++) {
+            //    $("#MonthList").append("<option value=" + result[i].Value + ">" + result[i].Text + "</option>");
+            //}
+            $("#UpdateProgress1").css("display", "none");
+            };
+
+            ajxfn.error = function () {
+            $.simplyToast('@GlobalResEstate.msgError', 'danger');
+            $("#UpdateProgress1").css("display", "none");
+            };
+            $.ajax(ajxfn);
+            }
+        );
+    });
+</script>

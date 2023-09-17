@@ -1,0 +1,180 @@
+﻿@using MVC_SYSTEM.Class
+@using MVC_SYSTEM.Models
+@model IEnumerable<MVC_SYSTEM.Models.tbl_Pkjmast>
+@{
+    ViewBag.Title = "GroupReport";
+    //Layout = "~/Views/Shared/_LayoutMain.cshtml";
+    GetConfig GetConfig = new GetConfig();
+    GetIdentity GetIdentity = new GetIdentity();
+    GetEstateDetail GetGroup = new GetEstateDetail();
+    ChangeTimeZone ChangeTimeZone = new ChangeTimeZone();
+    string namaKump = "";
+    int? getuserid = GetIdentity.ID(User.Identity.Name);
+    string getusername = User.Identity.Name;
+    int year = ChangeTimeZone.gettimezone().Year;
+    int month = ChangeTimeZone.gettimezone().Month;
+    int day = ChangeTimeZone.gettimezone().Day;
+    int hour = ChangeTimeZone.gettimezone().Hour;
+    int minute = ChangeTimeZone.gettimezone().Minute;
+    int second = ChangeTimeZone.gettimezone().Second;
+    string uniquefilename = "GroupReport_" + ViewBag.UserID + "_" + year.ToString() + month.ToString() + day.ToString() + hour.ToString() + minute.ToString() + second.ToString();
+
+    //int? SelectionList = ViewBag.GroupList;
+}
+
+@if (Model != null && Model.Count() != 0)
+{
+    @*<div id="scrollArea2" class="modal-body">*@
+    @*@if (ViewBag.getflag == 1)
+        {
+            <p style="color:red">@GlobalResEstate.msgChooseGroup</p>
+        }
+        else
+        {*@
+    <div id="scrollArea" class="modal-body">
+        <logo />
+        @foreach (var selectedKump in Model.Select(s => s.fld_KumpulanID).Distinct())
+        {
+            namaKump = GetGroup.GroupCode(selectedKump.Value, getuserid, getusername) + " - " + GetGroup.GroupName(selectedKump.Value, getuserid, getusername);
+            <table class="table table-bordered" style="font-size: 11px;" border="0" width="100%">
+                <thead>
+                    <tr>
+                        <th colspan="6" style="text-align:center;vertical-align:middle; border:none;">
+                            @ViewBag.NamaSyarikat
+                            <br />
+                            (@GlobalResEstate.lblCompanyNo : @ViewBag.NoSyarikat)
+                            <br />
+                            @GlobalResEstate.lblGroupReport
+                            <br />
+                            <label style="font-size:small">
+                                (@namaKump)
+                            </label>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Where(x => x.fld_KumpulanID == selectedKump))
+                    {
+
+                        <tr>
+                            <th colspan="2" style="border-bottom:1px solid; border-top:none; border-left:none; border-right:none; border-bottom-color:red">@item.fld_Nopkj - @item.fld_Nama</th>
+                        </tr>
+                        <tr>
+                            <td style="border:none; width:50%">
+                                <table>
+                                    <tr>
+                                        <td style="border:none;">
+                                            <label style="font-size:small; font-weight:normal;">@GlobalResEstate.hdrNoPkj</label><br />
+                                            <label style="font-size:small; font-weight:normal;">@GlobalResEstate.hdrName</label><br />
+                                            <label style="font-size:small; font-weight:normal;">@GlobalResEstate.hdrNoKp</label><br />
+
+                                        </td>
+                                        <td style="border:none;">
+                                            <label style="font-size:small; font-weight:normal;">: @item.fld_Nopkj</label><br />
+                                            <label style="font-size:small; font-weight:normal;">: @item.fld_Nama</label><br />
+                                            <label style="font-size:small; font-weight:normal;">: @item.fld_Nokp </label><br />
+
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                            <td style="border:none; width:50%">
+                                <table>
+                                    <tr>
+                                        <td style="border:none;">
+                                            <label style="font-size:small; font-weight:normal;">@GlobalResEstate.lblWorkerKtgri</label><br />
+                                            <label style="font-size:small; font-weight:normal;">@GlobalResEstate.lblWorkerType</label><br />
+                                            <label style="font-size:small; font-weight:normal;">@GlobalResEstate.lblCitizen</label><br />
+                                        </td>
+                                        <td style="border:none;">
+                                            <label style="font-size:small; font-weight:normal;">: @GetConfig.GetWebConfigDesc(item.fld_Ktgpkj, "designation", item.fld_NegaraID, item.fld_SyarikatID)</label><br />
+                                            <label style="font-size:small; font-weight:normal;">: @GetConfig.GetWebConfigDesc(item.fld_Jenispekerja, "jnsPkj", item.fld_NegaraID, item.fld_SyarikatID)</label><br />
+                                            <label style="font-size:small; font-weight:normal;">: @GetConfig.GetWebConfigDesc(item.fld_Kdrkyt, "krytnlist", item.fld_NegaraID, item.fld_SyarikatID)</label><br />
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <newpage />
+        }
+    </div>
+    if (ViewBag.Print == null)
+    {
+    <div style="text-align:right; margin-top:10px">
+        <a class="btn btn-default btn-sm" href="#" id="printpage">
+            <span class="glyphicon glyphicon-print"> </span> @GlobalResEstate.btnPrint
+        </a>
+        <a class="btn btn-default btn-sm" href="#" id="downloadpdf">
+            <span><img src="~/Asset/Images/pdf-icon.png" width="20px" height="20px" /></span> @GlobalResEstate.btnDownloadPdf
+        </a>
+        <a class="btn btn-default btn-sm" href="#" onclick="HTMLtoExcel('')">
+            <span><img src="~/Asset/Images/excel-icon.png" width="20px" height="20px" /></span> @GlobalResEstate.btnDownloadExcel
+        </a>
+    </div>
+    }
+}
+
+@if (Model == null || Model.Count() == 0)
+{
+    <div id="scrollArea2" class="modal-body" style="text-align: center">
+        <p style="color: red">@ViewBag.Message</p>
+
+    </div>
+}
+<style>
+    #page td {
+        padding: 2px;
+        margin: 2px;
+    }
+</style>
+
+<script>
+    $(document).ready(function () {
+        $("#printpage").click(function () {
+            var DivElement = document.getElementById("scrollArea").innerHTML;
+            var oldPage = document.body.innerHTML;
+            document.body.innerHTML = DivElement;
+            window.print();
+            document.body.innerHTML = oldPage;
+        })
+
+        $("#downloadpdf").click(function () {
+            //var RadioGroup = $('input[name=RadioGroup]:checked').val();
+            //var MonthList = $("#MonthList").val();
+            //var YearList = $("#YearList").val();
+            var GroupList = $("#GroupList").val();
+            //var StatusList = $("#StatusList").val();
+            //var WorkCategoryList = $("#WorkCategoryList").val();
+
+            //var StatusList = '';
+            //var WorkCategoryList = '';
+
+            var param = '/?GroupList=' + GroupList;
+            var controller = 'Report';
+            var action = 'PrintGrpWorkerPdf';
+
+            var ajxfn = {};
+            ajxfn.url = "@Url.Action("PDFIndetifier", "PdfCreator")";
+            ajxfn.type = "POST";
+            ajxfn.data = JSON.stringify({ controller: controller, action: action, param: param });
+            ajxfn.datatype = "json";
+            ajxfn.contentType = "application/json";
+            ajxfn.success = function (result) {
+                //var win = window.open(result.link, '_blank');
+                //win.focus();
+                PDFObject.embed(result.link, "#searchGrpWork", { height: "450px" });
+            };
+
+            ajxfn.error = function () {
+                $.simplyToast('@GlobalResEstate.msgError', 'danger');
+                $("#UpdateProgress1").css("display", "none");
+            };
+            $.ajax(ajxfn);
+
+            return false;
+        });
+    });
+</script>

@@ -1,0 +1,70 @@
+﻿@model MVC_SYSTEM.MasterModels.tbl_UpahAktiviti
+
+@{
+    ViewBag.Title = "PayrateGMNMaintenance";
+    //Layout = "~/Views/Shared/_LayoutMain.cshtml";
+    string aktvt = Model.fld_KodAktvt + " - " + Model.fld_Desc;
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div class="modal-header">
+        @*<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>*@
+        <h3 class="modal-title">@GlobalResEstate.titleDelete</h3>
+    </div>
+
+    <div class="modal-body">
+
+        <div class="form-horizontal">
+            <span id="progress" class="text-center" style="display: none;">
+                <img src="~/Asset/Images/wait.gif" alt="wait" />
+            </span>
+            <div class="form-group">
+                @Html.HiddenFor(model => model.fld_ID)
+                @Html.HiddenFor(model => model.fld_NegaraID)
+                @Html.HiddenFor(model => model.fld_SyarikatID)
+                <label class="control-label col-md-2">@GlobalResEstate.hdrWorkAktvt</label>
+                <div class="col-md-9">
+                    @Html.TextBox("aktvt", aktvt, new { @class = "form-control", @readonly = "readonly" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-2">@GlobalResEstate.hdrPrice (RM)</label>
+                <div class="col-md-9">
+                    @Html.EditorFor(model => model.fld_Harga, new { htmlAttributes = new { @class = "form-control", disabled = "disabled" } })
+                </div>
+            </div>
+
+            @*<div class="form-group">
+                    <label class="control-label col-md-2">@GlobalResEstate.hdrProductvt (@Model.fld_Unit)</label>
+                    <div class="col-md-9">
+                        @Html.EditorFor(model => model.fld_Produktvt, new { htmlAttributes = new { @class = "form-control", disabled = "disabled" } })
+                    </div>
+                </div>*@
+
+            <div class="form-group">
+                <div class="col-sm-9 col-sm-offset-3">
+                    <h3>
+                        <span class="label label-danger">
+                            @GlobalResEstate.msgDelete
+                        </span>
+                    </h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal-footer">
+        <button class="btn btn-primary" data-dismiss="modal">@GlobalResEstate.btnNo</button>
+        <input class="btn btn-danger" type="submit" value=@GlobalResEstate.btnYes />
+    </div>
+}
+<script>
+    $("form").removeData("validator");
+    $("form").removeData("unobtrusiveValidation");
+    $.validator.unobtrusive.parse("form");
+
+</script>

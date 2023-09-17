@@ -1,0 +1,376 @@
+﻿@model MVC_SYSTEM.Models.tbl_SubPkt
+
+@{
+    ViewBag.Title = "LevelsSubPktCreate";
+    //Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 class="modal-title">Daftar Sub Peringkat</h3>
+</div>
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div class="modal-body">
+        <div class="form-horizontal">
+            <span id="progress" class="text-center" style="display: none;">
+                <img src="~/Asset/Images/wait.gif" alt="wait" />
+            </span>
+            <div class="panel panel-primary">
+                <div class="panel-heading">Maklumat Sub Peringkat</div>
+                <div class="panel-body">
+                    <div class="form-group">
+                        <label class="control-label col-md-2">@GlobalResEstate.lblLevelMain</label>
+                        <div class="col-md-9">
+                            @Html.DropDownList("fld_KodPktUtama", null, htmlAttributes: new { @class = "form-control required" })
+                            @Html.ValidationMessageFor(model => model.fld_KodPktUtama, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-2">@GlobalResEstate.lblLevelCode</label>
+                        <div class="col-md-9">
+                            @Html.TextBox("fld_Pkt", "", new { @class = "form-control", @readonly = "readonly" })
+                            @Html.ValidationMessageFor(model => model.fld_Pkt, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-2">@GlobalResEstate.lblLevelName</label>
+                        <div class="col-md-9">
+                            @Html.EditorFor(model => model.fld_NamaPkt, new { htmlAttributes = new { @class = "form-control required" } })
+                            @Html.ValidationMessageFor(model => model.fld_NamaPkt, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    @*<div class="form-group">
+                <label class="control-label col-md-2">Jenis Kesukaran</label>
+                <div class="col-md-9">
+                    @Html.DropDownList("fld_jnsKesukaranPkt", null, htmlAttributes: new { @class = "form-control required" })
+                </div>
+            </div>
+
+        <div class="form-group">
+            <label class="control-label col-md-2">@GlobalResEstate.lblHarvestDifficulty</label>
+            <div class="col-md-9">
+                @Html.DropDownList("fld_KesukaranMenuaiPkt", null, htmlAttributes: new { @class = "form-control required" })
+                @Html.ValidationMessageFor(model => model.fld_KesukaranMenuaiPkt, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-md-2">@GlobalResEstate.lblFertilizeDifficulty</label>
+            <div class="col-md-9">
+                @Html.DropDownList("fld_KesukaranMembajaPkt", null, htmlAttributes: new { @class = "form-control required" })
+                @Html.ValidationMessageFor(model => model.fld_KesukaranMembajaPkt, "", new { @class = "text-danger" })
+            </div>
+        </div>
+                    *@
+                    <div class="form-group">
+                        <label class="control-label col-md-2">@GlobalResEstate.lblLevelArea</label>
+                        <div class="col-md-9">
+                            @Html.EditorFor(model => model.fld_LsPkt, new { htmlAttributes = new { @Value = "0.000", @class = "form-control required" } })
+                            @Html.ValidationMessageFor(model => model.fld_LsPkt, "", new { @class = "text-danger" })
+                            <div id="qouta" style="color:red;"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6" style="padding-left:0;padding-right:0;">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">@GlobalResEstate.lblPlantAreaInfo</div>
+                        <div class="panel-body">
+                            <div class="form-group">
+                                <div class="col-sm-6">
+                                    <label>@GlobalResEstate.lblPlantArea</label>
+                                    @Html.TextBox("fld_LuasKawTnmanPkt", "", new { @class = "form-control" })
+                                    @*@Html.EditorFor(model => model.fld_LuasKawTnman, new { htmlAttributes = new { @class = "form-control" } })*@
+                                    @Html.ValidationMessageFor(model => model.fld_LuasKawTnmanPkt, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-6">
+                                    <label>@GlobalResEstate.lblSucceedArea</label>
+                                    @Html.EditorFor(model => model.fld_LuasBerhasilPkt, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.fld_LuasBerhasilPkt, "", new { @class = "text-danger" })
+                                </div>
+                                <div class="col-sm-6">
+                                    <label>@GlobalResEstate.lblPlantCount</label>
+                                    @Html.EditorFor(model => model.fld_BilPokokPkt, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                                    @Html.ValidationMessageFor(model => model.fld_BilPokokPkt, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-6">
+                                    <label>@GlobalResEstate.lblNotSucceedArea</label>
+                                    @Html.EditorFor(model => model.fld_LuasBlmBerhasilPkt, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.fld_LuasBlmBerhasilPkt, "", new { @class = "text-danger" })
+                                </div>
+                                <div class="col-sm-6">
+                                    <label>@GlobalResEstate.lblPlantStand</label>
+                                    @Html.EditorFor(model => model.fld_DirianPokokPkt, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.fld_DirianPokokPkt, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div style="font-size:smaller">@GlobalResEstate.msgPlantCount</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6" style="padding-left:0;padding-right:0;">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">@GlobalResEstate.lblNoPlantAreaInfo</div>
+                        <div class="panel-body">
+                            <div class="form-group">
+                                <div class="col-sm-6">
+                                    <label>@GlobalResEstate.lblNoPlantArea</label>
+                                    @Html.TextBox("fld_LuasKawTiadaTanamanPkt", "", new { @class = "form-control" })
+                                    @*@Html.EditorFor(model => model.fld_LuasKawTiadaTanaman, new { htmlAttributes = new { @class = "form-control" } })*@
+                                    @Html.ValidationMessageFor(model => model.fld_LuasKawTiadaTanamanPkt, "", new { @class = "text-danger" })
+                                </div>
+                                <div class="col-sm-6">
+                                    <button class="btn btn-primary" id="btnAddTextPkt" @*onclick="inputadd()"*@>@GlobalResEstate.btnAddArea</button>
+                                </div>
+                            </div>
+                            <div id="dynamicInput2" class="form-group">
+                                @*<div class="col-sm-6">
+                                        <label>Jenis Kawasan</label>
+                                        <select id="KawList" class="form-control">
+                                            <option>Luas Paya</option>
+                                            <option>Luas Gunung</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <label>Luas</label>
+                                        <input id="textluas" name="textluas" type="text" class="form-control" />
+                                    </div>*@
+                            </div>
+                            @Html.Hidden("listCount2", null)
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <input class="btn btn-primary" formaction="LevelsSub" formmethod="post" type="submit" id="save" value=@GlobalResEstate.btnSave />
+        <a style="text-align:right" href="@Request.UrlReferrer" class="btn btn-warning" title="Back to list">@GlobalResEstate.btnBack</a>
+    </div>
+}
+
+<script>
+    $(document).ready(function () {
+        var btnClickPkt = 0;
+        if ($("#fld_KodPktUtama").val() == 0) {
+            var PktUtama = {};
+            var disableoption = "";
+            PktUtama.url = "@Url.Action("GetPkt", "BasicInfo")";
+            PktUtama.type = "POST";
+            PktUtama.data = JSON.stringify({ Pktutama: $("#fld_KodPktUtama").val() });
+            PktUtama.datatype = "json";
+            PktUtama.contentType = "application/json";
+            PktUtama.success = function (result) {
+                $("#fld_Pkt").empty();
+                $("#fld_Pkt").val(result.newpkt);
+                $("#qouta").empty();
+                //$("#qouta").append("*Sila masukkan luas peringkat sama atau tidak melebihi " + result.luas);
+            };
+            PktUtama.error = function () { $.simplyToast('@GlobalResEstate.msgError', 'danger'); };
+            $.ajax(PktUtama);
+        }
+        $("#fld_KodPktUtama").change(function () {
+            var PktUtama = {};
+            var disableoption = "";
+            PktUtama.url = "@Url.Action("GetPkt", "BasicInfo")";
+            PktUtama.type = "POST";
+            PktUtama.data = JSON.stringify({ Pktutama: $("#fld_KodPktUtama").val() });
+            PktUtama.datatype = "json";
+            PktUtama.contentType = "application/json";
+            PktUtama.success = function (result) {
+                $("#fld_Pkt").empty();
+                $("#fld_Pkt").val(result.newpkt);
+                $("#qouta").empty();
+                $("#qouta").append('@GlobalResEstate.lblLevelAreaNoti ' + result.luas);
+            };
+            PktUtama.error = function () { $.simplyToast('@GlobalResEstate.msgError', 'danger'); };
+            $.ajax(PktUtama);
+        });
+        $("#fld_LsPkt").change(function () {
+            var luas = $("#fld_LsPkt").val();
+            $("#fld_LsPkt").val(parseFloat(luas).toFixed(3));
+            var LsPkt = {};
+            var disableoption = "";
+            LsPkt.url = "@Url.Action("checkluas", "BasicInfo")";
+            LsPkt.type = "POST";
+            LsPkt.data = JSON.stringify({ kodpktutama: $("#fld_KodPktUtama").val(), luas: $("#fld_LsPkt").val()});
+            LsPkt.datatype = "json";
+            LsPkt.contentType = "application/json";
+            LsPkt.success = function (result) {
+                $("#fld_LuasKawTnmanPkt").val("");
+                $("#fld_LuasKawTiadaTanamanPkt").val("");
+                $("#fld_LuasBerhasilPkt").val("");
+                $("#fld_LuasBlmBerhasilPkt").val("");
+                $("#fld_BilPokokPkt").val("");
+                $("#fld_DirianPokokPkt").val("");
+                if (result == 0) {
+                    $("#fld_LsPkt").empty();
+                    $("#save").prop("disabled", true);
+                    $.simplyToast('@GlobalResEstate.msgArea', 'success');
+                }
+                else {
+                    $("#save").prop("disabled", false);
+                }
+            };
+            LsPkt.error = function () { $.simplyToast('@GlobalResEstate.msgError', 'danger'); };
+            $.ajax(LsPkt);
+        });
+
+        $("#fld_LuasKawTnmanPkt").change(function () {
+            var luas = $("#fld_LuasKawTnmanPkt").val();
+            $("#fld_LuasKawTnmanPkt").val(parseFloat(luas).toFixed(3));
+            var Dirian = {};
+                var disableoption = "";
+                Dirian.url = "@Url.Action("GetDirianPokok", "BasicInfo")";
+                Dirian.type = "POST";
+                Dirian.data = JSON.stringify({});
+                Dirian.datatype = "json";
+                Dirian.contentType = "application/json";
+                Dirian.success = function (dirianPokok) {
+                    $("#fld_LuasBerhasilPkt").val("");
+                    $("#fld_LuasBlmBerhasilPkt").val("");
+                    if ($("#fld_LsPkt").val() != "") {
+                        $("#fld_DirianPokokPkt").val("148");
+                        var bilPokok = parseFloat($("#fld_DirianPokokPkt").val()) * parseFloat($("#fld_LuasKawTnmanPkt").val());
+                        $("#fld_BilPokokPkt").val(Math.round(bilPokok));
+
+                        if ($("#fld_LuasKawTnmanPkt").val() == "") {
+                            $("#fld_LuasKawTnmanPkt").val("0");
+                            $("#fld_LuasKawTiadaTanamanPkt").val($("#fld_LsPkt").val());
+                        }
+                        else {
+                            var LuasTakTnm = parseFloat($("#fld_LsPkt").val()) - parseFloat($("#fld_LuasKawTnmanPkt").val());
+                            $("#fld_LuasKawTiadaTanamanPkt").val(parseFloat(LuasTakTnm).toFixed(3));
+                        }
+                    }
+                    else {
+                        $.simplyToast("Sila masukkan luas peringkat", "danger")
+                        $("#fld_LuasKawTnmanPkt").val("");
+                    }
+                };
+                Dirian.error = function () { $.simplyToast('@GlobalResEstate.msgError', 'danger'); };
+                $.ajax(Dirian);
+            });
+
+        $("#fld_LuasBerhasilPkt").change(function () {
+            var luas = $("#fld_LuasBerhasilPkt").val();
+            $("#fld_LuasBerhasilPkt").val(parseFloat(luas).toFixed(3));
+            if ($("#fld_LuasBerhasilPkt").val() == "") {
+                $("#fld_LuasBerhasilPkt").val("0");
+                $("#fld_LuasBlmBerhasilPkt").val($("#fld_LuasKawTnmanPkt").val());
+                }
+                else {
+                var LuasBlmHasil = parseFloat($("#fld_LuasKawTnmanPkt").val()) - parseFloat($("#fld_LuasBerhasilPkt").val());
+                $("#fld_LuasBlmBerhasilPkt").val(parseFloat(LuasBlmHasil).toFixed(3));
+                }
+            });
+
+        $("#fld_LuasBlmBerhasilPkt").change(function () {
+            var luas = $("#fld_LuasBlmBerhasilPkt").val();
+            $("#fld_LuasBlmBerhasilPkt").val(parseFloat(luas).toFixed(3));
+            var jumlahTanam = parseFloat($("#fld_LuasBerhasilPkt").val()) + parseFloat($("#fld_LuasBlmBerhasilPkt").val());
+            var kawTanam = parseFloat($("#fld_LuasKawTnmanPkt").val()) + parseFloat(1);
+            var LuasBerhasil = parseFloat($("#fld_LuasKawTnmanPkt").val()) - parseFloat($("#fld_LuasBlmBerhasilPkt").val());
+            $("#fld_LuasBerhasilPkt").val(parseFloat(LuasBerhasil).toFixed(3));
+                if (jumlahTanam >= kawTanam) {
+                    $.simplyToast("Jumlah telah melebihi luas kawasan tanaman", "danger")
+                    $("#fld_LuasBlmBerhasilPkt").empty();
+                }
+            });
+
+        $("#fld_LuasKawTiadaTanamanPkt").change(function () {
+            var luas = $("#fld_LuasKawTiadaTanamanPkt").val();
+            $("#fld_LuasKawTiadaTanamanPkt").val(parseFloat(luas).toFixed(3));
+            if ($("#fld_LuasKawTiadaTanamanPkt").val() == "") {
+                $("#fld_LuasKawTiadaTanamanPkt").val("0");
+                }
+            if ($("#fld_LsPkt").val() != "") {
+                    var LuasTanam = parseFloat($("#fld_LsPkt").val()) - parseFloat($("#fld_LuasKawTiadaTanamanPkt").val());
+                $("#fld_LuasKawTnmanPkt").val(parseFloat(LuasTanam).toFixed(3));
+                }
+            });
+
+        $("#fld_DirianPokokPkt").change(function () {
+            var bilPokok = parseFloat($("#fld_DirianPokokPkt").val()) * parseFloat($("#fld_LuasKawTnmanPkt").val());
+            $("#fld_BilPokokPkt").val(bilPokok);
+            });
+
+        $("#btnAddTextPkt").click(function (e) {
+                event.preventDefault()
+                btnClickPkt += 1;
+                var Kawasan = {};
+            var disableoption = "";
+            Kawasan.url = "@Url.Action("GetKawList", "BasicInfo")";
+            Kawasan.type = "POST";
+            Kawasan.data = JSON.stringify({ });
+            Kawasan.datatype = "json";
+            Kawasan.contentType = "application/json";
+            Kawasan.success = function (Kawasanlist) {
+                console.log(btnClickPkt);
+                console.log(Kawasanlist.length);
+                if (btnClickPkt <= Kawasanlist.length) {
+                    var addlist = document.createElement('div');
+                    var addtextbox = document.createElement('div');
+                    var list = document.createElement('select');
+                    addlist.className = 'col-sm-6';
+                    addtextbox.className = 'col-sm-6';
+                    list.className = 'form-control';
+                    list.id = "ddlPkt" + btnClickPkt;
+                    list.name = "ddlPkt" + btnClickPkt;
+
+                    addlist.innerHTML = '<label>@GlobalResEstate.lblAreaType</label>'
+                    for (var i = 0; i < Kawasanlist.length; i++) {
+                        var opt = document.createElement('option');
+                        opt.value = Kawasanlist[i].Value;
+                        opt.text = Kawasanlist[i].Text;
+                        list.appendChild(opt);
+                    }
+                    addlist.appendChild(list);
+                    addtextbox.innerHTML = '<label>@GlobalResEstate.lblArea</label><input id="textluasPkt' + btnClickPkt + '" name="textluasPkt' + btnClickPkt + '" type= "text" class="form-control" />';
+                    document.getElementById('dynamicInput2').appendChild(addlist);
+                    document.getElementById('dynamicInput2').appendChild(addtextbox);
+                    $("#listCount2").empty();
+                    $("#listCount2").val(btnClickPkt);
+                }
+                else {
+                    $.simplyToast('@GlobalResEstate.msgError', 'danger');
+                }
+
+            };
+            Kawasan.error = function () { $.simplyToast('@GlobalResEstate.msgError', 'danger'); };
+            $.ajax(Kawasan);
+        });
+
+        $("#fld_jnsKesukaranPkt").change(function () {
+            if ($("#fld_jnsKesukaranPkt").val() == 0) {
+                $("#fld_KesukaranPkt").empty();
+                $("#fld_KesukaranPkt").append("<option value=0>@GlobalResEstate.lblChoose</option>");
+            }
+            else {
+                var jnsKesukaran = {};
+            var disableoption = "";
+            jnsKesukaran.url = "@Url.Action("GetKesukaran", "BasicInfo")";
+            jnsKesukaran.type = "POST";
+            jnsKesukaran.data = JSON.stringify({ jnsKesukaran: $("#fld_jnsKesukaranPkt").val() });
+            jnsKesukaran.datatype = "json";
+            jnsKesukaran.contentType = "application/json";
+            jnsKesukaran.success = function (TahapKesukaranlist) {
+                $("#fld_KesukaranPkt").empty();
+                $("#fld_KesukaranPkt").append("<option value=0>@GlobalResEstate.lblChoose</option>");
+
+                for (var i = 0; i < TahapKesukaranlist.length; i++) {
+                    $("#fld_KesukaranPkt").append("<option value=" + TahapKesukaranlist[i].Value + " " + disableoption + ">" + TahapKesukaranlist[i].Text + "</option>");
+                }
+            };
+            jnsKesukaran.error = function () { $.simplyToast('@GlobalResEstate.msgError', 'danger'); };
+            $.ajax(jnsKesukaran);
+            }
+        });
+    });
+</script>

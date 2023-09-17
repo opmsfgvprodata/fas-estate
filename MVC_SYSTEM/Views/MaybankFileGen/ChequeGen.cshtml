@@ -1,0 +1,121 @@
+﻿
+@using MVC_SYSTEM.Class;
+@{
+    ViewBag.Title = "Cheque Gen";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+
+    AjaxOptions options = new AjaxOptions
+    {
+        HttpMethod = "Get",
+        UpdateTargetId = "searchData",
+        InsertionMode = InsertionMode.Replace,
+        LoadingElementId = "divLoading"
+    };
+}
+<style>
+    #ScreenFix {
+        position: absolute;
+        top: 160px;
+        right: 10px;
+        bottom: 30px;
+        left: 47px;
+    }
+
+    /*#searchData {
+        position: absolute;
+        top: 50px;
+        right: 10px;
+        bottom: 0px;
+        left: 10px;
+    }*/
+    .pdfobject {
+        position: absolute;
+        top: 45px;
+        right: 5px;
+        padding-bottom: 5px;
+        left: 5px;
+        height: 89% !important;
+        width: 99.3% !important;
+    }
+</style>
+<script src="~/Asset/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+
+<div id="divLoading" style="display:none;">
+    <div class="progressTest">
+        <label>
+            @GlobalResEstate.msgWait
+        </label>
+    </div>
+</div>
+
+<section class="content-wrapper main-content clear-fix">
+    <div class="well bottom" style="padding-bottom:16px;">
+        <div class="row">
+            <div class="col-sm-2">
+                <label>@GlobalResEstate.lblMonth</label>
+                @Html.DropDownList("MonthList", null, htmlAttributes: new { @class = "form-control" })
+            </div><div class="col-sm-2">
+                <label>@GlobalResEstate.lblYear</label>
+                @Html.DropDownList("YearList", null, htmlAttributes: new { @class = "form-control" })
+            </div>
+            <div class="col-sm-2">
+                <label>Salary Range</label>
+                @Html.DropDownList("RangeSalaryPrint", null, htmlAttributes: new { @class = "form-control" })
+            </div>
+            <div class="col-sm-4">
+                <label id="SelectionLabel">@GlobalResEstate.lblWorker</label>
+                @Html.DropDownList("SelectionList", null, htmlAttributes: new { @class = "form-control" })
+            </div>
+            <div class="col-sm-2" style="padding-top:24px;">
+                <button class="btn btn-primary btn-block" name="Gen" id="Gen">Generate</button>
+            </div>
+        </div>
+    </div>
+    <div class="panel panel-primary" id="ScreenFix">
+        <div class="panel-heading">Worker Cheque</div>
+        <div class="panel-body">
+            <div id="searchData">
+            </div>
+        </div>
+    </div>
+    @* added by faeza 25.05.2021 *@
+    <div class="modal-footer col-md-12">
+        <a href=@Url.Action("Index", "GenTextFile") class="btn btn-warning" role="button" onclick="return DisplayProgressMessage(this);">@GlobalResEstate.btnBack</a>
+    </div>
+
+</section>
+
+<script>
+    $(document).ready(function () {
+        $('input[name="RadioGroup"]').on("click", function (e) {
+            var Radiogrp = $('input[name=RadioGroup]:checked').val();
+            var radiogroup = {};
+            var disableoption = "";
+            $('#divLoading').show();
+            radiogroup.url = "@Url.Action("GetList", "Report")";
+            radiogroup.type = "POST";
+            radiogroup.data = JSON.stringify({ RadioGroup: Radiogrp, StatusList: $("#StatusList").val() });
+            radiogroup.datatype = "json";
+            radiogroup.contentType = "application/json";
+            radiogroup.success = function (result) {
+                document.getElementById("SelectionLabel").innerText = result.SelectionLabel;
+                $("#SelectionList").empty();
+                for (var i = 0; i < result.SelectionList.length; i++) {
+                    $("#SelectionList").append("<option value=" + result.SelectionList[i].Value + " " + disableoption + ">" + result.SelectionList[i].Text + "</option>");
+                }
+                $('#divLoading').hide();
+            };
+            radiogroup.error = function () { $.simplyToast('@GlobalResEstate.msgError', 'danger'); };
+            $.ajax(radiogroup);
+        });
+
+        $("#Gen").click(function () {
+            var MonthList = $("#MonthList").val();
+            var YearList = $("#YearList").val();
+            var SelectionList = $("#SelectionList").val();
+            var RangeSalaryPrint = $("#RangeSalaryPrint").val();
+            PDFObject.embed("@Url.Action("ChequeResult", "MaybankFileGen")?MonthList=" + MonthList + "&YearList=" + YearList + "&SelectionList=" + SelectionList + "&RangeSalaryPrint=" + RangeSalaryPrint, "#searchData");
+        });
+    });
+
+</script>

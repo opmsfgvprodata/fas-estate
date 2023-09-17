@@ -1,0 +1,412 @@
+﻿@model IEnumerable<MVC_SYSTEM.Models.sp_KerjaInfoDetails_Result>
+@using MVC_SYSTEM.Class
+@{
+    ViewBag.Title = "Checkroll Report";
+    Layout = "~/Views/Shared/_LayoutPopup.cshtml";
+    GetConfig GetConfig = new GetConfig();
+    int Loop = 1;
+    GetIdentity GetIdentity = new GetIdentity();
+    CheckrollFunction CheckrollFunction = new CheckrollFunction();
+    decimal? JumlahHasilK = 0;
+    decimal? JumlahJamOTK = 0;
+    decimal? JumlahBonusK = 0;
+    decimal? JumlahSemuaK = 0;
+    decimal? JumlahOTK = 0;
+    decimal? JumlahKwsnSkr = 0;
+    decimal? JumlahKslrhan = 0;
+}
+
+<div id="UpdateProgress1" style="display:none;">
+    <div class="progressTest">
+        <label>
+            @GlobalResEstate.msgWait
+        </label>
+    </div>
+</div>
+
+<style>
+    .panel-primary {
+        border-color: white !important;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    td, th {
+        padding: 20px;
+        border: 1px solid black;
+    }
+
+    .hover {
+        background: #b0b0b0;
+    }
+</style>
+@using (Html.BeginForm("CheckrollReport", "SalaryGenerator", FormMethod.Post, new { id = "CheckrollReport" }))
+{
+    @Html.AntiForgeryToken()
+    <section class="content-wrapper main-content clear-fix">
+        <div class="well2 bottom2">
+            <div class="row">
+                <div class="col-sm-2">
+                    @Html.RadioButton("SelectionCategory", 1, true, new { @id = "SelectionCategory1" })
+                    @Html.Label(GlobalResEstate.lblGroupSelection)
+                    <br />
+                    @Html.RadioButton("SelectionCategory", 2, false, new { @id = "SelectionCategory2" })
+                    @Html.Label(GlobalResEstate.lblIndividuSelection)
+                </div>
+                <div class="col-sm-4">
+                    <label id="catsel">@ViewBag.SelectionDataLabel</label>
+                    @Html.DropDownList("SelectionData", null, htmlAttributes: new { @class = "form-control" })
+                </div>
+                <div class="col-sm-2">
+                    <label for="Bulan">@GlobalResEstate.lblMonth</label>
+                    @Html.DropDownList("MonthList", null, htmlAttributes: new { @class = "form-control" })
+                </div>
+                <div class="col-sm-2">
+                    <label for="Tahun">@GlobalResEstate.lblYear</label>
+                    @Html.DropDownList("YearList", null, htmlAttributes: new { @class = "form-control" })
+                </div>
+                <div class="col-sm-2" style="padding-top:25px;">
+                    <input class="btn btn-primary btn-block" type="submit" name="Lihat" id="Lihat" value=@GlobalResEstate.btnView onclick="return DisplayProgressMessage(this);" />
+                </div>
+            </div>
+        </div>
+        <div class="well2">
+            <div id="scrollArea2" class="modal-body" style="max-height: 475px;">
+                @foreach (var GetWorker in ViewBag.GetWorkerList)
+                {
+                    JumlahHasilK = 0;
+                    JumlahJamOTK = 0;
+                    JumlahBonusK = 0;
+                    JumlahSemuaK = 0;
+                    JumlahOTK = 0;
+                    JumlahKwsnSkr = 0;
+                    JumlahKslrhan = 0;
+                    Loop = 1;
+                    <table class="table table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th colspan="17" style="text-align: center; vertical-align: middle; border: none;">
+                                    @ViewBag.NamaSyarikat
+                                    <br />
+                                    (@GlobalResEstate.lblCompanyNo : @ViewBag.NoSyarikat)
+                                    <br />
+                                    @GlobalResEstate.lblCheckrolRpt @ViewBag.BulanTahun
+                                </th>
+                            </tr>
+                            <tr>
+                                <th colspan="17">
+                                    @GlobalResEstate.hdrNoPkj : @GetWorker
+                                    <br />
+                                    @GlobalResEstate.hdrName : @Model.Where(x => x.fld_Nopkj == GetWorker).Select(s => s.fld_Nama).Distinct().FirstOrDefault()
+                                </th>
+                            </tr>
+                            <tr>
+                                <th class="text-center-0" width="2%">
+                                    <b>@GlobalResEstate.lblDate</b>
+                                </th>
+                                <th class="text-center" width="3%">
+                                    <b>@GlobalResEstate.lblRaining</b>
+                                </th>
+                                <th class="text-center" width="5%">
+                                    <b>@GlobalResEstate.hdrAttendance</b>
+                                </th>
+                                <th class="text-center" width="5%">
+                                    <b>@GlobalResEstate.lblLevel</b>
+                                </th>
+                                <th class="text-center" width="5%">
+                                    <b>@GlobalResEstate.hdrActvtCode</b>
+                                </th>
+                                <th class="text-center" width="5%">
+                                    <b>@GlobalResEstate.hdrUnit</b>
+                                </th>
+                                <th class="text-center" width="5%">
+                                    <b>@GlobalResEstate.hdrTotalOutcome</b>
+                                </th>
+                                <th class="text-center" width="5%">
+                                    <b>@GlobalResEstate.hdrPrice/@GlobalResEstate.hdrUnit</b>
+                                </th>
+                                <th class="text-center" width="5%">
+                                    <b>@GlobalResEstate.hdrOutcome (RM)</b>
+                                </th>
+                                <th class="text-center" width="5%">
+                                    <b>Insentif Kawasan Sukar (RM)</b>
+                                </th>
+                                <th class="text-center" width="5%">
+                                    <b>Jumlah (RM)</b>
+                                </th>
+                                <th class="text-center" width="5%">
+                                    <b>@GlobalResEstate.lblOvertimeHour</b>
+                                </th>
+                                <th class="text-center" width="5%">
+                                    <b>@GlobalResEstate.lblTotalOt (RM)</b>
+                                </th>
+                                <th class="text-center" width="5%">
+                                    <b>@GlobalResEstate.lblDailyBonus (RM)</b>
+                                </th>
+                                <th class="text-center" width="5%">
+                                    <b>@GlobalResEstate.lblTotal (RM)</b>
+                                </th>
+                                <th class="text-center" width="5%">
+                                    <b>@GlobalResEstate.lblUserID</b>
+                                </th>
+                                <th class="text-center" width="5%">
+                                    <b>@GlobalResEstate.lblUserName</b>
+                                </th>
+                            </tr>
+                        </thead>
+                        @{
+                            var WorkDetails = Model.Where(x => x.fld_Nopkj.Trim() == GetWorker).OrderBy(o => o.fld_Tarikh).ToList();
+                            DateTime? KeepOldDateTime = WorkDetails.Select(s => s.fld_Tarikh).Take(1).FirstOrDefault();
+                        }
+                        @foreach (var WorkDetail in WorkDetails)
+                        {
+                            string[] CutiBerbayar = new string[] { "C01", "C02", "C03" };
+                            if (CutiBerbayar.Contains(WorkDetail.fld_Kdhdct))
+                            {
+                                var GetLastMonthDate = WorkDetail.fld_Tarikh.Value.AddMonths(-1);
+                                int GetLastMonth_Month = GetLastMonthDate.Month;
+                                int GetLastMonth_Year = GetLastMonthDate.Year;
+                                WorkDetail.fld_Unit = "DAILY";
+                                //commented by Faeza 10.04.2020
+                                //WorkDetail.fld_Amount = CheckrollFunction.LastMonthPayment(WorkDetail.fld_Nopkj, ViewBag.NegaraID, ViewBag.SyarikatID, ViewBag.WilayahID, ViewBag.LadangID, GetLastMonth_Month, GetLastMonth_Year, 0, 0);
+
+                                //added by Faeza 10.04.2020
+                                WorkDetail.fld_Amount = WorkDetail.fld_Kadar;
+                            }
+                            var BonusHarian2 = WorkDetail.fld_JumlahBonus == null ? 0 : WorkDetail.fld_JumlahBonus;
+                            var OT2 = WorkDetail.fld_JumlahOT == null ? 0 : WorkDetail.fld_JumlahOT;
+                            var Jmlah2 = WorkDetail.fld_Amount == null ? 0 : WorkDetail.fld_Amount;
+                            var JamOT2 = WorkDetail.fld_JamOT == null ? 0 : WorkDetail.fld_JamOT;
+
+                            var Total2 = BonusHarian2 + OT2 + Jmlah2;
+                            var JumlahKwsnSkr1 = WorkDetail.fld_HrgaKwsnSkar == null ? 0 : WorkDetail.fld_HrgaKwsnSkar;
+                            var JumlahKslrhan1 = WorkDetail.fld_OverallAmount == null ? 0 : WorkDetail.fld_OverallAmount;
+
+                            JumlahHasilK = JumlahHasilK + Jmlah2;
+                            JumlahJamOTK = JumlahJamOTK + JamOT2;
+                            JumlahBonusK = JumlahBonusK + BonusHarian2;
+                            JumlahSemuaK = JumlahSemuaK + Total2;
+                            JumlahOTK = JumlahOTK + OT2;
+                            JumlahKwsnSkr = JumlahKwsnSkr + JumlahKwsnSkr1;
+                            JumlahKslrhan = JumlahKslrhan + JumlahKslrhan1;
+
+                            var rowspncount = WorkDetails.Where(x => x.fld_Tarikh == WorkDetail.fld_Tarikh).Count();
+                        <tr>
+                            @if (Loop == 1)
+    {
+                        <td rowspan="@rowspncount" align="center" valign="middle" width="2%">
+                            @string.Format("{0:dd/MM/yyyy}", WorkDetail.fld_Tarikh)
+                        </td>
+                        <td rowspan="@rowspncount" align="center" valign="middle" width="3%">
+                            @{var Hujan = WorkDetail.fld_Hujan == 0 ? "Tidak" : "Ya";}
+                            @Hujan
+                        </td>
+                        <td rowspan="@rowspncount" align="center" valign="middle" width="5%">
+                            @GetConfig.GetWebConfigDesc(WorkDetail.fld_Kdhdct, "cuti", ViewBag.NegaraID, ViewBag.SyarikatID)
+                        </td>
+}
+                            @if (KeepOldDateTime != WorkDetail.fld_Tarikh)
+    {
+                        <td rowspan="@rowspncount" align="center" valign="middle" width="2%">
+                            @string.Format("{0:dd/MM/yyyy}", WorkDetail.fld_Tarikh)
+                        </td>
+                        <td rowspan="@rowspncount" align="center" valign="middle" width="3%">
+                            @{var Hujan = WorkDetail.fld_Hujan == 0 ? "Tidak" : "Ya";}
+                            @Hujan
+                        </td>
+                        <td rowspan="@rowspncount" align="center" valign="middle" width="5%">
+                            @GetConfig.GetWebConfigDesc(WorkDetail.fld_Kdhdct, "cuti", ViewBag.NegaraID, ViewBag.SyarikatID)
+                        </td>
+}
+                            <td align="center" width="5%">
+                                @{var KodPkt = WorkDetail.fld_KodPkt == null ? "-" : WorkDetail.fld_KodPkt;}
+                                @KodPkt
+                            </td>
+                            <td align="center" width="5%">
+                                @{var KodAktvt = WorkDetail.fld_KodAktvt == null ? "-" : WorkDetail.fld_KodAktvt;}
+                                @KodAktvt
+                            </td>
+                            <td align="center" width="5%">
+                                @{var Unit = WorkDetail.fld_Unit == null ? "-" : WorkDetail.fld_Unit;}
+                                @Unit
+                            </td>
+                            <td align="right" width="5%">
+                                @{var JmlahHasil = WorkDetail.fld_JumlahHasil == null ? "-" : WorkDetail.fld_JumlahHasil.ToString();}
+                                @JmlahHasil
+                            </td>
+                            <td align="right" width="5%">
+                                @{var KadarUnit = WorkDetail.fld_KadarByr == null ? "-" : WorkDetail.fld_KadarByr.ToString();}
+                                @KadarUnit
+                            </td>
+                            <td align="right" width="5%">
+                                @{var Jmlah = WorkDetail.fld_Amount == null ? "-" : WorkDetail.fld_Amount.ToString();}
+                                @Jmlah
+                            </td>
+                            <td align="right" width="5%">
+                                @{var HrgaKwsnSkr = WorkDetail.fld_HrgaKwsnSkar == null ? "-" : WorkDetail.fld_HrgaKwsnSkar.ToString();}
+                                @HrgaKwsnSkr
+                            </td>
+                            <td align="right" width="5%">
+                                @{var JmlhSlrh = WorkDetail.fld_OverallAmount == null ? "-" : WorkDetail.fld_OverallAmount.ToString();}
+                                @JmlhSlrh
+                            </td>
+                            <td align="right" width="5%">
+                                @{var JamOT = WorkDetail.fld_JamOT == null ? "-" : WorkDetail.fld_JamOT.ToString();}
+                                @JamOT
+                            </td>
+                            <td align="right" width="5%">
+                                @{var OT = WorkDetail.fld_JumlahOT == null ? "-" : WorkDetail.fld_JumlahOT.ToString();}
+                                @OT
+                            </td>
+                            <td align="right" width="5%">
+                                @{var BonusHarian = WorkDetail.fld_JumlahBonus == null ? "-" : WorkDetail.fld_JumlahBonus.ToString();}
+                                @BonusHarian
+                            </td>
+                            <td align="right" width="5%">
+                                @{var Total = Total2 == 0 ? "-" : Total2.ToString();}
+                                @Total
+                            </td>
+                            <td align="center" width="5%">
+                                @GetIdentity.Username2(WorkDetail.fld_CreatedBy)
+                            </td>
+                            <td align="center" width="5%">
+                                @GetIdentity.MyNameFullName(WorkDetail.fld_CreatedBy)
+                            </td>
+                        </tr>
+                                            KeepOldDateTime = WorkDetail.fld_Tarikh;
+                                            Loop++;
+                                        }
+                        <tfoot>
+                            <tr>
+                                <th colspan="8" bgcolor="#085480" style="color:white; text-align: right; vertical-align:middle !important;" border="1">
+                                    <strong>Jumlah</strong>
+                                </th>
+                                <th bgcolor="#085480" style="color:white; text-align: right; vertical-align:middle !important;" border="1">
+                                    <strong>@JumlahHasilK</strong>
+                                </th>
+                                <th bgcolor="#085480" style="color:white; text-align: right; vertical-align:middle !important;" border="1">
+                                    <strong>@JumlahKwsnSkr</strong>
+                                </th>
+                                <th bgcolor="#085480" style="color:white; text-align: right; vertical-align:middle !important;" border="1">
+                                    <strong>@JumlahKslrhan</strong>
+                                </th>
+                                <th bgcolor="#085480" style="color:white; text-align: right; vertical-align:middle !important;" border="1">
+                                    <strong>@JumlahJamOTK</strong>
+                                </th>
+                                <th bgcolor="#085480" style="color:white; text-align: right; vertical-align:middle !important" border="1">
+                                    <strong>@JumlahOTK</strong>
+                                </th>
+                                <th bgcolor="#085480" style="color:white; text-align: right; vertical-align:middle !important;" border="1">
+                                    <strong>@JumlahBonusK</strong>
+                                </th>
+                                <th bgcolor="#085480" style="color:white; text-align: right; vertical-align:middle !important;" border="1">
+                                    <strong>@JumlahSemuaK</strong>
+                                </th>
+                                <th colspan="2" bgcolor="#085480" style="color:white; text-align: center; vertical-align:middle !important;" border="1">
+                                    <strong></strong>
+                                </th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                    <hr class="style6">
+                                        }
+
+            </div>
+        </div>
+    </section>
+                        }
+
+<script type="text/javascript">
+    function findBlocks(theTable) {
+        if ($(theTable).data('hasblockrows') == null) {
+            //console.log('findBlocks'); // to prove we only run this once
+
+            // we will loop through the rows but skip the ones not in a block
+            var rows = $(theTable).find('tr');
+            for (var i = 0; i < rows.length;) {
+
+                var firstRow = rows[i];
+
+                // find max rowspan in this row - this represents the size of the block
+                var maxRowspan = 1;
+                $(firstRow).find('td').each(function () {
+                    var attr = parseInt($(this).attr('rowspan') || '1', 10)
+                    if (attr > maxRowspan) maxRowspan = attr;
+                });
+
+                // set to the index in rows we want to go up to
+                maxRowspan += i;
+
+                // build up an array and store with each row in this block
+                // this is still memory-efficient, as we are just storing a pointer to the same array
+                // ... which is also nice becuase we can build the array up in the same loop
+                var blockRows = [];
+                for (; i < maxRowspan; i++) {
+                    $(rows[i]).data('blockrows', blockRows);
+                    blockRows.push(rows[i]);
+                }
+
+                // i is now the start of the next block
+            }
+
+            // set data against table so we know it has been inited (for if we call it in the hover event)
+            $(theTable).data('hasblockrows', 1);
+        }
+    }
+
+    $("td").hover(function () {
+        $el = $(this);
+        //findBlocks($el.closest('table')); // you can call it here or onload as below
+        $.each($el.parent().data('blockrows'), function () {
+            $(this).find('td').addClass('hover');
+        });
+    }, function () {
+        $el = $(this);
+        $.each($el.parent().data('blockrows'), function () {
+            $(this).find('td').removeClass('hover');
+        });
+    });
+
+findBlocks($('table'));
+</script>
+
+<script>
+    $('input:radio[name="SelectionCategory"]').change(function () {
+        $("#UpdateProgress1").css("display", "");
+        var SelectionCategory = $(this).val();
+        $("#catsel").empty();
+        if (SelectionCategory == 1) {
+            $("#catsel").text('@GlobalResEstate.lblGroup');
+        }
+        else {
+            $("#catsel").text('@GlobalResEstate.lblWorker');
+        }
+        var ajxfn = {};
+        ajxfn.url = "@Url.Action("WorkerData", "SalaryGenerator")";
+        ajxfn.type = "POST";
+        ajxfn.data = JSON.stringify({ SelectionCategory: SelectionCategory });
+        ajxfn.datatype = "json";
+        ajxfn.contentType = "application/json";
+        ajxfn.success = function (result) {
+            $("#SelectionData").empty();
+            for (var i = 0; i < result.length; i++) {
+                $("#SelectionData").append("<option value=" + result[i].Value + ">" + result[i].Text + "</option>");
+            }
+            $("#UpdateProgress1").css("display", "none");
+        };
+        ajxfn.error = function () {
+            $.simplyToast('@GlobalResEstate.msgError', 'danger');
+            $("#UpdateProgress1").css("display", "none");
+        };
+        $.ajax(ajxfn);
+    });
+
+    function DisplayProgressMessage(ctl) {
+        //$("body").addClass("submit-progress-bg");
+        //$(".submit-progress").removeClass("hidden");
+        $("#UpdateProgress1").css("display", "");
+        return true;
+    }
+</script>

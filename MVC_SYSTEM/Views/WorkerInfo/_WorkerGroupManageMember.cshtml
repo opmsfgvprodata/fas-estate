@@ -1,0 +1,179 @@
+﻿@*@model MVC_SYSTEM.Models.tbl_KumpulanKerja*@
+@using MVC_SYSTEM.Class
+@using MVC_SYSTEM.Controllers
+@model MVC_SYSTEM.ViewingModels.PagedList<MVC_SYSTEM.ViewingModels.tbl_Pkjmast>
+
+
+@{
+    ViewBag.Title = "GroupEdit";
+    //Layout = "~/Views/Shared/_LayoutMain.cshtml";
+    var grid = new WebGrid(
+        canPage: false,
+        rowsPerPage: Model.PageSize,
+        canSort: false,
+        ajaxUpdateContainerId: "workerGroupMemberDeleteList");
+
+    AjaxOptions options = new AjaxOptions
+    {
+        HttpMethod = "Get",
+        UpdateTargetId = "Confirm",
+        InsertionMode = InsertionMode.Replace,
+        LoadingElementId = "divLoading"
+    };
+}
+
+<div id="Confirm">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 class="modal-title">@GlobalResEstate.titleGroupMember</h3>
+    </div>
+    @using (Ajax.BeginForm("WorkerGroupDeleteList", "WorkerInfo", null, options, new { @id = "DeleteForm" }))
+    {
+        <div class="modal-body">
+            <div class="form-horizontal">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">@GlobalResEstate.lblTotalRecordGroup.ToUpper()</div>
+                    <div class="panel-body">
+                        @{
+                            grid.Bind(Model.Content, rowCount: Model.TotalRecords, autoSortAndPage: false);
+                            if (@grid.TotalRowCount > 0)
+                            {
+                                <div class="text-center">@grid.TotalRowCount @Html.Label(GlobalResEstate.lblGroupMember)</div>
+                                <div id="workerGroupMemberDeleteList">
+
+                                    @grid.GetHtml(htmlAttributes: new {id = "workerGroupMemberDelete"}, // id for ajaxUpdateContainerId parameter
+                                        tableStyle: "table table-bordered table-striped table-list table-hover",
+                                        headerStyle: "header_table",
+                                        alternatingRowStyle: "Grid-alt",
+                                        selectedRowStyle: "Grid-selected",
+                                        rowStyle: "Grid-rowstyle",
+                                        columns: grid.Columns(
+                                            grid.Column(header: GlobalResEstate.hdrNo
+                                                , format: item => item.WebGrid.Rows.IndexOf(item) + 1
+                                                                  + Math.Round(Convert.ToDouble(grid.TotalRowCount / grid.PageCount) / grid.RowsPerPage)
+                                                                  * grid.RowsPerPage * grid.PageIndex, style: "count"),
+                                            grid.Column(columnName: "fld_Nopkj", header: GlobalResEstate.hdrNoPkj, style: "nopkj"),
+                                            grid.Column(columnName: "fld_Nama", header: GlobalResEstate.hdrName),
+                                            grid.Column(header: "{checkall}",
+                                                format: @<text><center><input type="checkbox" class="checkbox" value="@item.fld_UniqueID" name="ids" id="ids"/></center> </text>,
+                                                style: "tindakan")
+
+                                            ))
+                                </div>
+                            }
+
+                            else
+                            {
+                                <hr />
+                                <div class="text-center">
+                                    @Html.Label(GlobalResEstate.msgGroupNoMember)
+                                </div>
+                                <hr />
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer" style="margin-top: -35px;">
+            <input type="submit" value=@GlobalResEstate.btnDelete class="btn btn-success">
+            <button class="btn btn-warning" data-dismiss="modal">@GlobalResEstate.btnBack</button>
+        </div>
+    }
+</div>
+
+<script>
+    $("form").removeData("validator");
+    $("form").removeData("unobtrusiveValidation");
+    $.validator.unobtrusive.parse("form");
+
+    $(document).ready(function () {
+
+        // 1st replace first column header text with checkbox
+
+        $("#workerGroupMemberDelete th").each(function () {
+            if ($.trim($(this).text().toString().toLowerCase()) === "{checkall}") {
+
+                $(this).text('');
+                $(this).append("<span>@GlobalResEstate.lblChckAll</span>");
+                $(this).append("<br><center><input type='checkbox' class='checkbox' value='' id='cbSelectAll'/></center>");
+
+
+
+                //$("<input/>", { type: "checkbox", class: "checkbox", id: "cbSelectAll", value: "" }).appendTo($(this));
+            }
+        });
+
+        //2nd click event for header checkbox for select /deselect all
+        $("#cbSelectAll").on("click", function () {
+            var ischecked = this.checked;
+            $('#workerGroupMemberDelete').find("input:checkbox").each(function () {
+                this.checked = ischecked;
+            });
+        });
+
+        $("#cbSelectAll").on("dblclick", function () {
+            var ischecked = this.checked;
+            $('#workerGroupMemberDelete').find("input:checkbox").each(function () {
+                this.checked = ischecked;
+            });
+        });
+
+
+        //3rd click event for checkbox of each row
+        $("input[name='ids']").click(function () {
+            var totalRows = $("#workerGroupMemberDelete td :checkbox").length;
+            var checked = $("#workerGroupMemberDelete td :checkbox:checked").length;
+
+            if (checked == totalRows) {
+                $("#workerGroupMemberDelete").find("input:checkbox").each(function () {
+                    this.checked = true;
+                });
+            }
+            else {
+                $("#cbSelectAll").removeAttr("checked");
+            }
+        });
+
+    });
+
+    //$('#submit').click(function(){
+    //    /* when the submit button in the modal is clicked, submit the form */
+
+    //    $('#myModal').modal('toggle');
+    //    $('#myModal').modal('hide');
+    //    $('.modal').not($(this).data('target')).modal('hide');
+    //    $('#WorkerGroupDeleteForm').submit();
+    //});
+</script>
+
+<style>
+    .header_table th {
+        text-align: center;
+    }
+
+    .count {
+        width: 60px;
+        text-align: center;
+    }
+
+    .nopkj {
+        width: 150px;
+        text-align: center;
+    }
+
+    .tindakan {
+        width: 70px;
+        text-align: center;
+    }
+
+    .checkbox {
+        width: 20px;
+        height: 20px;
+        text-align: center;
+    }
+
+    /*.delete {
+        width: 50px;
+    }*/
+</style>

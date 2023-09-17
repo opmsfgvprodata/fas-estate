@@ -1,0 +1,67 @@
+﻿<div class="form-horizontal">
+    <div id="workinfoinfo" class="col-sm-12">
+        <div class="panel panel-success">
+            <div class="panel-heading">@GlobalResEstate.menuWorkInfo <label id="name3"></label></div>
+            <div class="panel-body">
+                <div class="form-group">
+                    <div class="col-sm-3">
+                        <label id="catsel">@GlobalResEstate.hdrLejar</label>
+                        @Html.DropDownList("Lejar", null, htmlAttributes: new { @class = "form-control" })
+                    </div>
+                    <div class="col-sm-3">
+                        <label id="catsel">Cost Centre</label>
+                        @Html.DropDownList("CostCentre", null, htmlAttributes: new { @class = "form-control" })
+                    </div>
+                    <div class="col-sm-4">
+                        <label id="catsel">@GlobalResEstate.lblLevelSelection</label>
+                        @Html.DropDownList("PilihanPkt", null, htmlAttributes: new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-2">
+                        <label id="catsel">@GlobalResEstate.hdrActvtCode</label>
+                        @Html.DropDownList("PilihanAktvt", null, htmlAttributes: new { @class = "form-control" })
+                    </div>
+                    <div class="col-sm-1" id="descactvtydiv" @*style="padding-top:33px;width:0% !important;"*@>
+                        <a href="#" class="descactvtydivclass" id="descactvty" name="descactvty" title="@GlobalResEstate.msgInfo"><span class="glyphicon glyphicon-question-sign"></span></a>
+                    </div>
+                </div>
+                <div class="panel panel-success">
+                    <div class="panel-heading">@GlobalResEstate.lblWorkRecordEntry <label id="name4"></label></div>
+                    <div class="panel-body">
+                        <div id="workdata" style="display:none;padding-bottom:45px;">
+                            <div class="form-group" id="allcheckbookdiv">
+                                <div class="col-sm-12" id="allcheckbook">@*<label style="float:left;" id="sapgl"> </label>*@<label style="float:right;">@GlobalResEstate.chkAllSame <input type="checkbox" name="allsame" id="allsame" value="1" /></label></div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-12" id="ListofDetail3">
+                                </div>
+                            </div>
+                            <div class="col-sm-12" style="margin-bottom:10px;margin-top:-22px" id="SaveWrkbtndiv">
+                                <button class="btn btn-success" style="float:right;margin-right:-15px;" name="SaveWrk" id="SaveWrk" type="button">@GlobalResEstate.btnSave</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-success">
+                    <div class="panel-heading">@GlobalResEstate.lblWorkRecordInfo <label id="name5"></label></div>
+                    <div class="panel-body">
+                        <div class="form-group">
+                            <div class="col-sm-12" id="ListofDetail4">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@*<div id='myModal2' class='modal fade in'>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div id='myModalContent2'>
+                @Html.Action("_OtherDifficulty", "CheckRollGMN")
+            </div>
+        </div>
+    </div>
+</div>*@

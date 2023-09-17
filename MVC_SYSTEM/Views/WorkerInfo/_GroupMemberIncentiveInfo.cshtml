@@ -1,0 +1,173 @@
+﻿@model IEnumerable<MVC_SYSTEM.ViewingModels.vw_MaklumatInsentifPekerja>
+
+@{
+    //Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 class="modal-title">@GlobalResEstate.titleIncentiveInfo</h3>
+</div>
+
+<div class="modal-body">
+    <div class="form-horizontal">
+        <div class="panel panel-primary">
+            <div class="panel-heading">@GlobalResEstate.lblInsentifInfo</div>
+            <div class="panel-body">
+                <div>
+                    @{
+                        var grid = new WebGrid(
+                            source: Model,
+                            canPage: true,
+                            rowsPerPage: @ViewBag.pageSize,
+                            canSort: false,
+                            ajaxUpdateContainerId: "gridT");
+
+                        grid.Pager(WebGridPagerModes.All);
+
+                        if (@grid.TotalRowCount > 0)
+                        {
+                            <div class="text-center">@grid.TotalRowCount @Html.Label(GlobalResEstate.lblTotalRecord)</div>
+
+                            @grid.GetHtml(
+                                htmlAttributes: new {id = "gridT"},
+                                tableStyle: "table table-bordered table-list table-hover",
+                                headerStyle: "header_table",
+                                alternatingRowStyle: "Grid-alt",
+                                selectedRowStyle: "Grid-selected",
+                                rowStyle: "Grid-rowstyle",
+                                mode: WebGridPagerModes.All,
+                                columns: grid.Columns(
+                                    grid.Column(header: GlobalResEstate.hdrNo
+                                        , format: item => item.WebGrid.Rows.IndexOf(item) + 1
+                                                          + Math.Round(Convert.ToDouble(grid.TotalRowCount / grid.PageCount) / grid.RowsPerPage)
+                                                          * grid.RowsPerPage * grid.PageIndex, style: "count"),
+                                    grid.Column("Pkjmast.fld_Nopkj", GlobalResEstate.hdrNoPkj, style: "nopkj"),
+                                    grid.Column("Pkjmast.fld_Nama", GlobalResEstate.hdrName, style: "namapkj"),
+                                    grid.Column(GlobalResEstate.lblIncentive, format: (item) =>
+                                    {
+                                        WebGrid subGrid = new WebGrid(source: item.Insentif);
+
+                                        if (@subGrid.TotalRowCount > 0)
+                                        {
+                                            return subGrid.GetHtml(
+                                                htmlAttributes: new {id = "nestedT"},
+                                                tableStyle: "table borderless",
+                                                headerStyle: "header_table",
+                                                rowStyle: "Grid-rowstyle borderless",
+                                                displayHeader: false,
+
+                                                columns: subGrid.Columns(
+                                                    subGrid.Column(format: (Insentif) =>
+                                                    {
+                                                        var keterangan = Insentif.fld_Keterangan;
+                                                        return @Html.Raw(keterangan);
+                                                    }, canSort: false, style: "borderless"),
+                                                    subGrid.Column("fld_NilaiInsentif", format: (fld_NilaiInsentif) => $"RM", style: "rmind borderless"),
+                                                    subGrid.Column("fld_NilaiInsentif", style: "nilaiinsentif borderless"))
+                                                );
+                                        }
+                                        else
+                                        {
+                                            return @Html.Raw("<div class='text-center'>" + @GlobalResEstate.lblNoIncentive + "</div>");
+                                        }
+                                    })
+                                    )
+                                )
+                        }
+
+                        else
+                        {
+                            <hr/>
+                            <div class="text-center">
+                                @Html.Label(GlobalResEstate.msgErrorSearch)
+                            </div>
+                            <hr/>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+</div>
+<div class="modal-footer" style="margin-top:-5px;">
+    <button class="btn btn-warning" data-dismiss="modal">@GlobalResEstate.btnBack</button>
+</div>
+
+<script>
+    $("form").removeData("validator");
+    $("form").removeData("unobtrusiveValidation");
+    $.validator.unobtrusive.parse("form");
+
+
+    //<script>
+    //$("tfoot").hide(); // add bootstrap buttons
+
+    //function GridUpdate(data) {
+    //    $('#grid').html(data);
+    //}
+
+</script>
+
+<style>
+
+    .header_table th {
+        text-align: center;
+        vertical-align: middle !important;
+    }
+
+    .namapkj {
+        width: 300px;
+        font-size: 12px;
+        vertical-align: middle !important;
+        /*text-align: center;*/
+    }
+
+    .nopkj {
+        width: 130px;
+        font-size: 12px;
+        text-align: center;
+        vertical-align: middle !important;
+    }
+
+    .count {
+        width: 60px;
+        font-size: 12px;
+        text-align: center;
+        vertical-align: middle !important;
+    }
+
+    .rmind {
+        width: 20px;
+        font-size: 12px;
+        text-align: right;
+        vertical-align: middle !important;
+        /*border-right: 0px solid;*/
+    }
+
+    #nestedT .table td:nth-child(3) {
+        border: none;
+    }
+
+    .nilaiinsentif {
+        width: 80px;
+        font-size: 12px;
+        text-align: right;
+        vertical-align: middle !important;
+    }
+
+    .delete {
+        width: 50px;
+        font-size: 12px;
+        vertical-align: middle !important
+    }
+
+    .tindakan {
+        width: 70px;
+        text-align: center;
+        vertical-align: middle !important;
+    }
+</style>
+
+

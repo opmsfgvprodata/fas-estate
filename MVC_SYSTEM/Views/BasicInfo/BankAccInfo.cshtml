@@ -1,0 +1,117 @@
+﻿@model MVC_SYSTEM.MasterModels.tbl_Ladang
+
+@{
+    ViewBag.Title = "BankAccInfo";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+<section class="content-wrapper main-content clear-fix">
+    <div class="well">
+        @*<div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 class="modal-title">MAKLUMAT ASAS LADANG</h3>
+            </div>*@
+        @using (Html.BeginForm("BankAccInfo", null, FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+            <div class="modal-body">
+                <div class="form-horizontal">
+                    <span id="progress" class="text-center" style="display: none;">
+                        <img src="~/Asset/Images/wait.gif" alt="wait" />
+                    </span>
+
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">@GlobalResEstate.lblBankAcc (@GlobalResEstate.lblBAS)</div>
+                        <div class="panel-body">
+                            <p style="text-align:center; margin-bottom:40px"><label>@GlobalResEstate.lblBAS <br /> @Model.fld_LdgCode - @Model.fld_LdgName</label></p>
+                            <div class="form-group">
+                                <div>
+                                    <label class="col-sm-1" style="width:9%; margin-left:5%">@GlobalResEstate.lblBankCode</label>
+                                    <div class="col-sm-2" style="margin-right:10%">
+                                        @Html.DropDownList("fld_BankCode", null, htmlAttributes: new { @class = "form-control required" })
+                                        @Html.ValidationMessageFor(model => model.fld_BankCode, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                                <div>
+                                    <label  class="col-sm-1" style="width:11%">@GlobalResEstate.lblNoAcc</label>
+                                    <div class="col-sm-5">
+                                        @Html.EditorFor(model => model.fld_NoAcc, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.fld_NoAcc, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div>
+                                    <label class="col-sm-1" style="width:9%; margin-left:5%">@GlobalResEstate.lblCompanyID</label>
+                                    <div class="col-sm-2" style="margin-right:10%">
+                                        @Html.EditorFor(model => model.fld_LdgCode, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                                        @Html.ValidationMessageFor(model => model.fld_LdgName, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                                <div>
+                                    <label  class="col-sm-1" style="width:11%">@GlobalResEstate.lblCompanyName</label>
+                                    <div class="col-sm-5">
+                                        @Html.EditorFor(model => model.fld_LdgName, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                                        @Html.ValidationMessageFor(model => model.fld_LdgName, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div>
+                                    <label  class="col-sm-1" style="width:9%; margin-left:5%">@GlobalResEstate.lblOriginatorID</label>
+                                    <div class="col-sm-2" style="margin-right:10%">
+                                        @Html.EditorFor(model => model.fld_OriginatorID, new { htmlAttributes = new { @class = "form-control"} })
+                                        @Html.ValidationMessageFor(model => model.fld_OriginatorID, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                                <div>
+                                    <label  class="col-sm-1" style="width:11%">@GlobalResEstate.lblOriginatorName</label>
+                                    <div class="col-sm-5">
+                                        @Html.EditorFor(model => model.fld_OriginatorName, new { htmlAttributes = new { @class = "form-control"} })
+                                        @Html.ValidationMessageFor(model => model.fld_OriginatorName, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div>
+                                    <label  class="col-sm-1" style="width:9%; margin-left:5%">@GlobalResEstate.lblBranchCode</label>
+                                    <div class="col-sm-2" style="margin-right:10%">
+                                        @Html.EditorFor(model => model.fld_BranchCode, new { htmlAttributes = new { @class = "form-control"} })
+                                        @Html.ValidationMessageFor(model => model.fld_BranchCode, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                                <div>
+                                    <label  class="col-sm-1" style="width:11%">@GlobalResEstate.lblBranchName</label>
+                                    <div class="col-sm-5">
+                                        @Html.EditorFor(model => model.fld_BranchName, new { htmlAttributes = new { @class = "form-control"} })
+                                        @Html.ValidationMessageFor(model => model.fld_BranchName, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    @*<span id="progress" class="text-center" style="display: none;">
+                            <img src="~/Asset/Images/wait.gif" alt="wait" />
+                        </span>*@
+                </div>
+            </div>
+            <div class="modal-footer">
+                <input class="btn btn-primary" type="submit" value=@GlobalResEstate.btnSave />
+                <a style="text-align:right" href="@Request.UrlReferrer" class="btn btn-warning" title="Back to list">@GlobalResEstate.btnBack</a>
+            </div>
+        }
+    </div>
+</section>
+<!-- modal placeholder-->
+<div id='myModal1' class='modal fade in'>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div id='myModalContent1'></div>
+        </div>
+    </div>
+</div>
+@section scripts{
+    @Scripts.Render("~/Asset/Scripts/appjs.js")
+}

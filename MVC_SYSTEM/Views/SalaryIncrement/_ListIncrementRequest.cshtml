@@ -1,0 +1,137 @@
+﻿@model IEnumerable<MVC_SYSTEM.ViewingModels.CustMod_IncrementDataList>
+
+@{
+    /**/
+
+    int i = 1;
+}
+
+<div id="divLoading1" style="display:none;">
+    <div class="progressTest">
+        <label>
+            @GlobalResEstate.msgWait
+        </label>
+    </div>
+</div>
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 class="modal-title">Increment Salary Application</h3>
+</div>
+
+<div class="modal-body">
+    <div class="panel panel-primary">
+        <div class="panel-heading">Worker List</div>
+        <div class="panel-body">
+            <div class="form-horizontal">
+                @if (Model.Count() > 0)
+                {
+                    <div class="form-group">
+                        <div class="col-md-4">
+                            <label>Batch No</label>
+                            @Html.Editor("BatchNo", null, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                        </div>
+                        <div class="col-sm-2" style="padding-top:25px;">
+                            <button class="btn btn-primary btn-block" type="button" name="GenBatch" id="GenBatch">Batch Gen</button>
+                        </div>
+                    </div>
+                }
+                <div class="form-group">
+                    <div class="col-md-12">
+                        <table class="table table-hover table-bordered" style="font-size: 11px;" border="0">
+                            <thead>
+                                <tr>
+                                    <th bgcolor="#ffcc80" width="2%" style="color:black; text-align:center; vertical-align:middle;border:1px solid black;" border="1">@GlobalResEstate.hdrNo</th>
+                                    <th bgcolor="#ffcc80" width="5%" style="color:black; text-align:center; vertical-align:middle;border:1px solid black;" border="1">Worker ID</th>
+                                    <th bgcolor="#ffcc80" width="10%" style="color:black; text-align:center; vertical-align:middle;border:1px solid black;" border="1">Worker Name</th>
+                                    <th bgcolor="#ffcc80" width="5%" style="color:black; text-align:center; vertical-align:middle;border:1px solid black;" border="1">Increment Value (RM)</th>
+                                    <th bgcolor="#ffcc80" width="5%" style="color:black; text-align:center; vertical-align:middle;border:1px solid black;" border="1">Daily Incentive Value (RM)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model.Count() > 0)
+                                {
+                                    foreach (var item in Model)
+                                    {
+                                        <tr>
+                                            <td align="center" style="vertical-align:middle !important; border:1px solid black;" border="1">@i</td>
+                                            <td align="center" style="vertical-align:middle !important; border:1px solid black;" border="1">@item.fld_Nopkj</td>
+                                            <td align="center" style="vertical-align:middle !important; border:1px solid black;" border="1">@item.fld_Nama</td>
+                                            <td align="center" style="vertical-align:middle !important; border:1px solid black;" border="1">@item.fld_IncrmntSalary</td>
+                                            <td align="center" style="vertical-align:middle !important; border:1px solid black;" border="1">@item.fld_DailyInsentif</td>
+                                        </tr>
+                                        i++;
+                                    }
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td align="center" colspan="11" style="vertical-align:middle !important; border:1px solid black;" border="1">@GlobalResEstate.msgNoRecord</td>
+                                    </tr>
+                                }
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal-footer">
+    @if (Model.Count() > 0)
+    {
+        <button class="btn btn-success" type="button" id="Submit" name="Save">Submit</button>
+    }
+    <button class="btn btn-danger" id="incentiveAddBackButton" data-dismiss="modal">@GlobalResEstate.btnBack</button>
+</div>
+
+<script>
+    $().ready(function () {
+        $("#GenBatch").click(function () {
+            getbatchnofunc();
+        });
+        function getbatchnofunc() {
+            var batchno;
+            var GetBatchNo = {};
+            GetBatchNo.url = "@Url.Action("GetBatchNo", "SalaryIncrement")";
+            GetBatchNo.type = "POST";
+            GetBatchNo.async = false,
+                GetBatchNo.datatype = "json";
+            GetBatchNo.contentType = "application/json";
+            GetBatchNo.success = function (returndata) {
+                if (returndata != "") {
+                    $("#BatchNo").val(returndata);
+                    $("#GenBatch").attr('disabled', true);
+                }
+            }
+            GetBatchNo.error = function () { $.simplyToast('Sistem masalah', 'danger'); };
+            $.ajax(GetBatchNo);
+            return batchno;
+        }
+
+        $("#Submit").click(function () {
+            var BatchNo = $("#BatchNo").val();
+            if (BatchNo != "") {
+                $("#UpdateProgress1").css("display", "");
+                var batchid = $("#BatchNo").val();
+                var Submit = {};
+                Submit.url = "@Url.Action("SendEmailForAppIncSlry", "SendEmail")";
+                Submit.type = "POST";
+                Submit.data = JSON.stringify({ filename: batchid });
+                Submit.datatype = "json";
+                Submit.contentType = "application/json";
+                Submit.success = function (returndata) {
+                    $.simplyToast(returndata.msg, returndata.statusmsg);
+                    $("#UpdateProgress1").css("display", "none");
+                }
+                Submit.error = function () { $.simplyToast('Sistem masalah', 'danger'); };
+                $.ajax(Submit);
+            }
+            else {
+                $.simplyToast("Please genarate batch before send to HQ", "warning");
+            }
+        });
+
+    });
+</script>

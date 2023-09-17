@@ -1,0 +1,381 @@
+﻿@*Add by fitri 17-09-2020*@
+@model PagedList.IPagedList<MVC_SYSTEM.Models.tbl_Pkjmast>
+@using PagedList.Mvc; @*Add by fitri 17-09-2020*@
+@using MVC_SYSTEM.Class
+@using MVC_SYSTEM.Models
+@*@model IEnumerable<MVC_SYSTEM.Models.tbl_Pkjmast>*@ @*comment by fitri 17-09-2020*@
+<link href="~/Content/PagedList.css" rel="stylesheet" /> @*Add by fitri 17-09-2020*@
+@{
+    //GetTriager GetTriager = new GetTriager();
+    //GetEstateDetail GetGroup = new GetEstateDetail();
+    GetConfig GetConfig = new GetConfig();
+    GetEstateDetail GetEstateDetail = new GetEstateDetail();
+}
+@if (Model != null && Model.Count() != 0)
+{
+    <div id="scrollArea2" class="modal-body">
+
+        <logo />
+        <table class="table table-bordered" style="font-size: 11px;" border="0" width="100%">
+            <thead>
+                <tr>
+                    <th colspan="6" style="text-align:center;vertical-align:middle; border:none;">
+                        @ViewBag.NamaSyarikat
+                        <br />
+                        (@GlobalResEstate.lblCompanyNo : @ViewBag.NoSyarikat)
+                        <br />
+                        @*@GlobalResEstate.lblWorkerReport*@ @*comment by fitri 17-09-2020*@
+                    </th>
+                </tr>
+                <tr>
+                    @*Add by fitri 17-09-2020*@
+                    <td style="border:none; width:40%">
+                        <table>
+                            <tr>
+                                <td style="border:none;">
+                                    <label style="font-size:small; font-weight:normal;">TITLE</label><br />
+                                </td>
+                                <td style="border:none;">
+                                    <label style="font-size:small; font-weight:normal;">: @GlobalResEstate.lblWorkerInfo.ToUpper()</label><br />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="border:none;">
+                                    <label style="font-size:small; font-weight:normal;">@GlobalResEstate.lblRegion.ToUpper() / @GlobalResEstate.lblEstate.ToUpper()</label><br />
+                                </td>
+                                <td style="border:none;">
+                                    <label style="font-size:small; font-weight:normal;">: @ViewBag.NamaLadang</label><br />
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td style="border:none">
+                        &nbsp;
+                    </td>
+                    <td style="border:none">
+                        <table>
+                            <tr>
+                                <td style="font-size:small" align="right">
+                                    Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount | @ViewBag.Date | @ViewBag.Time
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    if (item.fld_Nama != null)
+                    {
+                        <tr>
+                            <th colspan="3" style="border-bottom:1px solid; border-top:none; border-left:none; border-right:none; border-bottom-color:red">@GlobalResEstate.lblhdrPersonalInfo</th>
+                        </tr>
+                        @* Comment by fitri 17-09-2020
+                                <tr style="border-bottom:none">
+                                <td colspan="2" align="center" style="border-bottom:hidden">
+                                    <img src=@GetEstateDetail.GetImageUrl(item.fld_Nopkj,item.fld_NegaraID.Value,item.fld_SyarikatID.Value,item.fld_WilayahID.Value,item.fld_LadangID.Value) id="image" style="width:180px;height:180px;border:1px solid;cursor:pointer;" />
+                                </td>
+                            </tr>*@
+                        <tr>
+                            <td style="border:none; width:40%">
+                                <!--Edit by fitri 17-09-2020-->
+                                <table>
+                                    <tr>
+                                        <td style="border:none;">
+                                            <label style="font-size:small; font-weight:normal;">@GlobalResEstate.hdrNoPkj</label><br />
+                                            <label style="font-size:small; font-weight:normal;">@GlobalResEstate.hdrName</label><br />
+                                            <label style="font-size:small; font-weight:normal;">@GlobalResEstate.hdrNoKp</label><br />
+                                            <label style="font-size:small; font-weight:normal;">@GlobalResEstate.lblDOB</label><br />
+                                            <label style="font-size:small; font-weight:normal;">@GlobalResEstate.lblGender</label><br />
+                                            <label style="font-size:small; font-weight:normal;">@GlobalResEstate.lblMarriageStatus</label><br />
+                                            <label style="font-size:small; font-weight:normal;">@GlobalResEstate.lblPeneroka</label><br />
+                                        </td>
+                                        <td style="border:none;">
+                                            <label style="font-size:small; font-weight:normal;">: @item.fld_Nopkj</label><br />
+                                            <label style="font-size:small; font-weight:normal;">: @item.fld_Nama</label><br />
+                                            <label style="font-size:small; font-weight:normal;">: @item.fld_Nokp </label><br />
+                                            <label style="font-size:small; font-weight:normal;">: @string.Format("{0:dd/MM/yyyy}", item.fld_Trlhr) </label><br />
+                                            <label style="font-size:small; font-weight:normal;">: @GetConfig.GetWebConfigDesc(item.fld_Kdjnt, "jantina", item.fld_NegaraID, item.fld_SyarikatID)</label><br />
+                                            <label style="font-size:small; font-weight:normal;">: @GetConfig.GetWebConfigDesc(item.fld_Kdkwn, "tarafKahwin", item.fld_NegaraID, item.fld_SyarikatID)</label><br />
+                                            <label style="font-size:small; font-weight:normal;">: @GetConfig.GetWebConfigDesc(item.fld_Kpenrka, "statusPeneroka", item.fld_NegaraID, item.fld_SyarikatID)</label><br />
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                            <td style="border:none; width:35%">
+                                <!--Edit by fitri 17-09-2020-->
+                                <table>
+                                    <tr>
+                                        <td style="border:none;">
+                                            <label style="font-size:small; font-weight:normal;">@GlobalResEstate.lblRace</label><br />
+                                            <label style="font-size:small; font-weight:normal;">@GlobalResEstate.lblReligion</label><br />
+                                            <label style="font-size:small; font-weight:normal;">@GlobalResEstate.lblCitizen</label><br />
+                                            <label style="font-size:small; font-weight:normal;">@GlobalResEstate.lblAddress</label><br />
+                                            <label style="font-size:small; font-weight:normal;">@GlobalResEstate.lblPostcode</label><br />
+                                            <label style="font-size:small; font-weight:normal;">@GlobalResEstate.lblDistrict</label><br />
+                                            <label style="font-size:small; font-weight:normal;">@GlobalResEstate.lblState</label><br />
+                                            <label style="font-size:small; font-weight:normal;">@GlobalResEstate.lblCountry</label>
+                                        </td>
+                                        <td style="border:none;">
+                                            <label style="font-size:small; font-weight:normal;">: @GetConfig.GetWebConfigDesc(item.fld_Kdbgsa, "bangsa", item.fld_NegaraID, item.fld_SyarikatID)</label><br />
+                                            <label style="font-size:small; font-weight:normal;">: @GetConfig.GetWebConfigDesc(item.fld_Kdagma, "agama", item.fld_NegaraID, item.fld_SyarikatID)</label><br />
+                                            <label style="font-size:small; font-weight:normal;">: @GetConfig.GetWebConfigDesc(item.fld_Kdrkyt, "krytnlist", item.fld_NegaraID, item.fld_SyarikatID)</label><br />
+                                            <label style="font-size:small; font-weight:normal;">: @item.fld_Almt1</label><br />
+                                            <label style="font-size:small; font-weight:normal;">: @item.fld_Poskod</label><br />
+                                            <label style="font-size:small; font-weight:normal;">: @item.fld_Daerah</label><br />
+                                            <label style="font-size:small; font-weight:normal;">: @GetConfig.GetWebConfigDesc(item.fld_Neg, "negeri", item.fld_NegaraID, item.fld_SyarikatID)</label><br />
+                                            <label style="font-size:small; font-weight:normal;">: @GetConfig.GetWebConfigDesc(item.fld_Negara, "krytnlist", item.fld_NegaraID, item.fld_SyarikatID) </label>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                            <!--Add by fitri 17-09-2020 -> Adjust profile picture-->
+                            <td style="border:none; width:25%;" align="right">
+                                <table>
+                                    <tr>
+                                        <td style="border:none;">
+                                            <img src=@GetEstateDetail.GetImageUrl(item.fld_Nopkj,item.fld_NegaraID.Value,item.fld_SyarikatID.Value,item.fld_WilayahID.Value,item.fld_LadangID.Value) id="image" style="width:150px;height:150px;border:none;cursor:pointer;" />
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <!--Edit by fitri 17-09-2020-->
+                            <th colspan="3" style="border-bottom:1px solid; border-top:none; border-left:none; border-right:none; border-bottom-color:red">@GlobalResEstate.lblTotalRecord.ToUpper()</th>
+                        </tr>
+                        <tr>
+                            <td style="border:none; width:35%">
+                                <!--Edit by fitri 17-09-2020-->
+                                <table>
+                                    <tr>
+                                        <td style="border:none;">
+                                            <label style="font-size:small; font-weight:normal;">@GlobalResEstate.lblWorkerType</label><br />
+                                            <label style="font-size:small; font-weight:normal;">@GlobalResEstate.lblWorkerKtgri</label><br />
+                                            <label style="font-size:small; font-weight:normal;">@GlobalResEstate.lblPermitNo</label><br />
+                                            @*<label style="font-size:small; font-weight:normal;">@GlobalResEstate.pas</label>*@<br />
+                                            <label style="font-size:small; font-weight:normal;">@GlobalResEstate.lblSupplier</label><br />
+                                        </td>
+                                        <td style="border:none;">
+                                            <label style="font-size:small; font-weight:normal;">: @GetConfig.GetWebConfigDesc(item.fld_Jenispekerja, "jnsPkj", item.fld_NegaraID, item.fld_SyarikatID)</label><br />
+                                            <label style="font-size:small; font-weight:normal;">: @GetConfig.GetWebConfigDesc(item.fld_Ktgpkj, "designation", item.fld_NegaraID, item.fld_SyarikatID)</label><br />
+                                            <label style="font-size:small; font-weight:normal;">: @item.fld_Prmtno</label><br />
+                                            @*<label style="font-size:small; font-weight:normal;">: @item.fld_Psptno</label>*@<br />
+                                            <label style="font-size:small; font-weight:normal;">: @GetConfig.GetPembekal(item.fld_Kodbkl, item.fld_NegaraID.Value, item.fld_SyarikatID.Value)</label><br />
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                            <td style="border:none; width:35%">
+                                <!--Edit by fitri 17-09-2020-->
+                                <table>
+                                    <tr>
+                                        <td style="border:none;">
+                                            <label style="font-size:small; font-weight:bolder;">@GlobalResEstate.lblStatus</label><br />
+                                            <label style="font-size:small; font-weight:normal;">@GlobalResEstate.lblNotActiveReason</label><br />
+                                            <label style="font-size:small; font-weight:normal;">@GlobalResEstate.lblNotActiveDate</label>
+                                        </td>
+                                        <td style="border:none;">
+                                            <label style="font-size:small; font-weight:bolder;">: @GetConfig.GetWebConfigDesc(item.fld_Kdaktf, "statusAktif", item.fld_NegaraID, item.fld_SyarikatID)</label><br />
+                                            <label style="font-size:small; font-weight:normal;">: @item.fld_Sbtakf</label><br />
+                                            <label style="font-size:small; font-weight:normal;">: </label>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <!--Edit by fitri 17-09-2020-->
+                            <th colspan="3" style="border-bottom:1px solid; border-top:none; border-left:none; border-right:none; border-bottom-color:red">@GlobalResEstate.lblWorkerAcc</th>
+                        </tr>
+                        <tr>
+                            <td style="border:none; width:35%">
+                                <!--Edit by fitri 17-09-2020-->
+                                <table>
+                                    <tr>
+                                        <td style="border:none;">
+                                            <label style="font-size:small; font-weight:normal;">@GlobalResEstate.lblBankName</label><br />
+                                            <label style="font-size:small; font-weight:normal;">@GlobalResEstate.lblNoAcc</label><br />
+                                            <label style="font-size:small; font-weight:normal;">@GlobalResEstate.lblNoKwsp</label><br />
+                                        </td>
+                                        <td style="border:none;">
+                                            <label style="font-size:small; font-weight:normal;">: @GetConfig.GetBank(item.fld_Kdbank, item.fld_NegaraID.Value, item.fld_SyarikatID.Value)</label><br />
+                                            <label style="font-size:small; font-weight:normal;">: @item.fld_NoAkaun</label><br />
+                                            <label style="font-size:small; font-weight:normal;">: @item.fld_Nokwsp</label><br />
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                            <td style="border:none; width:35%">
+                                <!--Edit by fitri 17-09-2020-->
+                                <table>
+                                    <tr>
+                                        <td style="border:none;">
+                                            <label style="font-size:small; font-weight:normal;">@GlobalResEstate.lblNoSocso</label><br />
+                                            <label style="font-size:small; font-weight:normal;">@GlobalResEstate.lblTotalLoan</label><br />
+                                            <label style="font-size:small; font-weight:normal;">@GlobalResEstate.lblBalanceLoan</label>
+                                        </td>
+                                        <td style="border:none;">
+                                            <label style="font-size:small; font-weight:normal;">: @item.fld_Noperkeso</label><br />
+                                            <label style="font-size:small; font-weight:normal;">: </label><br />
+                                            <label style="font-size:small; font-weight:normal;">: </label>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <!--Edit by fitri 17-09-2020-->
+                            <th colspan="3" style="border-bottom:1px solid; border-top:none; border-left:none; border-right:none; border-bottom-color:red">@GlobalResEstate.lblDateInfo</th>
+                        </tr>
+                        <tr>
+                            <td style="border:none; width:35%">
+                                <!--Edit by fitri 17-09-2020-->
+                                <table>
+                                    <tr>
+                                        <td style="border:none;">
+                                            <label style="font-size:small; font-weight:normal;">@GlobalResEstate.lblPassportStart</label><br />
+                                            <label style="font-size:small; font-weight:normal;">@GlobalResEstate.lblPassportEnd</label><br />
+                                            @*<label style="font-size:small; font-weight:normal;">@GlobalResEstate.lblPermitStart</label><br />*@ <!--Comment by fitri 17-09-2020-->
+                                            <label style="font-size:small; font-weight:normal;">Passport Issued Date</label><br /> <!--Add by fitri 17-09-2020-->
+                                        </td>
+                                        <td style="border:none;">
+                                            <label style="font-size:small; font-weight:normal;">: @string.Format("{0:dd/MM/yyyy}", item.fld_T1pspt)</label><br />
+                                            <label style="font-size:small; font-weight:normal;">: @string.Format("{0:dd/MM/yyyy}", item.fld_T2pspt)</label><br />
+                                            @*<label style="font-size:small; font-weight:normal;">: @string.Format("{0:dd/MM/yyyy}", item.fld_T1prmt)</label><br />*@ <!--Comment by fitri 17-09-2020-->
+                                            <label style="font-size:small; font-weight:normal;">: @string.Format("{0:dd/MM/yyyy}", item.fld_T1pspt)</label><br /> <!--Add by fitri 17-09-2020-->
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                            <td style="border:none; width:35%">
+                                <!--Edit by fitri 17-09-2020-->
+                                <table>
+                                    <tr>
+                                        <td style="border:none;">
+                                            <label style="font-size:small; font-weight:normal;">@GlobalResEstate.lblPermitEnd</label><br />
+                                            <label style="font-size:small; font-weight:normal;">@GlobalResEstate.lblDateKLIA</label><br />
+                                            <label style="font-size:small; font-weight:normal;">@GlobalResEstate.lblStartWork</label>
+                                        </td>
+                                        <td style="border:none;">
+                                            <label style="font-size:small; font-weight:normal;">: @string.Format("{0:dd/MM/yyyy}", item.fld_T2prmt)</label><br />
+                                            <label style="font-size:small; font-weight:normal;">: @string.Format("{0:dd/MM/yyyy}", item.fld_Trmlkj)</label><br />
+                                            <label style="font-size:small; font-weight:normal;">: @string.Format("{0:dd/MM/yyyy}", item.fld_Trshjw)</label>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+
+                    }
+                    else //if(Model == null && Model.Count() == 0)
+                    {
+                        <p align="center" style="color: red; font-size: 11px">@GlobalResEstate.msgErrorSearch</p>
+                        <br />
+                        <br />
+                    }
+                    @*<newpage />*@
+                }
+            </tbody>
+        </table>
+
+    </div>
+
+    if (ViewBag.Print == null)
+    { <!--Add by fitri 17-09-2020-->
+        @Html.PagedListPager(Model, Page_No => Url.Action("WorkerReport", new { Page_No, @*Sorting_Order = ViewBag.CurrentSortOrder,*@StatusList = ViewBag.Sta,
+        SelectionList = ViewBag.Sel,
+        JnsPkjList = ViewBag.Jns,
+        RadioGroup = ViewBag.Rad
+    }))
+        <div style="text-align:right; margin-top:10px">
+            <a class="btn btn-default btn-sm" href="#" id="printpage">
+                <span class="glyphicon glyphicon-print"> </span> @GlobalResEstate.btnPrint
+            </a>
+            <a class="btn btn-default btn-sm" href="#" id="downloadpdf">
+                <span><img src="~/Asset/Images/pdf-icon.png" width="20px" height="20px" /></span> @GlobalResEstate.btnDownloadPdf
+            </a>
+            <a class="btn btn-default btn-sm" href="#" onclick="HTMLtoExcel('WorkerReport')">
+                <span><img src="~/Asset/Images/excel-icon.png" width="20px" height="20px" /></span> @GlobalResEstate.btnDownloadExcel
+            </a>
+        </div>
+    }
+}
+
+@if (Model.Count() == 0)
+{
+    <div id="scrollArea2" class="modal-body" style="text-align: center">
+        <p style="color: red">@ViewBag.Message</p>
+    </div>
+}
+<script src="~/Asset/Scripts/FileSaver.js"></script> <!--Add by fitri 17-09-2020-->
+<script src="~/Asset/Scripts/FromHTML.js"></script> <!--Add by fitri 17-09-2020-->
+<style>
+    #page td {
+        padding: 2px;
+        margin: 2px;
+    }
+
+    thead {
+        display: table-header-group
+    }
+    /*add by fitri 17-09-2020 */
+    tfoot {
+        display: table-row-group
+    }
+    /*add by fitri 17-09-2020*/
+    tr {
+        page-break-inside: avoid
+    }
+    /*add by fitri 17-09-2020*/
+</style>
+
+<script>
+    $(document).ready(function () {
+        $("#printpage").click(function () {
+            var DivElement = document.getElementById("scrollArea2").innerHTML;
+            var oldPage = document.body.innerHTML;
+            document.body.innerHTML = DivElement;
+            window.print();
+            document.body.innerHTML = oldPage;
+        })
+
+        $("#downloadpdf").click(function () {
+            var RadioGroup = $('input[name=RadioGroup]:checked').val();
+            //var MonthList = $("#MonthList").val();
+            //var YearList = $("#YearList").val();
+            var SelectionList = $("#SelectionList").val();
+            var StatusList = $("#StatusList").val();
+            var JnsPkjList = $("#JnsPkjList").val();
+            //var WorkCategoryList = $("#WorkCategoryList").val();
+
+            //var StatusList = '';
+            //var WorkCategoryList = '';
+
+            var param = '/?RadioGroup=' + RadioGroup + '&SelectionList=' + SelectionList + '&StatusList=' + StatusList + '&JnsPkjList=' + JnsPkjList;
+            var controller = 'Report';
+            var action = 'PrintWorkerPdf';
+
+            var ajxfn = {};
+            ajxfn.url = "@Url.Action("PDFIndetifier", "PdfCreator")";
+            ajxfn.type = "POST";
+            ajxfn.data = JSON.stringify({ controller: controller, action: action, param: param });
+            ajxfn.datatype = "json";
+            ajxfn.contentType = "application/json";
+            ajxfn.success = function (result) {
+                //var win = window.open(result.link, '_blank');
+                //win.focus();
+                PDFObject.embed(result.link, "#searchResultWorkerInfo", { height: "450px" });
+            };
+
+            ajxfn.error = function () {
+                $.simplyToast('@GlobalResEstate.msgError', 'danger');
+                $("#UpdateProgress1").css("display", "none");
+            };
+            $.ajax(ajxfn);
+
+            return false;
+        });
+    });
+</script>

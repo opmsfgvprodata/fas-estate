@@ -1,0 +1,98 @@
+﻿@using MVC_SYSTEM.Class;
+@{
+    GetIdentity GetIdentity = new GetIdentity();
+    GetTriager GetTriager = new GetTriager();
+}
+@if (Request.IsAuthenticated)
+{
+    <div id="UpdateProgress2" style="display:none;">
+        <div class="progressTest">
+            <label>
+                @GlobalResEstate.msgWait
+            </label>
+        </div>
+    </div>
+
+    <div id="UpdateProgress1" style="display:none;">
+        <div class="progressTest">
+            <label>
+                @GlobalResEstate.msgWait
+            </label>
+        </div>
+    </div>
+
+    <div id="UpdateProgress4" style="display:none;">
+        <div class="progressTest">
+            <label>
+                @GlobalResEstate.msgWait
+            </label>
+        </div>
+    </div>
+
+    <nav class="navbar navbar-default sidebar" role="navigation">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-sidebar-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="glyphicon glyphicon-list"></span>
+                </button>
+            </div>
+            <div class="collapse navbar-collapse" id="bs-sidebar-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li @ViewBag.Main><a href="@Url.Action("Index", "Main")" onclick="return DisplayProgressMessage2(this);">@GlobalResEstate.menuHome<span style="font-size:16px;padding-left:10px" class="pull-right hidden-xs showopacity glyphicon glyphicon-home"></span></a></li>
+                    <li @ViewBag.BasicInfo><a href="@Url.Action("Index", "BasicInfo")" onclick="return DisplayProgressMessage2(this);">@GlobalResEstate.menuBasicInfo<span style="font-size:16px;padding-left:10px" class="pull-right hidden-xs showopacity glyphicon glyphicon-pencil"></span></a></li>
+                    <li @ViewBag.WorkerInfo><a href="@Url.Action("Index", "WorkerInfo")" onclick="return DisplayProgressMessage2(this);">@GlobalResEstate.lblTotalRecord<span style="font-size:16px;padding-left:10px" class="pull-right hidden-xs showopacity glyphicon glyphicon-user"></span></a></li>
+                    <li @ViewBag.CheckRoll><a href="@Url.Action("Index", "CheckRollMain")" onclick="return DisplayProgressMessage2(this);">@GlobalResEstate.menuWorkInfo<span style="font-size:16px;padding-left:10px" class="pull-right hidden-xs showopacity glyphicon glyphicon-book"></span></a></li>
+                    <li @ViewBag.GenSalary><a href="@Url.Action("Index", "SalaryGenerator")" onclick="return DisplayProgressMessage2(this);">@GlobalResEstate.menuGenerateSalary<span style="font-size:15px;padding-left:10px" class="pull-right hidden-xs showopacity glyphicon glyphicon-refresh"></span></a></li>
+
+                    <li @ViewBag.GenTextFile><a href="@Url.Action("Index", "GenTextFile")" onclick="return DisplayProgressMessage2(this);">Generate Text File<span style="font-size:16px;padding-left:10px" class="pull-right hidden-xs showopacity glyphicon glyphicon-envelope"></span></a></li>
+                    @*<li @ViewBag.MaybankFileGen><a href="@Url.Action("Index", "MaybankFileGen")" onclick="return DisplayProgressMessage2(this);">@GlobalResEstate.menuGenerateMaybankFile<span style="font-size:16px;padding-left:10px" class="pull-right hidden-xs showopacity glyphicon glyphicon-envelope"></span></a></li>*@
+                    <li @ViewBag.TableInfo><a href="@Url.Action("Index", "TableInfo")" onclick="return DisplayProgressMessage2(this);">@GlobalResEstate.menuTableInfo<span style="font-size:16px;padding-left:10px" class="pull-right hidden-xs showopacity glyphicon glyphicon-th"></span></a></li>
+                    @*<li @ViewBag.Maintenance><a href="@Url.Action("Index", "Maintenance")" onclick="return DisplayProgressMessage2(this);">@GlobalResEstate.menuMaintenance<span style="font-size:16px;padding-left:10px" class="pull-right hidden-xs showopacity glyphicon glyphicon-save"></span></a></li>*@
+                    @*<li @ViewBag.Approval><a href="@Url.Action("Index", "Approval")" onclick="return DisplayProgressMessage2(this);">Kelulusan<span style="font-size:16px;padding-left:10px" class="pull-right hidden-xs showopacity glyphicon glyphicon-bell"></span></a></li>*@
+                    <li @ViewBag.Report><a href="@Url.Action("Index", "Report")" onclick="return DisplayProgressMessage2(this);">@GlobalResEstate.menuReport<span style="font-size:16px;padding-left:10px" class="pull-right hidden-xs showopacity glyphicon glyphicon-list"></span></a></li>
+                    <li @ViewBag.ClosingTransaction><a href="@Url.Action("Index", "ClosingTransaction")" onclick="return DisplayProgressMessage2(this);">@GlobalResEstate.menuCloseTransaction<span style="font-size:16px;padding-left:10px" class="pull-right hidden-xs showopacity glyphicon glyphicon-adjust"></span></a></li>
+                    @*<li @ViewBag.UnblockCheckroll><a href="@Url.Action("Index", "UnblockCheckroll")" onclick="return DisplayProgressMessage2(this);">@GlobalResEstate.menuCheckrollUnblock<span style="font-size:16px;padding-left:10px" class="pull-right hidden-xs showopacity glyphicon glyphicon-adjust"></span></a></li>*@
+                    @*<li @ViewBag.CheckRoll><a href="@Url.Action("Index", "CheckRoll")" onclick="return DisplayProgressMessage2(this);">Cekrol <span style="font-size:16px;padding-left:10px" class="pull-right hidden-xs showopacity glyphicon glyphicon-tower"></span></a></li>*@
+                    @if (GetIdentity.SuperPowerAdmin(User.Identity.Name) || GetIdentity.SuperAdmin(User.Identity.Name) || GetIdentity.Admin1(User.Identity.Name) || GetIdentity.Admin2(User.Identity.Name))
+                    {
+                        <li @ViewBag.EstateSelection><a href="@Url.Action("Index","OPMSHQ")" onclick="return DisplayProgressMessage2(this);">@GlobalResEstate.menuHQLink<span style="font-size:16px;padding-left:10px" class="pull-right hidden-xs showopacity glyphicon glyphicon-open"></span></a></li>
+                    }
+                    <li><a href="@Url.Action("Index", "Modules")" onclick="return DisplayProgressMessage2(this);">OPMS Modules<span style="font-size:16px;padding-left:10px" class="pull-right hidden-xs showopacity"><i class='glyphicon glyphicon-dashboard'></i></span></a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+}
+<script>
+    function DisplayProgressMessage(ctl) {
+        //$("body").addClass("submit-progress-bg");
+        //$(".submit-progress").removeClass("hidden");
+        $("#UpdateProgress1").css("display", "");
+        return true;
+    }
+
+    function DisplayProgressMessage2(ctl) {
+        $("#UpdateProgress2").css("display", "");
+        return true;
+    }
+
+    function DisplayProgressMessage4(ctl) {
+        $("#UpdateProgress4").css("display", "");
+        return true;
+    }
+
+    $(document.body).on('shown.bs.modal', function () {
+        $("#UpdateProgress1").css("display", "none");
+        $("#UpdateProgress2").css("display", "none");
+    });
+
+    $(document.body).on('hidden.bs.modal', function () {
+        $("#UpdateProgress1").css("display", "none");
+        $("#UpdateProgress2").css("display", "none");
+    });
+
+    //$(document.body).on('shown.bs.modal', function () {
+    //    $("#UpdateProgress1").css("display", "none");
+    //});
+</script>

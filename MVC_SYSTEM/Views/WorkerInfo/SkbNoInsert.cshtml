@@ -1,0 +1,47 @@
+﻿@model MVC_SYSTEM.Models.tbl_Skb
+
+@{
+    ViewBag.Title = "SkbNoInsert";
+    //Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div class="modal-header">
+        @*<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>*@
+        <h3 class="modal-title">@GlobalResEstate.lblTitleCreate</h3>
+    </div>
+    <div class="modal-body">
+        <div class="form-horizontal">
+            <span id="progress" class="text-center" style="display: none;">
+                <img src="~/Asset/Images/wait.gif" alt="wait" />
+            </span>
+            <div class="form-group">
+                <label class="control-label col-md-2">Bulan</label>
+                <div class="col-md-9">
+                    @Html.DropDownList("fld_Bulan", null, htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.fld_Bulan, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-md-2">Tahun</label>
+                <div class="col-md-9">
+                    @Html.DropDownList("fld_Tahun", null, htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.fld_Tahun, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-md-2">No Skb</label>
+                <div class="col-md-9">
+                    @Html.EditorFor(model => model.fld_NoSkb, new { htmlAttributes = new { @class = "form-control required" } })
+                    @Html.ValidationMessageFor(model => model.fld_NoSkb, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <input class="btn btn-primary" type="submit" value=@GlobalResEstate.btnSave />
+        <button class="btn btn-warning" data-dismiss="modal">@GlobalResEstate.btnBack</button>
+    </div>
+}

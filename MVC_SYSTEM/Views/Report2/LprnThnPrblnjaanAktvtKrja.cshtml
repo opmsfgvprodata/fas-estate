@@ -1,0 +1,64 @@
+﻿@{
+    ViewBag.Title = ViewBag.TitleReport;
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+
+    AjaxOptions options = new AjaxOptions
+    {
+        HttpMethod = "Get",
+        UpdateTargetId = "searchResult",
+        InsertionMode = InsertionMode.Replace,
+        LoadingElementId = "divLoading"
+    };
+}
+<script src="~/Asset/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+
+<div id="divLoading" style="display:none;">
+    <div class="progressTest">
+        <label>
+            @GlobalResEstate.msgWait
+        </label>
+    </div>
+</div>
+
+
+<section class="content-wrapper main-content clear-fix">
+    <div class="well bottom" style="padding-bottom:16px;">
+        @using (Ajax.BeginForm("_LprnThnPrblnjaanAktvtKrja", "Report2", null, options, new { @id = "RptSearch" }))
+        {
+            @Html.AntiForgeryToken()
+            <div class="row">
+                <div class="col-sm-3" id="divlist">
+                    @Html.Label(GlobalResEstate.lblLevelSelection)
+                    @Html.DropDownList("PilihanAktvt", null, htmlAttributes: new { @class = "form-control" })
+                </div>
+                <div class="col-sm-1" id="divlist">
+                    @Html.Label("From Month")
+                    @Html.DropDownList("MonthList", null, htmlAttributes: new { @class = "form-control" })
+                </div>
+                <div class="col-sm-1" id="divlist">
+                    @Html.Label("To Month")
+                    @Html.DropDownList("MonthList2", null, htmlAttributes: new { @class = "form-control" })
+                </div>
+                <div class="col-sm-1" id="divlist">
+                    @Html.Label(GlobalResEstate.lblYear)
+                    @Html.DropDownList("YearList", null, htmlAttributes: new { @class = "form-control" })
+                </div>
+                <div class="col-sm-2" style="padding-top:25px;">
+                    <input class="btn btn-primary btn-block" type="submit" name="Lihat" id="btnSubmit" value="@GlobalResEstate.btnView" />
+                </div>
+            </div>
+        }
+    </div>
+    <div class="well" style="margin-top:7px;">
+        <div class="panel panel-primary">
+            <div class="panel-heading">@ViewBag.TitleReport.ToUpper()</div>
+            <div class="panel-body">
+                <div id="searchResult">
+                    <div id="scrollArea2" class="modal-body" style="text-align: center">
+                        <p style="color: red">Please select the selection and click view button.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

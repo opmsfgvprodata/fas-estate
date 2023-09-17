@@ -1,0 +1,119 @@
+﻿<div id="productivityListGMN">
+    @{
+        var grid = new WebGrid(
+            canPage: true,
+            rowsPerPage: Model.PageSize,
+            canSort: false,
+            ajaxUpdateContainerId: "grid");
+
+        grid.Bind(Model.Content, rowCount: Model.TotalRecords, autoSortAndPage: false);
+
+        if (@grid.TotalRowCount > 0)
+        {
+            <div class="text-center">@grid.TotalRowCount @Html.Label(GlobalResEstate.lblTotalRecord)</div>
+
+            @grid.GetHtml(htmlAttributes: new { id = "grid" }, // id for ajaxUpdateontainerId parameter
+                                tableStyle: "table table-bordered table-striped table-list table-hover",
+                                headerStyle: "header_table",
+                                alternatingRowStyle: "Grid-alt",
+                                selectedRowStyle: "Grid-selected",
+                                rowStyle: "Grid-rowstyle",
+                                footerStyle: "table-pager",
+                                mode: WebGridPagerModes.All,
+                                columns: grid.Columns(
+                                    grid.Column(header: GlobalResEstate.hdrNo
+                                        , format: item => item.WebGrid.Rows.IndexOf(item) + 1
+                                                          + Math.Round(Convert.ToDouble(grid.TotalRowCount / grid.PageCount) / grid.RowsPerPage)
+                                                          * grid.RowsPerPage * grid.PageIndex, style: "count"),
+                                    grid.Column(columnName: "fld_Nopkj", header: GlobalResEstate.hdrNoPkj, style: "nopkj"),
+                                    grid.Column(columnName: "fld_Nama", header: GlobalResEstate.hdrName, style: "namapkj"),
+                                    grid.Column(columnName: "fld_Nokp", header: GlobalResEstate.hdrNoKp, style: "nokp"),
+                                    grid.Column(header: GlobalResEstate.hdrTargetWorkingDay, style: "hadirKerja",
+                                        format: @<text>
+                                            <span id="targetHarian" class="hidden">@item.fld_TargetHarian</span>
+                                            <span id="hadirKerja1" class="display-mode">@item.fld_HadirKerja</span>
+                                            <span id="unit" class="hidden">@item.fld_Unit</span>
+                                            @Html.TextBox("fld_hadirKerja", (int?)item.fld_hadirKerja, htmlAttributes: new { @class = "edit-mode form-control", Style = "display:none; text-align: center;", size = 10, @readonly = "readonly", @Value = @item.fld_hadirKerja })
+                                        </text>),
+                                                              grid.Column(GlobalResEstate.hdrAction, format: (item) =>
+                                                              {
+                                                                  if (item.fld_JenisPelan != "" && item.fld_Unit != null)
+                                                                  {
+                                                                      var nopkj = @item.fld_Nopkj;
+                                                                      var tindakan = "<button class='edit-book display-mode btn btn-success btn-block' title='" + @GlobalResEstate.btnUpdate + "'><i class='fa fa-edit fa-lg'></i></button>" +
+                                                                                     "<button class='save-book edit-mode btn btn-success btn-block' id='" + nopkj + "' style='display: none;' title='" + @GlobalResEstate.btnSave + "'><i class='fa fa-check fa-lg'></i></button>" +
+                                                                                     "<button class='edit-mode cancel btn btn-danger btn-block' style='display: none;' title='" + @GlobalResEstate.btnCancel + "'><i class='fa fa-remove fa-lg'></i></button>";
+                                                                      return @Html.Raw(tindakan);
+                                                                  }
+                                                                  else
+                                                                  {
+                                                                      var nopkj = @item.fld_Nopkj;
+                                                                      var tindakan = "<button class='edit-book display-mode btn btn-success btn-block' title='" + @GlobalResEstate.btnAdd + "'><i class='fa fa-plus fa-lg'></i></button>" +
+                                                                                     "<button class='save-book edit-mode btn btn-success btn-block' id='" + nopkj + "' style='display: none;' title='" + @GlobalResEstate.btnSave + "'><i class='fa fa-check fa-lg'></i></button>" +
+                                                                                     "<button class='edit-mode cancel btn btn-danger btn-block' style='display: none;' title='" + @GlobalResEstate.btnCancel + "'><i class='fa fa-remove fa-lg'></i></button>";
+                                                                      return @Html.Raw(tindakan);
+                                                                  }
+                                                              }, canSort: false, style: "tindakan")
+                                                              ));
+        }
+        else
+        {
+            <hr />
+            <div class="text-center">
+                @Html.Label(GlobalResEstate.msgErrorSearch)
+            </div>
+            <hr />
+        }
+    }
+</div>
+
+<script>
+    $(function () {
+        $('.edit-mode').hide();
+        $('.hidden').hide();
+        $('.edit-book').prop("disabled", false);
+        $('.edit-book').on('click',
+            function () {
+                var tr = $(this).parents('tr:first');
+                tr.find('.edit-mode, .display-mode').toggle();
+                $('.edit-book').prop("disabled", true);
+            });
+        $('.cancel').on('click',
+            function () {
+                var tr = $(this).parents('tr:first');
+                tr.find('.edit-mode, .display-mode').toggle();
+                $('.edit-book').prop("disabled", false);
+            });
+        $('.save-book').on('click',
+            function () {
+                $('.hidden').hide();
+                var tr = $(this).parents('tr:first');
+                var nopkj = $(this).prop('id');
+                console.log(nopkj);
+                var hadirKerja = tr.find('#fld_hadirKerja').val();
+                console.log(hadirKerja);
+                var filter = $('#txtfilter').val();
+                console.log(filter);
+
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("addProductivityInfoGMN", "WorkerInfo")',
+                    dataType: 'json',
+                    contentType: 'application/json',
+                    async: false,
+                    data: JSON.stringify({ nopkj: nopkj, hadirKerja: hadirKerja }),
+                    success: function(result) {
+                        $.simplyToast(result.msg, result.status);
+                        if (result.status == "success") {
+                            $("#productivityListGMN").load('@Url.Action("_WorkerProductivitySearchGMN", "WorkerInfo")', { filter: filter });
+                            $('.edit-book').prop("disabled", false);
+                        }
+                    }
+                });
+            });
+    });
+</script>
+
+
+
+

@@ -1,0 +1,188 @@
+﻿@model IEnumerable<MVC_SYSTEM.Models.sp_RptSkb_Result>
+@using MVC_SYSTEM.Class;
+
+@{
+    ViewBag.Title = "SkbReport";
+    //System.Globalization.DateTimeFormatInfo mfi = new System.Globalization.DateTimeFormatInfo();
+    //GetTriager GetTriager = new GetTriager();
+    GetIdentity GetIdentity = new GetIdentity();
+    ChangeTimeZone ChangeTimeZone = new ChangeTimeZone();
+    DateTime Todaydate = ChangeTimeZone.gettimezone();
+    string uniquefilename = "SkbReport_" + ViewBag.UserID + "_" + Todaydate.Year.ToString() + Todaydate.Month.ToString() + Todaydate.Day.ToString() + Todaydate.Hour.ToString() + Todaydate.Minute.ToString() + Todaydate.Second.ToString();
+}
+
+@if (Model != null && Model.Count() != 0)
+{
+
+    @*<div class="panel panel-primary">
+        <div class="panel-heading">@GlobalResEstate.lblSkbRpt.ToUpper()</div>
+        <div class="panel-body">
+            @if (ViewBag.DataCount < 1)
+            {
+                <p style="color:red">@GlobalResEstate.msgNoRecord</p>
+            }
+            else
+            {*@
+    <div id="scrollArea2" class="modal-body">
+        @foreach (var item in Model)
+        {
+            <logo />
+            <table class="table table-bordered" style="font-size: 11px;" border="0">
+                <thead>
+                    <tr>
+                        <th colspan="6" style="text-align:center;vertical-align:middle; border:none;">
+                            @ViewBag.NamaSyarikat
+                            <br />
+                            (@GlobalResEstate.lblCompanyNo : @ViewBag.NoSyarikat)
+                            <br />
+                            @GlobalResEstate.lblSkbRpt
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th colspan="2" style="border-bottom:1px solid; border-top:none; border-left:none; border-right:none; border-bottom-color:red">@GlobalResEstate.lblSkbInfo</th>
+                    </tr>
+                    <tr>
+                        <td style="border:none; width:50%">
+                            <table>
+                                <tr>
+                                    <td style="border:none;">
+                                        <label style="font-size:small; font-weight:normal;">@GlobalResEstate.lblEstateCode</label><br />
+                                        <label style="font-size:small; font-weight:normal;">@GlobalResEstate.lblEstateName</label><br />
+
+                                    </td>
+                                    <td style="border:none;">
+                                        <label style="font-size:small; font-weight:normal;">: @item.fld_LdgCode</label><br />
+                                        <label style="font-size:small; font-weight:normal;">: @item.fld_LdgName</label><br />
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td style="border:none; width:50%">
+                            <table>
+                                <tr>
+                                    <td style="border:none;">
+                                        <label style="font-size:small; font-weight:normal;">@GlobalResEstate.lblSkb</label><br />
+                                        <label style="font-size:small; font-weight:normal;">@GlobalResEstate.lblAppliedSalary</label><br />
+                                    </td>
+                                    <td style="border:none;">
+                                        <label style="font-size:small; font-weight:normal;font-weight:bold">: @item.fld_NoSkb</label><br />
+                                        <label style="font-size:small; font-weight:normal;">: RM @item.fld_Amount.Value.ToString("N")</label><br />
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th colspan="2" style="border-bottom:1px solid; border-top:none; border-left:none; border-right:none; border-bottom-color:red">@GlobalResEstate.lblRequestInfo.ToUpper()</th>
+                    </tr>
+                    <tr>
+                        <td style="border:none; width:50%">
+                            <table>
+                                <tr>
+                                    <td style="border:none;">
+                                        <label style="font-size:small; font-weight:normal;">@GlobalResEstate.lblRequestDate</label><br />
+                                        <label style="font-size:small; font-weight:normal;">@GlobalResEstate.lblCheckedDate</label><br />
+                                        <label style="font-size:small; font-weight:normal;">@GlobalResEstate.lblSupportedDate</label><br />
+                                        <label style="font-size:small; font-weight:normal;">@GlobalResEstate.lblApprovedDate</label><br />
+                                    </td>
+                                    <td style="border:none;">
+                                        <label style="font-size:small; font-weight:normal;">: @string.Format("{0:dd/MM/yyyy}", item.fld_ApplyDate)</label><br />
+                                        <label style="font-size:small; font-weight:normal;">: @string.Format("{0:dd/MM/yyyy}", item.fld_SemakWil_DT)</label><br />
+                                        <label style="font-size:small; font-weight:normal;">: @string.Format("{0:dd/MM/yyyy}", item.fld_SokongWilGM_DT)</label><br />
+                                        <label style="font-size:small; font-weight:normal;">: @string.Format("{0:dd/MM/yyyy}", item.fld_TerimaHQ_DT)</label><br />
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td style="border:none; width:50%">
+                            <table>
+                                <tr>
+                                    <td style="border:none;">
+                                        <label style="font-size:small; font-weight:normal;">@GlobalResEstate.lblRequestBy</label><br />
+                                        <label style="font-size:small; font-weight:normal;">@GlobalResEstate.lblCheckedBy</label><br />
+                                        <label style="font-size:small; font-weight:normal;">@GlobalResEstate.lblSupportedBy</label><br />
+                                        <label style="font-size:small; font-weight:normal;">@GlobalResEstate.lblApproveBy</label>
+
+                                    </td>
+                                    <td style="border:none;">
+                                        <label style="font-size:small; font-weight:normal;">: @GetIdentity.MyNameFullName(item.fld_ApplyBy)</label><br />
+                                        <label style="font-size:small; font-weight:normal;">: @GetIdentity.MyNameFullName(item.fld_SemakWil_By)</label><br />
+                                        <label style="font-size:small; font-weight:normal;">: @GetIdentity.MyNameFullName(item.fld_SokongWilGM_By)</label><br />
+                                        <label style="font-size:small; font-weight:normal;">: @GetIdentity.MyNameFullName(item.fld_TerimaHQ_By)</label>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <newpage />
+        }
+    </div>
+    if (ViewBag.Print == null)
+    {
+        <div style="text-align:right; margin-top:10px">
+            <a class="btn btn-default btn-sm" href="#" id="printpage">
+                <span class="glyphicon glyphicon-print"> </span> @GlobalResEstate.btnPrint
+            </a>
+            <a class="btn btn-default btn-sm" href="#" id="downloadpdf">
+                <span><img src="~/Asset/Images/pdf-icon.png" width="20px" height="20px" /></span> @GlobalResEstate.btnDownloadPdf
+            </a>
+            <a class="btn btn-default btn-sm" href="#" onclick="HTMLtoExcel('')">
+                <span><img src="~/Asset/Images/excel-icon.png" width="20px" height="20px" /></span> @GlobalResEstate.btnDownloadExcel
+            </a>
+        </div>
+    }
+}
+
+@if (Model == null || Model.Count() == 0)
+{
+    <div id="scrollArea2" class="modal-body" style="text-align: center">
+        <p style="color: red">@ViewBag.Message</p>
+
+    </div>
+}
+<style>
+    #page td {
+        padding: 2px;
+        margin: 2px;
+    }
+</style>
+
+<script>
+    $(Document).ready(function () {
+        $("#printpage").click(function () {
+            var DivElement = document.getElementById("scrollArea2").innerHTML;
+            var oldPage = document.body.innerHTML;
+            document.body.innerHTML = DivElement;
+            window.print();
+            document.body.innerHTML = oldPage;
+        })
+
+        @*$("#downloadpdf").click(function () {
+            var myHtml = document.getElementById('scrollArea').innerHTML;
+            //alert(myHtml);
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("ConvertPDF", "Report")',
+                dataType: 'json',
+                contentType: 'application/json',
+                data: JSON.stringify({ myHtml: myHtml, filename: "@uniquefilename", reportname: "NoSkb" }),
+                success: function (result) {
+                    if (result.success) {
+                        var win = window.open(result.link, '_blank');
+                        win.focus();
+                    } else {
+                        $.simplyToast(result.msg, result.status);
+                    }
+                },
+                error: function (error) {
+                    $.simplyToast('@GlobalResEstate.msgError', 'danger');
+                }
+            });
+            return false;
+        });*@
+    });
+</script>

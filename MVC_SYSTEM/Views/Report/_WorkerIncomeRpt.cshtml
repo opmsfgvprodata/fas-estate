@@ -1,0 +1,31 @@
+﻿@model IEnumerable<MVC_SYSTEM.Models.tbl_Insentif>
+
+@if (Model != null)
+{
+    <table>
+        @foreach (var item in Model)
+        {
+
+            <tr>
+                <td style="border: none; width:25%">
+                    <label style="font-size: small; font-weight: normal;">Jenis Pendapatan</label><br/>
+                </td>
+                <td style="border: none; width:25%">
+                    <label style="font-size: small; font-weight: normal;">@item.fld_KodInsentif</label><br />
+                </td>
+                <td style="border: none; width:25%">
+                    <label style="font-size: small; font-weight: normal;">Jumlah (RM)</label><br/>
+                </td>
+                <td style="border: none; width:25%">
+                    <label style="font-size: small; font-weight: normal;">@item.fld_NilaiInsentif</label><br />
+                </td>
+            </tr> 
+        }
+    </table>
+}
+
+else
+{
+    <label style="font-size: small; font-weight: normal;">Tiada</label><br/>
+
+}

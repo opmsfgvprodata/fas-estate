@@ -1,0 +1,161 @@
+﻿@model IEnumerable<MVC_SYSTEM.ViewingModels.vw_MaklumatKeluarga>
+@using MVC_SYSTEM.Class;
+
+@{
+    ViewBag.Title = "DependentsInfo";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+
+    GetEstateDetail GetEstateDetail = new GetEstateDetail();
+    GetConfig GetConfig = new GetConfig();
+
+    //grid.Bind(Model.Content, rowCount: Model.TotalRecords, autoSortAndPage: false);
+}
+
+<section class="content-wrapper main-content clear-fix">
+
+    @using (Html.BeginForm("DependentsInfo", null, FormMethod.Get))
+    {
+        <div class="well bottom" style="padding-bottom: 16px">
+            <div class="row">
+                <div class="col-sm-2">
+                    @Html.Label("Pekerja")
+                    @Html.DropDownList("PkjList", null, htmlAttributes: new { @class = "form-control" })
+                </div>
+                <div class="col-sm-2" style="padding-top:25px;">
+                    <input class="btn btn-primary btn-block" type="submit" name="Lihat" id="Lihat" value="@GlobalResEstate.btnView" onclick="return DisplayProgressMessage(this);" />
+                </div>
+            </div>
+        </div>
+
+        <div class="well" style="margin-top: 7px; padding-bottom: 0px">
+            <div class="modal-body">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">@GlobalResEstate.lblWorkerInfo</div>
+                    <div class="panel-body">
+                        <div>
+                            @{
+                                var grid = new WebGrid(
+                                      source: Model,
+                                      canPage: true,
+                                      rowsPerPage: @ViewBag.pageSize,
+                                      canSort: false,
+                                      ajaxUpdateContainerId: "grid");
+                                grid.Pager(WebGridPagerModes.All);
+                            }
+                            @{
+                                @grid.GetHtml(htmlAttributes: new { id = "grid" }, // id for ajaxUpdateContainerId parameter
+                                fillEmptyRows: false,
+                                tableStyle: "table table-bordered table-striped table-list table-hover",
+                                headerStyle: "header_table",
+                                alternatingRowStyle: "Grid-alt",
+                                selectedRowStyle: "Grid-selected",
+                                rowStyle: "Grid-rowstyle",
+                                footerStyle: "table-pager",
+                                mode: WebGridPagerModes.All,
+                                columns: grid.Columns(
+                                    grid.Column(GlobalResEstate.hdrNo, canSort: false, format: item => item.WebGrid.Rows.IndexOf(item) + 1 + Math.Round(Convert.ToDouble(grid.TotalRowCount / grid.PageCount) / grid.RowsPerPage) * grid.RowsPerPage * grid.PageIndex, style: "count"),
+                                    grid.Column("MklmtPkj.fld_Nopkj", GlobalResEstate.hdrNoPkj, style: "nopkj"),
+                                    grid.Column("MklmtPkj.fld_Nama", GlobalResEstate.hdrName, style: "namapkj"),
+                                    grid.Column("Keluarga", format: (item) =>
+                                    {
+                                        var subgrid = new WebGrid(source: item.MklmtKeluarga, canSort: false);
+                                        if (subgrid.TotalRowCount > 0)
+                                        {
+                                            return subgrid.GetHtml(htmlAttributes: new { id = "nested" }, // id for ajaxUpdateContainerId parameter
+                                            fillEmptyRows: false,
+                                            tableStyle: "table table-striped table-list table-hover",
+                                            headerStyle: "header_table",
+                                            rowStyle: "Grid-rowstyle",
+                                            displayHeader: false,
+                                            columns: subgrid.Columns(
+                                                subgrid.Column("fld_NamaKeluarga", "Nama Keluarga", style: "nama2", format: (item2) => new HtmlString(item2.fld_NamaKeluarga + " (" + item2.fld_Hubungan + ")")),
+                                                subgrid.Column(GlobalResEstate.hdrAction, canSort: false, style: "tindakan2",
+                                                format: (item2) => new HtmlString("<a data-modal='' href='" + @Url.Action("DependentsInfoUpdate", "WorkerInfo") + "/?id=" + item2.fld_ID + "' class='btn btn-success' title='Update' onclick='return DisplayProgressMessage(this);'><i class='fa fa-edit fa-lg'></i></a>" +
+                                                "<a data-modal='' href='" + @Url.Action("DependentsInfoDelete", "WorkerInfo") + "/?id=" + item2.fld_ID + "' class='btn btn-danger' title='Delete' onclick='return DisplayProgressMessage(this);'><i class='fa fa-trash fa-lg'></i></a>"))
+                                                    ));
+                                        }
+                                        else
+                                        {
+                                            return @Html.Raw("<br/><div class='text-center'>Tiada Maklumat</div><br/>");
+                                        }
+
+
+                                    }),
+                                    grid.Column(GlobalResEstate.hdrAction, canSort: false, style: "tindakan",
+                                        format:@<text>
+                                        @Html.Raw("<a data-modal='' href='" + @Url.Action("DependentsInfoCreate", "WorkerInfo") + "/?PkjId=" + item.MklmtPkj.fld_Nopkj + "' class='btn btn-success' title='Update' onclick='return DisplayProgressMessage(this);'><i class='fa fa-plus fa-lg'></i></a>")
+                                        </text>)
+                                  ));
+                                        }
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer" style="margin-top: -18px">
+                @*<a class="btn btn-success" data-modal="" href="@Url.Action("DependentsInfoCreate", "WorkerInfo")" id="btnCreate" onclick="return DisplayProgressMessage2(this);">
+                    Tambah Maklumat
+                </a>*@
+                <a class="btn btn-warning" href="@Url.Action("Index", "WorkerInfo")" onclick="return DisplayProgressMessage2(this);">@GlobalResEstate.btnBack</a>
+            </div>
+        </div>
+                                }
+</section>
+
+<!-- modal placeholder-->
+<div id='myModal' class='modal fade in'>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div id='myModalContent'></div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    @Scripts.Render("~/Asset/Scripts/appjs.js")
+}
+
+<style>
+    .header_table th {
+        text-align: center;
+        vertical-align: middle !important;
+    }
+
+    .count {
+        width: 30px;
+        font-size: 12px;
+        text-align: center;
+        vertical-align: middle !important;
+    }
+
+    .nopkj {
+        width: 100px;
+        font-size: 12px;
+        text-align: center;
+        vertical-align: middle !important;
+    }
+
+    .namapkj {
+        width: 200px;
+        font-size: 12px;
+        text-align: left;
+        vertical-align: middle !important;
+    }
+
+    .tindakan {
+        width: 80px;
+        text-align: center;
+    }
+
+    .nama2 {
+        width: 300px;
+        font-size: 12px;
+        text-align: left;
+        vertical-align: middle !important;
+    }
+
+    .tindakan2 {
+        width: 80px;
+        text-align: center;
+    }
+</style>

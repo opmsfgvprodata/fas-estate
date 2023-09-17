@@ -1,0 +1,103 @@
+﻿@*@model MVC_SYSTEM.Models.tbl_KumpulanKerja*@
+@model MVC_SYSTEM.ViewingModels.PagedList<MVC_SYSTEM.ViewingModels.tbl_Pkjmast>
+
+
+@{
+    ViewBag.Title = "GroupEdit";
+    //Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+@*<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 class="modal-title"@GlobalResEstate.titleGroupMember</h3>
+</div>*@
+
+<div class="modal-body">
+    <div class="form-horizontal">
+        <div class="panel panel-primary">
+            <div class="panel-heading">@GlobalResEstate.titleGroupMember</div>
+            <div class="panel-body">
+                <div>
+                    @{
+                        var grid = new WebGrid(
+                            canPage: true,
+                            rowsPerPage: Model.PageSize,
+                            canSort: false,
+                            ajaxUpdateCallback: "GridUpdate",
+                            ajaxUpdateContainerId: "grid1");
+
+                        grid.Bind(Model.Content, rowCount: Model.TotalRecords, autoSortAndPage: false);
+                        grid.Pager(WebGridPagerModes.All);
+
+                        if (@grid.TotalRowCount > 0)
+                        {
+                            <div class="text-center">@grid.TotalRowCount @Html.Label(GlobalResEstate.lblGroupMember)</div>
+
+                            @grid.GetHtml(htmlAttributes: new { id = "grid1" }, // id for ajaxUpdateContainerId parameter
+                                tableStyle: "table table-bordered table-striped table-list table-hover",
+                                headerStyle: "header_table",
+                                alternatingRowStyle: "Grid-alt",
+                                selectedRowStyle: "Grid-selected",
+                                rowStyle: "Grid-rowstyle",
+                                columns: grid.Columns(
+                                    grid.Column(header: GlobalResEstate.hdrNo
+                                        , format: item => item.WebGrid.Rows.IndexOf(item) + 1
+                                                          + Math.Round(Convert.ToDouble(grid.TotalRowCount / grid.PageCount) / grid.RowsPerPage)
+                                                          * grid.RowsPerPage * grid.PageIndex, style: "count"),
+                                    grid.Column(columnName: "fld_Nopkj", header: GlobalResEstate.hdrNoPkj, style: "nopkj"),
+                                    grid.Column(columnName: "fld_Nama", header: GlobalResEstate.hdrName, style: "nopkj")));
+
+                        }
+
+                        else
+                        {
+                            <hr />
+                            <div class="text-center">
+                                @Html.Label(GlobalResEstate.msgGroupNoMember)
+                            </div>
+                            <hr />
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-warning" data-dismiss="modal">@GlobalResEstate.btnBack</button>
+</div>
+
+<script>
+    $("form").removeData("validator");
+    $("form").removeData("unobtrusiveValidation");
+    $.validator.unobtrusive.parse("form");
+
+
+    //<script>
+    //$("tfoot").hide(); // add bootstrap buttons
+
+    //function GridUpdate(data) {
+    //    $('#grid').html(data);
+    //}
+
+</script>
+
+<style>
+    .header_table th {
+        text-align: center;
+    }
+
+    .count {
+        width: 5px !important;
+        font-size: 12px;
+        text-align: center;
+    }
+
+    .nopkj {
+        width: 100px;
+        font-size: 12px;
+        text-align: center;
+    }
+</style>
+
+

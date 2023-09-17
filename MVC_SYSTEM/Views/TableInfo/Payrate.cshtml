@@ -1,0 +1,29 @@
+﻿@model MVC_SYSTEM.ViewingModels.PagedList<MVC_SYSTEM.ViewingModels.tbl_UpahMenuai>
+@using MVC_SYSTEM.Class;
+
+@{
+    ViewBag.Title = "Kadar Upah (Menuai)";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+    GetConfig GetConfig = new GetConfig();
+}
+
+<section class="content-wrapper main-content clear-fix">
+        @using (Html.BeginForm("Payrate", null, FormMethod.Get))
+        {
+            @Html.AntiForgeryToken()
+            <div id="DataTable" class="well" style="margin-top: 7px">
+                <div class="modal-body">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">@GlobalResEstate.lblPayrate.ToUpper()</div>
+                        <div id="divdetail" class="panel-body">
+                            @Html.Action("PayrateDetail", "TableInfo")
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <a style="text-align:right" href="@Url.Action("Index", "TableInfo")" class="btn btn-warning">@GlobalResEstate.btnBack</a>
+                </div>
+            </div>
+        }
+</section>
+

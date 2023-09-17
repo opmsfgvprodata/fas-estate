@@ -1,0 +1,83 @@
+﻿@model IEnumerable<MVC_SYSTEM.Models.tbl_SAPPostReturn>
+@{
+    ViewBag.Title = "Checkroll Report";
+    Layout = "~/Views/Shared/_LayoutPopup.cshtml";
+    int i = 1;
+}
+
+<style>
+    .panel-primary {
+        border-color: white !important;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    td, th {
+        padding: 20px;
+        border: 1px solid black;
+    }
+
+    .hover {
+        background: #b0b0b0;
+    }
+</style>
+
+<section class="content-wrapper main-content clear-fix">
+    <div class="well2">
+        <div class="modal-body">
+            <table class="table table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th class="text-center-0" width="5%">
+                            <b>No</b>
+                        </th>
+                        <th class="text-center" width="19%">
+                            <b>Masej 1</b>
+                        </th>
+                        <th class="text-center" width="19%">
+                            <b>Masej 2</b>
+                        </th>
+                        <th class="text-center" width="19%">
+                            <b>Masej 3</b>
+                        </th>
+                        <th class="text-center" width="19%">
+                            <b>Masej 4</b>
+                        </th>
+                        <th class="text-center" width="19%">
+                            <b>Masej 5</b>
+                        </th>
+                    </tr>
+                </thead>
+                @foreach (var item in Model)
+                {
+                    <tr>
+
+                        <td align="center">
+                            @i
+                        </td>
+                        <td align="left">
+                            @item.fld_Msg1
+                        </td>
+                        <td align="left">
+                            @item.fld_Msg2
+                        </td>
+                        <td align="left">
+                            @item.fld_Msg3
+                        </td>
+                        <td align="left">
+                            @item.fld_Msg4
+                        </td>
+                        <td align="left">
+                            @item.fld_Msg5
+                        </td>
+
+                    </tr>
+                    i++;
+                }
+            </table>
+        </div>
+    </div>
+</section>

@@ -1,0 +1,55 @@
+﻿@model MVC_SYSTEM.ViewingModels.PagedList<MVC_SYSTEM.ViewingModels.vw_HasilSawitSubPkt>
+
+<div id="subPktYield">
+    @{
+        var grid = new WebGrid(
+            canPage: true,
+            rowsPerPage: Model.PageSize,
+            canSort: false,
+            ajaxUpdateContainerId: "grid");
+
+        grid.Bind(Model.Content, rowCount: Model.TotalRecords, autoSortAndPage: false);
+        //grid.Pager(WebGridPagerModes.All);
+
+        if (@grid.TotalRowCount > 0)
+        {
+            <div class="text-center">@grid.TotalRowCount @Html.Label("maklumat Sub Peringkat")</div>
+
+            @grid.GetHtml(htmlAttributes: new { id = "grid" }, // id for ajaxUpdateontainerId parameter
+                     tableStyle: "table table-bordered table-striped table-list table-hover",
+                     headerStyle: "header_table",
+                     alternatingRowStyle: "Grid-alt",
+                     selectedRowStyle: "Grid-selected",
+                     rowStyle: "Grid-rowstyle",
+                     footerStyle: "table-pager",
+                     mode: WebGridPagerModes.All,
+                     columns: grid.Columns(
+                         grid.Column(header: "No."
+                             , format: item => item.WebGrid.Rows.IndexOf(item) + 1
+                                               + Math.Round(Convert.ToDouble(grid.TotalRowCount / grid.PageCount) / grid.RowsPerPage)
+                                               * grid.RowsPerPage * grid.PageIndex, style: "count"),
+                         grid.Column(columnName: "fld_Pkt", header: "Kod Sub Peringkat", style: "kodpkt"),
+                         grid.Column(columnName: "fld_LsPkt", header: "Luas Sub Peringkat", style: "luaspkt"),
+                         grid.Column(
+                             header: "Hasil Sawit Bulanan", style: "hasilsawit",
+                             format: @<text>
+                                <span id="hasilTan1" class="display-mode">@item.fld_HasilTan</span>
+                            </text>)
+                             ));
+        }
+        else
+        {
+            <hr />
+            <div class="text-center">
+                @Html.Label("Message", (string)ViewBag.Message)
+            </div>
+            <hr />
+        }
+    }
+</div>
+
+
+
+
+
+

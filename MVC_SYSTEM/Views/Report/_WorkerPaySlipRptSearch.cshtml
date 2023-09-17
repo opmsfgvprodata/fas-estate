@@ -1,0 +1,485 @@
+﻿@using MVC_SYSTEM.Class
+@using MVC_SYSTEM.Models
+@model IEnumerable<MVC_SYSTEM.ViewingModels.vw_PaySlipPekerja>
+
+@{
+    GetTriager GetTriager = new GetTriager();
+    GetEstateDetail GetGroup = new GetEstateDetail();
+    GetConfig GetConfig = new GetConfig();
+
+    int? month = ViewBag.MonthList;
+    int? year = ViewBag.YearList;
+    string worker = ViewBag.WorkerList;
+    int bil = 0;
+    //decimal jumlahPendapatan = 0;
+    //decimal jumlahPotongan = 0;
+
+    ChangeTimeZone ChangeTimeZone = new ChangeTimeZone();
+
+    int year1 = ChangeTimeZone.gettimezone().Year;
+    int month1 = ChangeTimeZone.gettimezone().Month;
+    int day = ChangeTimeZone.gettimezone().Day;
+    int hour = ChangeTimeZone.gettimezone().Hour;
+    int minute = ChangeTimeZone.gettimezone().Minute;
+    int second = ChangeTimeZone.gettimezone().Second;
+    string uniquefilename = "PaySlipRpt_" + ViewBag.UserID + "_" + year1.ToString() + month1.ToString() + day.ToString() + hour.ToString() + minute.ToString() + second.ToString();
+}
+
+@if (Model != null && Model.Count() != 0)
+{
+    <div id="scrollArea2" class="modal-body" style="page-break-before: always;">
+    @foreach (var item in Model)
+    {
+        decimal totalCarumanTambahan = 0;
+        <div style="page-break-before: always;">
+        <p style="font-size: 11px" align="right">@GlobalResEstate.lblDate : @ViewBag.Date</p>
+
+        <table id="page" class="table" style="font-size: 11px; margin-bottom: 0px" border="0" cellspacing="0">
+            <thead>
+            <tr>
+                <th colspan="18" style="text-align: center; vertical-align: middle; border: none;">
+                    <img src="~/Asset/Images/logo_FTPSB.jpg" height="60" width="60" />
+                    <br />
+                    @ViewBag.NamaSyarikat
+                    <br />
+                    (@ViewBag.NoSyarikat)
+                    <br />
+                    @GlobalResEstate.lblPayslipReport @GlobalResEstate.hdrForMonth @ViewBag.MonthList/@ViewBag.YearList
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td width="4%" style="font-weight: bold; vertical-align: middle !important; border:none;">@GlobalResEstate.hdrNoPkj</td>
+                <td width="4%" style="vertical-align: middle !important; border:none;">: @item.Pkjmast.fld_Nopkj</td>
+                <td width="4%" style="font-weight: bold; vertical-align: middle !important; border:none;">@GlobalResEstate.hdrName</td>
+                <td width="4%" style="vertical-align: middle !important; border:none;">: @item.Pkjmast.fld_Nama</td>
+                <td width="4%" style="font-weight: bold; vertical-align: middle !important; border:none;">@GlobalResEstate.lblNoKwsp</td>
+                <td width="4%" style="vertical-align: middle !important; border:none;">: @item.Pkjmast.fld_Nokwsp</td>
+            </tr>
+            <tr>
+                <td width="4%" style="font-weight: bold; vertical-align: middle !important; border:none;">@GlobalResEstate.hdrGroupCode</td>
+                <td width="4%" style="vertical-align: middle !important; border:none;">: @GetGroup.GroupCode(item.Pkjmast.fld_KumpulanID, ViewBag.UserID, ViewBag.UserName)</td>
+                <td width="4%" style="font-weight: bold; vertical-align: middle !important; border:none;">@GlobalResEstate.lblPosition</td>
+                <td width="4%" style="vertical-align: middle !important; border:none;">: @GetConfig.GetWebConfigDesc(item.Pkjmast.fld_Ktgpkj, "designation", ViewBag.NegaraID, ViewBag.SyarikatID)</td>
+                <td width="4%" style="font-weight: bold; vertical-align: middle !important; border:none;">@GlobalResEstate.lblNoSocso</td>
+                <td width="4%" style="vertical-align: middle !important; border:none;">: @item.Pkjmast.fld_Noperkeso</td>
+            </tr>
+            <tr>
+                <td width="4%" style="font-weight: bold; vertical-align: middle !important; border:none;">@GlobalResEstate.lblGender</td>
+                <td width="4%" style="vertical-align: middle !important; border:none;">: @GetConfig.GetWebConfigDesc(item.Pkjmast.fld_Kdjnt, "gender", ViewBag.NegaraID, ViewBag.SyarikatID)</td>
+                <td width="4%" style="font-weight: bold; vertical-align: middle !important; border:none;">@GlobalResEstate.hdrNoKp</td>
+                <td width="4%" style="vertical-align: middle !important; border:none;">: @item.Pkjmast.fld_Nokp</td>
+                <td width="4%" style="font-weight: bold; vertical-align: middle !important; border:none;"></td>
+                <td width="4%" style="vertical-align: middle !important; border:none;"></td>
+            </tr>
+            <tr>
+                <td width="4%" style="font-weight: bold; vertical-align: middle !important; border:none;">&nbsp;</td>
+                <td width="4%" style="vertical-align: middle !important; border:none;"></td>
+                <td width="4%" style="font-weight: bold; vertical-align: middle !important; border:none;"></td>
+                <td width="4%" style="vertical-align: middle !important; border:none;"></td>
+                <td width="4%" style="font-weight: bold; vertical-align: middle !important; border:none;"></td>
+                <td width="4%" style="vertical-align: middle !important; border:none;"></td>
+            </tr>
+            </tbody>
+        </table>
+
+        @if (item.GajiBulanan != null)
+        {
+            <table style="float: left; width: 65%; font-size: 11px; margin-bottom: 10px" class="table" cellspacing="0">
+                <thead>
+                <tr>
+                    <th colspan="6" width="1%" style="margin: 2px !important; margin: !important; padding: 2px !important; text-align: center; vertical-align: middle !important; border-top: 1px solid red;border-left: 1px solid red;border-bottom: 1px solid red; border-right: 1px solid red;" border="1">@GlobalResEstate.hdrEarning</th>
+                </tr>
+                <tr>
+                    <th width="2%" style="margin: 2px !important; padding: 2px !important; text-align: center; vertical-align: middle !important;border-left: 1px solid red;border-bottom: 1px solid red;">@GlobalResEstate.hdrDesc</th>
+                    <th width="1%" style="margin: 2px !important; padding: 2px !important; text-align: center; vertical-align: middle !important;border-left: 1px solid red;border-bottom: 1px solid red;">@GlobalResEstate.hdrQuantity</th>
+                    <th width="1%" style="margin: 2px !important; padding: 2px !important; text-align: center; vertical-align: middle !important;border-left: 1px solid red;border-bottom: 1px solid red;">@GlobalResEstate.hdrUnit</th>
+                    <th width="2%" style="margin: 2px !important; padding: 2px !important; text-align: center; vertical-align: middle !important;border-left: 1px solid red;border-bottom: 1px solid red;">@GlobalResEstate.hdrRate (RM)</th>
+                    <th width="1%" style="margin: 2px !important; padding: 2px !important; text-align: center; vertical-align: middle !important;border-left: 1px solid red;border-bottom: 1px solid red;">@GlobalResEstate.lblMultiples</th>
+                    <th width="2%" style="margin: 2px !important; padding: 2px !important; text-align: center; vertical-align: middle !important;border-left: 1px solid red;border-right: 1px solid red;border-bottom: 1px solid red;">@GlobalResEstate.lblTotal (RM)</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td width="4%" style="margin: 2px !important; padding: 2px !important; vertical-align: middle !important; border-bottom: 1px dotted gray; border-right: none; border-left: none">@GlobalResEstate.hdrEmployerKwsp</td>
+                    <td width="1%" style="margin: 2px !important; padding: 2px !important; vertical-align: middle !important; border-bottom: 1px dotted gray; text-align: right; border-right: none; border-left: none">-</td>
+                    <td width="1%" style="margin: 2px !important; padding: 2px !important; vertical-align: middle !important; border-bottom: 1px dotted gray; text-align: right; border-right: none; border-left: none">-</td>
+                    <td width="1%" style="margin: 2px !important; padding: 2px !important; vertical-align: middle !important; border-bottom: 1px dotted gray; text-align: right; border-right: none; border-left: none">-</td>
+                    <td width="1%" style="margin: 2px !important; padding: 2px !important; vertical-align: middle !important; border-bottom: 1px dotted gray; text-align: right; border-right: none; border-left: none">-</td>
+                    @if (item.GajiBulanan != null && item.GajiBulanan.fld_KWSPMjk != null)
+                    {
+                        <td width="1.5%" style="margin: 2px !important; padding: 2px !important; vertical-align: middle !important; border-bottom: 1px dotted gray; text-align: right; border-right: none; border-left: none">@item.GajiBulanan.fld_KWSPMjk</td>
+                    }
+                    else
+                    {
+                        <td width="1.5%" style="margin: 2px !important; padding: 2px !important; vertical-align: middle !important; border-bottom: 1px dotted gray; text-align: right; border-right: none; border-left: none">0.00</td>
+                    }
+                </tr>
+                <tr>
+                    <td width="4%" style="margin: 2px !important; padding: 2px !important; vertical-align: middle !important; border-bottom: 1px dotted gray; border-right: none; border-left: none">@GlobalResEstate.hdrEmployerSocso</td>
+                    <td width="1%" style="margin: 2px !important; padding: 2px !important; vertical-align: middle !important; border-bottom: 1px dotted gray; text-align: right; border-right: none; border-left: none">-</td>
+                    <td width="1%" style="margin: 2px !important; padding: 2px !important; vertical-align: middle !important; border-bottom: 1px dotted gray; text-align: right; border-right: none; border-left: none">-</td>
+                    <td width="1%" style="margin: 2px !important; padding: 2px !important; vertical-align: middle !important; border-bottom: 1px dotted gray; text-align: right; border-right: none; border-left: none">-</td>
+                    <td width="1%" style="margin: 2px !important; padding: 2px !important; vertical-align: middle !important; border-bottom: 1px dotted gray; text-align: right; border-right: none; border-left: none">-</td>
+                    @if (item.GajiBulanan != null && item.GajiBulanan.fld_SocsoMjk != null)
+                    {
+                        <td width="1.5%" style="margin: 2px !important; padding: 2px !important; vertical-align: middle !important; border-bottom: 1px dotted gray; text-align: right; border-right: none; border-left: none">@item.GajiBulanan.fld_SocsoMjk</td>
+                    }
+                    else
+                    {
+                        <td width="1.5%" style="margin: 2px !important; padding: 2px !important; vertical-align: middle !important; border-bottom: 1px dotted gray; text-align: right; border-right: none; border-left: none">0.00</td>
+                    }
+                </tr>
+
+                @foreach (var carumanTambahanMajikan in item.CarumanTambahan)
+                {
+                    <tr>
+                        <td width="4%" style="margin: 2px !important; padding: 2px !important; vertical-align: middle !important; border: 1px dotted gray; border-right: none; border-left: none">@GetConfig.GetAdditionalContributionDesc(carumanTambahanMajikan.fld_KodCarumanTambahan, ViewBag.NegaraID, ViewBag.SyarikatID)</td>
+                        <td width="1%" style="margin: 2px !important; padding: 2px !important; vertical-align: middle !important; border: 1px dotted gray; text-align: right; border-right: none; border-left: none">-</td>
+                        <td width="1%" style="margin: 2px !important; padding: 2px !important; vertical-align: middle !important; border: 1px dotted gray; text-align: right; border-right: none; border-left: none">-</td>
+                        <td width="1%" style="margin: 2px !important; padding: 2px !important; vertical-align: middle !important; border: 1px dotted gray; text-align: right; border-right: none; border-left: none">-</td>
+                        <td width="1%" style="margin: 2px !important; padding: 2px !important; vertical-align: middle !important; border: 1px dotted gray; text-align: right; border-right: none; border-left: none">-</td>
+                        <td width="1.5%" style="margin: 2px !important; padding: 2px !important; vertical-align: middle !important; border: 1px dotted gray; text-align: right; border-right: none; border-left: none">@carumanTambahanMajikan.fld_CarumanMajikan</td>
+                    </tr>
+                }
+
+                @if (item.GajiBulanan != null && item.GajiBulanan.fld_AIPS != null && item.GajiBulanan.fld_AIPS != 0)
+                {
+                    <tr>
+                        <td width="4%" style="margin: 2px !important; padding: 2px !important; vertical-align: middle !important; border-bottom: 1px dotted gray; border-right: none; border-left: none">@GlobalResEstate.lblAips</td>
+                        <td width="1%" style="margin: 2px !important; padding: 2px !important; vertical-align: middle !important; border-bottom: 1px dotted gray; text-align: right; border-right: none; border-left: none">-</td>
+                        <td width="1%" style="margin: 2px !important; padding: 2px !important; vertical-align: middle !important; border-bottom: 1px dotted gray; text-align: right; border-right: none; border-left: none">-</td>
+                        <td width="1%" style="margin: 2px !important; padding: 2px !important; vertical-align: middle !important; border-bottom: 1px dotted gray; text-align: right; border-right: none; border-left: none">-</td>
+                        <td width="1%" style="margin: 2px !important; padding: 2px !important; vertical-align: middle !important; border-bottom: 1px dotted gray; text-align: right; border-right: none; border-left: none">-</td>
+                        <td width="1.5%" style="margin: 2px !important; padding: 2px !important; vertical-align: middle !important; border-bottom: 1px dotted gray; text-align: right; border-right: none; border-left: none">@item.GajiBulanan.fld_AIPS</td>
+                    </tr>
+                }
+
+                        @*@foreach (var insentif in item.InsentifPekerja)
+                        {
+                            if (insentif.fld_KodInsentif.Contains("P"))
+                            {
+                                <tr>
+                                    <td width="4%" style="margin: 2px !important; padding: 2px !important; vertical-align: middle !important; border-bottom: 1px dotted gray; border-right: none; border-left: none">@insentif.fld_Keterangan</td>
+                                    <td width="1%" style="margin: 2px !important; padding: 2px !important; vertical-align: middle !important; border-bottom: 1px dotted gray; text-align: right; border-right: none; border-left: none">-</td>
+                                    <td width="1%" style="margin: 2px !important; padding: 2px !important; vertical-align: middle !important; border-bottom: 1px dotted gray; text-align: right; border-right: none; border-left: none">-</td>
+                                    <td width="1%" style="margin: 2px !important; padding: 2px !important; vertical-align: middle !important; border-bottom: 1px dotted gray; text-align: right; border-right: none; border-left: none">-</td>
+                                    <td width="1%" style="margin: 2px !important; padding: 2px !important; vertical-align: middle !important; border-bottom: 1px dotted gray; text-align: right; border-right: none; border-left: none">-</td>
+                                    <td width="1.5%" style="margin: 2px !important; padding: 2px !important; vertical-align: middle !important; border-bottom: 1px dotted gray; text-align: right; border-right: none; border-left: none">@insentif.fld_NilaiInsentif</td>
+                                </tr>
+                            }
+                        }*@
+
+            @foreach (var kerja in item.KerjaPekerja)
+            {
+                <tr>
+                    <td width="4%" style="margin: 2px !important; padding: 2px !important; vertical-align: middle !important; border-bottom: 1px dotted gray; border-right: none; border-left: none">@kerja.fld_Desc - @kerja.fld_KodPkt</td>
+                    <td width="1%" style="margin: 2px !important; padding: 2px !important; vertical-align: middle !important; border-bottom: 1px dotted gray; text-align: right; border-right: none; border-left: none">@kerja.fld_JumlahHasil</td>
+                    <td width="1%" style="margin: 2px !important; padding: 2px !important; vertical-align: middle !important; border-bottom: 1px dotted gray; text-align: right; border-right: none; border-left: none">@kerja.fld_Unit</td>
+                    <td width="1%" style="margin: 2px !important; padding: 2px !important; vertical-align: middle !important; border-bottom: 1px dotted gray; text-align: right; border-right: none; border-left: none">@kerja.fld_KadarByr</td>
+                    <td width="1%" style="margin: 2px !important; padding: 2px !important; vertical-align: middle !important; border-bottom: 1px dotted gray; text-align: right; border-right: none; border-left: none">@kerja.fld_Gandaan</td>
+                    <td width="1.5%" style="margin: 2px !important; padding: 2px !important; vertical-align: middle !important; border-bottom: 1px dotted gray; text-align: right; border-right: none; border-left: none">@kerja.fld_TotalAmount</td>
+                </tr>
+            }
+
+                @foreach (var ot in item.OTPekerja)
+                {
+                    <tr>
+                        <td width="4%" style="margin: 2px !important; padding: 2px !important; vertical-align: middle !important; border-bottom: 1px dotted gray; border-right: none; border-left: none">@ot.fld_Desc</td>
+                        <td width="1%" style="margin: 2px !important; padding: 2px !important; vertical-align: middle !important; border-bottom: 1px dotted gray; text-align: right; border-right: none; border-left: none">@ot.fld_JumlahJamOT</td>
+                        <td width="1%" style="margin: 2px !important; padding: 2px !important; vertical-align: middle !important; border-bottom: 1px dotted gray; text-align: right; border-right: none; border-left: none">@ot.fld_Unit</td>
+                        <td width="1%" style="margin: 2px !important; padding: 2px !important; vertical-align: middle !important; border-bottom: 1px dotted gray; text-align: right; border-right: none; border-left: none">@ot.fld_KadarByr</td>
+                        <td width="1%" style="margin: 2px !important; padding: 2px !important; vertical-align: middle !important; border-bottom: 1px dotted gray; text-align: right; border-right: none; border-left: none">-</td>
+                        <td width="1.5%" style="margin: 2px !important; padding: 2px !important; vertical-align: middle !important; border-bottom: 1px dotted gray; text-align: right; border-right: none; border-left: none">@ot.fld_TotalAmount</td>
+                    </tr>
+                }
+                @foreach (var bonus in item.BonusPekerja)
+                {
+                    <tr>
+                        <td width="4%" style="margin: 2px !important; padding: 2px !important; vertical-align: middle !important; border-bottom: 1px dotted gray; border-right: none; border-left: none">Bonus Harga - @bonus.fld_Desc - @bonus.fld_KodPkt</td>
+                        <td width="1%" style="margin: 2px !important; padding: 2px !important; vertical-align: middle !important; border-bottom: 1px dotted gray; text-align: right; border-right: none; border-left: none">@bonus.fld_BilanganHari</td>
+                        <td width="1%" style="margin: 2px !important; padding: 2px !important; vertical-align: middle !important; border-bottom: 1px dotted gray; text-align: right; border-right: none; border-left: none">@GlobalResEstate.lblDay.ToUpper()</td>
+                        <td width="1%" style="margin: 2px !important; padding: 2px !important; vertical-align: middle !important; border-bottom: 1px dotted gray; text-align: right; border-right: none; border-left: none">@bonus.fld_KadarByr</td>
+                        <td width="1%" style="margin: 2px !important; padding: 2px !important; vertical-align: middle !important; border-bottom: 1px dotted gray; text-align: right; border-right: none; border-left: none">@GetTriager.GetPercentageDivision(bonus.fld_Bonus)</td>
+                        <td width="1.5%" style="margin: 2px !important; padding: 2px !important; vertical-align: middle !important; border-bottom: 1px dotted gray; text-align: right; border-right: none; border-left: none">@bonus.fld_TotalAmount</td>
+                    </tr>
+                }
+
+                @foreach (var cuti in item.CutiPekerja)
+                {
+                    <tr>
+                        <td width="4%" style="margin: 2px !important; padding: 2px !important; vertical-align: middle !important; border-bottom: 1px dotted gray; border-right: none; border-left: none">@cuti.fld_Desc</td>
+                        <td width="1%" style="margin: 2px !important; padding: 2px !important; vertical-align: middle !important; border-bottom: 1px dotted gray; text-align: right; border-right: none; border-left: none">@cuti.fld_BilanganHari</td>
+                        <td width="1%" style="margin: 2px !important; padding: 2px !important; vertical-align: middle !important; border-bottom: 1px dotted gray; text-align: right; border-right: none; border-left: none">@GlobalResEstate.lblDay.ToUpper()</td>
+                        <td width="1%" style="margin: 2px !important; padding: 2px !important; vertical-align: middle !important; border-bottom: 1px dotted gray; text-align: right; border-right: none; border-left: none">@cuti.fld_KadarByr</td>
+                        <td width="1%" style="margin: 2px !important; padding: 2px !important; vertical-align: middle !important; border-bottom: 1px dotted gray; text-align: right; border-right: none; border-left: none">-</td>
+                        <td width="1.5%" style="margin: 2px !important; padding: 2px !important; vertical-align: middle !important; border-bottom: 1px dotted gray; text-align: right; border-right: none; border-left: none">@cuti.fld_TotalAmount</td>
+                    </tr>
+                }
+                        
+                @foreach (var insentif in item.InsentifPekerja)
+                {
+                    if (insentif.fld_KodInsentif.Contains("P"))
+                    {
+                        <tr>
+                            <td width="4%" style="margin: 2px !important; padding: 2px !important; vertical-align: middle !important; border: 1px dotted gray; border-right: none; border-left: none">@insentif.fld_Keterangan</td>
+                            <td width="1%" style="margin: 2px !important; padding: 2px !important; vertical-align: middle !important; border: 1px dotted gray; text-align: right; border-right: none; border-left: none">-</td>
+                            <td width="1%" style="margin: 2px !important; padding: 2px !important; vertical-align: middle !important; border: 1px dotted gray; text-align: right; border-right: none; border-left: none">-</td>
+                            <td width="1%" style="margin: 2px !important; padding: 2px !important; vertical-align: middle !important; border: 1px dotted gray; text-align: right; border-right: none; border-left: none">-</td>
+                            <td width="1%" style="margin: 2px !important; padding: 2px !important; vertical-align: middle !important; border: 1px dotted gray; text-align: right; border-right: none; border-left: none">-</td>
+                            <td width="1.5%" style="margin: 2px !important; padding: 2px !important; vertical-align: middle !important; border: 1px dotted gray; text-align: right; border-right: none; border-left: none">@insentif.fld_NilaiInsentif</td>
+                        </tr>
+                    }
+                }
+
+                </tbody>
+            </table>
+
+            <table style="float: left; width: 35%; font-size: 11px; margin-bottom: 10px" class="table" border="0" cellspacing="0">
+                <thead>
+                <tr>
+                    <th colspan="2" width="1%" style="margin: 2px !important; padding: 2px !important; text-align: center; vertical-align: middle !important; border-top: 1px solid red;border-bottom: 1px solid red;border-right: 1px solid red;" border="1">@GlobalResEstate.hdrDeduction</th>
+                </tr>
+                <tr>
+                    <th width="1%" style="margin: 2px !important; padding: 2px !important; text-align: center; vertical-align: middle !important; border-right: 1px solid red;border-bottom: 1px solid red;">@GlobalResEstate.hdrDesc</th>
+                    <th width="2%" style="margin: 2px !important; padding: 2px !important; text-align: center; vertical-align: middle !important; border-right: 1px solid red;border-bottom: 1px solid red;">@GlobalResEstate.lblTotal (RM)</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td width="4%" style="margin: 2px !important; padding: 2px !important; vertical-align: middle !important; border-bottom: 1px dotted gray; border-right: none; border-right: none; border-left: none">@GlobalResEstate.hdrEmployeeKwsp</td>
+                    @if (item.GajiBulanan != null && item.GajiBulanan.fld_KWSPPkj != null)
+                    {
+                        <td width="2%" style="margin: 2px !important; padding: 2px !important; vertical-align: middle !important; border-bottom: 1px dotted gray; text-align: right; border-right: none; border-left: none">@item.GajiBulanan.fld_KWSPPkj</td>
+                    }
+                    else
+                    {
+                        <td width="2%" style="margin: 2px !important; padding: 2px !important; vertical-align: middle !important; border-bottom: 1px dotted gray; text-align: right; border-right: none; border-left: none">0.00</td>
+                    }
+                </tr>
+                <tr>
+                    <td width="4%" style="margin: 2px !important; padding: 2px !important; vertical-align: middle !important; border-bottom: 1px dotted gray; border-right: none; border-left: none">@GlobalResEstate.hdrEmployeeSocso</td>
+                    @if (item.GajiBulanan != null && item.GajiBulanan.fld_SocsoPkj != null)
+                    {
+                        <td width="2%" style="margin: 2px !important; padding: 2px !important; vertical-align: middle !important; border-bottom: 1px dotted gray; text-align: right; border-right: none; border-left: none">@item.GajiBulanan.fld_SocsoPkj</td>
+                    }
+                    else
+                    {
+                        <td width="2%" style="margin: 2px !important; padding: 2px !important; vertical-align: middle !important; border-bottom: 1px dotted gray; text-align: right; border-left: none">0.00</td>
+                    }
+                </tr>
+                @foreach (var carumanTambahanPekerja in item.CarumanTambahan)
+                {
+                    totalCarumanTambahan += (decimal)@carumanTambahanPekerja.fld_CarumanPekerja;
+                    <tr>
+                        <td width="4%" style="margin: 2px !important; padding: 2px !important; vertical-align: middle !important; border: 1px dotted gray; border-right: none; border-left: none">@GetConfig.GetAdditionalContributionDesc(carumanTambahanPekerja.fld_KodCarumanTambahan, ViewBag.NegaraID, ViewBag.SyarikatID)</td>
+                        <td width="1.5%" style="margin: 2px !important; padding: 2px !important; vertical-align: middle !important; border: 1px dotted gray; text-align: right; border-right: none; border-left: none">@carumanTambahanPekerja.fld_CarumanPekerja</td>
+                    </tr>
+                }
+                @foreach (var insentif in item.InsentifPekerja)
+                {
+                    if (insentif.fld_KodInsentif.Contains("T"))
+                    {
+                        <tr>
+                            <td width="2%" style="margin: 2px !important; padding: 2px !important; vertical-align: middle !important; border-bottom: 1px dotted gray; border-right: none; border-left: none">@insentif.fld_Keterangan</td>
+                            <td width="2%" style="margin: 2px !important; padding: 2px !important; vertical-align: middle !important; border-bottom: 1px dotted gray; text-align: right; border-right: none; border-left: none">@insentif.fld_NilaiInsentif</td>
+                        </tr>
+                    }
+                }
+                </tbody>
+            </table>
+
+            <table style="float: left; width: 65%; font-size: 11px;" class="table" border="0" cellspacing="0">
+                <thead>
+
+                <tr>
+                    <th width="4%" style="margin: 2px !important; padding: 2px !important; text-align: center; vertical-align: middle !important; border-top: 1px solid red; border-bottom: none;"></th>
+                    <th width="1%" style="margin: 2px !important; padding: 2px !important; text-align: center; vertical-align: middle !important; border-top: 1px solid red; border-bottom: none;"></th>
+                    <th width="1%" style="margin: 2px !important; padding: 2px !important; text-align: center; vertical-align: middle !important; border-top: 1px solid red; border-bottom: none;"></th>
+                    <th width="1%" style="margin: 2px !important; padding: 2px !important; text-align: center; vertical-align: middle !important; border-top: 1px solid red; border-bottom: none;"></th>
+                    <th width="2%" style="margin: 2px !important; padding: 2px !important; text-align: right; vertical-align: middle !important; border-top: 1px solid red; border-bottom: none;">@GlobalResEstate.lblTotalEarning</th>
+                    @if (item.GajiBulanan != null && item.GajiBulanan.fld_GajiKasar != null)
+                    {
+                        <th width="1.5%" style="margin: 2px !important; padding: 2px !important; text-align: right; vertical-align: middle !important; border-top: 1px solid red; border-bottom: 1px double red; border-right: none;">@item.GajiBulanan.fld_GajiKasar</th>
+                    }
+                    else
+                    {
+                        <th width="1.5%" style="margin: 2px !important; padding: 2px !important; text-align: right; vertical-align: middle !important; border-top: 1px solid red; border-bottom: 1px double red; border-right: none;">0.00</th>
+                    }
+                </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+
+            <table style="float: left; width: 35%; font-size: 11px;" class="table" border="0" cellspacing="0">
+                <thead>
+                <tr>
+                    <th width="4%" style="margin: 2px !important; padding: 2px !important; text-align: right; vertical-align: middle !important; border-top: 1px solid red; border-bottom: none; border-left: none;">@GlobalResEstate.lblTotalDeduction</th>
+                    @if (item.GajiBulanan != null)
+                    {
+                        decimal? jumlahPotongan = 0;
+
+                        jumlahPotongan = item.GajiBulanan.fld_LainPotongan + item.GajiBulanan.fld_KWSPPkj + item.GajiBulanan.fld_SocsoPkj + totalCarumanTambahan;
+                        <th width="2%" style="margin: 2px !important; padding: 2px !important; text-align: right; vertical-align: middle !important; border-top: 1px solid red; border-bottom: 1px double red; border-right: none;">@jumlahPotongan</th>
+                    }
+
+                    else
+                    {
+                        <th width="2%" style="margin: 2px !important; padding: 2px !important; text-align: right; vertical-align: middle !important; border-top: 1px solid red; border-bottom: 1px double red; border-right: none;">0.00</th>
+
+                    }
+                </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+
+            <table style="float: left; width: 65%; font-size: 11px;" class="table" border="0" cellspacing="0">
+                <thead>
+                <tr>
+                    <th width="4%" style="margin: 2px !important; padding: 2px !important; text-align: center; vertical-align: middle !important; border: none;"></th>
+                    <th width="1%" style="margin: 2px !important; padding: 2px !important; text-align: center; vertical-align: middle !important; border: none;"></th>
+                    <th width="1%" style="margin: 2px !important; padding: 2px !important; text-align: center; vertical-align: middle !important; border: none;"></th>
+                    <th width="1%" style="margin: 2px !important; padding: 2px !important; text-align: center; vertical-align: middle !important; border: none;"></th>
+                    <th width="2%" style="margin: 2px !important; padding: 2px !important; text-align: center; vertical-align: middle !important; border: none;"></th>
+                    <th width="1.5%" style="margin: 2px !important; padding: 2px !important; text-align: center; vertical-align: middle !important; border: none;"></th>
+                </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+
+            <table style="float: left; width: 35%; font-size: 11px; margin-bottom: 10px" class="table" border="0" cellspacing="0">
+                <thead>
+                <tr>
+                    <th width="4%" style="margin: 2px !important; padding: 2px !important; text-align: right; vertical-align: middle !important; border: none;">@GlobalResEstate.hdrNetSalary</th>
+                    <th width="2%" style="margin: 2px !important; padding: 2px !important; text-align: right; vertical-align: middle !important; border-bottom: 1px double red; border-right: none;">@item.GajiBulanan.fld_GajiBersih</th>
+                </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+
+            <div class="clearfix"></div>
+
+            <table style="float: left; width: 100%; font-size: 11px; margin-bottom: 5px" class="table" border="0" cellspacing="0">
+                <thead>
+                <tr>
+                    <th colspan="2" style="margin: 2px !important; padding: 2px !important; text-align: right; vertical-align: middle !important; border-top: 2px solid gray; border-bottom: none; border-left: none;"></th>
+                </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+
+            <table style="float: left; width: 80%; font-size: 11px;" class="table" border="0" cellspacing="0">
+                <thead>
+                <tr>
+                    <th width="4%" style="margin: 2px !important; padding: 2px !important; text-align: left; vertical-align: middle !important; border: none;">*@GlobalResEstate.lblMultiples : 1 = @GlobalResEstate.lblWeedays, 2 = @GlobalResEstate.lblWeekend, 3 = @GlobalResEstate.lblPublicHoliday2</th>
+                </tr>
+                <tr>
+                    <th width="4%" style="margin: 2px !important; padding: 2px !important; text-align: left; vertical-align: middle !important; border: none;">*@GlobalResEstate.lblBonusMultiples : 0.5 = 50% @GlobalResEstate.lblAchievement, 1 = 100% @GlobalResEstate.lblAchievement</th>
+                </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+
+            <table style="float: left; width: 20%; font-size: 11px; border-top: 1px solid red; ; border-bottom: 1px solid red; border-left: 1px solid red; ; border-right: 1px solid red;" class="table" border="0" cellspacing="0">
+                <thead>
+                <tr>
+                    <th colspan="2" style="margin: 2px !important; padding: 2px !important; text-align: center; vertical-align: middle !important;  border-bottom: 1px solid red">@GlobalResEstate.lblDetail</th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach (var footnote in item.FootNote)
+                {
+                    <tr>
+                        <td width="4%" style="margin: 2px !important; padding: 2px !important; text-align: left; vertical-align: middle !important;">Jumlah @footnote.fld_Desc</td>
+                        <td width="1%" style="margin: 2px !important; padding: 2px !important; text-align: right; vertical-align: middle !important;">@footnote.fld_Bilangan</td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        }
+
+        else
+        {
+            <p align="center" style="color: red; font-size: 11px">@GlobalResEstate.msgErrorSearch</p>
+            <br />
+            <br />
+        }
+        @*<newpage />*@
+    </div>
+    }
+    </div>
+    if (ViewBag.Print == null)
+    {
+    <div style="text-align:right; margin-top:10px">
+        <a class="btn btn-default btn-sm" href="#" id="printpage">
+            <span class="glyphicon glyphicon-print"> </span> @GlobalResEstate.btnPrint
+        </a>
+        <a class="btn btn-default btn-sm" href="#" id="downloadpdf">
+            <span><img src="~/Asset/Images/pdf-icon.png" width="20px" height="20px" /></span> @GlobalResEstate.btnDownloadPdf
+        </a>
+        @*<a class="btn btn-default btn-sm" href="#" onclick="HTMLtoExcel('')">
+            <span><img src="~/Asset/Images/excel-icon.png" width="20px" height="20px" /></span> @GlobalResEstate.btnDownloadExcel
+        </a>*@
+    </div>
+    }
+}
+
+@if (Model.Count() == 0)
+{
+    <div id="scrollArea2" class="modal-body" style="text-align: center">
+        <p style="color: red">@ViewBag.Message</p>
+
+    </div>
+}
+
+<style>
+    #page td {
+        padding: 2px;
+        margin: 2px;
+    }
+</style>
+
+<script>
+    $(document).ready(function () {
+        $("#downloadpdf").click(function () {
+            var RadioGroup = $('input[name=RadioGroup]:checked').val();
+            var MonthList = $("#MonthList").val();
+            var YearList = $("#YearList").val();
+            var SelectionList = $("#SelectionList").val();
+            //var StatusList = $("#StatusList").val();
+            //var WorkCategoryList = $("#WorkCategoryList").val();
+
+            var StatusList = '';
+            var WorkCategoryList = '';
+
+            var param = '/?RadioGroup=' + RadioGroup + '&MonthList=' + MonthList + '&YearList=' + YearList + '&SelectionList=' + SelectionList + '&StatusList=' + StatusList + '&WorkCategoryList=' + WorkCategoryList;
+            var controller = 'Report';
+            var action = 'PrintWorkerPaySlipPdf';
+
+            var ajxfn = {};
+            ajxfn.url = "@Url.Action("PDFIndetifier", "PdfCreator")";
+            ajxfn.type = "POST";
+            ajxfn.data = JSON.stringify({ controller: controller, action: action, param: param });
+            ajxfn.datatype = "json";
+            ajxfn.contentType = "application/json";
+            ajxfn.success = function (result) {
+                //var win = window.open(result.link, '_blank');
+                //win.focus();
+                PDFObject.embed(result.link, "#searchResultWorkerPaySlipRptInfo", { height: "450px" });
+            };
+
+            ajxfn.error = function () {
+                $.simplyToast('@GlobalResEstate.msgError', 'danger');
+                $("#UpdateProgress1").css("display", "none");
+            };
+            $.ajax(ajxfn);
+            
+            return false;
+        });
+    });
+</script>

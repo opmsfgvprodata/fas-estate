@@ -1,0 +1,64 @@
+﻿
+@{
+    /**/
+
+    ViewBag.Title = "SAP Posting";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+
+    AjaxOptions options = new AjaxOptions
+    {
+        HttpMethod = "Get",
+        UpdateTargetId = "searchResultSAPPosting",
+        InsertionMode = InsertionMode.Replace,
+        LoadingElementId = "divLoading"
+    };
+
+    ViewBag.DateScriptAdv = 1;
+}
+
+<script src="~/Asset/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+
+<div id="divLoading" style="display:none;">
+    <div class="progressTest">
+        <label>
+            @GlobalResEstate.msgWait
+        </label>
+    </div>
+</div>
+
+<section class="content-wrapper main-content clear-fix">
+    <div class="well bottom" style="padding-bottom:16px">
+        @using (Ajax.BeginForm("_SAPPostingSearch", "BizTransac", null, options, new { @id = "SAPPostingSearch" }))
+        {
+            <div class="row">
+                <div class="col-sm-4">
+                    <label for="BulanProses">@GlobalResEstate.lblMonth</label>
+                    @Html.DropDownList("MonthList", null, htmlAttributes: new { @class = "form-control" })
+                </div>
+                <div class="col-sm-4">
+                    <label for="TahunProses">@GlobalResEstate.lblYear</label>
+                    @Html.DropDownList("YearList", null, htmlAttributes: new { @class = "form-control" })
+                </div>
+
+                <div class="col-sm-2" style="margin-top:25px;">
+                    <button type="submit" id="btnCari" class="btn btn-block btn-primary"><span class="glyphicon glyphicon-search"></span> @GlobalResEstate.btnSearch</button>
+                </div>
+            </div>
+        }
+    </div>
+    <div class="well" style="margin-top: 7px;">
+        <div class="modal-body">
+            <div class="panel panel-primary">
+                <div class="panel-heading">Hantar Data Ke SAP</div>
+                <div class="panel-body">
+                    <div id="searchResultSAPPosting">
+                        @Html.Action("_SAPPostingSearch", new { MonthList = 0 , YearList = 0})
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <a href=@Url.Action("Index", "BizTransac") class="btn btn-warning" role="button" onclick="return DisplayProgressMessage2(this);">@GlobalResEstate.btnBack</a>
+        </div>
+    </div>
+</section>

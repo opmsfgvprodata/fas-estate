@@ -1,0 +1,155 @@
+﻿
+@model MVC_SYSTEM.ViewingModels.PagedList<MVC_SYSTEM.Models.tbl_PktUtama>
+@using MVC_SYSTEM.Class;
+@{
+    //ViewBag.Title = GlobalResEstate.lblMapPublicHolidayMaintenanceTitle;
+    ViewBag.Title = "Register WBS Level";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+
+    AjaxOptions options = new AjaxOptions
+    {
+        HttpMethod = "Get",
+        UpdateTargetId = "WBSInfoDetails",
+        InsertionMode = InsertionMode.Replace,
+        LoadingElementId = "UpdateProgress1"
+    };
+}
+
+<script src="~/Asset/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+
+@section scripts{
+    @Scripts.Render("~/Asset/Scripts/Appjs.js")
+}
+
+<section class="content-wrapper main-content clear-fix">
+    <div class="well bottom" style="padding-bottom:16px;">
+        @using (Ajax.BeginForm("LevelsInfoPkt", "BasicInfo", null, options, new { @id = "WBSInfoSearchDetails" }))
+        {
+            @Html.AntiForgeryToken()
+            <div class="row">
+                <div class="col-sm-2">
+                    <label>@GlobalResEstate.lblLevelType</label>
+                    @Html.DropDownList("JnsPkt", null, htmlAttributes: new { @class = "form-control" })
+                </div>
+                <div class="col-sm-2" style="padding-top: 24px;">
+                    <input class="btn btn-primary btn-block" type="submit" name="btnSrch" id="btnSrch" value="@GlobalResEstate.btnView" />
+                </div>
+            </div>
+        }
+    </div>
+
+    <div class="well" style="margin-top:7px;">
+        <div class="modal-body">
+            <div class="panel panel-primary">
+                @*<div class="panel-heading">@GlobalResCorp.lblMapPublicHolidayMaintenanceInfo</div>*@
+                <div class="panel-heading">WBS Level Information(s)</div>
+
+                <div class="panel-body">
+                    <div id="WBSInfoDetails">
+                        @Html.Action("LevelsInfoPkt")
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer col-md-12">
+            <a class="btn btn-success" data-modal="" href="@Url.Action("LevelsPktCreate", "BasicInfo")" id="btnPkt" onclick="return DisplayProgressMessage2(this);">
+                Level Registration
+            </a>
+            <a class="btn btn-success" data-modal="" href="@Url.Action("LevelsSubPktCreate", "BasicInfo")" id="btnSub" onclick="return DisplayProgressMessage2(this);">
+                Sub Leves Registration
+            </a>
+            <a href=@Url.Action("Index", "BasicInfo") class="btn btn-warning" role="button" onclick="return DisplayProgressMessage(this);">@GlobalResEstate.btnBack</a>
+        </div>
+    </div>
+</section>
+<!-- modal placeholder-->
+<div id='myModal' class='modal fade in'>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div id='myModalContent'></div>
+        </div>
+    </div>
+</div>
+
+<div id='myModal1' class='modal fade in'>
+    <div class="modal-dialog" style="width: 30%">
+        <div class="modal-content">
+            <div id='myModalContent1'></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function resetSearch1() {
+        document.getElementById("txtfilter").value = "";
+        document.getElementById('btnCari').click();
+    }
+
+    $(document).ready(function () {
+        $("#btnIO").hide();
+        $("#btnPkt").hide();
+        $("#btnSub").hide();
+        $("#btnBlok").hide();
+
+        if ($("#JnsPkt").val() != 0) {
+            $("#btnSrch").click();
+        }
+        $("#btnSrch").click(function (e) {
+            var jnspkt = $("#JnsPkt").val();
+            if (jnspkt == 1) {
+                $("#btnIO").show();
+                $("#btnPkt").show();
+                $("#btnSub").hide();
+            }
+            else if (jnspkt == "2") {
+                $("#btnIO").hide();
+                $("#btnPkt").hide();
+                $("#btnSub").show();
+            }
+        });
+        @*function reloadAgain() {
+            $("#divupdate").load('@Url.Action("LevelsInfoPkt", "BasicInfo")');
+        }*@
+
+        @*$("#btnSrch").click(function (e) {
+            e.preventDefault();
+            var jnspkt = $("#JnsPkt").val();
+            //jnspkt = $("#JnsPkt").val();
+            console.log(jnspkt);
+            //$("#UpdateProgress1").hide();
+            $("#UpdateProgress1").css("display", "");
+            if (jnspkt == 1) {
+                $("#WBSInfoDetails").load('@Url.Action("LevelsInfoPkt", "BasicInfo")');
+                console.log("satu");
+                $("#btnIO").show();
+                $("#btnPkt").show();
+                $("#btnSub").hide();
+                $("#btnBlok").hide();
+                $("#UpdateProgress1").css("display", "none");
+            }
+            else if (jnspkt == "2") {
+                $("#WBSInfoDetails").load('@Url.Action("LevelsInfoSubPkt", "BasicInfo")');
+                console.log("dua");
+                $("#btnIO").hide();
+                $("#btnPkt").hide();
+                $("#btnSub").show();
+                $("#btnBlok").hide();
+                $("#UpdateProgress1").css("display", "none");
+            }
+            else if (jnspkt == "3") {
+                $("#WBSInfoDetails").load('@Url.Action("LevelsInfoBlok", "BasicInfo")');
+                console.log("tiga");
+                $("#btnIO").hide();
+                $("#btnPkt").hide();
+                $("#btnSub").hide();
+                $("#btnBlok").show();
+                $("#UpdateProgress1").css("display", "none");
+            }
+            else {
+                $("#UpdateProgress1").css("display", "none");
+                $.simplyToast('@GlobalResEstate.msgError', 'danger');
+            }
+        });*@
+
+    });
+</script>

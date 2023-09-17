@@ -1,0 +1,120 @@
+﻿
+@{
+    GetConfig getConfig = new GetConfig();
+
+    var grid = new WebGrid(
+        canPage: true,
+        rowsPerPage: Model.PageSize,
+        canSort: false,
+        ajaxUpdateContainerId: "grid");
+
+    grid.Bind(Model.Content, rowCount: Model.TotalRecords, autoSortAndPage: false);
+    grid.Pager(WebGridPagerModes.All);
+
+    if (@grid.TotalRowCount > 0)
+    {
+        <div class="text-center">@grid.TotalRowCount @Html.Label(GlobalResEstate.lblTotalRecordGroup)</div>
+
+        @grid.GetHtml(htmlAttributes: new { id = "grid" }, // id for ajaxUpdateContainerId parameter
+            tableStyle: "table table-bordered table-striped table-list table-hover",
+            headerStyle: "header_table",
+            alternatingRowStyle: "Grid-alt",
+            selectedRowStyle: "Grid-selected",
+            rowStyle: "Grid-rowstyle",
+            mode: WebGridPagerModes.All,
+            columns: grid.Columns(
+                grid.Column(header: GlobalResEstate.hdrNo
+                    , format: item => item.WebGrid.Rows.IndexOf(item) + 1
+                                      + Math.Round(Convert.ToDouble(grid.TotalRowCount / grid.PageCount) / grid.RowsPerPage)
+                                      * grid.RowsPerPage * grid.PageIndex, style: "count"),
+                grid.Column(columnName: "fld_KodKumpulan", header: GlobalResEstate.hdrGroupCode, style: "kodkmpln"),
+                grid.Column(columnName: "fld_KodKerja", header: GlobalResEstate.hdrWorkAktvt, style: "kodkerja"),
+                grid.Column(columnName: "fld_Keterangan", header: GlobalResEstate.hdrDesc, style: "keterangankumpulan"),
+                grid.Column(columnName: "bilangan_ahli", header: GlobalResEstate.hdrBilAhli, style: "bil_ahli"),
+                grid.Column(GlobalResEstate.hdrAction, format: (item) =>
+                {
+                    var kerjaHadirCount = 0;//getConfig.GetKerjaHadirCount(item.fld_KodKumpulan, item.fld_NegaraID, item.fld_SyarikatID, item.fld_WilayahID, item.fld_LadangID);
+
+                    if (item.bilangan_ahli != 0)
+                    {
+                        if (kerjaHadirCount > 0)
+                        {
+                            var tindakan = "<button type='button' class='btn btn-warning' onclick='return DisplayExist(this);'><i class='fa fa-cogs fa-lg'></i></button>";
+                            return @Html.Raw(tindakan);
+                        }
+
+                        else
+                        {
+                            var tindakan = "<a data-modal='' href='" + @Url.Action("_WorkerGroupManageMember", "WorkerInfo") + "/?id=" + item.fld_KumpulanID + "' class='btn btn-success' role='button' title='" + @GlobalResEstate.btnUpdate + "' onclick='return DisplayProgressMessage2(this);'><i class='fa fa-cogs fa-lg'></i></a>&nbsp;";
+                            return @Html.Raw(tindakan);
+                        }
+
+                    }
+                    else
+                    {
+                        var tindakan = "";
+                        return @Html.Raw(tindakan);
+                    }
+                }, canSort: false, style: "tindakan")
+                ));
+    }
+    else
+    {
+        <hr />
+        <div class="text-center">
+            @Html.Label(GlobalResEstate.msgErrorSearch)
+        </div>
+
+        <hr />
+    }
+}
+
+<script>
+    function DisplayExist() {
+        $.simplyToast('@GlobalResEstate.msgAlert1', 'danger');
+    }
+</script>
+
+<style>
+    .header_table th {
+        text-align: center;
+        vertical-align: middle !important;
+    }
+
+    .count {
+        width: 60px;
+        text-align: center;
+        vertical-align: middle !important;
+    }
+
+    .kodkmpln {
+        width: 150px;
+        text-align: center;
+        vertical-align: middle !important
+    }
+
+    .kodkerja {
+        width: 200px;
+        text-align: center;
+        vertical-align: middle !important
+    }
+
+    .keterangankumpulan {
+        width: 200px;
+        font-size: 12px;
+        text-align: center;
+        vertical-align: middle !important;
+    }
+
+    .bil_ahli {
+        width: 120px;
+        text-align: center;
+        vertical-align: middle !important;
+    }
+
+    .tindakan {
+        width: 70px;
+        text-align: center;
+        vertical-align: middle !important;
+    }
+</style>

@@ -1,0 +1,71 @@
+﻿@using MVC_SYSTEM.Class
+@model MVC_SYSTEM.Models.tbl_HutangPekerjaViewModelCreate
+
+@{
+    @Scripts.Render("~/bundles/jqueryval")
+
+    GetConfig getConfig = new GetConfig();
+}
+
+<section class="content-wrapper main-content clear-fix">
+
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 class="modal-title">@GlobalResEstate.lblWorkerDebtAdd</h3>
+    </div>
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        <div class="modal-body">
+            <div class="form-horizontal">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">@GlobalResEstate.lblTitleWorkerDebtInfo</div>
+                    <div class="panel-body">
+                        <div class="form-group">
+                            <label class="control-label col-sm-3">@GlobalResEstate.hdrNoPkj:</label>
+                            <div class="col-sm-4">
+                                @Html.TextBoxFor(model => model.fld_NoPkj, null, new { @class = "form-control", @readonly = "true" })
+                                @Html.ValidationMessageFor(model => model.fld_NoPkj, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-3">@GlobalResEstate.hdrName:</label>
+                            <div class="col-sm-8">
+                                @Html.TextBoxFor(model => model.fld_NoPkj, null, new { @class = "form-control", @disabled = "true", @Value = getConfig.getPkjNameFromPkjNo(Model.fld_NoPkj, Model.fld_NegaraID, Model.fld_SyarikatID, Model.fld_WilayahID, Model.fld_LadangID, @ViewBag.Host, @ViewBag.User, @ViewBag.Catalog, @ViewBag.Pass) })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-3">@GlobalResEstate.lblWorkerDebtType:</label>
+                            <div class="col-sm-8">
+                                @Html.DropDownListFor(model => model.fld_KodHutang, new SelectList(ViewBag.WorkerDebtList, "Value", "Text"), new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.fld_KodHutang, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-3">@GlobalResEstate.lblWorkerDebtAmount:</label>
+                            <div class="col-sm-4">
+                                @Html.TextBoxFor(model => model.fld_NilaiHutang, htmlAttributes: new { @class = "form-control col-sm-2" })
+                                @Html.ValidationMessageFor(model => model.fld_NilaiHutang, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        @Html.HiddenFor(model => model.fld_NegaraID)
+                        @Html.HiddenFor(model => model.fld_SyarikatID)
+                        @Html.HiddenFor(model => model.fld_WilayahID)
+                        @Html.HiddenFor(model => model.fld_LadangID)
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <input class="btn btn-success" type="submit" value=@GlobalResEstate.btnSave>
+            <button class="btn btn-warning" data-dismiss="modal">@GlobalResEstate.btnBack</button>
+        </div>
+    }
+</section>
+
+<script>
+    $("form").removeData("validator");
+    $("form").removeData("unobtrusiveValidation");
+    $.validator.unobtrusive.parse("form");
+</script>

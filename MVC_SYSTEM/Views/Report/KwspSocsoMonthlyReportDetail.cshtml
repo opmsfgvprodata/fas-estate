@@ -1,0 +1,497 @@
+﻿@model IEnumerable<MVC_SYSTEM.Models.vw_rptKwspSocso>
+@using MVC_SYSTEM.Class;
+
+@{
+    ViewBag.Title = "KwspSocsoMonthlyReport";
+    //Layout = "~/Views/Shared/_LayoutMain.cshtml";
+    System.Globalization.DateTimeFormatInfo mfi = new System.Globalization.DateTimeFormatInfo();
+    GetTriager GetTriager = new GetTriager();
+    string monthname = "";
+    int bill = 0;
+    decimal TotalKwspPkj = 0;
+    decimal TotalKwspMjkn = 0;
+    decimal TotalSocsoPkj = 0;
+    decimal TotalSocsoMjkn = 0;
+    decimal TotalSipPkj = 0;
+    decimal TotalSipMjkn = 0;
+    ChangeTimeZone ChangeTimeZone = new ChangeTimeZone();
+    DateTime Todaydate = ChangeTimeZone.gettimezone();
+    //GetConfig GetConfig = new GetConfig();
+    string uniquefilename = "AccountReport_" + ViewBag.UserID + "_" + Todaydate.Year.ToString() + Todaydate.Month.ToString() + Todaydate.Day.ToString() + Todaydate.Hour.ToString() + Todaydate.Minute.ToString() + Todaydate.Second.ToString();
+}
+
+@if (Model != null && Model.Count() != 0)
+{
+            <div id="scrollArea2" class="modal-body">
+                <logo />
+                <table class="table table-bordered" style="font-size: 11px;" border="0" width="100%">
+                    <thead>
+                        <tr>
+                            <th colspan="45" style="text-align:center;vertical-align:middle;">
+                                @ViewBag.NamaSyarikat
+                                <br />
+                                (@GlobalResEstate.lblCompanyNo : @ViewBag.NoSyarikat)
+                                <br />
+                                @GlobalResEstate.lblKwspSocsoMonthlyRpt
+                                <br />
+                                @GlobalResEstate.lblYear @ViewBag.YearSelection
+                            </th>
+                        </tr>
+                        <tr>
+                            <th rowspan="2" bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">@GlobalResEstate.hdrNo</th>
+                            <th rowspan="2" bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">@GlobalResEstate.hdrNoPkj</th>
+                            <th rowspan="2" bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">@GlobalResEstate.hdrName</th>
+                            <th colspan="14" bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">@GlobalResEstate.lblMonth</th>
+                        </tr>
+                        <tr>
+                            <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1"> </th>
+                            @for (int i = 1; i <= 12; i++)
+                            {
+                                monthname = mfi.GetAbbreviatedMonthName(i);
+                    <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">@monthname</th>
+                            }
+                            <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">@GlobalResEstate.lblTotal</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Select(s => new { s.fld_Nopkj, s.fld_Nama }).Distinct())
+                        {
+                            bill = bill + 1;
+                            <tr>
+                                <td rowspan="6" align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                    @bill
+                                </td>
+                                <td rowspan="6" align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                    @item.fld_Nopkj
+                                </td>
+                                <td rowspan="6" align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                    @item.fld_Nama
+                                </td>
+
+                                <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                    @GlobalResEstate.hdrEmployeeKwsp
+                                </td>
+                                @for (int i = 1; i <= 12; i++)
+                                {
+
+                                    var kwspPkj = Model.Where(x => x.fld_Nopkj == item.fld_Nopkj && x.fld_Month == i);
+                                    if (kwspPkj.Count() < 1)
+                                    {
+                                        <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                            -
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        foreach (var kwspP in kwspPkj)
+                                        {
+                                            TotalKwspPkj = TotalKwspPkj + kwspP.fld_KWSPPkj.Value;
+                                            <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                                @kwspP.fld_KWSPPkj
+                                            </td>
+                                        }
+                                    }
+                                }
+                                <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                    @TotalKwspPkj
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                    @GlobalResEstate.hdrEmployerKwsp
+                                </td>
+                                @for (int i = 1; i <= 12; i++)
+                                {
+
+                                    var kwspMjkn = Model.Where(x => x.fld_Nopkj == item.fld_Nopkj && x.fld_Month == i);
+                                    if (kwspMjkn.Count() < 1)
+                                    {
+                                        <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                            -
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        foreach (var kwspM in kwspMjkn)
+                                        {
+                                            TotalKwspMjkn = TotalKwspMjkn + kwspM.fld_KWSPMjk.Value;
+                                            <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                                @kwspM.fld_KWSPMjk
+                                            </td>
+                                        }
+                                    }
+                                }
+                                <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                    @TotalKwspMjkn
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                    @GlobalResEstate.hdrEmployeeSocso
+                                </td>
+                                @for (int i = 1; i <= 12; i++)
+                                {
+
+                                    var socsoPkj = Model.Where(x => x.fld_Nopkj == item.fld_Nopkj && x.fld_Month == i);
+                                    if (socsoPkj.Count() < 1)
+                                    {
+                                        <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                            -
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        foreach (var socsoP in socsoPkj)
+                                        {
+                                            TotalSocsoPkj = TotalSocsoPkj + socsoP.fld_SocsoPkj.Value;
+                                            <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                                @socsoP.fld_SocsoPkj
+                                            </td>
+                                        }
+                                    }
+                                }
+                                <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                    @TotalSocsoPkj
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                    @GlobalResEstate.hdrEmployerSocso
+                                </td>
+                                @for (int i = 1; i <= 12; i++)
+                                {
+
+                                    var socsoMjkn = Model.Where(x => x.fld_Nopkj == item.fld_Nopkj && x.fld_Month == i);
+                                    if (socsoMjkn.Count() < 1)
+                                    {
+                                        <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                            -
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        foreach (var socsoM in socsoMjkn)
+                                        {
+                                            TotalSocsoMjkn = TotalSocsoMjkn + socsoM.fld_SocsoMjk.Value;
+                                            <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                                @socsoM.fld_SocsoMjk
+                                            </td>
+                                        }
+                                    }
+                                }
+                                <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                    @TotalSocsoMjkn
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                    @GlobalResEstate.hdrEmployeeSip
+                                </td>
+                                @for (int i = 1; i <= 12; i++)
+                                {
+
+                                    var sipMjkn = Model.Where(x => x.fld_Nopkj == item.fld_Nopkj && x.fld_Month == i);
+                                    if (sipMjkn.Count() < 1)
+                                    {
+                                        <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                            -
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        foreach (var SipM in sipMjkn)
+                                        {
+                                            //TotalSipMjkn = TotalSipMjkn + SipM.fld_CarumanMajikan.Value;
+                                            <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                                @*@SipM.fld_CarumanMajikan*@
+                                            </td>
+                                        }
+                                    }
+                                }
+                                <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                    @TotalSipMjkn
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                    @GlobalResEstate.hdrEmployerSip
+                                </td>
+                                @for (int i = 1; i <= 12; i++)
+                                {
+
+                                    var sipPkrj = Model.Where(x => x.fld_Nopkj == item.fld_Nopkj && x.fld_Month == i);
+                                    if (sipPkrj.Count() < 1)
+                                    {
+                                        <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                            -
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        foreach (var SipP in sipPkrj)
+                                        {
+                                            //TotalSipPkj = TotalSipPkj + SipP.fld_CarumanPekerja.Value;
+                                            <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                                @*@SipP.fld_CarumanPekerja*@
+                                            </td>
+                                        }
+                                    }
+                                }
+                                <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                    @TotalSipPkj
+                                </td>
+                            </tr>
+
+                        }
+                    </tbody>
+                    <tfoot style="font-weight:bold">
+                        @{
+                            TotalKwspPkj = 0;
+                            TotalKwspMjkn = 0;
+                            TotalSocsoPkj = 0;
+                            TotalSocsoMjkn = 0;
+                            TotalSipPkj = 0;
+                            TotalSipMjkn = 0;
+                        }
+                        <tr>
+                            <td colspan="3" rowspan="6" align="right" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @GlobalResEstate.lblTotalOverall.ToUpper()
+                            </td>
+                            <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @GlobalResEstate.hdrEmployeeKwsp
+                            </td>
+                            @for (int i = 1; i <= 12; i++)
+                            {
+
+                                decimal? kwspPkjSum = Model.Where(x => x.fld_Month == i).Select(s => s.fld_KWSPPkj).Sum();
+                                if (kwspPkjSum.Value < 1)
+                                {
+                                    <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                        -
+                                    </td>
+                                }
+                                else
+                                {
+                                    TotalKwspPkj = TotalKwspPkj + kwspPkjSum.Value;
+                                    <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                        @kwspPkjSum
+                                    </td>
+                                }
+                            }
+                            <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @TotalKwspPkj
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @GlobalResEstate.hdrEmployerKwsp
+                            </td>
+                            @for (int i = 1; i <= 12; i++)
+                            {
+
+                                decimal? kwspMjknSum = Model.Where(x => x.fld_Month == i).Select(s => s.fld_KWSPMjk).Sum();
+                                if (kwspMjknSum.Value < 1)
+                                {
+                                    <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                        -
+                                    </td>
+                                }
+                                else
+                                {
+                                    TotalKwspMjkn = TotalKwspMjkn + kwspMjknSum.Value;
+                                    <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                        @kwspMjknSum
+                                    </td>
+                                }
+                            }
+                            <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @TotalKwspMjkn
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @GlobalResEstate.hdrEmployeeSocso
+                            </td>
+                            @for (int i = 1; i <= 12; i++)
+                            {
+
+                                decimal? socsoPkjSum = Model.Where(x => x.fld_Month == i).Select(s => s.fld_SocsoPkj).Sum();
+                                if (socsoPkjSum.Value < 1)
+                                {
+                                    <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                        -
+                                    </td>
+                                }
+                                else
+                                {
+                                    TotalSocsoPkj = TotalSocsoPkj + socsoPkjSum.Value;
+                                    <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                        @socsoPkjSum
+                                    </td>
+                                }
+                            }
+                            <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @TotalSocsoPkj
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @GlobalResEstate.hdrEmployerSocso
+                            </td>
+                            @for (int i = 1; i <= 12; i++)
+                            {
+
+                                decimal? socsoMjknSum = Model.Where(x => x.fld_Month == i).Select(s => s.fld_SocsoMjk).Sum();
+                                if (socsoMjknSum.Value < 1)
+                                {
+                                    <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                        -
+                                    </td>
+                                }
+                                else
+                                {
+                                    TotalSocsoMjkn = TotalSocsoMjkn + socsoMjknSum.Value;
+                                    <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                        @socsoMjknSum
+                                    </td>
+                                }
+                            }
+                            <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @TotalSocsoMjkn
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @GlobalResEstate.hdrEmployeeSip
+                            </td>
+                            @for (int i = 1; i <= 12; i++)
+                            {
+
+                                decimal? sipPkjSum = Model.Where(x => x.fld_Month == i).Select(s => s.fld_CarumanPekerja).Sum();
+                                if (sipPkjSum.Value < 1)
+                                {
+                                    <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                        -
+                                    </td>
+                                }
+                                else
+                                {
+                                    TotalSipPkj = TotalSipPkj + sipPkjSum.Value;
+                                    <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                        @sipPkjSum
+                                    </td>
+                                }
+                            }
+                            <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @TotalSipPkj
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @GlobalResEstate.hdrEmployerSip
+                            </td>
+                            @for (int i = 1; i <= 12; i++)
+                            {
+
+                                decimal? sipMjknSum = Model.Where(x => x.fld_Month == i).Select(s => s.fld_CarumanMajikan).Sum();
+                                if (sipMjknSum.Value < 1)
+                                {
+                                    <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                        -
+                                    </td>
+                                }
+                                else
+                                {
+                                    TotalSipMjkn = TotalSipMjkn + sipMjknSum.Value;
+                                    <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                        @sipMjknSum
+                                    </td>
+                                }
+                            }
+                            <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                @TotalSipMjkn
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+                <newpage />
+            </div>
+    if (ViewBag.Print == null)
+    {
+        <div style="text-align:right; margin-top:10px">
+            <a class="btn btn-default btn-sm" href="#" id="printpage">
+                <span class="glyphicon glyphicon-print"> </span> @GlobalResEstate.btnPrint
+            </a>
+            <a class="btn btn-default btn-sm" href="#" id="downloadpdf" @*onclick="location.href='@Url.Action("htmltopdf", "Report")'"*@>
+                <span><img src="~/Asset/Images/pdf-icon.png" width="20px" height="20px" /></span> @GlobalResEstate.btnDownloadPdf
+            </a>
+            <a class="btn btn-default btn-sm" href="#" onclick="HTMLtoExcel('')">
+                <span><img src="~/Asset/Images/excel-icon.png" width="20px" height="20px" /></span> @GlobalResEstate.btnDownloadExcel
+            </a>
+        </div>
+    }
+}
+
+@if (Model == null || Model.Count() == 0)
+{
+    <div id="scrollArea2" class="modal-body" style="text-align: center">
+        <p style="color: red">@ViewBag.Message</p>
+
+    </div>
+}
+<style>
+    #page td {
+        padding: 2px;
+        margin: 2px;
+    }
+</style>
+
+<script>
+    $(document).ready(function () {
+        $("#printpage").click(function () {
+            var DivElement = document.getElementById("scrollArea2").innerHTML;
+            var oldPage = document.body.innerHTML;
+            document.body.innerHTML = DivElement;
+            window.print();
+            document.body.innerHTML = oldPage;
+        })
+
+
+        $("#downloadpdf").click(function () {
+            //var RadioGroup = $('input[name=RadioGroup]:checked').val();
+            var GroupList = $("#GroupList").val();
+            var YearList = $("#YearList").val();
+            var WorkerList = $("#WorkerList").val();
+            //var StatusList = $("#StatusList").val();
+            //var WorkCategoryList = $("#WorkCategoryList").val();
+
+            //var StatusList = '';
+            //var WorkCategoryList = '';
+
+            var param = '/?YearList=' + YearList + '&GroupList=' + GroupList + '&WorkerList=' + WorkerList;
+            var controller = 'Report';
+            var action = 'PrintKwspSocsoMonthPdf';
+
+            var ajxfn = {};
+            ajxfn.url = "@Url.Action("PDFIndetifier", "PdfCreator")";
+            ajxfn.type = "POST";
+            ajxfn.data = JSON.stringify({ controller: controller, action: action, param: param });
+            ajxfn.datatype = "json";
+            ajxfn.contentType = "application/json";
+            ajxfn.success = function (result) {
+                //var win = window.open(result.link, '_blank');
+                //win.focus();
+                PDFObject.embed(result.link, "#searchKwspSocsoMonth", { height: "450px" });
+            };
+
+            ajxfn.error = function () {
+                $.simplyToast('@GlobalResEstate.msgError', 'danger');
+                $("#UpdateProgress1").css("display", "none");
+            };
+            $.ajax(ajxfn);
+
+            return false;
+        });
+    });
+</script>
+

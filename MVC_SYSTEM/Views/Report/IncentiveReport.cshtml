@@ -1,0 +1,131 @@
+﻿@using MVC_SYSTEM.Class;
+@{
+    ViewBag.Title = "Incentive Report";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+
+    AjaxOptions options = new AjaxOptions
+    {
+        HttpMethod = "Get",
+        UpdateTargetId = "searchResultWorkerIncentiveRptInfo",
+        InsertionMode = InsertionMode.Replace,
+        LoadingElementId = "divLoading"
+    };
+}
+
+<script src="~/Asset/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+
+<div id="divLoading" style="display:none;">
+    <div class="progressTest">
+        <label>
+            @GlobalResEstate.msgWait
+        </label>
+    </div>
+</div>
+
+
+<section class="content-wrapper main-content clear-fix">
+    <div class="well bottom" style="padding-bottom:16px;">
+        @using (Ajax.BeginForm("_WorkerIncentiveRptSearch", "Report", null, options, new { @id = "WorkerIncentiveRptSearch" }))
+        {
+            @Html.AntiForgeryToken()
+            <div class="row">
+                <div class="col-sm-2">
+                    @Html.RadioButton("RadioGroup", 0, new { @checked = "checked" })
+                    @Html.Label(GlobalResEstate.lblIndividuSelection)<br />
+                    @Html.RadioButton("RadioGroup", 1)
+                    @Html.Label(GlobalResEstate.lblGroupSelection)
+                </div>
+                <div class="col-sm-1">
+                    <label>@GlobalResEstate.lblMonth</label>
+                    @Html.DropDownList("MonthList", null, htmlAttributes: new { @class = "form-control" })
+                </div>
+                <div class="col-sm-1">
+                    <label>@GlobalResEstate.lblYear</label>
+                    @Html.DropDownList("YearList", null, htmlAttributes: new { @class = "form-control" })
+                </div>
+                <div class="col-sm-4">
+                    <label id="SelectionLabel">@GlobalResEstate.lblWorker</label>
+                    @Html.DropDownList("SelectionList", null, htmlAttributes: new { @class = "form-control" })
+                </div>
+                <div class="col-sm-2">
+                    <label id="SelectionLabel">@GlobalResEstate.lblWorkerType</label>
+                    @Html.DropDownList("JnsPkjList", null, htmlAttributes: new { @class = "form-control" })
+                </div>
+                <div class="col-sm-2">
+                    <input class="btn btn-primary btn-block" type="submit" name="Lihat" value=@GlobalResEstate.btnView />
+                    <a data-modal1='' href="@Url.Action("_WorkerIncentiveRptAdvanceSearch", "Report")" class='btn btn-primary btn-block' id='btnAdvanceSearch' role='button'>@GlobalResEstate.btnSearchAdvance</a>
+                </div>
+            </div>
+        }
+    </div>
+    <div class="well" style="margin-top:7px;">
+        <div class="panel panel-primary">
+            <div class="panel-heading">@GlobalResEstate.lblIncentiveReport</div>
+            <div class="panel-body">
+                <div id="searchResultWorkerIncentiveRptInfo">
+                    @Html.Action("_WorkerIncentiveRptSearch")
+                </div>
+            </div>
+        </div>
+    </div>
+    @*<div style="text-align:right; margin-top:10px">
+        <a class="btn btn-default btn-sm" href="#" id="printpage">
+            <span class="glyphicon glyphicon-print"> </span> @GlobalResEstate.btnPrint
+        </a>
+        <a class="btn btn-default btn-sm" href="#" id="downloadpdf">
+            <span><img src="~/Asset/Images/pdf-icon.png" width="20px" height="20px" /></span> @GlobalResEstate.btnDownloadPdf
+        </a>
+        <a class="btn btn-default btn-sm" href="#" onclick="HTMLtoExcel('')">
+            <span><img src="~/Asset/Images/excel-icon.png" width="20px" height="20px" /></span> @GlobalResEstate.btnDownloadExcel
+        </a>
+    </div>*@
+    
+</section>
+
+
+<!-- modal placeholder-->
+<div id='myModal1' class='modal'>
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div id='myModalContent1'></div>
+        </div>
+    </div>
+</div>
+
+<div id='myModal' class='modal'>
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div id='myModalContent'></div>
+        </div>
+    </div>
+</div>
+@section scripts{
+    @Scripts.Render("~/Asset/Scripts/appjs.js")
+}
+
+<script>
+    $(document).ready(function () {
+        $('input[name="RadioGroup"]').on("click", function (e) {
+            console.log($('input[name=RadioGroup]:checked').val());
+            var Radiogrp = $('input[name=RadioGroup]:checked').val();
+            var radiogroup = {};
+            var disableoption = "";
+            $('#divLoading').show();
+            radiogroup.url = "@Url.Action("GetList", "Report")";
+            radiogroup.type = "POST";
+            radiogroup.data = JSON.stringify({ RadioGroup: Radiogrp, StatusList: $("#StatusList").val() });
+            radiogroup.datatype = "json";
+            radiogroup.contentType = "application/json";
+            radiogroup.success = function (result) {
+                document.getElementById("SelectionLabel").innerText = result.SelectionLabel;
+                $("#SelectionList").empty();
+                for (var i = 0; i < result.SelectionList.length; i++) {
+                    $("#SelectionList").append("<option value=" + result.SelectionList[i].Value + " " + disableoption + ">" + result.SelectionList[i].Text + "</option>");
+                }
+                $('#divLoading').hide();
+            };
+            radiogroup.error = function () { $.simplyToast('Sistem masalah', 'danger'); };
+            $.ajax(radiogroup);
+        });
+    });
+</script>

@@ -1,0 +1,100 @@
+﻿
+
+@{
+    var grid = new WebGrid(
+        canPage: true,
+        rowsPerPage: Model.PageSize,
+        canSort: false,
+        ajaxUpdateContainerId: "grid");
+
+    grid.Bind(Model.Content, rowCount: Model.TotalRecords, autoSortAndPage: false);
+    //grid.Pager(WebGridPagerModes.All);
+
+    if (@grid.TotalRowCount > 0)
+    {
+        <div class="text-center">@grid.TotalRowCount @Html.Label(GlobalResEstate.lblTotalRecord)</div>
+        if (@ViewBag.WorkerWithoutGroupCount != 0)
+        {
+            <div class="text-center red">@ViewBag.WorkerWithoutGroupCount @Html.Label(GlobalResEstate.lblNoGroupAssign)</div>
+        }
+
+        @grid.GetHtml(htmlAttributes: new {id = "grid"}, // id for ajaxUpdateontainerId parameter
+            tableStyle: "table table-bordered table-striped table-list table-hover",
+            headerStyle: "header_table",
+            alternatingRowStyle: "Grid-alt",
+            selectedRowStyle: "Grid-selected",
+            rowStyle: "Grid-rowstyle",
+            footerStyle: "table-pager",
+            mode: WebGridPagerModes.All,
+            columns: grid.Columns(
+                grid.Column(header: GlobalResEstate.hdrNo
+                    , format: item => item.WebGrid.Rows.IndexOf(item) + 1
+                                      + Math.Round(Convert.ToDouble(grid.TotalRowCount / grid.PageCount) / grid.RowsPerPage)
+                                      * grid.RowsPerPage * grid.PageIndex, style: "count height"),
+                grid.Column(columnName: "fld_Nopkj", header: GlobalResEstate.hdrNoPkj, style: "nopkj height"),
+                grid.Column(columnName: "fld_Nama", header: GlobalResEstate.hdrName, style: "namapkj height"),
+                grid.Column(columnName: "fld_KodKumpulan", header: GlobalResEstate.hdrGroupCode, style: "kodkmpln height"),
+                grid.Column(GlobalResEstate.hdrAction, format: (item) =>
+                {
+                    if (item.fld_KodKumpulan != "N/A")
+                    {
+                        var tindakan = "";
+                        return @Html.Raw(tindakan);
+                    }
+                    else
+                    {
+                        var tindakan = "<a data-modal='' href='" + @Url.Action("_WorkerGroupSelection", "WorkerInfo") + "/?workerid=" + item.fld_UniqueID + "&WorkerSearchFilter=" + ViewBag.WorkerSearchFilter + "&WorkerSearchFilter=" + ViewBag.WorkerSearchFilter + "' class='btn btn-success' role='button' title='Tambah pekerja ke dalam kumpulan' onclick='return DisplayProgressMessage2(this);'><i class='fa fa-plus fa-lg'></i></a>";
+                        return @Html.Raw(tindakan);
+                    }
+                }, canSort: false, style: "tindakan height")
+                ));
+    }
+    else
+    {
+        <hr />
+        <div class="text-center">
+            @Html.Label(GlobalResEstate.msgErrorSearch)
+        </div>
+
+        <hr />
+    }
+}
+
+<script>
+    function displayErrorExist() {
+        $.simplyToast('Pekerja ini sudah mempunyai kumpulan.', 'danger');
+    }
+
+    function displayErrorNotExist() {
+        $.simplyToast('Pekerja ini tidak mempunyai kumpulan.', 'danger');
+    }
+
+    var RadioGroup = "@ViewBag.RadioGroup";
+    console.log(RadioGroup);
+
+    if (RadioGroup != null || RadioGroup != empty) {
+        if (RadioGroup === 1) {
+            $("input[name=RadioGroup][value='1']").prop("checked", true);
+        }
+        if (RadioGroup === 2) {
+            $("input[name=RadioGroup][value='2']").prop("checked", true);
+        }
+    }
+    else {
+        $("input[name=RadioGroup][value='1']").prop("checked", true);
+    }
+
+</script>
+
+<style>
+    .red {
+        color: red;
+    }
+</style>
+
+
+
+
+
+
+

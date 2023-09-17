@@ -1,0 +1,100 @@
+﻿@model MVC_SYSTEM.Models.tbl_PkjmastEdit
+@using MVC_SYSTEM.Class;
+
+@{
+    ViewBag.Title = "BankAcc";
+    GetConfig GetConfig = new GetConfig();
+    string statusPkj = GetConfig.GetWebConfigDesc(Model.fld_Kdaktf, "statusaktif", Model.fld_NegaraID, Model.fld_SyarikatID);
+}
+
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 class="modal-title">@GlobalResEstate.titleUpdate</h3>
+</div>
+<section class="content-wrapper main-content clear-fix">
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        <div class="modal-body">
+            <div class="form-horizontal">
+                @*<span id="progress" class="text-center" style="display: none;">
+                    <img src="~/Asset/Images/wait.gif" alt="wait" />
+                </span>*@
+
+                <div class="form-group">
+                    <div class="col-sm-5">
+                        <label class="control-label col-md-3">@GlobalResEstate.hdrNoPkj</label>
+                        <div class="col-md-9">
+                            @Html.TextBoxFor(model => model.fld_Nopkj, new { @class = "form-control", @readonly = "readonly" })
+                            @Html.ValidationMessageFor(model => model.fld_Nopkj, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="col-sm-5">
+                        <label class="control-label col-md-3">@GlobalResEstate.hdrNoKp</label>
+                        <div class="col-md-9">
+                            @Html.TextBoxFor(model => model.fld_Nokp, new { @class = "form-control", @readonly = "readonly" })
+                            @Html.ValidationMessageFor(model => model.fld_Nokp, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-5">
+                        <label class="control-label col-md-3">@GlobalResEstate.hdrName</label>
+                        <div class="col-md-9">
+                            @Html.TextBoxFor(model => model.fld_Nama, new { @class = "form-control", @readonly = "readonly" })
+                            @Html.ValidationMessageFor(model => model.fld_Nama, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="col-sm-5">
+                        <label class="control-label col-md-3">@GlobalResEstate.lblWorkerStatus</label>
+                        <div class="col-md-9">
+                            @Html.TextBox("fld_Kdaktf", statusPkj, new { @class = "form-control", @disabled = "readonly" })
+                            @*@Html.TextBoxFor(model => model.fld_Kdaktf, new { @class = "form-control", @readonly = "readonly" })*@
+                            @Html.ValidationMessageFor(model => model.fld_Kdaktf, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-5">
+                        <label class="control-label col-md-3">@GlobalResEstate.lblNoAcc</label>
+                        <div class="col-md-9">
+                            @Html.TextBoxFor(model => model.fld_NoAkaun, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.fld_NoAkaun, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="col-sm-5">
+                        <label class="control-label col-md-3">@GlobalResEstate.lblAccStatus</label>
+                        <div class="col-md-9">
+                            @*@Html.TextBoxFor(model => model.fld_StatusAkaun, new { @class = "form-control" })*@
+                            @Html.DropDownList("fld_StatusAkaun", null, htmlAttributes: new { @class = "form-control" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-5">
+                        <label class="control-label col-md-3">@GlobalResEstate.lblBankName</label>
+                        <div class="col-md-9">
+                            @Html.DropDownList("fld_Kdbank", null, htmlAttributes: new { @class = "form-control" })
+                            @*@Html.TextBoxFor(model => model.fld_Kdbank, new { @class = "form-control" })*@
+                            @Html.ValidationMessageFor(model => model.fld_Kdbank, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="modal-footer">
+            <input class="btn btn-primary" type="submit" value=@GlobalResEstate.btnSave />
+            <button class="btn btn-warning" data-dismiss="modal">@GlobalResEstate.btnBack</button>
+        </div>
+    }
+    </section>
+
+<script>
+    $("form").removeData("validator");
+    $("form").removeData("unobtrusiveValidation");
+    $.validator.unobtrusive.parse("form");
+</script>

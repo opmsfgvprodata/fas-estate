@@ -1,0 +1,101 @@
+﻿@model IEnumerable<MVC_SYSTEM.MasterModels.vw_Socso>
+@using MVC_SYSTEM.Class;
+
+@{
+    ViewBag.Title = "SocsoDetail";
+    //Layout = "~/Views/Shared/_LayoutMain.cshtml";
+    //ChangeTimeZone ChangeTimeZone = new ChangeTimeZone();
+    //int year = ChangeTimeZone.gettimezone().Year;
+    //int month = ChangeTimeZone.gettimezone().Month;
+    //int day = ChangeTimeZone.gettimezone().Day;
+    //int hour = ChangeTimeZone.gettimezone().Hour;
+    //int minute = ChangeTimeZone.gettimezone().Minute;
+    //int second = ChangeTimeZone.gettimezone().Second;
+    //string uniquefilename = "Socso_" + ViewBag.UserID + "_" + year.ToString() + month.ToString() + day.ToString() + hour.ToString() + minute.ToString() + second.ToString();
+    GetTriager GetTriager = new GetTriager();
+    string KdrGaji = "";
+    decimal Jumlah = 0;
+    int bil = 0;
+}
+@if (Model.Count() > 0)
+{
+    <div id="scrollArea">
+        <logo />
+        <table class="table table-hover table-bordered" style="font-size: 11px;" border="0" id="tblSample">
+            <thead>
+                <tr>
+                    <th colspan="10" style="text-align:center;vertical-align:middle;">
+                        @ViewBag.NamaSyarikat
+                        <br />
+                        (@GlobalResEstate.lblCompanyNo : @ViewBag.NoSyarikat)
+                        <br />
+                        @GlobalResEstate.lblSocso
+                    </th>
+                </tr>
+                <tr>
+                    <th rowspan="2" bgcolor="#ffcc80" style="color: black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">@GlobalResEstate.hdrNo</th>
+                    <th rowspan="2" bgcolor="#ffcc80" style="color: black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">@GlobalResEstate.lblSalaryRange (RM)</th>
+                    <th colspan="3" bgcolor="#ffcc80" style="color: black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">@GlobalResEstate.lblSocsoType1</th>
+                    <th bgcolor="#ffcc80" style="color: black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">@GlobalResEstate.lblSocsoType2</th>
+
+                </tr>
+                <tr>
+                    <th bgcolor="#ffcc80" style="color: black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">@GlobalResEstate.lblEmloyerShare (RM)</th>
+                    <th bgcolor="#ffcc80" style="color: black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">@GlobalResEstate.lblEmployeeShare (RM)</th>
+                    <th bgcolor="#ffcc80" style="color: black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">@GlobalResEstate.lblTotalContribution (RM)</th>
+                    <th bgcolor="#ffcc80" style="color: black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">@GlobalResEstate.lblEmployerOnly (RM)</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    bil = bil + 1;
+                    Jumlah = item.fld_SocsoMjkn.Value + item.fld_SocsoPkj.Value;
+                    if (item.fld_KdrUpper != null)
+                    {
+                        KdrGaji = GetTriager.GetTotalForMoney(item.fld_KdrLower) + " - " + @GetTriager.GetTotalForMoney(item.fld_KdrUpper);
+                    }
+                    else
+                    {
+                        KdrGaji = @GetTriager.GetTotalForMoney(item.fld_KdrLower) + " dan keatas";
+                    }
+                    <tr>
+                        <td align="center" style="vertical-align: middle !important; border: 1px solid black;" border="1">
+                            @bil
+                        </td>
+                        <td align="center" style="vertical-align: middle !important; border: 1px solid black;" border="1">
+                            @KdrGaji.ToString()
+                        </td>
+                        <td align="center" style="vertical-align: middle !important; border: 1px solid black;" border="1">
+                            @item.fld_SocsoMjkn
+                        </td>
+                        <td align="center" style="vertical-align: middle !important; border: 1px solid black;" border="1">
+                            @item.fld_SocsoPkj
+                        </td>
+                        <td align="center" style="vertical-align: middle !important; border: 1px solid black;" border="1">
+                            @Jumlah
+                        </td>
+                        <td align="center" style="vertical-align: middle !important; border: 1px solid black;" border="1">
+                            @item.fld_MjknShj
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <newpage />
+    </div>
+    <div style="text-align:right; margin-top:10px">
+        <a class="btn btn-default btn-sm" href="#" id="printpage">
+            <span class="glyphicon glyphicon-print"> </span> @GlobalResEstate.btnPrint
+        </a>
+        <a class="btn btn-default btn-sm" href="#" id="downloadpdf">
+            <span><img src="~/Asset/Images/pdf-icon.png" width="20px" height="20px" /></span> @GlobalResEstate.btnDownloadPdf
+        </a>
+    </div>
+}
+else
+{
+    <p style="color:red">@GlobalResEstate.msgErrorSearch</p>
+}
+
+

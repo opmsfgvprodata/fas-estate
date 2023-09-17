@@ -1,0 +1,56 @@
+﻿
+@{
+    ViewBag.Title = "KwspSocso";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+<section class="content-wrapper main-content clear-fix">
+    @using (Html.BeginForm("KwspSocso", null, FormMethod.Get))
+    {
+        <div class="well bottom">
+           @*searching*@
+        </div>
+        <div id="DataTable" class="well">
+            <h4 style="text-align:center;"><strong>JADUAL KWSP / SOCSO</strong></h4>
+            <div id="scrollArea" class="modal-body">
+                <logo/>
+                <table class="table table-hover table-bordered" style="font-size:11px;" border="0" id="tblSample">
+                    <thead>
+                        <tr>
+                            <th rowspan="2" bgcolor="#ffcc80" style="color:white;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Bil</th>
+                            <th rowspan="2" bgcolor="#ffcc80" style="color:white;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Kadar Gaji</th>
+                            <th bgcolor="#ffcc80" style="color:white;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Syer Majikan</th>
+                            <th bgcolor="#ffcc80" style="color:white;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Syer Pekerja</th>
+                            <th bgcolor="#ffcc80" style="color:white;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Jumlah Caruman</th>
+                            <th bgcolor="#ffcc80" style="color:white;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Kadar Gaji</th>
+
+                        </tr>
+                        <tr>
+                            @*<th bgcolor="#ffcc80" style="color:white;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Bil</th>
+                            <th bgcolor="#ffcc80" style="color:white;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Kadar Gaji</th>*@
+                            <th bgcolor="#ffcc80" style="color:white;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Syer Majikan</th>
+                            <th bgcolor="#ffcc80" style="color:white;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Syer Pekerja</th>
+                            <th bgcolor="#ffcc80" style="color:white;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Jumlah Caruman</th>
+                            @*<th bgcolor="#ffcc80" style="color:white;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Kadar Gaji</th>*@
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach(var item in Model)
+                        {
+                            <tr>
+                                <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                    @item.fld_JnsTnmn
+                                </td>
+                                <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                                    @item.fld_HargaSemasa
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+                <newpage />
+            </div>
+        </div>
+    }
+</section>

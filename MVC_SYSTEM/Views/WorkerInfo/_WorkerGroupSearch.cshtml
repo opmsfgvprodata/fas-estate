@@ -1,0 +1,105 @@
+﻿
+@{
+    var grid1 = new WebGrid(
+        canPage: true,
+        rowsPerPage: Model.PageSize,
+        canSort: false,
+        ajaxUpdateContainerId: "grid1");
+
+    grid1.Bind(Model.Content, rowCount: Model.TotalRecords, autoSortAndPage: false);
+    grid1.Pager(WebGridPagerModes.All);
+
+    if (@grid1.TotalRowCount > 0)
+    {
+        <div class="text-center">@grid1.TotalRowCount @Html.Label("maklumat kumpulan")</div>
+
+        @grid1.GetHtml(htmlAttributes: new {id = "grid1"}, // id for ajaxUpdateContainerId parameter
+            tableStyle: "table table-bordered table-striped table-list table-hover",
+            headerStyle: "header_table",
+            alternatingRowStyle: "Grid-alt",
+            selectedRowStyle: "Grid-selected",
+            rowStyle: "Grid-rowstyle",
+            mode: WebGridPagerModes.All,
+            columns: grid1.Columns(
+                grid1.Column(header: "No."
+                    , format: item => item.WebGrid.Rows.IndexOf(item) + 1
+                                      + Math.Round(Convert.ToDouble(grid1.TotalRowCount / grid1.PageCount) / grid1.RowsPerPage)
+                                      * grid1.RowsPerPage * grid1.PageIndex, style: "count"),
+                grid1.Column(columnName: "fld_KodKumpulan", header: "Kod Kumpulan", style: "kodkmpln"),
+                grid1.Column(columnName: "fld_KodKerja", header: "Jenis Kerja", style: "jeniskerja"),
+                grid1.Column(columnName: "fld_Keterangan", header: "Keterangan Kumpulan", style: "keterangankumpulan"),
+                grid1.Column(columnName: "bilangan_ahli", header: "Bilangan Ahli", style: "bilanganahli"),
+                grid1.Column(GlobalResEstate.hdrAction, format: (item) =>
+                {
+                    //var tindakan = "<a data-modal1='' href='" + @Url.Action("_WorkerGroupAdd", "WorkerInfo") + "/?workerid=" + @ViewBag.workerid + "&id=" + item.fld_KumpulanID + "' class='btn btn-success btn-xs' role='button' title='Tambah pekerja ke dalam kumpulan ini'> <span class='glyphicon glyphicon-plus'></span></a>";
+                    var tindakan = "<a data-modal1='' href='" + @Url.Action("_WorkerGroupAdd", "WorkerInfo") + "/?workerid=" + @ViewBag.workerid + "&id=" + item.fld_KumpulanID + "&WorkerSearchFilter=" + ViewBag.WorkerSearchFilter+ "' class='btn btn-success' role='button' title='Tambah pekerja ke dalam kumpulan ini'> <span class='glyphicon glyphicon-plus'></span></a>";
+
+                    return @Html.Raw(tindakan);
+
+                }, canSort: false, style: "tindakan")))
+        ;
+    }
+    else
+    {
+        <hr/>
+        <div class="text-center">
+            @Html.Label("Tiada maklumat dijumpai")
+        </div>
+
+        <hr/>
+    }
+}
+
+<script>
+    function displayError() {
+        $.simplyToast('Kumpulan yang masih mempunyai ahli tidak boleh dihapuskan', 'danger');
+    }
+</script>
+
+<style>
+    .header_table th {
+        text-align: center;
+        vertical-align: middle !important;
+    }
+
+    .count {
+        width: 60px;
+        font-size: 12px;
+        text-align: center;
+        vertical-align: middle !important;
+    }
+
+    .kodkmpln {
+        width: 80px;
+        font-size: 12px;
+        text-align: center;
+        vertical-align: middle !important;
+    }
+
+    .jeniskerja {
+        width: 100px;
+        font-size: 12px;
+        text-align: center;
+        vertical-align: middle !important;
+    }
+
+    .keterangankumpulan {
+        width: 200px;
+        font-size: 12px;
+        text-align: center;
+        vertical-align: middle !important;
+    }
+
+    .bilanganahli {
+        width: 80px;
+        font-size: 12px;
+        text-align: center;
+        vertical-align: middle !important;
+    }
+
+    .tindakan {
+        width: 85px;
+        text-align: left;
+        vertical-align: middle !important;
+    }
+</style>

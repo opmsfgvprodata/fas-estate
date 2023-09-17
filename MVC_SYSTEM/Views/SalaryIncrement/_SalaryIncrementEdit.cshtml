@@ -1,0 +1,92 @@
+﻿@model MVC_SYSTEM.CustomModels.CustMod_NewRequestIncrement
+
+@if (!ViewBag.StatusExist)
+{
+    <div id="divLoading1" style="display:none;">
+        <div class="progressTest">
+            <label>
+                @GlobalResEstate.msgWait
+            </label>
+        </div>
+    </div>
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 class="modal-title">Salary Increment </h3>
+    </div>
+
+    using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        <div class="modal-body">
+            <div class="panel panel-primary">
+                <div class="panel-heading">Salary Increment For @Model.NoPkj - @Model.NamaPkj</div>
+                <div class="panel-body">
+                    <div class="form-horizontal">
+                        <div class="form-group">
+                            <label class="control-label col-md-3">Worker ID : </label>
+                            <div class="col-md-2">
+                                @Html.EditorFor(model => model.NoPkj, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-3">Worker Name : </label>
+                            <div class="col-md-5">
+                                @Html.EditorFor(model => model.NamaPkj, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-3">Increment Value : </label>
+                            <div class="col-md-8">
+                                @Html.EditorFor(model => model.IncrmntVal, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.IncrmntVal, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-3">Daily Incentive : </label>
+                            <div class="col-md-8">
+                                @Html.EditorFor(model => model.DailyIncentiveVal, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.IncrmntVal, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            @if (Model.SubmitAppStatus == 2)
+            {
+                <label class="btn btn-warning">Permohonan Telah Dihantar Ke HQ</label>
+            }
+            else
+            {
+                <input class="btn btn-success" type="submit" value="@GlobalResEstate.btnSave" />
+            }
+            <button class="btn btn-danger" id="incentiveAddBackButton" data-dismiss="modal">@GlobalResEstate.btnBack</button>
+        </div>
+    }
+}
+else
+{
+    <div class="modal-body">
+        <div class="panel panel-primary">
+            <div class="panel-heading">Wrong Request</div>
+            <div class="panel-body">
+                <p>You entered wrong request</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-footer">
+        <button class="btn btn-danger" id="incentiveAddBackButton" data-dismiss="modal">@GlobalResEstate.btnBack</button>
+    </div>
+}
+
+<script src="~/Asset/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+
+<script>
+    $("form").removeData("validator");
+    $("form").removeData("unobtrusiveValidation");
+    $.validator.unobtrusive.parse("form");
+</script>
+

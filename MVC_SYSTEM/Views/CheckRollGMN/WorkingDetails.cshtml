@@ -1,0 +1,1568 @@
+﻿@using MVC_SYSTEM.Class
+@{
+    ViewBag.Title = "Working Details";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+    GetConfig getconfig = new GetConfig();
+    string dateformat = getconfig.GetData("dateformat");
+    ViewBag.DateScriptAdv = 1;
+}
+<style>
+    .panel-body {
+        padding-bottom: 0px !important;
+    }
+    .disableTab{
+        pointer-events:none;
+    }
+
+    .hovering {
+        background: #b0b0b0;
+    }
+
+    #ListofDetail {
+        overflow-y: auto;
+    }
+
+    #ListofDetail3 {
+        overflow-y: auto !important;
+    }
+
+    #ListofDetail4 {
+        overflow-y: auto !important;
+    }
+    /* The sticky class is added to the navbar with JS when it reaches its scroll position */
+    .sticky {
+        position: fixed;
+        top: 50px;
+        z-index: 2;
+        width: auto !important;
+        padding-right: 45px;
+    }
+    #addksranlain {
+        padding: 0px 5px 0px 5px !important;
+    }
+    .well {
+        overflow-x: unset !important;
+    }
+</style>
+
+<link href="~/Asset/ConfirmAlert/css/jquery-confirm.css" rel="stylesheet" />
+<script src="~/Asset/ConfirmAlert/js/jquery-confirm.js"></script>
+<div id="UpdateProgress1" style="display:none;">
+    <div class="progressTest">
+        <label>
+            @GlobalResEstate.msgWait
+        </label>
+    </div>
+</div>
+<section class="content-wrapper main-content clear-fix">
+    <div class="well" id="well">
+        @using (Html.BeginForm("Attendance", "CheckRollGMN", FormMethod.Post, new { id = "Attendance" }))
+    {
+        @Html.AntiForgeryToken()
+        <div class="form-horizontal">
+            <div class="col-sm-12" id="selectionsection">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">@GlobalResEstate.lblAttendanceInfo.ToUpper()</div>
+                    <div class="panel-body">
+                        <div class="form-group">
+                            <div class="col-sm-2">
+                                @Html.RadioButton("SelectionCategory", 1, false, new { @id = "SelectionCategory1" })
+                                @Html.Label(GlobalResEstate.lblGroupSelection)
+                            </div>
+                            <div class="col-sm-2">
+                                @Html.RadioButton("SelectionCategory", 2, false, new { @id = "SelectionCategory2" })
+                                @Html.Label(GlobalResEstate.lblIndividuSelection)
+                            </div>
+                            <div class="col-sm-4">
+                                <label id="catsel">**@GlobalResEstate.msgChooseCtgri</label>
+                                @Html.DropDownList("SelectionData", null, htmlAttributes: new { @class = "form-control" })
+                            </div>
+                            <div class="col-sm-3">
+                                <label for="startdate">@GlobalResEstate.lblDate</label>
+                                <div class='input-group date' id='datetimepicker1'>
+                                    <input type="datetime" class="form-control" name="dateseleted" id="dateseleted" onkeydown="return false" required />
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-sm-1" style="padding-top:30px;">
+                                <label id="day"></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-body">
+            <div class="col-md-12">
+                <div class="panel with-nav-tabs panel-primary">
+                    <div class="panel-heading">
+                        <ul id="mytabs" class="nav nav-tabs">
+                            <li id="tabhadir" class="active"><a href="#tab1primary" data-toggle="tab">@GlobalResEstate.hdrAttendance.ToUpper()</a></li>
+                            <li id="tabkerja" class="disableTab"><a href="#tab2primary" data-toggle="tab">@GlobalResEstate.lblWork.ToUpper()</a></li>
+                        </ul>
+                    </div>
+                    <div class="panel-body">
+                        <div class="tab-content">
+                            <div class="tab-pane fade in active" id="tab1primary">
+                                @{
+                                Html.RenderAction("Attendance", "CheckRollGMN");
+                                }
+                            </div>
+                            <div class="tab-pane fade" id="tab2primary">
+                                @{
+                                Html.RenderAction("WorkDetail", "CheckRollGMN");
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id='myModal' class='modal fade in'>
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div id='myModalContent'>@Html.Action("_NeglectedDay", "CheckRollGMN")</div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer col-md-12" style="margin-top: 20px;">
+            <a style="text-align:right" href="@Url.Action("Index", "CheckRollMain")" class="btn btn-warning">@GlobalResEstate.btnBack</a>
+        </div>
+}
+    </div>
+</section>
+<script>
+    var heightglobal = 0;
+    function ClearInput() {
+        $("#hargaKesukaranLain").val(0);
+        $('#KesukaranLain').text('RM 0');
+        $("#MngrID").val(0);
+        $("#DTApp").val('');
+        $('#ManagerID2').val('');
+        $('#ManagerPassword2').val('');
+    }
+
+    function HideWorkInput() {
+        $("#workdata").css("display", "none");
+        $("#allcheckbookdiv").css("display", "none");
+        $("#SaveWrkbtndiv").css("display", "none");
+    }
+
+    $("#Rainning").change(function () {
+        var status = $('#Rainning').val();
+        var atteditstatus = $('#atteditstatus').val();
+        ClearInput();
+        $('#ManagerID').val('');
+        $('#ManagerPassword').val('');
+        if (status == 1 && atteditstatus == 0) {
+            $('#myModal').modal('show');
+        }
+        else if (status == 0 && atteditstatus == 0) {
+
+        }
+        else {
+            $('#SaveAtt').attr("disabled", true);
+            alertmsg('Perhatian', 'Sila hapuskan data kehadiran terdahulu sebelum meneruskan tindakkan.')
+        }
+    });
+
+    $("#addksranlain").click(function () {
+        ClearInput();
+        $('#myModal2').modal('show');
+    });
+
+    $('#myModal').modal({
+        backdrop: 'static',
+        show: false,
+        keyboard: false
+    })
+
+    $('#myModal2').modal({
+        backdrop: 'static',
+        show: false,
+        keyboard: false
+    })
+
+    $("#back").click(function () {
+        ClearInput();
+        $('#Rainning').val(0);
+        $('#ManagerID').val('');
+        $('#ManagerPassword').val('');
+    });
+
+    $('#Rainning').attr("disabled", true);
+
+    $("#JenisChargeHT").change(function () {
+        var JenisChargeHT = $('#JenisChargeHT').val();
+        if (JenisChargeHT == 'kadaran') {
+            $('#PilihanMasaHT').attr("disabled", true);
+            $('#CostCentreHT').attr("disabled", true);
+            $('#PilihanPktHT').attr("disabled", true);
+            $('#PilihanAktvtHT').attr("disabled", true);
+        }
+        else {
+            $('#PilihanMasaHT').attr("disabled", false);
+            $('#CostCentreHT').attr("disabled", false);
+            $('#PilihanPktHT').attr("disabled", false);
+            $('#PilihanAktvtHT').attr("disabled", false);
+        }
+    });
+
+    $("#PilihanPktHT").change(function () {
+        $('#PilihanAktvtHT').val(0);
+        $('#sapglneg').text('');
+    });
+
+    @*$("#PilihanAktvtHT").change(function () {
+        $("#UpdateProgress1").css("display", "");
+        var JnisPkt = $("#JnisPktHT").val();
+        var PilihanPkt = $("#PilihanPktHT").val();
+        var PilihanAktvt = $("#PilihanAktvtHT").val();
+        var ajxfn = {};
+        ajxfn.url = "@Url.Action("GetGLSAP", "CheckRollGMN")";
+        ajxfn.type = "POST";
+        ajxfn.data = JSON.stringify({ JnisPkt: JnisPkt, PilihanPkt: PilihanPkt, PilihanAktvt: PilihanAktvt });
+        ajxfn.datatype = "json";
+        ajxfn.async = false;
+        ajxfn.contentType = "application/json";
+        ajxfn.success = function (result) {
+            if (result.GLCode != "") {
+                $('#sapglneg').text('Kod GL SAP : ' + result.GLCode);
+                $('#SaveNeg').attr("disabled", false);
+            }
+            else {
+                alertmsg('Perhatian', result.msg)
+                $('#SaveNeg').attr("disabled", true);
+            }
+
+            $("#UpdateProgress1").css("display", "none");
+        };
+        ajxfn.error = function () {
+            $.simplyToast('@GlobalResEstate.msgError', 'danger');
+        };
+        $.ajax(ajxfn);
+    });*@
+
+    $('#descactvtykong').click(function (e) {
+        var Populink = "@Url.Action("ActivityCodeDetails", "CheckRollGMN", null, "http")";
+        var TypeAct = '05';
+        var CostCentre = $("#CostCentreHT").val();
+        if (CostCentre != "0") {
+            Populink = Populink + "/?ActivityType=" + TypeAct + "&CostCentre=" + CostCentre;
+            window.open(Populink, null, "height=600,width=800,status=yes,toolbar=no,menubar=no,location=no,scrollbars=yes,resizable=no");
+            e.stopPropagation();
+            e.preventDefault();
+        }
+    });
+
+    $().ready(function () {
+
+        //var height = $(window).height();
+        //var margintop = window.getComputedStyle(document.getElementById('ListofDetail'));
+        //var margintop2 = margintop.getPropertyValue('margin-top');
+        //var $scrollingDiv = $("#attinfo");
+        ////var $scrollingselSecDiv = $("#selectionsection");
+        //// Get the navbar
+        //var $scrollingselSecDiv = document.getElementById("selectionsection");
+
+        //// Get the offset position of the navbar
+        //var sticky = $scrollingselSecDiv.offsetTop;
+
+        $('#WorkData').click(function (e) {
+            //$scrollingDiv
+            //    .stop()
+            //    .animate({ "marginTop": (0) + "px" }, "slow");
+            //e.preventDefault();
+            $('#mytabs a[href="#tab2primary"]').tab('show');
+        })
+
+        //function myFunction() {
+        //    if (window.pageYOffset >= sticky + 120) {
+        //        $scrollingselSecDiv.classList.add("sticky")
+        //    } else {
+        //        $scrollingselSecDiv.classList.remove("sticky");
+        //    }
+        //}
+
+        //$(window).scroll(function () {
+        //    //myFunction();
+
+        //    if ($(document).width() >= 974) {
+        //        if ($(window).scrollTop() >= 27 + 100 + 90) {
+        //            $scrollingDiv
+        //                .stop()
+        //                .animate({ "marginTop": ($(window).scrollTop() - 256 + 20) + "px" }, "slow");
+        //        }
+        //        else {
+        //            $scrollingDiv
+        //                .stop()
+        //                .animate({ "marginTop": (0) + "px" }, "slow");
+        //        }
+        //    }
+        //    else {
+        //        $scrollingDiv
+        //            .stop()
+        //            .animate({ "marginTop": (0) + "px" }, "slow");
+        //    }
+        //});
+    });
+
+    $(window).resize(function () {
+        if ($(document).width() <= 974) {
+            $("#attinfo").removeClass('col-sm-8');
+            $("#attinfo").addClass('col-sm-12');
+        }
+        else {
+            $("#attinfo").removeClass('col-sm-12');
+            $("#attinfo").addClass('col-sm-8');
+        }
+    });
+
+    $(window).on("load", function () {
+        var widthsize = $(window).width();
+        if (parseInt(widthsize) <= 974) {
+            $("#attinfo").removeClass('col-sm-8');
+            $("#attinfo").addClass('col-sm-12');
+        }
+        else {
+            $("#attinfo").removeClass('col-sm-12');
+            $("#attinfo").addClass('col-sm-8');
+        }
+    });
+
+    $("#SaveAtt").attr('disabled', true);
+    $("#WorkData").attr('disabled', true);
+    $("#allcheckbookdiv").css("display", "none");
+    $("#SaveWrkbtndiv").css("display", "none");
+    $('#tabkerja').addClass('disableTab');
+
+    $("#CostCentre").change(function () {
+        $("#UpdateProgress1").css("display", "");
+        var AktivitiToolTip = "";
+        HideWorkInput();
+        var CostCentre = $("#CostCentre").val();
+        var ajxfn = {};
+        ajxfn.url = "@Url.Action("GetPktAtvt", "CheckRollGMN")";
+        ajxfn.type = "POST";
+        ajxfn.data = JSON.stringify({ CostCentre: CostCentre });
+        ajxfn.datatype = "json";
+        ajxfn.contentType = "application/json";
+        ajxfn.success = function (result) {
+            $('#PilihanPkt').empty();
+            $('#PilihanAktvt').empty();
+            for (var i = 0; i < result.PilihPeringkat.length; i++) {
+                $("#PilihanPkt").append("<option value=" + result.PilihPeringkat[i].Value + ">" + result.PilihPeringkat[i].Text + "</option>");
+            }
+            for (var i = 0; i < result.PilihAktiviti.length; i++) {
+                if (i > 0) {
+                    AktivitiToolTip = result.AktivitiToolTip[i - 1].Label;
+                }
+                $("#PilihanAktvt").append("<option title='" + AktivitiToolTip + "' value=" + result.PilihAktiviti[i].Value + ">" + result.PilihAktiviti[i].Text + "</option>");
+            }
+            $("#UpdateProgress1").css("display", "none");
+        };
+        ajxfn.error = function () {
+            $.simplyToast('@GlobalResEstate.msgError', 'danger');
+            $("#UpdateProgress1").css("display", "none");
+        };
+        $.ajax(ajxfn);
+    });
+
+    function calculatetotal(hasil, kadar, gandaankadar, jumlah, jumlahH, jumlahHS, JnisAktvt) {
+        $("#UpdateProgress1").css("display", "");
+        var checkvalidkwsnskr = "0";
+        $("#statusvalidkwsnskr").val(checkvalidkwsnskr);
+        var hargaKesukaranMembaja = 0;
+        var hargaKesukaranMenuai = 0;
+        var hargaKesukaranLain = 0;
+        var hargakwsnskr = 0;
+        switch (checkvalidkwsnskr) {
+            case "1":
+                hargakwsnskr = parseFloat(hargaKesukaranMembaja);
+                break;
+            case "2":
+                hargakwsnskr = parseFloat(hargaKesukaranMenuai);
+                break;
+            case "3":
+                hargakwsnskr = parseFloat(hargaKesukaranLain);
+                break;
+            default:
+                hargakwsnskr = 0;
+        }
+        var maxhasil = $("#maxhasil").val();
+        var hasil1 = $(hasil).val();
+        if (parseFloat(hasil1) <= parseFloat(maxhasil)) {
+            var datano = $("#datano").val();
+            var loopdatahdr = $("#loopdatahdr").val();
+            var splitdata = datano.split(',');
+            if ($("#allsame").is(":checked")) {
+                for (var i = 0; i < loopdatahdr; i++) {
+                    var kadar1 = $("#kadar_" + splitdata[i]).val();
+                    var gandaankadar1 = $("#gandaankadar_" + splitdata[i]).val();
+                    var gettotal = 0;
+                    var gettotal2 = 0;
+                    gettotal = kadar1 * hasil1 * gandaankadar1
+                    gettotal2 = kadar1 * hasil1 * gandaankadar1 + hargakwsnskr
+                    $("#hasil_" + splitdata[i]).val(hasil1);
+                    $("#jumlah_" + splitdata[i]).val(gettotal2.toFixed(2));
+                    $("#jumlahH_" + splitdata[i]).val(gettotal.toFixed(2));
+                    $("#jumlahHS_" + splitdata[i]).val(gettotal2.toFixed(2));
+                }
+            }
+            else {
+                var kadar1 = $("#" + kadar).val();
+                var gandaankadar1 = $("#" + gandaankadar).val();
+                var gettotal2 = 0;
+                gettotal = kadar1 * hasil1 * gandaankadar1
+                gettotal2 = kadar1 * hasil1 * gandaankadar1 + hargakwsnskr
+                $("#" + jumlah).val(gettotal2.toFixed(2));
+                $("#" + jumlahH).val(gettotal.toFixed(2));
+                $("#" + jumlahHS).val(gettotal2.toFixed(2));
+            }
+        }
+        else {
+            alertmsg('@GlobalResEstate.msgError', '@GlobalResEstate.lblMaxHasil' + ' ' + maxhasil);
+        }
+        $("#UpdateProgress1").css("display", "none");
+    }
+
+    function checkvalidkwsnsukar(JnisAktvt) {
+        var result1 = "3";
+        var ajxfn = {};
+        ajxfn.url = "@Url.Action("CheckValidKwsnSkr", "CheckRollGMN")";
+        ajxfn.type = "POST";
+        ajxfn.data = JSON.stringify({ JnisAktvt: JnisAktvt });
+        ajxfn.datatype = "json";
+        ajxfn.async = false;
+        ajxfn.contentType = "application/json";
+        ajxfn.success = function (result) {
+            result1 = result;
+        };
+        ajxfn.error = function () {
+            $.simplyToast('@GlobalResEstate.msgError', 'danger');
+        };
+        $.ajax(ajxfn);
+
+        return result1;
+    }
+
+    function bonuschange(bonus) {
+        var bonus1 = $(bonus).val();
+        var datano = $("#datano").val();
+        var loopdatahdr = $("#loopdatahdr").val();
+        var splitdata = datano.split(',');
+        if ($("#allsame").is(":checked")) {
+            for (var i = 0; i < loopdatahdr; i++) {
+                $("#bonus_" + splitdata[i]).val(bonus1);
+            }
+        }
+    }
+
+    function kdhmnuaichange(kdhmnuai, kadar, kadartext) {
+        $("#UpdateProgress1").css("display", "");
+        var kdhmnuai1 = $(kdhmnuai).val();
+        var SelectDate = $('#datetimepicker1').data("DateTimePicker").date();
+        var JnisPkt = $("#JnisPkt").val();
+        var PilihanPkt = $("#PilihanPkt").val();
+        var datano = $("#datano").val();
+        var loopdatahdr = $("#loopdatahdr").val();
+        var splitdata = datano.split(',');
+
+        var ajxfn = {};
+        ajxfn.url = "@Url.Action("GetMenuaiRate", "CheckRollGMN")";
+        ajxfn.type = "POST";
+        ajxfn.data = JSON.stringify({ SelectDate: SelectDate, JnisPkt: JnisPkt, PilihanPkt: PilihanPkt, kdhmnuai: kdhmnuai1 });
+        ajxfn.datatype = "json";
+        ajxfn.contentType = "application/json";
+        ajxfn.success = function (result) {
+            if ($("#allsame").is(":checked")) {
+                for (var i = 0; i < loopdatahdr; i++) {
+                    $("#kdhmnuai_" + splitdata[i]).val(kdhmnuai1);
+                    $("#kadar_" + splitdata[i]).val(result.kadarharga);
+                    $("#kadartext_" + splitdata[i]).text(result.kadarharga);
+                }
+            }
+            else {
+                $("#" + kadar).val(result.kadarharga);
+                $("#" + kadartext).text(result.kadarharga);
+            }
+            $("#UpdateProgress1").css("display", "none");
+        };
+        ajxfn.error = function () {
+            $.simplyToast('@GlobalResEstate.msgError', 'danger');
+            $("#UpdateProgress1").css("display", "none");
+        };
+        $.ajax(ajxfn);
+    }
+    function otchange(ot) {
+        var ot1 = $(ot).val();
+        var datano = $("#datano").val();
+        var loopdatahdr = $("#loopdatahdr").val();
+        var splitdata = datano.split(',');
+        if ($("#allsame").is(":checked")) {
+            for (var i = 0; i < loopdatahdr; i++) {
+                $("#ot_" + splitdata[i]).val(ot1);
+            }
+        }
+    }
+
+    function kualitichange(kualiti) {
+        var kualiti1 = $(kualiti).val();
+        var datano = $("#datano").val();
+        var loopdatahdr = $("#loopdatahdr").val();
+        var splitdata = datano.split(',');
+        if ($("#allsame").is(":checked")) {
+            for (var i = 0; i < loopdatahdr; i++) {
+                $("#kualiti_" + splitdata[i]).val(kualiti1);
+            }
+        }
+    }
+
+    $("#SaveWrk").click(function () {
+        var datano = $("#datano").val();
+        var loopdatahdr = $("#loopdatahdr").val();
+        var checkvalidkwsnskr = "0";
+        var hargaKesukaranMembaja = "0";
+        var hargaKesukaranMenuai = "0";
+        var hargaKesukaranLain = "0";
+        var hargakwsnskr = 0;
+        var kodkwsnskr = "";
+        switch (checkvalidkwsnskr) {
+            case "1":
+                hargakwsnskr = parseFloat(hargaKesukaranMembaja);
+                kodkwsnskr = $("#CdKesukaranMembaja").val();
+                break;
+            case "2":
+                hargakwsnskr = parseFloat(hargaKesukaranMenuai);
+                kodkwsnskr = $("#CdKesukaranMenuai").val();
+                break;
+            case "3":
+                hargakwsnskr = parseFloat(hargaKesukaranLain);
+                kodkwsnskr = $("#CdKesukaranLain").val();
+                break;
+            default:
+                hargakwsnskr = 0;
+                kodkwsnskr = "-";
+        }
+
+        if (!jQuery.isEmptyObject(loopdatahdr)) {
+            var splitdata = datano.split(',');
+            var hasil = null;
+            var kualiti = null;
+            var bonus = null;
+            var ot = null;
+            var SelectDate = $('#datetimepicker1').data("DateTimePicker").date();
+            var SelectionData = $("#SelectionData").val();
+            var SelectionCategory = $('input[name="SelectionCategory"]:checked').val();
+            var Lejar = $("#Lejar").val();
+            var JnisPkt = "0";
+            var PilihanPkt = $("#PilihanPkt").val();
+            var JnisAktvt = "0";
+            var PilihanAktvt = $("#PilihanAktvt").val();
+            var AppKwnsSkrLainID = null;//$("#MngrID").val();
+            var AppKwnsSkrLainDT = null;//$("#DTApp").val();
+            var CostCentre = $("#CostCentre").val();
+
+            var datapost = {
+                "SelectDate": SelectDate,
+                "SelectionData": SelectionData,
+                "SelectionCategory": SelectionCategory,
+                "Lejar": Lejar,
+                "JnisPkt": JnisPkt,
+                "PilihanPkt": PilihanPkt,
+                "JnisAktvt": JnisAktvt,
+                "PilihanAktvt": PilihanAktvt,
+                "HrgaKwsnSkr": "0",
+                "KdKwsnSkr": "-",
+                "AppKwnsSkrLainID": AppKwnsSkrLainID,
+                "AppKwnsSkrLainDT": AppKwnsSkrLainDT,
+                "CostCentre": CostCentre,
+                "HadirData": []
+            };
+
+            for (var i = 0; i < loopdatahdr; i++) {
+                var loopdataitems = {};
+                nopkj = $("#nopkj_" + splitdata[i]).val();
+                kadar = $("#kadar_" + splitdata[i]).val();
+                gandaankadar = $("#gandaankadar_" + splitdata[i]).val();
+                hasil = $("#hasil_" + splitdata[i]).val();
+                jumlah = $("#jumlahH_" + splitdata[i]).val();
+                jumlahOA = $("#jumlahHS_" + splitdata[i]).val();
+                kualiti = $("#kualiti_" + splitdata[i]).val();
+                bonus = $("#bonus_" + splitdata[i]).val();
+                ot = $("#ot_" + splitdata[i]).val();
+                kdhmnuai = $("#kdhmnuai_" + splitdata[i]).val();
+                checkpurpose = $("#checkpurpose_" + splitdata[i]).val();
+
+                loopdataitems["nopkj"] = nopkj;
+                loopdataitems["kadar"] = kadar;
+                loopdataitems["gandaankadar"] = gandaankadar;
+                loopdataitems["hasil"] = hasil;
+                loopdataitems["jumlah"] = jumlah;
+                loopdataitems["jumlahOA"] = jumlahOA;
+                loopdataitems["kualiti"] = kualiti;
+                loopdataitems["bonus"] = bonus;
+                loopdataitems["ot"] = ot;
+                loopdataitems["kdhmnuai"] = kdhmnuai;
+                loopdataitems["checkpurpose"] = checkpurpose;
+                datapost.HadirData.push(loopdataitems);
+            }
+
+            if (!jQuery.isEmptyObject(datapost)) {
+                $("#UpdateProgress1").css("display", "");
+                var ajxfn = {};
+                ajxfn.url = "@Url.Action("Working", "CheckRollGMN")";
+                ajxfn.type = "POST";
+                ajxfn.data = JSON.stringify(datapost);
+                ajxfn.datatype = "json";
+                ajxfn.contentType = "application/json";
+                ajxfn.success = function (result) {
+                    $('#ListofDetail4').empty();
+                    $('#ListofDetail4').append('<table class="table table-hover table-bordered" style="font-size: 11px;" border="0"></table>');
+                    var table = $('#ListofDetail4').children();
+                    table.append(result.tablelisting);
+                    $.simplyToast(result.msg, result.statusmsg);
+                    if (result.statusmsg == 'warning' || result.statusmsg == 'danger') {
+                        alertmsg('Perhatian', result.msg)
+                    }
+                    ClearInput();
+                    $("#UpdateProgress1").css("display", "none");
+                };
+                ajxfn.error = function () {
+                    $.simplyToast('@GlobalResEstate.msgError', 'danger');
+                    $("#UpdateProgress1").css("display", "none");
+                };
+                $.ajax(ajxfn);
+            }
+        }
+        return false;
+    });
+
+    function dateselectedit(date) {
+        $('#datetimepicker1').data("DateTimePicker").date(date);
+        $("#atteditstatus").val(1);
+        $('#SaveAtt').attr("disabled", false);
+        return false;
+    }
+
+    $("#SaveNeg").click(function () {
+        ClearInput();
+        $("#UpdateProgress1").css("display", "");
+        var SelectionData = $("#SelectionData").val();
+        var SelectionCategory = $('input[name="SelectionCategory"]:checked').val();
+        var SelectDate = $('#datetimepicker1').data("DateTimePicker").date();
+        var CostCentreHT = $("#CostCentreHT").val();
+        var PilihanPktHT = $("#PilihanPktHT").val();
+        var PilihanAktvtHT = $("#PilihanAktvtHT").val();
+        var JenisChargeHT = $("#JenisChargeHT").val();
+        var ProceedStatus = false;
+        if (JenisChargeHT == "kadaran") {
+            ProceedStatus = true;
+        }
+        else if (JenisChargeHT == "kong" && CostCentreHT != "0" && PilihanPktHT != "0" && PilihanAktvtHT != "0") {
+            ProceedStatus = true;
+        }
+
+        if (ProceedStatus) {
+            var ajxfn = {};
+            ajxfn.url = "@Url.Action("_NeglectedDay", "CheckRollGMN")";
+            ajxfn.type = "POST";
+            ajxfn.async = true;
+            ajxfn.data = JSON.stringify($("#Attendance").serializeObject());
+            ajxfn.datatype = "json";
+            ajxfn.contentType = "application/json";
+            ajxfn.success = function (result) {
+                if (result.AuthStatus) {
+                    onloadattandance(SelectionCategory, SelectionData);
+                    onloadattandance2(SelectionCategory, SelectionData, SelectDate);
+                    $('#SaveAtt').attr("disabled", result.proceedstatus);
+                    $("#atteditstatus").val(1);
+                    $('#tabkerja').removeClass('disableTab');
+                    $("#WorkData").attr('disabled', false);
+                    $("#allcheckbookdiv").css("display", "none");
+                    $("#SaveWrkbtndiv").css("display", "none");
+                    $('#ListofDetail3').empty();
+                    $('#ListofDetail4').empty();
+                    $('#ListofDetail4').append('<table class="table table-hover table-bordered" style="font-size: 11px;" border="0"></table>');
+                    var table2 = $('#ListofDetail4').children();
+                    table2.append(result.tablelisting2);
+                    $.simplyToast(result.msg, result.statusmsg);
+                    if (result.statusmsg == 'warning' || result.statusmsg == 'danger') {
+                        alertmsg('Perhatian', result.msg)
+                    }
+                    if (result.statusmsg == 'success') {
+                        $('#myModal').modal('hide');
+                    }
+                    $('#ManagerID').val('');
+                    $('#ManagerPassword').val('');
+                }
+                else {
+                    alertmsg('Perhatian', result.msg);
+                    $.simplyToast(result.msg, result.statusmsg);
+                }
+                $("#UpdateProgress1").css("display", "none");
+            }
+            ajxfn.error = function () {
+                $.simplyToast('@GlobalResEstate.msgError', 'danger');
+                $("#UpdateProgress1").css("display", "none");
+            };
+            $.ajax(ajxfn);
+            var height = $('#tblattinfo').height();
+            var $scrollingAttDiv = $("#ListofDetail");
+
+            $scrollingAttDiv
+                .stop()
+                .animate({ "height": (height + 25) + "px" }, "slow");
+        }
+        $("#UpdateProgress1").css("display", "none");
+        return false;
+    });
+
+    $("#SaveOtherDifValue").click(function () {
+        var ajxfn = {};
+        ajxfn.url = "@Url.Action("_OtherDifficulty", "CheckRollGMN")";
+        ajxfn.type = "POST";
+        ajxfn.async = true;
+        ajxfn.data = JSON.stringify($("#Attendance").serializeObject());
+        ajxfn.datatype = "json";
+        ajxfn.contentType = "application/json";
+        ajxfn.success = function (result) {
+            if (result.AuthStatus) {
+                $("#hargaKesukaranLain").val(result.OtherDifValue)
+                $("#statusvalidkwsnskr").val(result.GetValidation)
+                $("#MngrID").val(result.AppUsrID)
+                $("#DTApp").val(ToJavaScriptDate(result.AppDT))
+                $('#KesukaranLain').text('RM ' + result.OtherDifValue);
+                $('#myModal2').modal('hide');
+            }
+            else {
+                alertmsg('Perhatian', result.msg);
+            }
+            $('#ManagerID2').val('');
+            $('#ManagerPassword2').val('');
+            $.simplyToast(result.msg, result.statusmsg);
+            $("#UpdateProgress1").css("display", "none");
+        }
+        ajxfn.error = function () {
+            $.simplyToast('@GlobalResEstate.msgError', 'danger');
+            $("#UpdateProgress1").css("display", "none");
+        };
+        $.ajax(ajxfn);
+        return false;
+    });
+
+    function ToJavaScriptDate(value) {
+        var pattern = /Date\(([^)]+)\)/;
+        var results = pattern.exec(value);
+        var dt = new Date(parseFloat(results[1]));
+        return dt.getDate() + "/" + (dt.getMonth() + 1) + "/" + dt.getFullYear() + " " + dt.getHours() + ":" + dt.getMinutes() + ":" + dt.getSeconds();
+    }
+
+    $("#SaveAtt").click(function () {
+        ClearInput();
+        var status = $('#Rainning').val();
+        var atteditstatus = $('#atteditstatus').val();
+        ClearInput();
+        if (status == 1 && atteditstatus == 0) {
+            $('#myModal').modal('show');
+        }
+        else {
+            $("#UpdateProgress1").css("display", "");
+            var SelectionData = $("#SelectionData").val();
+            var SelectionCategory = $('input[name="SelectionCategory"]:checked').val();
+            var SelectDate = $('#datetimepicker1').data("DateTimePicker").date();
+            var ajxfn = {};
+            ajxfn.url = "@Url.Action("Attendance", "CheckRollGMN")";
+            ajxfn.type = "POST";
+            ajxfn.async = false;
+            ajxfn.data = JSON.stringify($("#Attendance").serializeObject());
+            ajxfn.datatype = "json";
+            ajxfn.contentType = "application/json";
+            ajxfn.success = function (result) {
+                onloadattandance(SelectionCategory, SelectionData);
+                onloadattandance2(SelectionCategory, SelectionData, SelectDate);
+                $('#SaveAtt').attr("disabled", result.proceedstatus);
+                $("#atteditstatus").val(0);
+                if (result.ZeroLeaveBal || result.AlertPopup) {
+                    alertmsg(result.statusmsg2, result.msg2);
+                }
+                else {
+                    $('#tabkerja').removeClass('disableTab');
+                    $("#WorkData").attr('disabled', false);
+                    $("#allcheckbookdiv").css("display", "block");
+                    $("#SaveWrkbtndiv").css("display", "block");
+                    $.simplyToast(result.msg, result.statusmsg);
+                }
+                $('#ListofDetail4').empty();
+                $('#ListofDetail4').append('<table class="table table-hover table-bordered" style="font-size: 11px;" border="0"></table>');
+                var table2 = $('#ListofDetail4').children();
+                table2.append(result.tablelisting2);
+                if (result.statusmsg == 'warning' || result.statusmsg == 'danger') {
+                    alertmsg('Perhatian', result.msg)
+                }
+                $("#UpdateProgress1").css("display", "none");
+            }
+            ajxfn.error = function () {
+                $.simplyToast('@GlobalResEstate.msgError', 'danger');
+                $("#UpdateProgress1").css("display", "none");
+            };
+            $.ajax(ajxfn);
+            var height = $('#tblattinfo').height();
+            var $scrollingAttDiv = $("#ListofDetail");
+
+            $scrollingAttDiv
+                .stop()
+                .animate({ "height": (height + 25) + "px" }, "slow");
+        }
+        return false;
+    });
+
+    function alertmsg(title, content) {
+        $.confirm({
+            title: title,
+            content: content,
+            buttons: {
+                confirm: {
+                    text: 'OK',
+                    btnClass: 'btn-green',
+                    keys: ['enter', 'shift']
+                }
+            }
+        });
+    }
+
+    function DeleteAttInfo(Data) {
+        var SelectionData = $("#SelectionData").val();
+        var SelectionCategory = $('input[name="SelectionCategory"]:checked').val();
+        var SelectDate = $('#datetimepicker1').data("DateTimePicker").date();
+        $.confirm({
+            title: '@GlobalResEstate.titleDelete',
+            content: '@GlobalResEstate.msgDelete',
+            buttons: {
+                confirm: {
+                    text: '@GlobalResEstate.btnYes',
+                    btnClass: 'btn-green',
+                    keys: ['enter', 'shift'],
+                    action: function () {
+                        $("#workdata").css("display", "none");
+                        $("#allcheckbookdiv").css("display", "none");
+                        $("#SaveWrkbtndiv").css("display", "none");
+                        if (SelectDate != null && SelectionData != '0' && SelectionCategory != '') {
+                            $("#UpdateProgress1").css("display", "");
+                            var ajxfn = {};
+                            ajxfn.url = "@Url.Action("DeleteAttInfo", "CheckRollGMN")";
+                            ajxfn.type = "POST";
+                            ajxfn.data = JSON.stringify({ Data: Data, SelectionCategory: SelectionCategory, SelectionData: SelectionData, SelectDate: SelectDate });
+                            ajxfn.datatype = "json";
+                            ajxfn.contentType = "application/json";
+                            ajxfn.success = function (result) {
+                                if (result.kodhdr != '') {
+                                    $('#WorkCode').val(result.kodhdr);
+                                }
+                                if (result.kodhjn != '') {
+                                    $('#Rainning').val(result.kodhjn);
+                                }
+                                $('#name0').empty();
+                                $('#name0').text('- ' + result.namelabel);
+                                $('#name1').empty();
+                                $('#name1').text('- ' + result.namelabel);
+                                $('#name3').empty();
+                                $('#name3').text('- ' + result.namelabel);
+                                $('#name3').empty();
+                                $('#name3').text('- ' + result.namelabel);
+                                $('#name4').empty();
+                                $('#name4').text('- ' + result.namelabel);
+                                $('#name5').empty();
+                                $('#name5').text('- ' + result.namelabel);
+                                $("#day").empty();
+                                $("#day1").empty();
+                                $("#day").text(result.dayname)
+                                $("#day1").text("- " + result.dayname)
+                                $('#ListofDetail').empty();
+                                $('#ListofDetail3').empty();
+                                $('#ListofDetail4').empty();
+                                $('#ListofDetail').append('<table class="table table-hover table-bordered" style="font-size: 11px;" border="0" id="tblattinfo"></table>');
+                                var table = $('#ListofDetail').children();
+                                table.append(result.tablelisting);
+                                $('#ListofDetail4').append('<table class="table table-hover table-bordered" style="font-size: 11px;" border="0"></table>');
+                                var table2 = $('#ListofDetail4').children();
+                                table2.append(result.tablelisting2);
+                                onloadattandance(SelectionCategory, SelectionData);
+                                if (result.proceedstatus) {
+                                    $('#atteditstatus').val(1);
+                                }
+                                else {
+                                    $('#atteditstatus').val(0);
+                                }
+                                if (result.checkxhadir) {
+                                    $('#tabhadir').addClass('active');
+                                    $('#tab1primary').addClass('tab-pane fade in active');
+                                    $('#tabkerja').addClass('disableTab').removeClass('active');
+                                    $("#WorkData").attr('disabled', true);
+                                    $("#allcheckbookdiv").css("display", "none");
+                                    $("#SaveWrkbtndiv").css("display", "none");
+                                    $('#tab2primary').removeClass('tab-pane fade in active').addClass('tab-pane fade');
+                                    alertmsg('Peringatan', 'Sila pastikan maklumat kehadiran disimpan sebelum mengisi maklumat kerja.')
+                                }
+                                else {
+                                    $('#tabkerja').removeClass('disableTab');
+                                    $("#WorkData").attr('disabled', false);
+                                    $("#allcheckbookdiv").css("display", "block");
+                                    $("#SaveWrkbtndiv").css("display", "block");
+                                }
+                                $('#SaveAtt').attr("disabled", false);
+                                $.simplyToast(result.msg, result.statusmsg);
+                                $("#UpdateProgress1").css("display", "none");
+                                if (result.statusmsg == 'warning' || result.statusmsg == 'danger') {
+                                    alertmsg('Perhatian', result.msg)
+                                }
+                            };
+                            ajxfn.error = function () {
+                                $.simplyToast('Maaf system tergendala', 'danger');
+                                $("#UpdateProgress1").css("display", "none");
+                            };
+                            $.ajax(ajxfn);
+                        }
+                        else {
+                        }
+                    }
+                },
+                cancel: {
+                    text: '@GlobalResEstate.btnNo',
+                    btnClass: 'btn-red',
+                    keys: ['enter', 'shift'],
+                    action: function () {
+
+                    }
+                }
+            }
+        });
+        return false;
+    }
+
+    function DeleteWorkInfo(pkt, kodatvt) {
+        var SelectionData = $("#SelectionData").val();
+        var SelectionCategory = $('input[name="SelectionCategory"]:checked').val();
+        var SelectDate = $('#datetimepicker1').data("DateTimePicker").date();
+        $.confirm({
+            title: '@GlobalResEstate.titleDelete',
+            content: '@GlobalResEstate.msgDelete',
+            buttons: {
+                confirm: {
+                    text: '@GlobalResEstate.btnYes',
+                    btnClass: 'btn-green',
+                    keys: ['enter', 'shift'],
+                    action: function () {
+                        $("#UpdateProgress1").css("display", "");
+                        var ajxfn = {};
+                        ajxfn.url = "@Url.Action("DeleteWorkInfo", "CheckRollGMN")";
+                        ajxfn.type = "POST";
+                        ajxfn.data = JSON.stringify({ SelectDate: SelectDate, SelectionData: SelectionData, SelectionCategory: SelectionCategory, pkt: pkt, kodatvt: kodatvt });
+                        ajxfn.datatype = "json";
+                        ajxfn.contentType = "application/json";
+                        ajxfn.success = function (result) {
+                            $('#ListofDetail4').empty();
+                            $('#ListofDetail4').append('<table class="table table-hover table-bordered" style="font-size: 11px;" border="0"></table>');
+                            var table = $('#ListofDetail4').children();
+                            table.append(result.tablelisting);
+                            $.simplyToast(result.msg, result.statusmsg);
+                            $("#UpdateProgress1").css("display", "none");
+                            if (result.statusmsg == 'warning' || result.statusmsg == 'danger') {
+                                alertmsg('Perhatian', result.msg)
+                            }
+                        };
+                        ajxfn.error = function () {
+                            $.simplyToast('Maaf system tergendala', 'danger');
+                            $("#UpdateProgress1").css("display", "none");
+                        };
+                        $.ajax(ajxfn);
+                    }
+                },
+                cancel: {
+                    text: '@GlobalResEstate.btnNo',
+                    btnClass: 'btn-red',
+                    keys: ['enter', 'shift'],
+                    action: function () {
+
+                    }
+                }
+            }
+        });
+        return false;
+    }
+    $('input:radio[name="SelectionCategory"]').change(function () {
+        ClearInput();
+        var height = $(window).height();
+        var $scrollingAttDiv = $("#ListofDetail");
+
+        $scrollingAttDiv
+            .stop()
+            .animate({ "height": (0) + "px" }, "slow");
+
+        $("#atteditstatus").val(0);
+        $('#SaveAtt').attr("disabled", true);
+        $("#UpdateProgress1").css("display", "");
+        $('#datetimepicker1').data("DateTimePicker").date(null);
+        $('#tabhadir').addClass('active');
+        $('#tab1primary').addClass('tab-pane fade in active');
+        $('#tabkerja').addClass('disableTab').removeClass('active');
+        $("#WorkData").attr('disabled', true);
+        $("#allcheckbookdiv").css("display", "none");
+        $("#SaveWrkbtndiv").css("display", "none");
+        $('#tab2primary').removeClass('tab-pane fade in active').addClass('tab-pane fade');
+        $("#workdata").css("display", "none");
+        var SelectionCategory = $(this).val();
+        $("#catsel").empty();
+        if (SelectionCategory == 1) {
+            $("#catsel").text('@GlobalResEstate.lblGroup');
+            $('#allsame').attr("disabled", false);
+        }
+        else {
+            $("#catsel").text('@GlobalResEstate.lblWorker');
+            $('#allsame').attr("disabled", true);
+        }
+        var ajxfn = {};
+        ajxfn.url = "@Url.Action("WorkerData", "CheckRollGMN")";
+        ajxfn.type = "POST";
+        ajxfn.data = JSON.stringify({ SelectionCategory: SelectionCategory });
+        ajxfn.datatype = "json";
+        ajxfn.contentType = "application/json";
+        ajxfn.success = function (result) {
+            $('#name0').empty();
+            $('#name1').empty();
+            $('#name2').empty();
+            $('#ListofDetail').empty();
+            $('#ListofDetail2').empty();
+            $('#ListofDetail3').empty();
+            $("#SelectionData").empty();
+            for (var i = 0; i < result.length; i++) {
+                $("#SelectionData").append("<option value=" + result[i].Value + ">" + result[i].Text + "</option>");
+            }
+            $('#tabkerja').addClass('disableTab');
+            $("#WorkData").attr('disabled', true);
+            $("#allcheckbookdiv").css("display", "none");
+            $("#SaveWrkbtndiv").css("display", "none");
+            $("#UpdateProgress1").css("display", "none");
+        };
+        ajxfn.error = function () {
+            $.simplyToast('@GlobalResEstate.msgError', 'danger');
+            $("#UpdateProgress1").css("display", "none");
+        };
+        $.ajax(ajxfn);
+    });
+
+    $('#datetimepicker1').datetimepicker({
+        format: '@dateformat',
+        useCurrent: false
+    });
+
+    $("#SelectionData").change(function () {
+        ClearInput();
+        $("#atteditstatus").val(0);
+        $('#SaveAtt').attr("disabled", true);
+        $('#datetimepicker1').data("DateTimePicker").date(null);
+        $('#tabhadir').addClass('active');
+        $('#tab1primary').addClass('tab-pane fade in active');
+        $('#tabkerja').addClass('disableTab').removeClass('active');
+        $("#WorkData").attr('disabled', true);
+        $("#allcheckbookdiv").css("display", "none");
+        $("#SaveWrkbtndiv").css("display", "none");
+        $('#tab2primary').removeClass('tab-pane fade in active').addClass('tab-pane fade');
+        var SelectionData = $("#SelectionData").val();
+        var SelectionCategory = $('input[name="SelectionCategory"]:checked').val();
+        $("#workdata").css("display", "none");
+        if (SelectionData != '0') {
+            $("#UpdateProgress1").css("display", "");
+            var ajxfn = {};
+            ajxfn.url = "@Url.Action("WorkerAvlbleChecking", "CheckRollGMN")";
+            ajxfn.type = "POST";
+            ajxfn.data = JSON.stringify({ SelectionCategory: SelectionCategory, SelectionData: SelectionData });
+            ajxfn.datatype = "json";
+            ajxfn.async = false;
+            ajxfn.contentType = "application/json";
+            ajxfn.success = function (result) {
+                $('#name0').empty();
+                $('#name0').text('- ' + result.namelabel);
+                $('#name1').empty();
+                $('#name1').text('- ' + result.namelabel);
+                $('#name2').empty();
+                $('#name2').text('- ' + result.namelabel);
+                $('#ListofDetail').empty();
+                $('#ListofDetail3').empty();
+                $('#ListofDetail').append('<table class="table table-hover table-bordered" style="font-size: 11px;" border="0" id="tblattinfo"></table>');
+                var table = $('#ListofDetail').children();
+                table.append(result.tablelisting);
+                $.simplyToast(result.msg, result.statusmsg);
+                if (result.statusmsg == 'warning' || result.statusmsg == 'danger') {
+                    alertmsg('Perhatian', result.msg)
+                }
+                $('#dateseleted').attr("disabled", result.datedisable);
+                onloadattandance(SelectionCategory, SelectionData);
+                $("#UpdateProgress1").css("display", "none");
+                var height = document.getElementById('well').offsetHeight;
+            };
+            ajxfn.error = function () {
+                $.simplyToast('@GlobalResEstate.msgError', 'danger');
+                $("#UpdateProgress1").css("display", "none");
+            };
+            $.ajax(ajxfn);
+            var height = $('#tblattinfo').height();
+            heightglobal = height;
+            var $scrollingAttDiv = $("#ListofDetail");
+
+            $scrollingAttDiv
+                .stop()
+                .animate({ "height": (height + 25) + "px" }, "slow");
+        }
+    });
+
+    $("#datetimepicker1").on("dp.change", function (e) {
+        ClearInput();
+        $("#PilihanAktvt").val("0");
+        var SelectDate = $('#datetimepicker1').data("DateTimePicker").date();
+        var SelectionData = $("#SelectionData").val();
+        var SelectionCategory = $('input[name="SelectionCategory"]:checked').val();
+        $("#workdata").css("display", "none");
+        if (SelectDate != null && SelectionData != '0' && SelectionCategory != '') {
+            $("#UpdateProgress1").css("display", "");
+            var ajxfn = {};
+            ajxfn.url = "@Url.Action("WorkerDateChecking", "CheckRollGMN")";
+            ajxfn.type = "POST";
+            ajxfn.data = JSON.stringify({ SelectionCategory: SelectionCategory, SelectionData: SelectionData, SelectDate: SelectDate });
+            ajxfn.datatype = "json";
+            ajxfn.async = false;
+            ajxfn.contentType = "application/json";
+            ajxfn.success = function (result) {
+                $('#WorkCode').val(result.AttCodeType);
+                if (result.kodhdr != '') {
+                    $('#WorkCode').val(result.kodhdr);
+                }
+                if (result.kodhjn != '') {
+                    $('#Rainning').val(result.kodhjn);
+                }
+                $('#name0').empty();
+                $('#name0').text('- ' + result.namelabel);
+                $('#name1').empty();
+                $('#name1').text('- ' + result.namelabel);
+                $('#name3').empty();
+                $('#name3').text('- ' + result.namelabel);
+                $('#name3').empty();
+                $('#name3').text('- ' + result.namelabel);
+                $('#name4').empty();
+                $('#name4').text('- ' + result.namelabel);
+                $('#name5').empty();
+                $('#name5').text('- ' + result.namelabel);
+                $("#day").empty();
+                $("#day1").empty();
+                $("#day").text(result.dayname)
+                $("#day1").text("- " + result.dayname)
+                $('#ListofDetail').empty();
+                $('#ListofDetail3').empty();
+                $('#ListofDetail4').empty();
+                $('#ListofDetail').append('<table class="table table-hover table-bordered" style="font-size: 11px;" border="0" id="tblattinfo"></table>');
+                var table = $('#ListofDetail').children();
+                table.append(result.tablelisting);
+                $('#ListofDetail4').append('<table class="table table-hover table-bordered" style="font-size: 11px;" border="0"></table>');
+                var table2 = $('#ListofDetail4').children();
+                table2.append(result.tablelisting2);
+
+                if (result.proceedstatus) {
+                    $('#atteditstatus').val(1);
+                }
+                else {
+                    $('#atteditstatus').val(0);
+                }
+                if (result.checkxhadir) {
+                    $('#tabhadir').addClass('active');
+                    $('#tab1primary').addClass('tab-pane fade in active');
+                    $('#tabkerja').addClass('disableTab').removeClass('active');
+                    $("#WorkData").attr('disabled', true);
+                    $("#allcheckbookdiv").css("display", "none");
+                    $("#SaveWrkbtndiv").css("display", "none");
+                    $('#tab2primary').removeClass('tab-pane fade in active').addClass('tab-pane fade');
+                    alertmsg('Peringatan', 'Sila pastikan maklumat kehadiran disimpan sebelum mengisi maklumat kerja.')
+                }
+                else {
+                    $('#tabkerja').removeClass('disableTab');
+                    $("#WorkData").attr('disabled', false);
+                    $("#allcheckbookdiv").css("display", "");
+                    $("#SaveWrkbtndiv").css("display", "");
+                }
+                if (result.CutOfDateStatus) {
+                    $('#Rainning').attr("disabled", true);
+                    $('#WorkCode').attr("disabled", true);
+                    $('#SaveAtt').attr("disabled", true);
+
+                    $('#Lejar').attr("disabled", true);
+                    $('#JnisPkt').attr("disabled", true);
+                    $('#PilihanPkt').attr("disabled", true);
+                    $('#JnisAktvt').attr("disabled", true);
+                    $('#PilihanAktvt').attr("disabled", true);
+                }
+                else {
+                    $('#Rainning').attr("disabled", false);
+                    $('#WorkCode').attr("disabled", false);
+                    $('#SaveAtt').attr("disabled", false);
+
+                    $('#Lejar').attr("disabled", false);
+                    $('#JnisPkt').attr("disabled", false);
+                    $('#PilihanPkt').attr("disabled", false);
+                    $('#JnisAktvt').attr("disabled", false);
+                    $('#PilihanAktvt').attr("disabled", false);
+                }
+                $.simplyToast(result.msg, result.statusmsg);
+                if (result.statusmsg == 'warning' || result.statusmsg == 'danger') {
+                    alertmsg('Perhatian', result.msg)
+                }
+                $("#UpdateProgress1").css("display", "none");
+            };
+            ajxfn.error = function () {
+                $.simplyToast('@GlobalResEstate.msgError', 'danger');
+                $("#UpdateProgress1").css("display", "none");
+            };
+            $.ajax(ajxfn);
+            var height = $('#tblattinfo').height();
+            if (height < 0) {
+                height = heightglobal;
+            }
+            else {
+                heightglobal = height;
+            }
+            var $scrollingAttDiv = $("#ListofDetail");
+
+            $scrollingAttDiv
+                .stop()
+                .animate({ "height": (height + 25) + "px" }, "slow");
+        }
+        else {
+        }
+    });
+
+    function onloadattandance(SelectionCategory, SelectionData) {
+        var ajxfn = {};
+        ajxfn.url = "@Url.Action("GetAttandanceDetails", "CheckRollGMN")";
+        ajxfn.type = "POST";
+        ajxfn.async = false;
+        ajxfn.data = JSON.stringify({ SelectionCategory: SelectionCategory, SelectionData: SelectionData });
+        ajxfn.datatype = "json";
+        ajxfn.contentType = "application/json";
+        ajxfn.success = function (result) {
+            $('#ListofDetail2').empty();
+            $('#ListofDetail3').empty();
+            $('#ListofDetail2').append('<table class="table table-hover table-bordered" style="font-size: 11px;" border="0" id="tblattinfodate"></table>');
+            var table = $('#ListofDetail2').children();
+            table.append(result.tablelisting2);
+        };
+        ajxfn.error = function () {
+            $.simplyToast('@GlobalResEstate.msgError', 'danger');
+            $("#UpdateProgress1").css("display", "none");
+        };
+        $.ajax(ajxfn);
+    }
+
+    function onloadattandance2(SelectionCategory, SelectionData, SelectDate) {
+        var ajxfn = {};
+        ajxfn.url = "@Url.Action("WorkerDateChecking", "CheckRollGMN")";
+        ajxfn.type = "POST";
+        ajxfn.async = false;
+        ajxfn.data = JSON.stringify({ SelectionCategory: SelectionCategory, SelectionData: SelectionData, SelectDate: SelectDate });
+        ajxfn.datatype = "json";
+        ajxfn.contentType = "application/json";
+        ajxfn.success = function (result) {
+            $('#ListofDetail').empty();
+            $('#ListofDetail').append('<table class="table table-hover table-bordered" style="font-size: 11px;" border="0" id="tblattinfo"></table>');
+            var table = $('#ListofDetail').children();
+            table.append(result.tablelisting);
+        };
+        ajxfn.error = function () {
+            $.simplyToast('@GlobalResEstate.msgError', 'danger');
+            $("#UpdateProgress1").css("display", "none");
+        };
+        $.ajax(ajxfn);
+    }
+
+    $("#WorkCode").change(function () {
+        ClearInput();
+        $("#UpdateProgress1").css("display", "");
+        var ajxfn = {};
+        ajxfn.url = "@Url.Action("GetWorkCodeStatus", "CheckRollGMN")";
+        ajxfn.type = "POST";
+        ajxfn.data = JSON.stringify({ WorkCode: $("#WorkCode").val() });
+        ajxfn.datatype = "json";
+        ajxfn.contentType = "application/json";
+        ajxfn.success = function (result) {
+            if (result.workstatus == "xhadirkerja") {
+                $('#Rainning').attr("disabled", true);
+            }
+            else {
+                $('#Rainning').attr("disabled", false);
+            }
+
+            $("#UpdateProgress1").css("display", "none");
+        };
+        ajxfn.error = function () {
+            $.simplyToast('@GlobalResEstate.msgError', 'danger');
+            $("#UpdateProgress1").css("display", "none");
+        };
+        $.ajax(ajxfn);
+    });
+
+    $("#JnisPkt").change(function () {
+        ClearInput();
+        $("#UpdateProgress1").css("display", "");
+        $("#workdata").css("display", "none");
+        $("#allcheckbookdiv").css("display", "none");
+        $("#SaveWrkbtndiv").css("display", "none");
+        var ajxfn = {};
+        ajxfn.url = "@Url.Action("GetPkt", "CheckRollGMN")";
+        ajxfn.type = "POST";
+        ajxfn.data = JSON.stringify({ JnisPkt: $("#JnisPkt").val() });
+        ajxfn.datatype = "json";
+        ajxfn.contentType = "application/json";
+        ajxfn.success = function (result) {
+            $('#ListofDetail3').empty();
+            $('#PilihanPkt').empty();
+            for (var i = 0; i < result.PilihPeringkat.length; i++) {
+                $("#PilihanPkt").append("<option value=" + result.PilihPeringkat[i].Value + ">" + result.PilihPeringkat[i].Text + "</option>");
+            }
+            $('#hargaKesukaranMenuai').val(result.hargaKesukaranMenuai);
+            $('#hargaKesukaranMembaja').val(result.hargaKesukaranMembaja);
+            $('#CdKesukaranMenuai').val(result.CdKesukaranMenuai);
+            $('#CdKesukaranMembaja').val(result.CdKesukaranMembaja);
+            $('#KesukaranMenuai').text('RM ' + result.hargaKesukaranMenuai);
+            $('#KesukaranMembaja').text('RM ' + result.hargaKesukaranMembaja);
+            $("#UpdateProgress1").css("display", "none");
+        };
+        ajxfn.error = function () {
+            $.simplyToast('@GlobalResEstate.msgError', 'danger');
+            $("#UpdateProgress1").css("display", "none");
+        };
+        $.ajax(ajxfn);
+    }
+    );
+
+    $("#CostCentreHT").change(function () {
+        ClearInput();
+        var AktivitiToolTip = "";
+        $("#UpdateProgress1").css("display", "");
+        $("#workdata").css("display", "none");
+        $("#allcheckbookdiv").css("display", "none");
+        $("#SaveWrkbtndiv").css("display", "none");
+        $("#UpdateProgress1").css("display", "");
+        var CostCentre = $("#CostCentreHT").val();
+        var ajxfn = {};
+        ajxfn.url = "@Url.Action("GetPktAtvt2", "CheckRollGMN")";
+        ajxfn.type = "POST";
+        ajxfn.data = JSON.stringify({ CostCentre: CostCentre });
+        ajxfn.datatype = "json";
+        ajxfn.contentType = "application/json";
+        ajxfn.success = function (result) {
+            $('#PilihanPktHT').empty();
+            $('#PilihanAktvtHT').empty();
+            for (var i = 0; i < result.PilihPeringkat.length; i++) {
+                $("#PilihanPktHT").append("<option value=" + result.PilihPeringkat[i].Value + ">" + result.PilihPeringkat[i].Text + "</option>");
+            }
+            for (var i = 0; i < result.PilihAktiviti.length; i++) {
+                if (i > 0) {
+                    AktivitiToolTip = result.AktivitiToolTip[i - 1].Label;
+                }
+                $("#PilihanAktvtHT").append("<option title='" + AktivitiToolTip + "' value=" + result.PilihAktiviti[i].Value + ">" + result.PilihAktiviti[i].Text + "</option>");
+            }
+            $("#UpdateProgress1").css("display", "none");
+        };
+        ajxfn.error = function () {
+            $.simplyToast('@GlobalResEstate.msgError', 'danger');
+            $("#UpdateProgress1").css("display", "none");
+        };
+        $.ajax(ajxfn);
+    });
+
+    function GetActivty() {
+        var AktivitiToolTip = "";
+        var ajxfn = {};
+        ajxfn.url = "@Url.Action("GetAktvt", "CheckRollGMN")";
+        ajxfn.type = "POST";
+        ajxfn.data = JSON.stringify({ JnisAktvt: $("#JnisAktvt").val() });
+        ajxfn.datatype = "json";
+        ajxfn.contentType = "application/json";
+        ajxfn.success = function (result) {
+            $('#PilihanAktvt').empty();
+            for (var i = 0; i < result.PilihAktiviti.length; i++) {
+                if (i > 0) {
+                    AktivitiToolTip = result.AktivitiToolTip[i - 1].Label;
+                }
+                $("#PilihanAktvt").append("<option title='" + AktivitiToolTip + "' value=" + result.PilihAktiviti[i].Value + ">" + result.PilihAktiviti[i].Text + "</option>");
+            }
+        };
+        ajxfn.error = function () {
+        };
+        $.ajax(ajxfn);
+    }
+
+    $("#JnisAktvt").change(function () {
+        ClearInput();
+        var AktivitiToolTip = "";
+        $("#UpdateProgress1").css("display", "");
+        $("#workdata").css("display", "none");
+        $("#allcheckbookdiv").css("display", "none");
+        $("#SaveWrkbtndiv").css("display", "none");
+        $('#ListofDetail3').empty();
+        var ajxfn = {};
+        ajxfn.url = "@Url.Action("GetAktvt", "CheckRollGMN")";
+        ajxfn.type = "POST";
+        ajxfn.data = JSON.stringify({ JnisAktvt: $("#JnisAktvt").val() });
+        ajxfn.datatype = "json";
+        ajxfn.contentType = "application/json";
+        ajxfn.success = function (result) {
+            $('#ListofDetail3').empty();
+            $('#PilihanAktvt').empty();
+            for (var i = 0; i < result.PilihAktiviti.length; i++) {
+                if (i > 0) {
+                    AktivitiToolTip = result.AktivitiToolTip[i - 1].Label;
+                }
+                $("#PilihanAktvt").append("<option value=" + result.PilihAktiviti[i].Value + ">" + result.PilihAktiviti[i].Text + "</option>");
+            }
+            $("#UpdateProgress1").css("display", "none");
+        };
+        ajxfn.error = function () {
+            $.simplyToast('@GlobalResEstate.msgError', 'danger');
+            $("#UpdateProgress1").css("display", "none");
+        };
+        $.ajax(ajxfn);
+    });
+
+    $("#PilihanPkt").change(function () {
+        $("#PilihanAktvt").val(0);
+        HideWorkInput();
+    });
+
+    @*$("#Lejar").change(function () {
+        ClearInput();
+        var Lejar = $("#Lejar").val();
+        $("#workdata").css("display", "none");
+        $("#allcheckbookdiv").css("display", "none");
+        $("#SaveWrkbtndiv").css("display", "none");
+        $("#PilihanAktvt").val("0");
+        $('#ListofDetail3').empty();
+        $("#UpdateProgress1").css("display", "");
+        var ajxfn = {};
+        ajxfn.url = "@Url.Action("GetActvtType", "CheckRollGMN")";
+        ajxfn.type = "POST";
+        ajxfn.data = JSON.stringify({ Lejar: Lejar });
+        ajxfn.datatype = "json";
+        ajxfn.contentType = "application/json";
+        ajxfn.success = function (result) {
+            $('#JnisAktvt').empty();
+            for (var i = 0; i < result.JnisAktvt.length; i++) {
+                $("#JnisAktvt").append("<option value=" + result.JnisAktvt[i].Value + ">" + result.JnisAktvt[i].Text + "</option>");
+            }
+            $('#PilihanAktvt').empty();
+            for (var i = 0; i < result.PilihanAktvt.length; i++) {
+                $("#PilihanAktvt").append("<option value=" + result.PilihanAktvt[i].Value + ">" + result.PilihanAktvt[i].Text + "</option>");
+            }
+            $("#UpdateProgress1").css("display", "none");
+        };
+        ajxfn.error = function () {
+            $.simplyToast('@GlobalResEstate.msgError', 'danger');
+            $("#UpdateProgress1").css("display", "none");
+        };
+
+        $.ajax(ajxfn);
+    });*@
+
+    $("#PilihanAktvt").change(function () {
+        HideWorkInput();
+        var SelectDate = $('#datetimepicker1').data("DateTimePicker").date();
+        var SelectionData = $("#SelectionData").val();
+        var SelectionCategory = $('input[name="SelectionCategory"]:checked').val();
+        var KodAktvt = $("#PilihanAktvt").val();
+        var PilihanPkt = $("#PilihanPkt").val();
+        if (KodAktvt != "0" && PilihanPkt != "0") {
+            $("#UpdateProgress1").css("display", "");
+            var ajxfn = {};
+            ajxfn.url = "@Url.Action("GetForm", "CheckRollGMN")";
+            ajxfn.type = "POST";
+            ajxfn.data = JSON.stringify({ SelectionCategory: SelectionCategory, SelectionData: SelectionData, PilihanPkt: PilihanPkt, KodAktvt: KodAktvt, SelectDate: SelectDate });
+            ajxfn.datatype = "json";
+            ajxfn.contentType = "application/json";
+            ajxfn.success = function (result) {
+                $('#ListofDetail3').empty();
+                $("#UpdateProgress1").css("display", "none");
+                if (!result.closeform) {
+
+                    $("#workdata").css("display", "block");
+                    $("#allcheckbookdiv").css("display", "block");
+                    $("#SaveWrkbtndiv").css("display", "block");
+                    $('#ListofDetail3').append('<table class="table table-hover table-bordered" style="font-size: 11px;" border="0" id="workformtable"></table>');
+                    var table = $('#ListofDetail3').children();
+                    table.append(result.tablelisting);
+                    $('#sapgl').text('Kod GL SAP : ' + result.GLCode);
+                }
+                else {
+                    $("#workdata").css("display", "none");
+                    $("#allcheckbookdiv").css("display", "none");
+                    $("#SaveWrkbtndiv").css("display", "none");
+                    $('#sapgl').text('Kod GL SAP : -');
+                }
+                $.simplyToast(result.msg, result.statusmsg);
+                if (result.statusmsg == 'warning' || result.statusmsg == 'danger') {
+                    alertmsg('Perhatian', result.msg)
+                }
+            };
+            ajxfn.error = function () {
+                $.simplyToast('@GlobalResEstate.msgError', 'danger');
+                $("#UpdateProgress1").css("display", "none");
+                $("#workdata").css("display", "block");
+                $("#allcheckbookdiv").css("display", "block");
+                $("#SaveWrkbtndiv").css("display", "block");
+            };
+
+            $.ajax(ajxfn);
+        }
+    });
+
+    $.fn.serializeObject = function () {
+        var o = {};
+        var a = this.serializeArray();
+        $.each(a, function () {
+            if (o[this.name]) {
+                if (!o[this.name].push) {
+                    o[this.name] = [o[this.name]];
+                }
+                o[this.name].push(this.value || '');
+            } else {
+                o[this.name] = this.value || '';
+            }
+        });
+        return o;
+    };
+
+    $('#descactvty').click(function (e) {
+        var Populink = "@Url.Action("ActivityCodeDetails", "CheckRollGMN", null, "http")";
+        var TypeAct = '00';
+        var CostCentre = $("#CostCentre").val();
+        if (CostCentre != "0") {
+            Populink = Populink + "/?ActivityType=" + TypeAct + "&CostCentre=" + CostCentre;
+            window.open(Populink, null, "height=600,width=800,status=yes,toolbar=no,menubar=no,location=no,scrollbars=yes,resizable=no");
+            e.stopPropagation();
+            e.preventDefault();
+        }
+    });
+</script>
+
+<script>
+    $(document).ready(function () {
+        $(document).on('mouseover', '.fullrow', function (e) {
+            var id = this.getAttribute("data-id");
+            $(".row_" + id).addClass('hovering');
+        })
+
+        $(document).on('mouseout', '.fullrow', function (e) {
+            var id = this.getAttribute("data-id");
+            $(".row_" + id).removeClass('hovering');
+        })
+        
+    });
+</script>

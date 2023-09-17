@@ -1,0 +1,84 @@
+﻿@model IEnumerable<MVC_SYSTEM.Models.tbl_AktvtKerja>
+
+@{
+    ViewBag.Title = "WorkerAktvt";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+<section class="content-wrapper main-content clear-fix">
+
+    @using (Html.BeginForm("WorkerAktvt", null, FormMethod.Get))
+    {
+        <div class="well bottom" style="padding-bottom: 16px">
+            <div class="row">
+                <div class="col-sm-6">
+                    @Html.Label(GlobalResEstate.hdrLejar + " / " + GlobalResEstate.hdrActvtCode)
+                    @Html.TextBox("Search", null, htmlAttributes: new { @class = "form-control", placeholder = "" })
+                </div>
+                <div class="col-sm-2" style="padding-top:25px;">
+                    <input class="btn btn-primary btn-block" type="submit" name="Lihat" id="Lihat" value="Cari" onclick="return DisplayProgressMessage(this);" />
+                </div>
+            </div>
+        </div>
+        <div id="DataTable" class="well" style="margin-top: 7px">
+            <div class="modal-body">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">@GlobalResEstate.lblWorkerAktvt</div>
+                    <div class="panel-body">
+                        <div id="scrollArea">
+                            <logo/>
+                            <table class="table table-hover table-bordered" style="font-size: 11px;" border="0">
+                                <thead>
+                                <tr>
+                                    <th bgcolor="#ffcc80" style="color: black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">@GlobalResEstate.hdrLejar</th>
+                                    <th bgcolor="#ffcc80" style="color: black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">@GlobalResEstate.lblLevel</th>
+                                    <th bgcolor="#ffcc80" style="color: black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">@GlobalResEstate.hdrActvtCode</th>
+                                    <th bgcolor="#ffcc80" style="color: black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">@GlobalResEstate.lblGroup</th>
+                                    <th bgcolor="#ffcc80" style="color: black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">@GlobalResEstate.hdrPercent</th>
+                                    <th bgcolor="#ffcc80" style="color: black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">@GlobalResEstate.hdrPrice</th>
+                                    <th bgcolor="#ffcc80" style="color: black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">@GlobalResEstate.hdrWorkAktvt</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td align="center" style="vertical-align: middle !important; border: 1px solid black;" border="1">
+                                            @item.fld_Lejar
+                                        </td>
+                                        <td align="center" style="vertical-align: middle !important; border: 1px solid black;" border="1">
+                                            @item.fld_Peringkat
+                                        </td>
+                                        <td align="center" style="vertical-align: middle !important; border: 1px solid black;" border="1">
+                                            @item.fld_Aktvt
+                                        </td>
+                                        <td align="center" style="vertical-align: middle !important; border: 1px solid black;" border="1">
+                                            @item.fld_Kump
+                                        </td>
+                                        <td align="center" style="vertical-align: middle !important; border: 1px solid black;" border="1">
+                                            @item.fld_Peratus
+                                        </td>
+                                        <td align="center" style="vertical-align: middle !important; border: 1px solid black;" border="1">
+                                            @item.fld_Harga
+                                        </td>
+                                        <td align="center" style="vertical-align: middle !important; border: 1px solid black;" border="1">
+
+                                        </td>
+                                    </tr>
+                                }
+                                </tbody>
+                            </table>
+                            <newpage/>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a style="text-align:right" href="@Url.Action("Index", "TableInfo")" class="btn btn-warning">@GlobalResEstate.btnBack</a>
+            </div>
+        </div>
+    }
+</section>
+
+

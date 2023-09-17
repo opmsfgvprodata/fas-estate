@@ -1,0 +1,134 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+<div id="UpdateProgress1" style="display:none;">
+    <div class="progressTest">
+        <label>
+            Data sedang diproses
+        </label>
+    </div>
+</div>
+
+<section class="content-wrapper main-content clear-fix">
+    <div class="well">
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+            <div class="modal-body">
+                <div class="form-horizontal">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">GENERATE MAYBANK FILE (CDMAS)</div>
+                        <div class="panel-body">
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    <label class="text-warning">@GlobalResEstate.msgGenMaybankFile</label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-4">
+                                    <label for="BulanProses">@GlobalResEstate.lblMonth</label>
+                                    @Html.DropDownList("MonthList", null, htmlAttributes: new { @class = "form-control" })
+                                </div>
+                                <div class="col-sm-4">
+                                    <label for="TahunProses">@GlobalResEstate.lblYear</label>
+                                    @Html.DropDownList("YearList", null, htmlAttributes: new { @class = "form-control" })
+                                </div>
+                                <div class="col-sm-2" style="padding-top:25px;">
+                                    <button class="btn btn-primary btn-block" type="button" name="Check" id="Check">@GlobalResEstate.btnSearch</button>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-4">
+                                    <label for="NoRecord">@GlobalResEstate.lblRecordRead</label>
+                                    <input type="text" name="RecordNo" id="RecordNo" class="form-control" value="" disabled />
+                                </div>
+                                <div class="col-sm-4">
+                                    <label for="TotalSalary">@GlobalResEstate.lblSalaryPaid (RM)</label>
+                                    <input type="text" name="TotalSalary" id="TotalSalary" class="form-control" value="" disabled />
+                                </div>
+                                <div class="col-sm-4">
+                                    <label for="FileName">@GlobalResEstate.lblGenerateFile</label>
+                                    <input type="text" name="FileName" id="FileName" class="form-control" value="" disabled />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer-report">
+                    @*<a class="btn btn-success" href="@Url.Action("ChequeGen", "MaybankFileGen")" id="btnCreate" onclick="return DisplayProgressMessage2(this);">
+                            Generate Cheque
+                        </a>*@
+                    @*<input class="btn btn-primary" type="submit" name="viewaudittrail" id="viewaudittrail" value="Lihat Audit Trail" />*@
+                    <input class="btn btn-primary" type="submit" name="proceed" id="proceed" value=@GlobalResEstate.btnGo />
+                    <a href=@Url.Action("Index", "GenTextFile") class="btn btn-warning" role="button" onclick="return DisplayProgressMessage(this);">@GlobalResEstate.btnBack</a>
+
+                </div>
+            </div>
+        }
+    </div>
+</section>
+<script>
+    $("#proceed").click(function () {
+        var Month = $("#MonthList").val();
+        var Year = $("#YearList").val();
+        $("#UpdateProgress1").css("display", "");
+        var ajxfn = {};
+        ajxfn.url = "@Url.Action("Index", "MaybankFileGen")";
+        ajxfn.type = "POST";
+        ajxfn.async = false;
+        ajxfn.data = JSON.stringify({ Month: Month, Year: Year });
+        ajxfn.datatype = "json";
+        ajxfn.contentType = "application/json";
+        ajxfn.success = function (result) {
+            $.simplyToast(result.msg, result.statusmsg);
+            var win = window.open(result.link, '_blank');
+            $("#UpdateProgress1").css("display", "none");
+        };
+        ajxfn.error = function () {
+            $.simplyToast('@GlobalResEstate.msgError', 'danger');
+            $("#UpdateProgress1").css("display", "none");
+        };
+        $.ajax(ajxfn);
+
+        return false;
+    });
+
+    $("#Check").click(function () {
+        var Month = $("#MonthList").val();
+        var Year = $("#YearList").val();
+        $("#UpdateProgress1").css("display", "");
+        var ajxfn = {};
+        ajxfn.url = "@Url.Action("CheckGenDataDetail", "MaybankFileGen")";
+        ajxfn.type = "POST";
+        ajxfn.async = false;
+        ajxfn.data = JSON.stringify({ Month: Month, Year: Year });
+        ajxfn.datatype = "json";
+        ajxfn.contentType = "application/json";
+        ajxfn.success = function (result) {
+            $('#RecordNo').val(result.totaldata);
+            $('#TotalSalary').val(result.salary);
+            $('#FileName').val(result.file);
+            $.simplyToast(result.msg, result.statusmsg);
+            $("#UpdateProgress1").css("display", "none");
+        };
+        ajxfn.error = function () {
+            $.simplyToast('@GlobalResEstate.msgError', 'danger');
+            $("#UpdateProgress1").css("display", "none");
+        };
+        $.ajax(ajxfn);
+
+        return false;
+    });
+
+    $('#viewaudittrail').click(function (e) {
+        var Populink = "@Url.Action("AuditTrail", "ClosingTransaction", null, "http")";
+        window.open(Populink, null, "height=500,width=1000,status=yes,toolbar=no,menubar=no,location=no,scrollbars=yes,resizable=no");
+        e.stopPropagation();
+        e.preventDefault();
+    });
+</script>
+
+

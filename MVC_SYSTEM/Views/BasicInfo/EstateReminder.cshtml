@@ -1,0 +1,230 @@
+﻿@model MVC_SYSTEM.MasterModels.tbl_Ladang
+@using MVC_SYSTEM.Class;
+
+@{
+    ViewBag.Title = "EstateReminder";
+    Layout = "~/Views/Shared/_LayoutReminder.cshtml";
+    GetWilayah GetWilayah = new GetWilayah();
+    string wlyhname = "";
+    string negeri = @ViewBag.Negeri;
+}
+
+<section class="content-wrapper main-content clear-fix">
+    <div class="well" style="padding-bottom: 0px">
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+            <div class="modal-body">
+                <div class="form-horizontal">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">@GlobalResEstate.lblEstateInfo</div>
+                        <div class="panel-body">
+                            <div class="form-group">
+                                @Html.HiddenFor(Model => Model.fld_ID)
+                                @Html.HiddenFor(model => model.fld_WlyhID)
+                                @if (Model.fld_WlyhID != null)
+                                {
+                                    wlyhname = GetWilayah.GetWilayahName(Model.fld_WlyhID.Value);
+                                }
+                                <div class="col-sm-2">
+                                    <label>@GlobalResEstate.lblRegionName</label>
+                                    @Html.TextBox("wlyhname", wlyhname, new { @class = "form-control", disabled = "disabled" })
+                                    @Html.ValidationMessageFor(model => model.fld_WlyhID, "", new { @class = "text-danger" })
+                                </div>
+                                @if (Model.fld_SyarikatID == 1)
+                                {
+                                    <div class="col-sm-2">
+                                        <label>Cost Centre</label>
+                                        @Html.TextBox("fld_CostCentre", null, new { @class = "form-control", disabled = "disabled" })
+                                        @Html.ValidationMessageFor(model => model.fld_CostCentre, "", new { @class = "text-danger" })
+                                    </div>
+                                }
+
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-2">
+                                    <label>@GlobalResEstate.lblEstateCode</label>
+                                    @Html.EditorFor(model => model.fld_LdgCode, new { htmlAttributes = new { @class = "form-control", disabled = "disabled" } })
+                                    @Html.ValidationMessageFor(model => model.fld_LdgCode, "", new { @class = "text-danger" })
+                                </div>
+                                <div class="col-sm-5">
+                                    <label>@GlobalResEstate.lblEstateName</label>
+                                    @Html.EditorFor(model => model.fld_LdgName, new { htmlAttributes = new { @class = "form-control", disabled = "disabled" } })
+                                    @Html.ValidationMessageFor(model => model.fld_LdgName, "", new { @class = "text-danger" })
+                                </div>
+                                <div class="col-sm-5">
+                                    <label>@GlobalResEstate.lblState</label>
+                                    @Html.TextBox("fld_KodNegeri", negeri, new { @class = "form-control", disabled = "disabled" })
+                                    @Html.ValidationMessageFor(model => model.fld_KodNegeri, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-4">
+                                    <label>@GlobalResEstate.lblManagerName</label>
+                                    @Html.EditorFor(model => model.fld_Pengurus, new { htmlAttributes = new { @class = "form-control", @autocomplete = "off" } })
+                                    @Html.ValidationMessageFor(model => model.fld_Pengurus, "", new { @class = "text-danger" })
+                                </div>
+                                <div class="col-sm-4">
+                                    <label>@GlobalResEstate.lblManagerNameBefore</label>
+                                    @Html.EditorFor(model => model.fld_PengurusSblm, new { htmlAttributes = new { @class = "form-control", disabled = "disabled" } })
+                                    @Html.ValidationMessageFor(model => model.fld_PengurusSblm, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-sm-7">
+                                    <label>@GlobalResEstate.lblAddress</label>
+                                    @Html.EditorFor(model => model.fld_Adress, new { htmlAttributes = new { @class = "form-control", @autocomplete = "off" } })
+                                    @Html.ValidationMessageFor(model => model.fld_Adress, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-3">
+                                    <label>@GlobalResEstate.lblTel</label>
+                                    @Html.EditorFor(model => model.fld_Tel, new { htmlAttributes = new { @class = "form-control", @autocomplete = "off" } })
+                                    @Html.ValidationMessageFor(model => model.fld_Tel, "", new { @class = "text-danger" })
+                                </div>
+                                <div class="col-sm-3">
+                                    <label>@GlobalResEstate.lblFax</label>
+                                    @Html.EditorFor(model => model.fld_Fax, new { htmlAttributes = new { @class = "form-control", @autocomplete = "off" } })
+                                    @Html.ValidationMessageFor(model => model.fld_Fax, "", new { @class = "text-danger" })
+                                </div>
+                                <div class="col-sm-5">
+                                    <label>@GlobalResEstate.lblEmel</label>
+                                    @Html.EditorFor(model => model.fld_LdgEmail, new { htmlAttributes = new { @class = "form-control", @type = "email", @autocomplete = "off" } })
+                                    @Html.ValidationMessageFor(model => model.fld_LdgEmail, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer" style="margin-top: -17px;">
+                @*<input class="btn btn-primary" type="submit" value=@GlobalResAdditionalEmail.btnSave>*@
+                <button class="btn btn-primary" id="btnTmbh" name="btnTmbh">
+                    @GlobalResEstate.btnSave
+                </button>
+                @*<a style="text-align:right" href="@Url.Action("Index", "BasicInfo")" class="btn btn-warning">@GlobalResEstate.btnBack</a>*@
+            </div>
+        }
+    </div>
+</section>
+
+<!-- modal placeholder-->
+<div id='myModal' class='modal fade in'>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div id='myModalContent'></div>
+        </div>
+    </div>
+</div>
+@section scripts{
+    @Scripts.Render("~/Asset/Scripts/appjs.js")
+}
+
+
+<script>
+    $(document).ready(function () {
+        $("#btnTmbh").prop("disabled", true);
+        textboxChecking();
+
+        $('#btnTmbh').click(function () {
+            if ($("#fld_Pengurus").val() == "" || $("#fld_Adress").val() == "" || $("#fld_Tel").val() == "" || $("#fld_Fax").val() == "" || $("#fld_LdgEmail").val() == "") {
+                @*$.simplyToast('@GlobalResEstate.msgCompleteInfo', 'danger');*@
+                $.simplyToast('Danger', 'danger');
+                return false;
+            }
+            var tbl_Ladang = {
+                fld_ID: $("#fld_ID").val(),
+                fld_WlyhID: $("#fld_WlyhID").val(),
+                fld_LdgCode: $("#fld_LdgCode").val(),
+                fld_LdgName: $("#fld_LdgName").val(),
+                fld_KodNegeri: $("#fld_KodNegeri").val(),
+                fld_Pengurus: $("#fld_Pengurus").val(),
+                fld_PengurusSblm: $("#fld_PengurusSblm").val(),
+                fld_Adress: $("#fld_Adress").val(),
+                fld_Tel: $("#fld_Tel").val(),
+                fld_Fax: $("#fld_Fax").val(),
+                fld_LdgEmail: $("#fld_LdgEmail").val()
+            };
+            var reloadPage = {};
+            console.log(tbl_Ladang);
+            //e.preventDefault();
+            reloadPage.url = "@Url.Action("EstateInfo", "BasicInfo")";
+            reloadPage.type = "POST";
+            reloadPage.data = { tbl_Ladang: tbl_Ladang };
+            reloadPage.datatype = "json";
+            reloadPage.success = function (result) {
+                $.simplyToast('@GlobalResEstate.msgUpdate', 'danger');
+            };
+            reloadPage.error = function () {
+                $.simplyToast('@GlobalResEstate.msgError', 'danger');
+            };
+            $.ajax(reloadPage);
+        });
+
+        function textboxChecking() {
+            if ($("#fld_Pengurus").val() == "" || $("#fld_Adress").val() == "" || $("#fld_Tel").val() == "" || $("#fld_Fax").val() == "" || $("#fld_LdgEmail").val() == "") {
+                $("#btnTmbh").prop("disabled", true);
+            }
+            else {
+                var validation = {};
+                validation.url = "@Url.Action("EmailValidation", "BasicInfo")";
+                validation.type = "POST";
+                validation.data = { emel: $("#fld_LdgEmail").val() };
+                validation.datatype = "json";
+                validation.success = function (result) {
+                    if (!result) {
+                        $("#emelValidation").empty();
+                        $("#emelValidation").append('Alamat emel tidak lengkap');
+                        $("#btnTmbh").prop("disabled", true);
+                    }
+                    else {
+                        $("#emelValidation").empty();
+                        $("#btnTmbh").prop("disabled", false);
+                    }
+                };
+                validation.error = function () {
+                    $.simplyToast('@GlobalResEstate.msgError', 'danger');
+                };
+                $.ajax(validation);
+            }
+        }
+
+        $("#fld_Pengurus").change(function () {
+            textboxChecking();
+        });
+        $("#fld_Adress").change(function () {
+            textboxChecking();
+        });
+        $("#fld_Tel").change(function () {
+            textboxChecking();
+        });
+        $("#fld_Fax").change(function () {
+            textboxChecking();
+        });
+        $("#fld_LdgEmail").change(function () {
+            var validation = {};
+                validation.url = "@Url.Action("EmailValidation", "BasicInfo")";
+                validation.type = "POST";
+                validation.data = { emel: $("#fld_LdgEmail").val() };
+                validation.datatype = "json";
+                validation.success = function (result) {
+                    if (!result) {
+                        $("#emelValidation").empty();
+                        $("#emelValidation").append('Alamat emel tidak lengkap');
+                    }
+                    else {
+                        $("#emelValidation").empty();
+                    }
+                };
+                validation.error = function () {
+                    $.simplyToast('@GlobalResEstate.msgError', 'danger');
+                };
+                $.ajax(validation);
+                textboxChecking();
+        });
+
+    });
+</script>
+
