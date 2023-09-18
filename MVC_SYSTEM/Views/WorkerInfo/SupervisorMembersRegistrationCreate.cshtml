@@ -1,0 +1,62 @@
+﻿@model MVC_SYSTEM.CustomModels.CustMod_SupervisorMembersInfoCreate
+@using MVC_SYSTEM.Class
+@{
+    ViewBag.Title = "PayrateFullMaintenance";
+}
+
+<section class="content-wrapper main-content clear-fix">
+
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 class="modal-title">Create Members</h3>
+    </div>
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        <div class="modal-body">
+            <div class="form-horizontal">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">Supervision Members</div>
+                    <div class="panel-body">
+                        <div class="form-group">
+                            <label class="control-label col-md-2">Supervisor :</label>
+                            <div class="col-md-3">
+                                @*@Html.TextBox("fld_SupervisorID", (String)ViewBag.fld_SupervisorID, htmlAttributes: new { @class = "form-control" })*@
+                                @Html.Label("fld_SupervisorName", (String)ViewBag.fld_SupervisorName, htmlAttributes: new { @class = "form-control" })
+                                <input id="fld_SupervisorID"
+                                       name="fld_SupervisorID"
+                                       type="hidden"
+                                       value="@ViewBag.fld_SupervisorID" />
+                                <br>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-2">Supervisor:</label>
+                            <div class="col-md-9">
+                                @Html.ListBoxFor(model => model.fld_Nopkj, new MultiSelectList(ViewBag.fld_Nopkj, "Value", "Text"), new { @class = "form-control col-sm-2 designationSelection", multiple = "multiple", size = 10 })
+                                @Html.ValidationMessageFor(model => model.fld_Nopkj, "", new { @class = "text-danger" })
+                               
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <input class="btn btn-primary" type="submit" value="Save" />
+            <button class="btn btn-warning" data-dismiss="modal">Back</button>
+        </div>
+    }
+
+</section>
+
+<script>
+
+    $("form").removeData("validator");
+    $("form").removeData("unobtrusiveValidation");
+    $.validator.unobtrusive.parse("form");
+
+
+
+</script>

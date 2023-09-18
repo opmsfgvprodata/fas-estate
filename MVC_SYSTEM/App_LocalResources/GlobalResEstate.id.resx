@@ -2235,4 +2235,7 @@
   <data name="lblPaymentMode" xml:space="preserve">
     <value>Payment Mode</value>
   </data>
+  <data name="lblTitleSupervisorRegistration" xml:space="preserve">
+    <value>Daftar Supervisor</value>
+  </data>
 </root>

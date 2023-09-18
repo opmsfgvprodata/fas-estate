@@ -309,7 +309,6 @@
     <Compile Include="Controllers\OPMSHQController.cs" />
     <Compile Include="Controllers\PdfCreatorController.cs" />
     <Compile Include="Controllers\Report2Controller.cs" />
-    <Compile Include="Controllers\ReportController.cs" />
     <Compile Include="Controllers\ReportPdfController.cs" />
     <Compile Include="Controllers\SalaryGeneratorController.cs" />
     <Compile Include="Controllers\SalaryIncrementController.cs" />
@@ -358,6 +357,8 @@
     <Compile Include="CustomModels\CustMod_SAPCredential.cs" />
     <Compile Include="CustomModels\CustMod_SAPPostingData.cs" />
     <Compile Include="CustomModels\CustMod_SAPPostingSave.cs" />
+    <Compile Include="CustomModels\CustMod_SupervisorInfo.cs" />
+    <Compile Include="CustomModels\CustMod_SupervisorMembersInfo.cs" />
     <Compile Include="CustomModels\CustMod_Work.cs" />
     <Compile Include="CustomModels\CustMod_WorkerWork.cs" />
     <Compile Include="CustomModels\CustMod_WorkIdList.cs" />
@@ -477,6 +478,7 @@
     <Compile Include="MasterModels\vw_NSWL_2.cs" />
     <Compile Include="MasterModels\vw_ServicesProcess.cs" />
     <Compile Include="MasterModels\vw_Socso.cs" />
+    <Compile Include="MasterModels\vw_SupervisorInfo.cs" />
     <Compile Include="MasterModels\vw_UpahGMN.cs" />
     <Compile Include="MasterModels\vw_UserIDDetail.cs" />
     <Compile Include="ModelSAPPUP\MVC_SYSTEM_Models_SAPPUP.cs" />
@@ -577,6 +579,8 @@
     <Compile Include="Models\tbl_SevicesProcessHistory.cs" />
     <Compile Include="Models\tbl_Skb.cs" />
     <Compile Include="Models\tbl_SubPkt.cs" />
+    <Compile Include="Models\tbl_Supervisor.cs" />
+    <Compile Include="Models\tbl_SupervisorMember.cs" />
     <Compile Include="Models\tbl_SupportedDoc.cs" />
     <Compile Include="Models\tbl_TamatPermitPassport.cs" />
     <Compile Include="Models\tbl_TutupUrusNiaga.cs" />
@@ -597,6 +601,7 @@
     <Compile Include="Models\vw_PkjCarumanTambahan.cs" />
     <Compile Include="Models\vw_RptAIPS.cs" />
     <Compile Include="Models\vw_rptKwspSocso.cs" />
+    <Compile Include="Models\vw_SupervisorMembersInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Security\CustomRoleProvider.cs" />
     <Compile Include="Security\EncryptDecrypt.cs" />
@@ -719,10 +724,6 @@
     <Compile Include="ViewingModels\vw_TamatPassport.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App_Data\MVC_SYSTEM_HQ_CONN.mdf" />
-    <Content Include="App_Data\MVC_SYSTEM_HQ_CONN_log.ldf">
-      <DependentUpon>MVC_SYSTEM_HQ_CONN.mdf</DependentUpon>
-    </Content>
     <Content Include="Asset\alert\simply-toast.css" />
     <Content Include="Asset\alert\simply-toast.js" />
     <Content Include="Asset\alert\simply-toast.min.css" />
@@ -3187,6 +3188,12 @@
     <Content Include="Views\Report\_PaySlipRptDetail2.cshtml" />
     <Content Include="Views\Report\_PaySlipRptSearch2.cshtml" />
     <Content Include="Views\Report\PaySlipRpt2.cshtml" />
+    <Content Include="Views\WorkerInfo\SupervisorMembersRegistrationCreate.cshtml" />
+    <Content Include="Views\WorkerInfo\SupervisorMembersRegistrationDelete.cshtml" />
+    <Content Include="Views\WorkerInfo\SupervisorRegistration.cshtml" />
+    <Content Include="Views\WorkerInfo\SupervisorRegistrationCreate.cshtml" />
+    <Content Include="Views\WorkerInfo\_SupervisorRegistration.cshtml" />
+    <Content Include="Views\WorkerInfo\_MembersRegistration.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Asset\Upload\120\" />

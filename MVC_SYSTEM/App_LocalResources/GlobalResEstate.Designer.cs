@@ -8152,6 +8152,15 @@ namespace MVC_SYSTEM.App_LocalResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Daftar Supervisor.
+        /// </summary>
+        public static string lblTitleSupervisorRegistration {
+            get {
+                return ResourceManager.GetString("lblTitleSupervisorRegistration", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Selenggara Unit.
         /// </summary>
         public static string lblTitleUnitMaintenance {
