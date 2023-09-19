@@ -9164,6 +9164,89 @@ namespace MVC_SYSTEM.Controllers
                 db.Dispose();
             }
         }
+
+        public ActionResult SupervisorRegistrationDelete(string id)
+        {
+            int? getuserid = GetIdentity.ID(User.Identity.Name);
+            int? NegaraID, SyarikatID, WilayahID, LadangID = 0;
+            string host, catalog, user, pass = "";
+            GetNSWL.GetData(out NegaraID, out SyarikatID, out WilayahID, out LadangID, getuserid, User.Identity.Name);
+            Connection.GetConnection(out host, out catalog, out user, out pass, WilayahID, SyarikatID.Value, NegaraID.Value);
+            MVC_SYSTEM_Models dbr = MVC_SYSTEM_Models.ConnectToSqlServer(host, catalog, user, pass);
+
+
+            if (id == null)
+            {
+                return RedirectToAction("SupervisorRegistration");
+            }
+            tbl_Supervisor tbl_Supervisor = dbr.tbl_Supervisor.Where(x => x.fld_SupervisorID == id).FirstOrDefault();
+
+            db.Dispose();
+            return PartialView(tbl_Supervisor);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult SupervisorRegistrationDelete(Models.tbl_Supervisor tbl_Supervisor)
+        {
+
+            int? getuserid = GetIdentity.ID(User.Identity.Name);
+            int? NegaraID, SyarikatID, WilayahID, LadangID = 0;
+            string host, catalog, user, pass = "";
+            GetNSWL.GetData(out NegaraID, out SyarikatID, out WilayahID, out LadangID, getuserid, User.Identity.Name);
+            Connection.GetConnection(out host, out catalog, out user, out pass, WilayahID, SyarikatID.Value, NegaraID.Value);
+            MVC_SYSTEM_Models dbr = MVC_SYSTEM_Models.ConnectToSqlServer(host, catalog, user, pass);
+
+            errorlog geterror = new errorlog();
+            try
+            {
+
+                bool status = true;
+
+                if (tbl_Supervisor == null)
+                {
+                    return Json(new { success = true, msg = GlobalResEstate.msgDelete2, status = "success", checkingdata = "0", method = "1", getid = "", data1 = "", data2 = "" });
+                }
+                else
+                {
+                    var getdata = dbr.tbl_SupervisorMember.Where(x => x.fld_SupervisorID == tbl_Supervisor.fld_SupervisorID && x.fld_NegaraID == tbl_Supervisor.fld_NegaraID && x.fld_SyarikatID == tbl_Supervisor.fld_SyarikatID && x.fld_LadangID== LadangID).ToList();
+                    dbr.tbl_SupervisorMember.RemoveRange(getdata);
+                    dbr.SaveChanges();
+                  
+
+                    var getdataSupervisor = dbr.tbl_Supervisor.Where(x => x.fld_SupervisorID == tbl_Supervisor.fld_SupervisorID && x.fld_NegaraID == tbl_Supervisor.fld_NegaraID && x.fld_SyarikatID == tbl_Supervisor.fld_SyarikatID && x.fld_LadangID == LadangID).FirstOrDefault();
+                    dbr.tbl_Supervisor.Remove(getdataSupervisor);
+                    dbr.SaveChanges();
+
+                    dbr.Dispose();                
+                    string appname = Request.ApplicationPath;
+                    string domain = Request.Url.GetLeftPart(UriPartial.Authority);
+                    var lang = Request.RequestContext.RouteData.Values["lang"];
+
+                    if (appname != "/")
+                    {
+                        domain = domain + appname;
+                    }
+
+                    return Json(new
+                    {
+                        success = true,
+                        msg = GlobalResEstate.msgDelete2,
+                        status = "success",
+                        checkingdata = "0",
+                        method = "3",
+                        div = "SupervisorRegistrationDetails",
+                        rootUrl = domain,
+                        action = "_SupervisorRegistration",
+                        controller = "WorkerInfo"
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                geterror.catcherro(ex.Message, ex.StackTrace, ex.Source, ex.TargetSite.ToString());
+                return Json(new { success = true, msg = GlobalResEstate.msgError, status = "danger", checkingdata = "1" });
+            }
+        }
         public ActionResult _MembersRegistration(string id, int page = 1, string sort = "fld_Nama", string sortdir = "ASC")
         {
             int? getuserid = GetIdentity.ID(User.Identity.Name);

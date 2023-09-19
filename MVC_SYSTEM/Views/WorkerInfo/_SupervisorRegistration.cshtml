@@ -32,20 +32,9 @@
 
         grid.Column("Action", format: (item) =>
         {
-            if (item.fld_Deleted == false)
-            {
-                var tindakan = "<a data-modal1='' href='" + @Url.Action("_MembersRegistration", "WorkerInfo") + "/?id=" + item.fld_SupervisorID + "' class='btn btn-success' role='button' title='" +"Kemaskini" + "' onclick='return DisplayProgressMessage(this);'><i class='fa fa-pencil-square-o  fa-lg'></i></a>&nbsp;" +
-                               "<a data-modal1='' href='" + @Url.Action("_PayrateFullDelete", "Maintenance") + "/?id=" + item.fld_SupervisorID + "&Status=Delete" + "' class='btn btn-danger' role='button' title='" + "Delete" + "' onclick='return DisplayProgressMessage(this);'><i class='fa fa-trash fa-lg'></i></span></a>";
+                var tindakan = "<a data-modal1='' href='" + @Url.Action("_MembersRegistration", "WorkerInfo") + "/?id=" + item.fld_SupervisorID + "' class='btn btn-success' role='button' title='" +"Kemaskini" + "' onclick='return DisplayProgressMessage(this);'><i class='fa fa-cogs'></i></a>&nbsp;" +
+                               "<a data-modal1='' href='" + @Url.Action("SupervisorRegistrationDelete", "WorkerInfo") + "/?id=" + item.fld_SupervisorID + "&Status=Delete" + "' class='btn btn-danger' role='button' title='" + "Delete" + "' onclick='return DisplayProgressMessage(this);'><i class='fa fa-trash fa-lg'></i></span></a>";
                 return @Html.Raw(tindakan);
-            }
-
-            else
-            {
-                var tindakan = "<a data-modal1='' href='" + @Url.Action("_MembersRegistration", "WorkerInfo") + "/?id=" + item.fld_SupervisorID + "&Status=ReCreate" + "' class='btn btn-success' role='button' title='" + "Manage Member" + "' onclick='return DisplayProgressMessage(this);'><span class='fa fa-cogs'></span></a>&nbsp;";
-                return @Html.Raw(tindakan);
-            }
-
-            //Closed Added by Shazana 23 / 10
         }, canSort: false, style: "tindakan")
                            ));
     }

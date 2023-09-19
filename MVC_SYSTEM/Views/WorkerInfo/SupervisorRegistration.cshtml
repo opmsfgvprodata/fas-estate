@@ -1,7 +1,7 @@
 ﻿@model MVC_SYSTEM.ViewingModels.PagedList<MVC_SYSTEM.CustomModels.CustMod_SupervisorInfo>
 @using MVC_SYSTEM.Class;
 @{
-    ViewBag.Title = "PayrateFullMaintenance";
+    ViewBag.Title = "SupervisorRegistration";
     Layout = "~/Views/Shared/_LayoutMain.cshtml";
     //string aktvtselection = "";
 
@@ -49,7 +49,7 @@
             </div>
         </div>
         <div class="modal-footer col-md-12">
-            <a data-modal1='' href=@Url.Action("SupervisorRegistrationCreate", "WorkerInfo") class="btn btn-success" role="button" onclick="return DisplayProgressMessage(this);">@GlobalResEstate.btnAdd</a>
+            <a data-modal1='' href=@Url.Action("SupervisorRegistrationCreate", "WorkerInfo") class="btn btn-success" role="button" onclick="return DisplayProgressMessage(this);">Add Supervisor</a>
             <a href=@Url.Action("Index", "WorkerInfo") class="btn btn-warning" role="button" onclick="return DisplayProgressMessage(this);">@GlobalResEstate.btnBack</a>
         </div>
     </div>
