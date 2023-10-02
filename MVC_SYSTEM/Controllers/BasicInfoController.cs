@@ -3420,6 +3420,23 @@ namespace MVC_SYSTEM.Controllers
 
             ViewBag.DivisionList = divisionList;
 
+
+            //Added by Shazana 29/9/2023
+            List<SelectListItem> SupervisorList = new List<SelectListItem>();
+
+            SupervisorList = new SelectList(
+                dbr.tbl_Supervisor
+                    .Where(x => x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID &&
+                                x.fld_WilayahID == WilayahID && x.fld_LadangID == LadangID && x.fld_Deleted == false)
+                    .OrderBy(o => o.fld_SupervisorName)
+                    .Select(s => new SelectListItem
+                    {
+                        Value = s.fld_SupervisorID.ToString(),
+                        Text = s.fld_SupervisorID + " - " + s.fld_SupervisorName
+                    }), "Value", "Text").ToList();
+            SupervisorList.Insert(0, (new SelectListItem { Text = GlobalResEstate.lblChoose, Value = "" }));
+            ViewBag.SupervisorList = SupervisorList;
+
             return View();
         }
 
@@ -3460,12 +3477,20 @@ namespace MVC_SYSTEM.Controllers
                         .Distinct()
                         .FirstOrDefault();
 
+                    //Added by Shazana 29/9/2023
+                    var supervisor = dbr.tbl_Supervisor.Where(x => x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID && x.fld_WilayahID == WilayahID && x.fld_LadangID == LadangID && x.fld_SupervisorID == kumpulanKerjaViewModelCreate.fld_SupervisorID).FirstOrDefault();
+
                     kumpulanKerja.fld_KodKerja = getGrpActivity;
                     kumpulanKerja.fld_NegaraID = NegaraID;
                     kumpulanKerja.fld_SyarikatID = SyarikatID;
                     kumpulanKerja.fld_WilayahID = WilayahID;
                     kumpulanKerja.fld_LadangID = LadangID;
                     kumpulanKerja.fld_deleted = false;
+                    //Added by Shazana 29/9/2023
+                    kumpulanKerja.fld_SupervisorID = kumpulanKerjaViewModelCreate.fld_SupervisorID == null? null : kumpulanKerjaViewModelCreate.fld_SupervisorID;
+                    kumpulanKerja.fld_SupervisorName = kumpulanKerjaViewModelCreate.fld_SupervisorID == null? null : supervisor.fld_SupervisorName;
+                    kumpulanKerja.fld_CreatedBy = getuserid;
+                    kumpulanKerja.fld_CreatedDT = DateTime.Today;
 
                     if (getCurrentGrpNo == null)
                     {
@@ -3484,7 +3509,7 @@ namespace MVC_SYSTEM.Controllers
                         {
                             domain = domain + appname;
                         }
-
+   
                         return Json(new
                         {
                             success = true,
@@ -3580,6 +3605,26 @@ namespace MVC_SYSTEM.Controllers
             ViewBag.fld_LadangName = getidentity.estatename(Convert.ToInt32(getuserid));
             ViewBag.fld_WilayahName = getidentity.getWilayahName(Convert.ToInt32(getuserid));
 
+            //Added by Shazana 29/9/2023
+            List<SelectListItem> SupervisorList = new List<SelectListItem>();
+
+            //SupervisorList = new SelectList(
+            //    dbr.tbl_Supervisor
+            //        .Where(x => x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID &&
+            //                    x.fld_WilayahID == WilayahID && x.fld_LadangID == LadangID && x.fld_Deleted == false)
+            //        .OrderBy(o => o.fld_SupervisorName)
+            //        .Select(s => new SelectListItem
+            //        {
+            //            Value = s.fld_SupervisorID.ToString(),
+            //            Text = s.fld_SupervisorID + " - " + s.fld_SupervisorName
+            //        }), "Value", "Text", tbl_KumpulanKerja.fld_SupervisorID).ToList();
+            //SupervisorList.Insert(0, (new SelectListItem { Text = GlobalResEstate.lblChoose, Value = "" }));
+            //ViewBag.fld_SupervisorID = SupervisorList;
+
+            SupervisorList = new SelectList(dbr.tbl_Supervisor.Where(x => x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID && x.fld_WilayahID == WilayahID && x.fld_LadangID == LadangID).OrderBy(o => o.fld_SupervisorID).Select(s => new SelectListItem { Value = s.fld_SupervisorID, Text = s.fld_SupervisorID + " - " + s.fld_SupervisorName }), "Value", "Text").ToList();
+            SupervisorList.Insert(0, (new SelectListItem { Text = GlobalResEstate.lblChoose, Value = "0" }));
+
+            ViewBag.fld_SupervisorID1 = SupervisorList;
             return PartialView("GroupEdit", tbl_KumpulanKerja);
         }
 
@@ -3598,10 +3643,18 @@ namespace MVC_SYSTEM.Controllers
             {
                 try
                 {
+					//Added by Shazana 29/9/2023
+                    var supervisor = dbr.tbl_Supervisor.Where(x => x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID && x.fld_WilayahID == WilayahID && x.fld_LadangID == LadangID && x.fld_SupervisorID == tbl_KumpulanKerja.fld_SupervisorID).FirstOrDefault();
+
                     var getdata = dbr.tbl_KumpulanKerja
                         .Single(x => x.fld_KumpulanID == id && x.fld_LadangID == LadangID &&
                                      x.fld_WilayahID == WilayahID && x.fld_NegaraID == NegaraID && x.fld_deleted == false);
                     getdata.fld_Keterangan = tbl_KumpulanKerja.fld_Keterangan.ToUpper();
+                    //Added by Shazana 29/9/2023
+                    getdata.fld_SupervisorID = tbl_KumpulanKerja.fld_SupervisorID == "0" ? null : tbl_KumpulanKerja.fld_SupervisorID;
+                    getdata.fld_SupervisorName = tbl_KumpulanKerja.fld_SupervisorID == "0" ? null : supervisor.fld_SupervisorName;
+                    getdata.fld_ModifiedBy = getuserid;
+                    getdata.fld_ModifiedDT = DateTime.Today;
                     dbr.Entry(getdata).State = EntityState.Modified;
                     dbr.SaveChanges();
 
