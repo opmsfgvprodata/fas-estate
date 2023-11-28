@@ -27,6 +27,7 @@
     decimal? totalNetPayCheque = 0;
     decimal? totalNetPayEwallet = 0;
     decimal? totalNetPayCdmas = 0;
+    decimal? totalNetPayM2eHQ = 0; //fatin added - 25/10/2023
 
 }
 
@@ -127,77 +128,88 @@
                     {
                         totalNetPayCdmas += item.PaySheetPekerja.fld_GajiBersih;
                     }
-
-                <tr>
-                    <td align="center" style="margin: 2px !important; padding-top: 60px !important; padding-bottom: 2px !important; vertical-align: middle !important; border: 1px dotted gray; text-align: right; border-right: none; border-left: none">@bil</td>
-                    <td align="center" style="margin: 2px !important; padding-top: 60px !important; padding-bottom: 2px !important; vertical-align: middle !important; border: 1px dotted gray; text-align: center; border-right: none; border-left: none">@item.PaySheetPekerja.fld_Nopkj</td>
-                    <td align="center" style="margin: 2px !important; padding-top: 60px !important; padding-bottom: 2px !important; vertical-align: middle !important; border: 1px dotted gray; text-align: left; border-right: none; border-left: none">@item.PaySheetPekerja.fld_Nama</td>
-                    <td align="center" style="margin: 2px !important; padding-top: 60px !important; padding-bottom: 2px !important; vertical-align: middle !important; border: 1px dotted gray; text-align: center; border-right: none; border-left: none">@item.PaySheetPekerja.fld_Nokp</td>
-                    <td align="center" style="margin: 2px !important; padding-top: 60px !important; padding-bottom: 2px !important; vertical-align: middle !important; border: 1px dotted gray; text-align: center; border-right: none; border-left: none">@item.PaySheetPekerja.fld_NoAkaun</td>
-
-                    @if (item.PaySheetPekerja.fld_PaymentMode == "1")
+                    //fatin added - 25/10/2023
+                    if (item.PaySheetPekerja.fld_PaymentMode == "5")
                     {
-                        paymentmode = "CASH";
+                        totalNetPayM2eHQ += item.PaySheetPekerja.fld_GajiBersih;
                     }
 
-                    @if (item.PaySheetPekerja.fld_PaymentMode == "2")
-                    {
-                        paymentmode = "CHEQUE";
-                    }
+                    <tr>
+                        <td align="center" style="margin: 2px !important; padding-top: 60px !important; padding-bottom: 2px !important; vertical-align: middle !important; border: 1px dotted gray; text-align: right; border-right: none; border-left: none">@bil</td>
+                        <td align="center" style="margin: 2px !important; padding-top: 60px !important; padding-bottom: 2px !important; vertical-align: middle !important; border: 1px dotted gray; text-align: center; border-right: none; border-left: none">@item.PaySheetPekerja.fld_Nopkj</td>
+                        <td align="center" style="margin: 2px !important; padding-top: 60px !important; padding-bottom: 2px !important; vertical-align: middle !important; border: 1px dotted gray; text-align: left; border-right: none; border-left: none">@item.PaySheetPekerja.fld_Nama</td>
+                        <td align="center" style="margin: 2px !important; padding-top: 60px !important; padding-bottom: 2px !important; vertical-align: middle !important; border: 1px dotted gray; text-align: center; border-right: none; border-left: none">@item.PaySheetPekerja.fld_Nokp</td>
+                        <td align="center" style="margin: 2px !important; padding-top: 60px !important; padding-bottom: 2px !important; vertical-align: middle !important; border: 1px dotted gray; text-align: center; border-right: none; border-left: none">@item.PaySheetPekerja.fld_NoAkaun</td>
 
-                    @if (item.PaySheetPekerja.fld_PaymentMode == "3")
-                    {
-                        paymentmode = "EWALLET";
-                    }
-
-                    @if (item.PaySheetPekerja.fld_PaymentMode == "4")
-                    {
-                        paymentmode = "CDMAS";
-                    }
-
-                    @if (item.PaySheetPekerja.fld_PaymentMode == null)
-                    {
-                        paymentmode = "";
-                    }
-                    <td align="center" style="margin: 2px !important; padding-top: 60px !important; padding-bottom: 2px !important; vertical-align: middle !important; border: 1px dotted gray; text-align: center; border-right: none; border-left: none">@paymentmode</td>
-                    <td align="center" style="margin: 2px !important; padding-top: 60px !important; padding-bottom: 2px !important; vertical-align: middle !important; border: 1px dotted gray; text-align: right; border-right: none; border-left: none">@item.PaySheetPekerja.fld_ByrKerja</td>
-                    <td align="center" style="margin: 2px !important; padding-top: 60px !important; padding-bottom: 2px !important; vertical-align: middle !important; border: 1px dotted gray; text-align: right; border-right: none; border-left: none">@totalIncome</td>
-                    <td align="center" style="margin: 2px !important; padding-top: 60px !important; padding-bottom: 2px !important; vertical-align: middle !important; border: 1px dotted gray; text-align: right; border-right: none; border-left: none">@item.PaySheetPekerja.fld_KWSPMjk</td>
-                    <td align="center" style="margin: 2px !important; padding-top: 60px !important; padding-bottom: 2px !important; vertical-align: middle !important; border: 1px dotted gray; text-align: right; border-right: none; border-left: none">@item.PaySheetPekerja.fld_SocsoMjk</td>
-
-                    @if (item.CarumanTambahan.Count > 0)
-                    {
-                        foreach (var caruman in item.CarumanTambahan)
+                        @if (item.PaySheetPekerja.fld_PaymentMode == "1")
                         {
-                            <td align="center" style="margin: 2px !important; padding-top: 60px !important; padding-bottom: 2px !important; vertical-align: middle !important; border: 1px dotted gray; text-align: right; border-right: none; border-left: none">@caruman.fld_CarumanMajikan</td>
+                            paymentmode = "CASH";
                         }
-                    }
 
-                    @if (item.CarumanTambahan.Count == 0)
-                    {
-                        <td align="center" style="margin: 2px !important; padding-top: 60px !important; padding-bottom: 2px !important; vertical-align: middle !important; border: 1px dotted gray; text-align: right; border-right: none; border-left: none">0.00</td>
-                    }
-
-                    <td align="center" style="margin: 2px !important; padding-top: 60px !important; padding-bottom: 2px !important; vertical-align: middle !important; border: 1px dotted gray; text-align: right; border-right: none; border-left: none">@item.PaySheetPekerja.fld_GajiKasar</td>
-                    <td align="center" style="margin: 2px !important; padding-top: 60px !important; padding-bottom: 2px !important; vertical-align: middle !important; border: 1px dotted gray; text-align: right; border-right: none; border-left: none">@item.PaySheetPekerja.fld_LainPotongan</td>
-                    <td align="center" style="margin: 2px !important; padding-top: 60px !important; padding-bottom: 2px !important; vertical-align: middle !important; border: 1px dotted gray; text-align: right; border-right: none; border-left: none">@item.PaySheetPekerja.fld_KWSPPkj</td>
-                    <td align="center" style="margin: 2px !important; padding-top: 60px !important; padding-bottom: 2px !important; vertical-align: middle !important; border: 1px dotted gray; text-align: right; border-right: none; border-left: none">@item.PaySheetPekerja.fld_SocsoPkj</td>
-                    @if (item.CarumanTambahan.Count > 0)
-                    {
-                        foreach (var caruman in item.CarumanTambahan)
+                        @if (item.PaySheetPekerja.fld_PaymentMode == "2")
                         {
-                            <td align="center" style="margin: 2px !important; padding-top: 60px !important; padding-bottom: 2px !important; vertical-align: middle !important; border: 1px dotted gray; text-align: right; border-right: none; border-left: none">@caruman.fld_CarumanPekerja</td>
+                            paymentmode = "CHEQUE";
                         }
-                    }
 
-                    @if (item.CarumanTambahan.Count == 0)
-                    {
-                        <td align="center" style="margin: 2px !important; padding-top: 60px !important; padding-bottom: 2px !important; vertical-align: middle !important; border: 1px dotted gray; text-align: right; border-right: none; border-left: none">0.00</td>
-                    }
-                    <td align="center" style="margin: 2px !important; padding-top: 60px !important; padding-bottom: 2px !important; vertical-align: middle !important; border: 1px dotted gray; text-align: right; border-right: none; border-left: none">@totalDeduction</td>
-                    <td align="center" style="margin: 2px !important; padding-top: 60px !important; padding-bottom: 2px !important; vertical-align: middle !important; border: 1px dotted gray; text-align: right; border-right: none; border-left: none">@item.PaySheetPekerja.fld_GajiBersih</td>
-                    <td align="center" style="margin: 2px !important; padding-top: 60px !important; padding-bottom: 2px !important; vertical-align: middle !important; border: 1px dotted gray; text-align: right; border-right: none; border-left: none">__________</td>
-                </tr>
+                        @if (item.PaySheetPekerja.fld_PaymentMode == "3")
+                        {
+                            paymentmode = "EWALLET";
+                        }
+
+                        @if (item.PaySheetPekerja.fld_PaymentMode == "4")
+                        {
+                            paymentmode = "CDMAS";
+                        }
+
+                        @*fatin added - 25/10/2023*@
+                        @if (item.PaySheetPekerja.fld_PaymentMode == "5")
+                        {
+                            paymentmode = "M2E-HQ";
+                        }
+
+                        @if (item.PaySheetPekerja.fld_PaymentMode == null)
+                        {
+                            paymentmode = "";
+                        }
+                        <td align="center" style="margin: 2px !important; padding-top: 60px !important; padding-bottom: 2px !important; vertical-align: middle !important; border: 1px dotted gray; text-align: center; border-right: none; border-left: none">@paymentmode</td>
+                        <td align="center" style="margin: 2px !important; padding-top: 60px !important; padding-bottom: 2px !important; vertical-align: middle !important; border: 1px dotted gray; text-align: right; border-right: none; border-left: none">@item.PaySheetPekerja.fld_ByrKerja</td>
+                        <td align="center" style="margin: 2px !important; padding-top: 60px !important; padding-bottom: 2px !important; vertical-align: middle !important; border: 1px dotted gray; text-align: right; border-right: none; border-left: none">@totalIncome</td>
+                        <td align="center" style="margin: 2px !important; padding-top: 60px !important; padding-bottom: 2px !important; vertical-align: middle !important; border: 1px dotted gray; text-align: right; border-right: none; border-left: none">@item.PaySheetPekerja.fld_KWSPMjk</td>
+                        <td align="center" style="margin: 2px !important; padding-top: 60px !important; padding-bottom: 2px !important; vertical-align: middle !important; border: 1px dotted gray; text-align: right; border-right: none; border-left: none">@item.PaySheetPekerja.fld_SocsoMjk</td>
+
+                        @if (item.CarumanTambahan.Count > 0)
+                        {
+                            foreach (var caruman in item.CarumanTambahan)
+                            {
+                                <td align="center" style="margin: 2px !important; padding-top: 60px !important; padding-bottom: 2px !important; vertical-align: middle !important; border: 1px dotted gray; text-align: right; border-right: none; border-left: none">@caruman.fld_CarumanMajikan</td>
+                            }
+                        }
+
+                        @if (item.CarumanTambahan.Count == 0)
+                        {
+                            <td align="center" style="margin: 2px !important; padding-top: 60px !important; padding-bottom: 2px !important; vertical-align: middle !important; border: 1px dotted gray; text-align: right; border-right: none; border-left: none">0.00</td>
+                        }
+
+                        <td align="center" style="margin: 2px !important; padding-top: 60px !important; padding-bottom: 2px !important; vertical-align: middle !important; border: 1px dotted gray; text-align: right; border-right: none; border-left: none">@item.PaySheetPekerja.fld_GajiKasar</td>
+                        <td align="center" style="margin: 2px !important; padding-top: 60px !important; padding-bottom: 2px !important; vertical-align: middle !important; border: 1px dotted gray; text-align: right; border-right: none; border-left: none">@item.PaySheetPekerja.fld_LainPotongan</td>
+                        <td align="center" style="margin: 2px !important; padding-top: 60px !important; padding-bottom: 2px !important; vertical-align: middle !important; border: 1px dotted gray; text-align: right; border-right: none; border-left: none">@item.PaySheetPekerja.fld_KWSPPkj</td>
+                        <td align="center" style="margin: 2px !important; padding-top: 60px !important; padding-bottom: 2px !important; vertical-align: middle !important; border: 1px dotted gray; text-align: right; border-right: none; border-left: none">@item.PaySheetPekerja.fld_SocsoPkj</td>
+                        @if (item.CarumanTambahan.Count > 0)
+                        {
+                            foreach (var caruman in item.CarumanTambahan)
+                            {
+                                <td align="center" style="margin: 2px !important; padding-top: 60px !important; padding-bottom: 2px !important; vertical-align: middle !important; border: 1px dotted gray; text-align: right; border-right: none; border-left: none">@caruman.fld_CarumanPekerja</td>
+                            }
+                        }
+
+                        @if (item.CarumanTambahan.Count == 0)
+                        {
+                            <td align="center" style="margin: 2px !important; padding-top: 60px !important; padding-bottom: 2px !important; vertical-align: middle !important; border: 1px dotted gray; text-align: right; border-right: none; border-left: none">0.00</td>
+                        }
+                        <td align="center" style="margin: 2px !important; padding-top: 60px !important; padding-bottom: 2px !important; vertical-align: middle !important; border: 1px dotted gray; text-align: right; border-right: none; border-left: none">@totalDeduction</td>
+                        <td align="center" style="margin: 2px !important; padding-top: 60px !important; padding-bottom: 2px !important; vertical-align: middle !important; border: 1px dotted gray; text-align: right; border-right: none; border-left: none">@item.PaySheetPekerja.fld_GajiBersih</td>
+                        <td align="center" style="margin: 2px !important; padding-top: 60px !important; padding-bottom: 2px !important; vertical-align: middle !important; border: 1px dotted gray; text-align: right; border-right: none; border-left: none">__________</td>
+                    </tr>
                 }
 
                 @* added by faeza 31.05.2021 *@
@@ -285,6 +297,28 @@
                         <td align="center" style="margin: 2px !important; padding-top: 2px !important; padding-bottom: 2px !important; vertical-align: middle !important; border-top: none; text-align: right; border-right: none; border-left: none"></td>
                         <td align="center" style="margin: 2px !important; padding-top: 2px !important; padding-bottom: 2px !important; vertical-align: middle !important; border-top: none; text-align: right; border-right: none; border-left: none"></td>
                         <td align="center" style="margin: 2px !important; padding-top: 2px !important; padding-bottom: 2px !important; vertical-align: middle !important; border-top: none; border-bottom: none; text-align: right; border-right: none; border-left: none; font-weight:bold">@totalNetPayCdmas</td>
+                        <td align="center" style="margin: 2px !important; padding-top: 2px !important; padding-bottom: 2px !important; vertical-align: middle !important; border-top: none; text-align: right; border-right: none; border-left: none"></td>
+                    </tr>
+                    //fatin added - 25/10/2023
+                    <tr>
+                        <td align="center" style="margin: 2px !important; padding-top: 2px !important; padding-bottom: 2px !important; vertical-align: middle !important; border-top: none; text-align: right; border-right: none; border-left: none"></td>
+                        <td align="center" style="margin: 2px !important; padding-top: 2px !important; padding-bottom: 2px !important; vertical-align: middle !important; border-top: none; text-align: right; border-right: none; border-left: none"></td>
+                        <td align="center" style="margin: 2px !important; padding-top: 2px !important; padding-bottom: 2px !important; vertical-align: middle !important; border-top: none; text-align: right; border-right: none; border-left: none"></td>
+                        <td align="center" style="margin: 2px !important; padding-top: 2px !important; padding-bottom: 2px !important; vertical-align: middle !important; border-top: none; text-align: right; border-right: none; border-left: none"></td>
+                        <td align="center" style="margin: 2px !important; padding-top: 2px !important; padding-bottom: 2px !important; vertical-align: middle !important; border-top: none; text-align: right; border-right: none; border-left: none"></td>
+                        <td align="center" style="margin: 2px !important; padding-top: 2px !important; padding-bottom: 2px !important; vertical-align: middle !important; border-top: none; text-align: right; border-right: none; border-left: none; font-weight:bold">Total-M2E-HQ</td>
+                        <td align="center" style="margin: 2px !important; padding-top: 2px !important; padding-bottom: 2px !important; vertical-align: middle !important; border-top: none; text-align: right; border-right: none; border-left: none"></td>
+                        <td align="center" style="margin: 2px !important; padding-top: 2px !important; padding-bottom: 2px !important; vertical-align: middle !important; border-top: none; text-align: right; border-right: none; border-left: none"></td>
+                        <td align="center" style="margin: 2px !important; padding-top: 2px !important; padding-bottom: 2px !important; vertical-align: middle !important; border-top: none; text-align: right; border-right: none; border-left: none"></td>
+                        <td align="center" style="margin: 2px !important; padding-top: 2px !important; padding-bottom: 2px !important; vertical-align: middle !important; border-top: none; text-align: right; border-right: none; border-left: none"></td>
+                        <td align="center" style="margin: 2px !important; padding-top: 2px !important; padding-bottom: 2px !important; vertical-align: middle !important; border-top: none; text-align: right; border-right: none; border-left: none"></td>
+                        <td align="center" style="margin: 2px !important; padding-top: 2px !important; padding-bottom: 2px !important; vertical-align: middle !important; border-top: none; text-align: right; border-right: none; border-left: none"></td>
+                        <td align="center" style="margin: 2px !important; padding-top: 2px !important; padding-bottom: 2px !important; vertical-align: middle !important; border-top: none; text-align: right; border-right: none; border-left: none"></td>
+                        <td align="center" style="margin: 2px !important; padding-top: 2px !important; padding-bottom: 2px !important; vertical-align: middle !important; border-top: none; text-align: right; border-right: none; border-left: none"></td>
+                        <td align="center" style="margin: 2px !important; padding-top: 2px !important; padding-bottom: 2px !important; vertical-align: middle !important; border-top: none; text-align: right; border-right: none; border-left: none"></td>
+                        <td align="center" style="margin: 2px !important; padding-top: 2px !important; padding-bottom: 2px !important; vertical-align: middle !important; border-top: none; text-align: right; border-right: none; border-left: none"></td>
+                        <td align="center" style="margin: 2px !important; padding-top: 2px !important; padding-bottom: 2px !important; vertical-align: middle !important; border-top: none; text-align: right; border-right: none; border-left: none"></td>
+                        <td align="center" style="margin: 2px !important; padding-top: 2px !important; padding-bottom: 2px !important; vertical-align: middle !important; border-top: none; border-bottom: none; text-align: right; border-right: none; border-left: none; font-weight:bold">@totalNetPayM2eHQ</td>
                         <td align="center" style="margin: 2px !important; padding-top: 2px !important; padding-bottom: 2px !important; vertical-align: middle !important; border-top: none; text-align: right; border-right: none; border-left: none"></td>
                     </tr>
                     <tr>
