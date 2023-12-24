@@ -1,24 +1,25 @@
 ﻿@model IEnumerable<MVC_SYSTEM.CustomModels.FooterPayslipDetails>
 @{
-                /**/
+    /**/
 
-                var hdrhrbs = Model.Where(x => x.flag == "hdrhrbs").Select(s => s.count).FirstOrDefault();
-                var hdrhrmg = Model.Where(x => x.flag == "hdrhrmg").Select(s => s.count).FirstOrDefault();
-                var hdrhrcu = Model.Where(x => x.flag == "hdrhrcu").Select(s => s.count).FirstOrDefault();
-                var hdrhrpg = Model.Where(x => x.flag == "hdrhrpg").Select(s => s.count).FirstOrDefault();
-                var hdrhrct = Model.Where(x => x.flag == "hdrhrct").Select(s => s.count).FirstOrDefault();
-                var hdrhrtg = Model.Where(x => x.flag == "hdrhrtg").Select(s => s.count).FirstOrDefault();
-                var hdrhrcs = Model.Where(x => x.flag == "hdrhrcs").Select(s => s.count).FirstOrDefault();
-                var hdrhrca = Model.Where(x => x.flag == "hdrhrca").Select(s => s.count).FirstOrDefault();
-                var hdrhrcm = Model.Where(x => x.flag == "hdrhrcm").Select(s => s.count).FirstOrDefault();
-                var hdrhrcb = Model.Where(x => x.flag == "hdrhrcb").Select(s => s.count).FirstOrDefault();
-                var hdrothrbs = Model.Where(x => x.flag == "hdrothrbs").Select(s => s.value).FirstOrDefault();
-                var hdrothrcm = Model.Where(x => x.flag == "hdrothrcm").Select(s => s.value).FirstOrDefault();
-                var hdrothrcu = Model.Where(x => x.flag == "hdrothrcu").Select(s => s.value).FirstOrDefault();
-                var hrkrja = Model.Where(x => x.flag == "hrkrja").Select(s => s.count).FirstOrDefault();
-                var jmlhhdr = Model.Where(x => x.flag == "jmlhhdr").Select(s => s.count).FirstOrDefault();
-                var crmnthavgslry = Model.Where(x => x.flag == "crmnthavgslry").Select(s => s.value).FirstOrDefault();
-                var lsmnthavgslry = Model.Where(x => x.flag == "lsmnthavgslry").Select(s => s.value).FirstOrDefault();
+    var hdrhrbs = Model.Where(x => x.flag == "hdrhrbs").Select(s => s.count).FirstOrDefault();
+    var hdrhrmg = Model.Where(x => x.flag == "hdrhrmg").Select(s => s.count).FirstOrDefault();
+    var hdrhrcu = Model.Where(x => x.flag == "hdrhrcu").Select(s => s.count).FirstOrDefault();
+    var hdrhrpg = Model.Where(x => x.flag == "hdrhrpg").Select(s => s.count).FirstOrDefault();
+    var hdrhrct = Model.Where(x => x.flag == "hdrhrct").Select(s => s.count).FirstOrDefault();
+    var hdrhrtg = Model.Where(x => x.flag == "hdrhrtg").Select(s => s.count).FirstOrDefault();
+    var hdrhrcs = Model.Where(x => x.flag == "hdrhrcs").Select(s => s.count).FirstOrDefault();
+    var hdrhrca = Model.Where(x => x.flag == "hdrhrca").Select(s => s.count).FirstOrDefault();
+    var hdrhrcm = Model.Where(x => x.flag == "hdrhrcm").Select(s => s.count).FirstOrDefault();
+    var hdrhrcb = Model.Where(x => x.flag == "hdrhrcb").Select(s => s.count).FirstOrDefault();
+    var hdrothrbs = Model.Where(x => x.flag == "hdrothrbs").Select(s => s.value).FirstOrDefault();
+    var hdrothrcm = Model.Where(x => x.flag == "hdrothrcm").Select(s => s.value).FirstOrDefault();
+    var hdrothrcu = Model.Where(x => x.flag == "hdrothrcu").Select(s => s.value).FirstOrDefault();
+    var hrkrja = Model.Where(x => x.flag == "hrkrja").Select(s => s.count).FirstOrDefault();
+    var jmlhhdr = Model.Where(x => x.flag == "jmlhhdr").Select(s => s.count).FirstOrDefault();
+    var crmnthavgslry = Model.Where(x => x.flag == "crmnthavgslry").Select(s => s.value).FirstOrDefault();
+    var lsmnthavgslry = Model.Where(x => x.flag == "lsmnthavgslry").Select(s => s.value).FirstOrDefault();
+    var yearavgslry = Model.Where(x => x.flag == "yearavgslry").Select(s => s.count).FirstOrDefault();
 }
 <tr>
     <td>Jumlah Hadir Hari Biasa</td>
@@ -75,6 +76,14 @@
     <td></td>
     <td>Purata Gaji Bulan Lepas</td>
     <td>@lsmnthavgslry</td>
+</tr>
+<tr>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>Purata Gaji Setahun</td>
+    <td>@yearavgslry</td>
 </tr>
 
 @*@foreach (var Kdhdct in Model.Select(s => new { s.fld_Kdhdct, s.fld_NegaraID, s.fld_SyarikatID }).Distinct())
