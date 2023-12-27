@@ -13660,6 +13660,8 @@ namespace MVC_SYSTEM.Controllers
             decimal? SIPEmplyer = 0;
             decimal? SBKPEmplyee = 0;
             decimal? SBKPEmplyer = 0;
+            decimal? PCBEmplyee = 0;
+            decimal? PCBEmplyer = 0;
             int ID = 1;
             string WorkerName = "";
             string WorkerIDNo = "";
@@ -13703,6 +13705,8 @@ namespace MVC_SYSTEM.Controllers
                 SIPEmplyer = 0;
                 SBKPEmplyee = 0;
                 SBKPEmplyer = 0;
+                PCBEmplyee = 0;
+                PCBEmplyer = 0;
 
                 TotalInsentifEfected = tbl_InsentifList.Where(x => x.fld_Nopkj == GajiBulananDetail.fld_Nopkj).Sum(s => s.fld_NilaiInsentif);
                 TotalInsentifEfected = TotalInsentifEfected == null ? 0 : TotalInsentifEfected;
@@ -13716,28 +13720,58 @@ namespace MVC_SYSTEM.Controllers
                 SocsoEmplyee = GajiBulananDetail.fld_SocsoPkj;
                 SocsoEmplyer = GajiBulananDetail.fld_SocsoMjk;
 
-                var GetAddContribution = tbl_ByrCarumanTambahanList.Where(x => x.fld_GajiID == GajiBulananDetail.fld_ID).FirstOrDefault();
+                //fatin added - 27/12/2023
+                tbl_ByrCarumanTambahanList = dbr.tbl_ByrCarumanTambahan.Where(x => x.fld_GajiID == GajiBulananDetail.fld_ID).ToList();
 
-                if (GetAddContribution != null)
+                foreach (var CarumanTambahan in tbl_ByrCarumanTambahanList)
                 {
-                    if (GetAddContribution.fld_KodCaruman == "SIP")
+                    //original code
+                    //var GetAddContribution = tbl_ByrCarumanTambahanList.Where(x => x.fld_GajiID == GajiBulananDetail.fld_ID).FirstOrDefault();
+
+                    //if (GetAddContribution != null)
+                    //{
+                    //    if (GetAddContribution.fld_KodCaruman == "SIP")
+                    //    {
+                    //        SIPEmplyee = GetAddContribution.fld_CarumanPekerja;
+                    //        SIPEmplyer = GetAddContribution.fld_CarumanMajikan;
+                    //    }
+                    //    else
+                    //    {
+                    //        SBKPEmplyee = GetAddContribution.fld_CarumanPekerja;
+                    //        SBKPEmplyer = GetAddContribution.fld_CarumanMajikan;
+                    //    }
+
+                    //}
+
+                    if (CarumanTambahan != null)
                     {
-                        SIPEmplyee = GetAddContribution.fld_CarumanPekerja;
-                        SIPEmplyer = GetAddContribution.fld_CarumanMajikan;
-                    }
-                    else
-                    {
-                        SBKPEmplyee = GetAddContribution.fld_CarumanPekerja;
-                        SBKPEmplyer = GetAddContribution.fld_CarumanMajikan;
+                        if (CarumanTambahan.fld_KodCaruman == "SIP")
+                        {
+                            SIPEmplyee = CarumanTambahan.fld_CarumanPekerja;
+                            SIPEmplyer = CarumanTambahan.fld_CarumanMajikan;
+                        }
+                        if (CarumanTambahan.fld_KodCaruman == "SBKP")
+                        {
+                            SBKPEmplyee = CarumanTambahan.fld_CarumanPekerja;
+                            SBKPEmplyer = CarumanTambahan.fld_CarumanMajikan;
+                        }
+                        if (CarumanTambahan.fld_KodCaruman == "PCB")
+                        {
+                            PCBEmplyee = CarumanTambahan.fld_CarumanPekerja;
+                            PCBEmplyer = CarumanTambahan.fld_CarumanMajikan;
+                        }
+
                     }
                 }
 
                 WorkerName = tbl_PkjmastList.Where(x => x.fld_Nopkj == GajiBulananDetail.fld_Nopkj).Select(s => s.fld_Nama).FirstOrDefault();
                 WorkerIDNo = tbl_PkjmastList.Where(x => x.fld_Nopkj == GajiBulananDetail.fld_Nopkj).Select(s => s.fld_Nokp).FirstOrDefault();
 
-                if (SBKPEmplyer != 0 || SocsoEmplyer != 0 || KWSPEmplyer != 0)
+                //original code
+                //if (SBKPEmplyer != 0 || SocsoEmplyer != 0 || KWSPEmplyer != 0 )
+                if (SIPEmplyer != 0 || SBKPEmplyer != 0 || SocsoEmplyer != 0 || KWSPEmplyer != 0 || PCBEmplyer != 0)
                 {
-                    ContributionReportList.Add(new ContributionReport() { ID = ID, WorkerName = WorkerName, TotalSalaryForKwsp = TotalSalaryForKWSP.Value, TotalSalaryForPerkeso = TotalSalaryForPerkeso.Value, KwspContributionEmplyee = KWSPEmplyee.Value, KwspContributionEmplyer = KWSPEmplyer.Value, SipContributionEmplyee = SIPEmplyee.Value, SipContributionEmplyer = SIPEmplyer.Value, SocsoContributionEmplyee = SocsoEmplyee.Value, SocsoContributionEmplyer = SocsoEmplyer.Value, SbkpContributionEmplyee = SBKPEmplyee.Value, SbkpContributionEmplyer = SBKPEmplyer.Value, WorkerNo = GajiBulananDetail.fld_Nopkj, WorkerIDNo = WorkerIDNo });
+                    ContributionReportList.Add(new ContributionReport() { ID = ID, WorkerName = WorkerName, TotalSalaryForKwsp = TotalSalaryForKWSP.Value, TotalSalaryForPerkeso = TotalSalaryForPerkeso.Value, KwspContributionEmplyee = KWSPEmplyee.Value, KwspContributionEmplyer = KWSPEmplyer.Value, SipContributionEmplyee = SIPEmplyee.Value, SipContributionEmplyer = SIPEmplyer.Value, SocsoContributionEmplyee = SocsoEmplyee.Value, SocsoContributionEmplyer = SocsoEmplyer.Value, SbkpContributionEmplyee = SBKPEmplyee.Value, SbkpContributionEmplyer = SBKPEmplyer.Value, PcbContributionEmplyee = PCBEmplyee.Value, PcbContributionEmplyer = PCBEmplyer.Value, WorkerNo = GajiBulananDetail.fld_Nopkj, WorkerIDNo = WorkerIDNo });
                     ID++;
                 }
             }

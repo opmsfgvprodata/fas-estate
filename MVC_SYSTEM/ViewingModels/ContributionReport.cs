@@ -36,5 +36,7 @@ namespace MVC_SYSTEM.ViewingModels
         public decimal SbkpContributionEmplyee { get; set; }
 
         public decimal SbkpContributionEmplyer { get; set; }
+        public decimal PcbContributionEmplyee { get; set; }
+        public decimal PcbContributionEmplyer { get; set; }
     }
 }
