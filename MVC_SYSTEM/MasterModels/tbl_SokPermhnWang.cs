@@ -47,6 +47,9 @@ namespace MVC_SYSTEM.MasterModels
         public decimal? fld_JumlahCdmas { get; set; }
 
         [Column(TypeName = "numeric")]
+        public decimal? fld_JumlahM2EHQ { get; set; }
+
+        [Column(TypeName = "numeric")]
         public decimal? fld_JumlahLain { get; set; }
         //end added faeza
 

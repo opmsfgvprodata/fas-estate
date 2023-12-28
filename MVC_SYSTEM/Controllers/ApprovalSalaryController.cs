@@ -274,6 +274,19 @@ namespace MVC_SYSTEM.Controllers
                 TotalCdmas = amountCdmas.Sum(s => s.fld_GajiBersih.Value);
             }
 
+            //***totalm2ehq
+            var amountM2ehq = vmModel.vw_PaySheetPekerja
+                   .Where(x => x.fld_Month == month && x.fld_Year == year &&
+                               x.fld_NegaraID == NegaraID &&
+                               x.fld_SyarikatID == SyarikatID && x.fld_WilayahID == WilayahID &&
+                               x.fld_LadangID == LadangID && x.fld_PaymentMode == "5").ToList();
+
+            decimal TotalM2ehq = 0;
+            if (amountM2ehq.Count() > 0)
+            {
+                TotalM2ehq = amountM2ehq.Sum(s => s.fld_GajiBersih.Value);
+            }
+
             ////***totallain - if paymentmode = null/0
             var amountLain = vmModel.vw_PaySheetPekerja
                    .Where(x => x.fld_Month == month && x.fld_Year == year &&
@@ -294,6 +307,7 @@ namespace MVC_SYSTEM.Controllers
             tbl_SokPermhnWang.fld_JumlahCheque = TotalCheque;
             tbl_SokPermhnWang.fld_JumlahEwallet = TotalEwallet;
             tbl_SokPermhnWang.fld_JumlahCdmas = TotalCdmas;
+            tbl_SokPermhnWang.fld_JumlahM2EHQ = TotalM2ehq;
             tbl_SokPermhnWang.fld_JumlahLain = TotalLain;
             tbl_SokPermhnWang.fld_Year = year;
             tbl_SokPermhnWang.fld_Month = month;
@@ -442,6 +456,7 @@ namespace MVC_SYSTEM.Controllers
                         tbl_SokPermhnWang.fld_JumlahCheque = PermohonanWang.fld_JumlahCheque;//added by faeza 30.09.2021
                         tbl_SokPermhnWang.fld_JumlahEwallet = PermohonanWang.fld_JumlahEwallet;//added by faeza 30.09.2021
                         tbl_SokPermhnWang.fld_JumlahCdmas = PermohonanWang.fld_JumlahCdmas;//added by faeza 30.09.2021
+                        tbl_SokPermhnWang.fld_JumlahM2EHQ = PermohonanWang.fld_JumlahM2EHQ;
                         tbl_SokPermhnWang.fld_JumlahLain = PermohonanWang.fld_JumlahLain;//added by faeza 30.09.2021
                         tbl_SokPermhnWang.fld_StsTtpUrsNiaga = true;
                         tbl_SokPermhnWang.fld_NegaraID = NegaraID;
@@ -481,6 +496,7 @@ namespace MVC_SYSTEM.Controllers
                             checkexsting.fld_JumlahCheque = PermohonanWang.fld_JumlahCheque;//added by faeza 30.09.2021
                             checkexsting.fld_JumlahEwallet = PermohonanWang.fld_JumlahEwallet;//added by faeza 30.09.2021
                             checkexsting.fld_JumlahCdmas = PermohonanWang.fld_JumlahCdmas;//added by faeza 30.09.2021
+                            checkexsting.fld_JumlahM2EHQ = PermohonanWang.fld_JumlahM2EHQ;
                             checkexsting.fld_JumlahLain = PermohonanWang.fld_JumlahLain;//added by faeza 30.09.2021
                             db.Entry(checkexsting).State = EntityState.Modified;
                             db.SaveChanges();
