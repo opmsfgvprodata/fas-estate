@@ -9615,6 +9615,12 @@ namespace MVC_SYSTEM.Controllers
             id += 1;
             var hdrhrcb = hdr.Where(x => x.fld_Kdhdct == "C04").Count();
             FooterPayslipDetails.Add(new FooterPayslipDetails { id = id, flag = "hdrhrcb", count = hdrhrcb });
+            id += 1;
+            var hdrhrch = hdr.Where(x => x.fld_Kdhdct == "C10").Count();
+            FooterPayslipDetails.Add(new FooterPayslipDetails { id = id, flag = "hdrhrch", count = hdrhrch });
+            id += 1;
+            var hdrhrce = hdr.Where(x => x.fld_Kdhdct == "C09").Count();
+            FooterPayslipDetails.Add(new FooterPayslipDetails { id = id, flag = "hdrhrce", count = hdrhrce });
 
             //get hdr OT
             var hdrot = dbr.vw_KerjaHdrOT.Where(x => x.fld_Nopkj == nopkj && x.fld_Tarikh.Value.Month == month && x.fld_Tarikh.Value.Year == year && x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID && x.fld_WilayahID == WilayahID && x.fld_LadangID == LadangID).ToList();
@@ -9632,7 +9638,9 @@ namespace MVC_SYSTEM.Controllers
             FooterPayslipDetails.Add(new FooterPayslipDetails { id = id, flag = "hdrothrcu", value = hdrothrcu.Value });
 
             //get Jumlah Hari Kerja
-            int? hrkrja = 0;//db.tbl_HariBekerjaLadang.Where(x => x.fld_Month == month && x.fld_Year == year && x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID && x.fld_WilayahID == WilayahID && x.fld_LadangID == LadangID).Select(s => s.fld_BilHariBekerja).FirstOrDefault();
+            //int? hrkrja = 0;//db.tbl_HariBekerjaLadang.Where(x => x.fld_Month == month && x.fld_Year == year && x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID && x.fld_WilayahID == WilayahID && x.fld_LadangID == LadangID).Select(s => s.fld_BilHariBekerja).FirstOrDefault();
+            var GetLadangDetail = db.tbl_Ladang.Where(x => x.fld_ID == LadangID && x.fld_WlyhID == WilayahID).FirstOrDefault();
+            int? hrkrja = db.vw_HariBekerja.Where(x => GetLadangDetail.fld_KodNegeri == x.fld_NegeriID.ToString() && x.fld_NegaraID == NegaraID && x.fld_Year == year && x.fld_Month == month && x.fld_SyarikatID == SyarikatID && x.fld_Deleted == false && GetLadangDetail.fld_ID == LadangID).Select(s => s.fld_BilanganHariBekerja).FirstOrDefault();
             id += 1;
             FooterPayslipDetails.Add(new FooterPayslipDetails { id = id, flag = "hrkrja", count = hrkrja.Value });
 
@@ -9643,17 +9651,24 @@ namespace MVC_SYSTEM.Controllers
             FooterPayslipDetails.Add(new FooterPayslipDetails { id = id, flag = "jmlhhdr", count = jmlhhdr });
 
             //get avg slry
+            //modified by Shah 24.12.2023 - untuk purata setahun
             DateTime cdate = new DateTime(year, month, 15);
             DateTime ldate = cdate.AddMonths(-1);
-            var crmnthavgslry = dbr.tbl_GajiBulanan.Where(x => x.fld_Month == cdate.Month && x.fld_Year == cdate.Year && x.fld_Nopkj == nopkj && x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID && x.fld_WilayahID == WilayahID && x.fld_LadangID == LadangID).Select(s => s.fld_PurataGaji).FirstOrDefault();
-            crmnthavgslry = crmnthavgslry == null ? 0m : crmnthavgslry;
-            id += 1;
-            FooterPayslipDetails.Add(new FooterPayslipDetails { id = id, flag = "crmnthavgslry", value = crmnthavgslry.Value });
+            var cravgslry = dbr.tbl_GajiBulanan.Where(x => x.fld_Month == cdate.Month && x.fld_Year == cdate.Year && x.fld_Nopkj == nopkj && x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID && x.fld_WilayahID == WilayahID && x.fld_LadangID == LadangID).Select(s => new { s.fld_PurataGaji, s.fld_PurataGaji12Bln }).FirstOrDefault();
+            if (cravgslry != null)
+            {
+                var crmnthavgslry = cravgslry.fld_PurataGaji == null ? 0m : cravgslry.fld_PurataGaji;
+                id += 1;
+                FooterPayslipDetails.Add(new FooterPayslipDetails { id = id, flag = "crmnthavgslry", value = crmnthavgslry.Value });
+            }
             var lsmnthavgslry = dbr.tbl_GajiBulanan.Where(x => x.fld_Month == ldate.Month && x.fld_Year == ldate.Year && x.fld_Nopkj == nopkj && x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID && x.fld_WilayahID == WilayahID && x.fld_LadangID == LadangID).Select(s => s.fld_PurataGaji).FirstOrDefault();
             lsmnthavgslry = lsmnthavgslry == null ? 0m : lsmnthavgslry;
             id += 1;
             FooterPayslipDetails.Add(new FooterPayslipDetails { id = id, flag = "lsmnthavgslry", value = lsmnthavgslry.Value });
-            //shah
+            var yearavgslry = cravgslry.fld_PurataGaji12Bln == null || cravgslry.fld_PurataGaji12Bln > 200 ? 0m : cravgslry.fld_PurataGaji12Bln;
+            id += 1;
+            FooterPayslipDetails.Add(new FooterPayslipDetails { id = id, flag = "yearavgslry", value = yearavgslry.Value });
+            //modified by Shah 24.12.2023 - untuk purata setahun
             return View(FooterPayslipDetails);
         }
 
@@ -9700,6 +9715,12 @@ namespace MVC_SYSTEM.Controllers
             id += 1;
             int hdrhrcb = 0;// hdr.Where(x => x.fld_Kdhdct == "C04").Count();
             FooterPayslipDetails.Add(new FooterPayslipDetails { id = id, flag = "hdrhrcb", count = hdrhrcb });
+            id += 1;
+            var hdrhrch = 0;// hdr.Where(x => x.fld_Kdhdct == "C10").Count();
+            FooterPayslipDetails.Add(new FooterPayslipDetails { id = id, flag = "hdrhrch", count = hdrhrch });
+            id += 1;
+            int hdrhrce = 0;// hdr.Where(x => x.fld_Kdhdct == "C09").Count();
+            FooterPayslipDetails.Add(new FooterPayslipDetails { id = id, flag = "hdrhrce", count = hdrhrce });
 
             //get hdr OT
             //var hdrot = dbr.vw_KerjaHdrOT.Where(x => x.fld_Nopkj == nopkj && x.fld_Tarikh.Value.Month == month && x.fld_Tarikh.Value.Year == year && x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID && x.fld_WilayahID == WilayahID && x.fld_LadangID == LadangID).ToList();

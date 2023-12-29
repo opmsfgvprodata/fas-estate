@@ -1,25 +1,36 @@
 ﻿@model IEnumerable<MVC_SYSTEM.CustomModels.FooterPayslipDetails>
 @{
-                /**/
+    /**/
 
-                var hdrhrbs = Model.Where(x => x.flag == "hdrhrbs").Select(s => s.count).FirstOrDefault();
-                var hdrhrmg = Model.Where(x => x.flag == "hdrhrmg").Select(s => s.count).FirstOrDefault();
-                var hdrhrcu = Model.Where(x => x.flag == "hdrhrcu").Select(s => s.count).FirstOrDefault();
-                var hdrhrpg = Model.Where(x => x.flag == "hdrhrpg").Select(s => s.count).FirstOrDefault();
-                var hdrhrct = Model.Where(x => x.flag == "hdrhrct").Select(s => s.count).FirstOrDefault();
-                var hdrhrtg = Model.Where(x => x.flag == "hdrhrtg").Select(s => s.count).FirstOrDefault();
-                var hdrhrcs = Model.Where(x => x.flag == "hdrhrcs").Select(s => s.count).FirstOrDefault();
-                var hdrhrca = Model.Where(x => x.flag == "hdrhrca").Select(s => s.count).FirstOrDefault();
-                var hdrhrcm = Model.Where(x => x.flag == "hdrhrcm").Select(s => s.count).FirstOrDefault();
-                var hdrhrcb = Model.Where(x => x.flag == "hdrhrcb").Select(s => s.count).FirstOrDefault();
-                var hdrothrbs = Model.Where(x => x.flag == "hdrothrbs").Select(s => s.value).FirstOrDefault();
-                var hdrothrcm = Model.Where(x => x.flag == "hdrothrcm").Select(s => s.value).FirstOrDefault();
-                var hdrothrcu = Model.Where(x => x.flag == "hdrothrcu").Select(s => s.value).FirstOrDefault();
-                var hrkrja = Model.Where(x => x.flag == "hrkrja").Select(s => s.count).FirstOrDefault();
-                var jmlhhdr = Model.Where(x => x.flag == "jmlhhdr").Select(s => s.count).FirstOrDefault();
-                var crmnthavgslry = Model.Where(x => x.flag == "crmnthavgslry").Select(s => s.value).FirstOrDefault();
-                var lsmnthavgslry = Model.Where(x => x.flag == "lsmnthavgslry").Select(s => s.value).FirstOrDefault();
+    var hdrhrbs = Model.Where(x => x.flag == "hdrhrbs").Select(s => s.count).FirstOrDefault();
+    var hdrhrmg = Model.Where(x => x.flag == "hdrhrmg").Select(s => s.count).FirstOrDefault();
+    var hdrhrcu = Model.Where(x => x.flag == "hdrhrcu").Select(s => s.count).FirstOrDefault();
+    var hdrhrpg = Model.Where(x => x.flag == "hdrhrpg").Select(s => s.count).FirstOrDefault();
+    var hdrhrct = Model.Where(x => x.flag == "hdrhrct").Select(s => s.count).FirstOrDefault();
+    var hdrhrtg = Model.Where(x => x.flag == "hdrhrtg").Select(s => s.count).FirstOrDefault();
+    var hdrhrcs = Model.Where(x => x.flag == "hdrhrcs").Select(s => s.count).FirstOrDefault();
+    var hdrhrca = Model.Where(x => x.flag == "hdrhrca").Select(s => s.count).FirstOrDefault();
+    var hdrhrcm = Model.Where(x => x.flag == "hdrhrcm").Select(s => s.count).FirstOrDefault();
+    var hdrhrcb = Model.Where(x => x.flag == "hdrhrcb").Select(s => s.count).FirstOrDefault();
+    var hdrhrch = Model.Where(x => x.flag == "hdrhrch").Select(s => s.count).FirstOrDefault();
+    var hdrhrce = Model.Where(x => x.flag == "hdrhrce").Select(s => s.count).FirstOrDefault();
+    var hdrothrbs = Model.Where(x => x.flag == "hdrothrbs").Select(s => s.value).FirstOrDefault();
+    var hdrothrcm = Model.Where(x => x.flag == "hdrothrcm").Select(s => s.value).FirstOrDefault();
+    var hdrothrcu = Model.Where(x => x.flag == "hdrothrcu").Select(s => s.value).FirstOrDefault();
+    var hrkrja = Model.Where(x => x.flag == "hrkrja").Select(s => s.count).FirstOrDefault();
+    var jmlhhdr = Model.Where(x => x.flag == "jmlhhdr").Select(s => s.count).FirstOrDefault();
+    var crmnthavgslry = Model.Where(x => x.flag == "crmnthavgslry").Select(s => s.value).FirstOrDefault();
+    var lsmnthavgslry = Model.Where(x => x.flag == "lsmnthavgslry").Select(s => s.value).FirstOrDefault();
+    var yearavgslry = Model.Where(x => x.flag == "yearavgslry").Select(s => s.value).FirstOrDefault();
 }
+<tr>
+    <td>Jumlah Hari Bekerja</td>
+    <td>@hrkrja</td>
+    <td>Jumlah Cuti Tahunan</td>
+    <td>@hdrhrct</td>
+    <td>Jumlah Cuti Ehsan</td>
+    <td>@hdrhrce</td>    
+</tr>
 <tr>
     <td>Jumlah Hadir Hari Biasa</td>
     <td>@hdrhrbs</td>
@@ -32,7 +43,7 @@
     <td>Jumlah Hadir Hari Minggu</td>
     <td>@hdrhrmg</td>
     <td>Jumlah Cuti Hospitalisasi</td>
-    <td>0</td>
+    <td>@hdrhrch</td>
     <td>Jumlah OT - Hari Cuti Minggu (Jam)</td>
     <td>@hdrothrcm</td>
 </tr>
@@ -45,36 +56,28 @@
     <td>@hdrothrcu</td>
 </tr>
 <tr>
-    <td>Jumlah Ponteng</td>
-    <td>@hdrhrpg</td>
-    <td>Jumlah Cuti Hari Minggu</td>
-    <td>@hdrhrcm</td>
-    <td>Jumlah Hari Bekerja</td>
-    <td>@hrkrja</td>
-</tr>
-<tr>
-    <td>Jumlah Cuti Tahunan</td>
-    <td>@hdrhrct</td>
-    <td>Jumlah Cuti Bersalin</td>
-    <td>@hdrhrcb</td>
     <td>Jumlah Hari Hadir</td>
     <td>@jmlhhdr</td>
-</tr>
-<tr>
-    <td>Jumlah Hari Terabai</td>
-    <td>0</td>
-    <td></td>
-    <td></td>
+    <td>Jumlah Cuti Hari Minggu</td>
+    <td>@hdrhrcm</td>
     <td>Purata Gaji Bulan ini</td>
     <td>@crmnthavgslry</td>
 </tr>
 <tr>
-    <td>Jumlah Cuti Tanpa Gaji</td>
-    <td>@hdrhrtg</td>
-    <td></td>
-    <td></td>
+    <td>Jumlah Hari Terabai</td>
+    <td>0</td>
+    <td>Jumlah Cuti Bersalin</td>
+    <td>@hdrhrcb</td>
     <td>Purata Gaji Bulan Lepas</td>
     <td>@lsmnthavgslry</td>
+</tr>
+<tr>
+    <td>Jumlah Ponteng</td>
+    <td>@hdrhrpg</td>
+    <td>Jumlah Cuti Tanpa Gaji</td>
+    <td>@hdrhrtg</td>
+    <td>Purata Gaji Setahun</td>
+    <td>@yearavgslry</td>
 </tr>
 
 @*@foreach (var Kdhdct in Model.Select(s => new { s.fld_Kdhdct, s.fld_NegaraID, s.fld_SyarikatID }).Distinct())
