@@ -2629,6 +2629,8 @@ namespace MVC_SYSTEM.Controllers
                         var checkatts = dbr.tbl_Kerjahdr.Join(dbr.tbl_Pkjmast, j => new { j.fld_Nopkj, j.fld_NegaraID, j.fld_SyarikatID, j.fld_WilayahID, j.fld_LadangID }, k => new { k.fld_Nopkj, k.fld_NegaraID, k.fld_SyarikatID, k.fld_WilayahID, k.fld_LadangID }, (j, k) => new { j.fld_Kum, j.fld_Tarikh, j.fld_NegaraID, j.fld_SyarikatID, j.fld_WilayahID, j.fld_LadangID, k.fld_Nama, j.fld_Nopkj, j.fld_Kdhdct, k.fld_DivisionID }).Where(x => datainpkjmast.Contains(x.fld_Nopkj) && x.fld_Tarikh == SelectDate && x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID && x.fld_WilayahID == WilayahID && x.fld_LadangID == LadangID && x.fld_DivisionID == DivisionID2).ToList();
                         foreach (var checkatt in checkatts)
                         {
+                            //added by faeza 03.01.2024
+                            kadarharga = kadarharga2;
                             ActvtGLSAP = "";
                             var SalaryIncrement = dbr.tbl_PkjIncrmntSalary.Where(x => x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID && x.fld_WilayahID == WilayahID && x.fld_LadangID == LadangID && x.fld_Nopkj == checkatt.fld_Nopkj && x.fld_AppStatus == true).Select(s => new { s.fld_IncrmntSalary, s.fld_DailyInsentif }).FirstOrDefault();
                             //added by faeza 17.08.2022

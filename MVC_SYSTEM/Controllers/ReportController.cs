@@ -13676,6 +13676,7 @@ namespace MVC_SYSTEM.Controllers
             decimal? TotalInsentifEfected = 0;
             decimal? TotalSalaryForKWSP = 0;
             decimal? TotalSalaryForPerkeso = 0;
+            decimal? BakiCutiTahunan = 0;
             decimal? KWSPEmplyee = 0;
             decimal? KWSPEmplyer = 0;
             decimal? SocsoEmplyee = 0;
@@ -13730,9 +13731,12 @@ namespace MVC_SYSTEM.Controllers
 
                 TotalInsentifEfected = tbl_InsentifList.Where(x => x.fld_Nopkj == GajiBulananDetail.fld_Nopkj).Sum(s => s.fld_NilaiInsentif);
                 TotalInsentifEfected = TotalInsentifEfected == null ? 0 : TotalInsentifEfected;
-
-                TotalSalaryForKWSP = GajiBulananDetail.fld_ByrKerja + GajiBulananDetail.fld_ByrCuti + GajiBulananDetail.fld_BonusHarian + TotalInsentifEfected + GajiBulananDetail.fld_AIPS + GajiBulananDetail.fld_ByrKwsnSkr;
-                TotalSalaryForPerkeso = GajiBulananDetail.fld_ByrKerja + GajiBulananDetail.fld_ByrCuti + GajiBulananDetail.fld_OT + TotalInsentifEfected + GajiBulananDetail.fld_AIPS + GajiBulananDetail.fld_ByrKwsnSkr;
+                BakiCutiTahunan = GajiBulananDetail.fld_BakiCutiTahunan == null ? 0 : GajiBulananDetail.fld_BakiCutiTahunan;
+                //modified by faeza 04.01.2023
+                //TotalSalaryForKWSP = GajiBulananDetail.fld_ByrKerja + GajiBulananDetail.fld_ByrCuti + GajiBulananDetail.fld_BonusHarian + TotalInsentifEfected + GajiBulananDetail.fld_AIPS + GajiBulananDetail.fld_ByrKwsnSkr;
+                //TotalSalaryForPerkeso = GajiBulananDetail.fld_ByrKerja + GajiBulananDetail.fld_ByrCuti + GajiBulananDetail.fld_OT + TotalInsentifEfected + GajiBulananDetail.fld_AIPS + GajiBulananDetail.fld_ByrKwsnSkr;
+                TotalSalaryForKWSP = GajiBulananDetail.fld_ByrKerja + GajiBulananDetail.fld_ByrCuti + GajiBulananDetail.fld_BonusHarian + TotalInsentifEfected + GajiBulananDetail.fld_AIPS + GajiBulananDetail.fld_ByrKwsnSkr + BakiCutiTahunan;
+                TotalSalaryForPerkeso = GajiBulananDetail.fld_ByrKerja + GajiBulananDetail.fld_ByrCuti + GajiBulananDetail.fld_OT + TotalInsentifEfected + GajiBulananDetail.fld_AIPS + GajiBulananDetail.fld_ByrKwsnSkr + BakiCutiTahunan;
 
                 KWSPEmplyee = GajiBulananDetail.fld_KWSPPkj;
                 KWSPEmplyer = GajiBulananDetail.fld_KWSPMjk;
