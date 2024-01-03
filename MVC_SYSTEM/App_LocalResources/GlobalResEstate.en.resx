@@ -229,7 +229,7 @@
     <value>Description</value>
   </data>
   <data name="hdrEarning" xml:space="preserve">
-    <value>Earnings</value>
+    <value>Income</value>
   </data>
   <data name="hdrEmployeeKwsp" xml:space="preserve">
     <value>KWSP (Employee)</value>
@@ -250,7 +250,7 @@
     <value>For Month</value>
   </data>
   <data name="hdrGrossSalary" xml:space="preserve">
-    <value>Gross Salary</value>
+    <value>Basic Income</value>
   </data>
   <data name="hdrGroupCode" xml:space="preserve">
     <value>Group Code</value>
@@ -760,7 +760,7 @@
     <value>Name</value>
   </data>
   <data name="lblNetTotal" xml:space="preserve">
-    <value>Net Total</value>
+    <value>Net Income</value>
   </data>
   <data name="lblNewLevel" xml:space="preserve">
     <value>New Level</value>
@@ -817,7 +817,7 @@
     <value>Others Deductions</value>
   </data>
   <data name="lblOthersEarning" xml:space="preserve">
-    <value>Others Earnings</value>
+    <value>Others Income</value>
   </data>
   <data name="lblOverall" xml:space="preserve">
     <value>Overall</value>
@@ -1054,7 +1054,7 @@
     <value>Total Deductions</value>
   </data>
   <data name="lblTotalEarning" xml:space="preserve">
-    <value>Total Earnings</value>
+    <value>Gross Income</value>
   </data>
   <data name="lblTotalLoan" xml:space="preserve">
     <value>Total Loans</value>

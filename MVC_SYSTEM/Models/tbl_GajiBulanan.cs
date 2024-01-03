@@ -100,5 +100,10 @@ namespace MVC_SYSTEM.Models
 
         [Column(TypeName = "numeric")]
         public decimal? fld_ByrKwsnSkr { get; set; }
+
+        //added by faeza 04.01.2024
+        [Column(TypeName = "numeric")]
+        public decimal? fld_BakiCutiTahunan { get; set; }
+        
     }
 }

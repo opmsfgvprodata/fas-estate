@@ -139,5 +139,33 @@
         [StringLength(15)]
         public string fld_Notel { get; set; }
 
+        //add by faeza 04.01.2024
+        [Column(TypeName = "numeric")]
+        public decimal? fld_ByrKerjaORP { get; set; }
+
+        [Column(TypeName = "numeric")]
+        public decimal? fld_BonusHarianORP { get; set; }
+
+        [Column(TypeName = "numeric")]
+        public decimal? fld_LainInsentifORP { get; set; }
+
+        [Column(TypeName = "numeric")]
+        public decimal? fld_TotalByrKerjaORP { get; set; }
+
+        [Column(TypeName = "numeric")]
+        public decimal? fld_BakiCutiTahunan { get; set; }
+
+        [Column(TypeName = "numeric")]
+        public decimal? basicincome { get; set; }
+
+        [Column(TypeName = "numeric")]
+        public decimal? othersincome { get; set; }
+
+        [Column(TypeName = "numeric")]
+        public decimal? netincome { get; set; }
+
+        [Column(TypeName = "numeric")]
+        public decimal? deduction { get; set; }
+
     }
 }
