@@ -760,7 +760,7 @@
     <value>Name</value>
   </data>
   <data name="lblNetTotal" xml:space="preserve">
-    <value>Net Income</value>
+    <value>Net Income (RM)</value>
   </data>
   <data name="lblNewLevel" xml:space="preserve">
     <value>New Level</value>
