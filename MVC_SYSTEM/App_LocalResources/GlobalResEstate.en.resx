@@ -1048,10 +1048,10 @@
     <value>Total</value>
   </data>
   <data name="lblTotalContribution" xml:space="preserve">
-    <value>Total Contributions</value>
+    <value>Contribution Total</value>
   </data>
   <data name="lblTotalDeduction" xml:space="preserve">
-    <value>Total Deductions</value>
+    <value>Deduction Total</value>
   </data>
   <data name="lblTotalEarning" xml:space="preserve">
     <value>Gross Income</value>
