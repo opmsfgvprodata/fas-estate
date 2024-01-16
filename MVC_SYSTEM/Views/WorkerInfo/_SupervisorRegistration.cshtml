@@ -1,17 +1,17 @@
 ﻿@using MVC_SYSTEM.Class
 @{
-                if (ViewBag.Datacount > 0)
-                {
-                    GetConfig getConfig = new GetConfig();
-                    var grid = new WebGrid(
-                canPage: true,
-                rowsPerPage: Model.PageSize,
-                canSort: false,
-                ajaxUpdateContainerId: "grid");
+    if (ViewBag.Datacount > 0)
+    {
+        GetConfig getConfig = new GetConfig();
+        var grid = new WebGrid(
+    canPage: true,
+    rowsPerPage: Model.PageSize,
+    canSort: false,
+    ajaxUpdateContainerId: "grid");
 
-                    grid.Bind(Model.Content, rowCount: Model.TotalRecords, autoSortAndPage: false);
+        grid.Bind(Model.Content, rowCount: Model.TotalRecords, autoSortAndPage: false);
 
-    <div class="text-center"> @Html.Label("Total") @grid.TotalRowCount</div>
+        <div class="text-center"> @Html.Label("Total") @grid.TotalRowCount</div>
 
         @grid.GetHtml(htmlAttributes: new { id = "grid" },
                             tableStyle: "table table-bordered table-striped table-list table-hover",
@@ -28,21 +28,41 @@
                                    * grid.RowsPerPage * grid.PageIndex, style: "count"),
                                                grid.Column(columnName: "fld_SupervisorID", header: "Supervisor Id", style: "kod"),
                                                grid.Column(columnName: "fld_SupervisorName", header: "Supervisor Name", style: "keterangan"),
-                                               grid.Column(columnName: "SupervisorMembersCount", header: "No of Workers", style: "keterangan"),
+               //grid.Column(columnName: "SupervisorMembersCount", header: "No of Workers", style: "keterangan"),
 
-        grid.Column("Action", format: (item) =>
-        {
-                var tindakan = "<a data-modal1='' href='" + @Url.Action("_MembersRegistration", "WorkerInfo") + "/?id=" + item.fld_SupervisorID + "' class='btn btn-success' role='button' title='" +"Kemaskini" + "' onclick='return DisplayProgressMessage(this);'><i class='fa fa-cogs'></i></a>&nbsp;" +
-                               "<a data-modal1='' href='" + @Url.Action("SupervisorRegistrationDelete", "WorkerInfo") + "/?id=" + item.fld_SupervisorID + "&Status=Delete" + "' class='btn btn-danger' role='button' title='" + "Delete" + "' onclick='return DisplayProgressMessage(this);'><i class='fa fa-trash fa-lg'></i></span></a>";
-                return @Html.Raw(tindakan);
-        }, canSort: false, style: "tindakan")
-                           ));
+
+               //Modified by Shazana 16/1/2024                                    
+               //grid.Column("Action", format: (item) =>
+               //{
+               //        var tindakan = "<a data-modal1='' href='" + @Url.Action("_MembersRegistration", "WorkerInfo") + "/?id=" + item.fld_SupervisorID + "' class='btn btn-success' role='button' title='" +"Kemaskini" + "' onclick='return DisplayProgressMessage(this);'><i class='fa fa-cogs'></i></a>&nbsp;" +
+               //                       "<a data-modal1='' href='" + @Url.Action("SupervisorRegistrationDelete", "WorkerInfo") + "/?id=" + item.fld_SupervisorID + "&Status=Delete" + "' class='btn btn-danger' role='button' title='" + "Delete" + "' onclick='return DisplayProgressMessage(this);'><i class='fa fa-trash fa-lg'></i></span></a>";
+               //        return @Html.Raw(tindakan);
+               //}, canSort: false, style: "tindakan")
+               //                   ));
+
+               grid.Column("Action", format: (item) =>
+               {
+
+                   if (item.SupervisorMembersCount == 0)
+                   {
+                       var tindakan =
+                       //"<a data-modal1='' href='" + @Url.Action("_MembersRegistration", "WorkerInfo") + "/?id=" + item.fld_SupervisorID + "' class='btn btn-success' role='button' title='" + "Kemaskini" + "' onclick='return DisplayProgressMessage(this);'><i class='fa fa-cogs'></i></a>&nbsp;" +
+                       "<a data-modal1='' href='" + @Url.Action("SupervisorRegistrationDelete", "WorkerInfo") + "/?id=" + item.fld_SupervisorID + "&Status=Delete" + "' class='btn btn-danger' role='button' title='" + "Delete" + "' onclick='return DisplayProgressMessage(this);'><i class='fa fa-trash fa-lg'></i></span></a>";
+                       return @Html.Raw(tindakan);
+                   }
+                   else
+                   {
+                       var tindakan = "";
+                       return @Html.Raw(tindakan);
+                   }
+               }, canSort: false, style: "tindakan")
+                ));
     }
     else
     {
         <hr />
         <div class="text-center">
-            @Html.Label("No data")
+            @Html.Label("No record")
         </div>
 
         <hr />
