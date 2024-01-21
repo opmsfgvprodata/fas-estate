@@ -198,6 +198,9 @@ namespace MVC_SYSTEM.Models
 
         [StringLength(50)]
         public string fld_KodSAPPekerja { get; set; }
+
+        [StringLength(20)]
+        public string fld_NopkjPermanent { get; set; }
     }
 
     [Table("tbl_Pkjmast")]

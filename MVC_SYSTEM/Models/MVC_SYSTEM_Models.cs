@@ -118,6 +118,8 @@ namespace MVC_SYSTEM.Models
         public virtual DbSet<vw_GajiBulananPekerja_2> vw_GajiBulananPekerja_2 { get; set; }
         public virtual DbSet<vw_KerjaInfoDetails2> vw_KerjaInfoDetails2 { get; set; }
         public virtual DbSet<vw_KerjaHdrOT> vw_KerjaHdrOT { get; set; }
+        public virtual DbSet<tbl_TaxWorkerInfo> tbl_TaxWorkerInfo { get; set; }
+
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

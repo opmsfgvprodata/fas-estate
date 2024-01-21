@@ -19,7 +19,7 @@ namespace MVC_SYSTEM.App_LocalResources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class GlobalResEstate {
@@ -772,6 +772,15 @@ namespace MVC_SYSTEM.App_LocalResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No Pekerja Tetap.
+        /// </summary>
+        public static string hdrNoPkjPermanent {
+            get {
+                return ResourceManager.GetString("hdrNoPkjPermanent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Catitan.
         /// </summary>
         public static string hdrNote {
@@ -898,6 +907,15 @@ namespace MVC_SYSTEM.App_LocalResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Mastautin.
+        /// </summary>
+        public static string hdrResidency {
+            get {
+                return ResourceManager.GetString("hdrResidency", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Kelayakan Cuti Sakit (Hari/Tahun).
         /// </summary>
         public static string hdrSickLeave {
@@ -930,6 +948,15 @@ namespace MVC_SYSTEM.App_LocalResources {
         public static string hdrTargetWorkingDay {
             get {
                 return ResourceManager.GetString("hdrTargetWorkingDay", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No Cukai.
+        /// </summary>
+        public static string hdrTaxNo {
+            get {
+                return ResourceManager.GetString("hdrTaxNo", resourceCulture);
             }
         }
         
@@ -3076,6 +3103,24 @@ namespace MVC_SYSTEM.App_LocalResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Individu Kurang Upaya.
+        /// </summary>
+        public static string lblDisabledIndividual {
+            get {
+                return ResourceManager.GetString("lblDisabledIndividual", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pasangan Kurang Upaya.
+        /// </summary>
+        public static string lblDisabledSpouse {
+            get {
+                return ResourceManager.GetString("lblDisabledSpouse", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Daerah.
         /// </summary>
         public static string lblDistrict {
@@ -5169,6 +5214,15 @@ namespace MVC_SYSTEM.App_LocalResources {
         public static string lblManagerNameBefore {
             get {
                 return ResourceManager.GetString("lblManagerNameBefore", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Status Perkahwinan.
+        /// </summary>
+        public static string lblMaritalStatus {
+            get {
+                return ResourceManager.GetString("lblMaritalStatus", resourceCulture);
             }
         }
         
@@ -8737,6 +8791,24 @@ namespace MVC_SYSTEM.App_LocalResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to MAKLUMAT CUKAI PEKERJA.
+        /// </summary>
+        public static string lblWorkerTaxInfo {
+            get {
+                return ResourceManager.GetString("lblWorkerTaxInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sila masukkan nama pekerja, no pekerja, no tetap pekerja atau no cukai.
+        /// </summary>
+        public static string lblWorkerTaxSearch {
+            get {
+                return ResourceManager.GetString("lblWorkerTaxSearch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Jenis Pekerja.
         /// </summary>
         public static string lblWorkerType {
@@ -10101,6 +10173,15 @@ namespace MVC_SYSTEM.App_LocalResources {
         public static string titleUpdateIncentive {
             get {
                 return ResourceManager.GetString("titleUpdateIncentive", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to KEMASKINI MAKLUMAT CUKAI PEKERJA.
+        /// </summary>
+        public static string titleUpdateWorkerTax {
+            get {
+                return ResourceManager.GetString("titleUpdateWorkerTax", resourceCulture);
             }
         }
         
