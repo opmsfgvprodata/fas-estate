@@ -2460,4 +2460,31 @@
   <data name="lblPaymentMode" xml:space="preserve">
     <value>Payment Mode</value>
   </data>
+  <data name="hdrNoPkjPermanent" xml:space="preserve">
+    <value>Worker Permanent ID</value>
+  </data>
+  <data name="hdrResidency" xml:space="preserve">
+    <value>Residency</value>
+  </data>
+  <data name="hdrTaxNo" xml:space="preserve">
+    <value>Tax No</value>
+  </data>
+  <data name="lblMaritalStatus" xml:space="preserve">
+    <value>Marital Status</value>
+  </data>
+  <data name="lblWorkerTaxInfo" xml:space="preserve">
+    <value>WORKER TAX INFORMATION</value>
+  </data>
+  <data name="lblWorkerTaxSearch" xml:space="preserve">
+    <value>Please enter worker name, worker id, or worker permanent id</value>
+  </data>
+  <data name="titleUpdateWorkerTax" xml:space="preserve">
+    <value>UPDATE WORKER TAX INFORMATION</value>
+  </data>
+  <data name="lblDisabledIndividual" xml:space="preserve">
+    <value>Disabled Individuals</value>
+  </data>
+  <data name="lblDisabledSpouse" xml:space="preserve">
+    <value>Disabled Spouse</value>
+  </data>
 </root>

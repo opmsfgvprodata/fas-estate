@@ -532,6 +532,7 @@
     <Compile Include="Models\tbl_Asaspkt.cs" />
     <Compile Include="Models\tbl_Blok.cs" />
     <Compile Include="Models\tbl_ByrCarumanTambahan.cs" />
+    <Compile Include="Models\tbl_TaxWorkerInfo.cs" />
     <Compile Include="Models\tbl_CutiDiambil.cs" />
     <Compile Include="Models\tbl_CutiPeruntukan.cs" />
     <Compile Include="Models\tbl_GajiBulanan.cs" />
@@ -641,6 +642,7 @@
     <Compile Include="ViewingModels\RejectList.cs" />
     <Compile Include="ViewingModels\SystemConfigList.cs" />
     <Compile Include="ViewingModels\tbl_AsaspktList.cs" />
+    <Compile Include="ViewingModels\tbl_TaxWorkerInfoList.cs" />
     <Compile Include="ViewingModels\tbl_GLSAP.cs" />
     <Compile Include="ViewingModels\tbl_KawTidakBerhasil.cs" />
     <Compile Include="ViewingModels\tbl_Blok.cs" />
@@ -683,6 +685,7 @@
     <Compile Include="ViewingModels\tbl_WilayahList.cs" />
     <Compile Include="ViewingModels\UserList.cs" />
     <Compile Include="ViewingModels\vw_BonusPekerja.cs" />
+    <Compile Include="ViewingModels\vw_TaxWorkerInfo.cs" />
     <Compile Include="ViewingModels\vw_CutiPekerja.cs" />
     <Compile Include="ViewingModels\vw_CutiUmumLdgDetails.cs" />
     <Compile Include="ViewingModels\vw_CutiUmumNegeri.cs" />
@@ -3187,6 +3190,10 @@
     <Content Include="Views\Report\_PaySlipRptDetail2.cshtml" />
     <Content Include="Views\Report\_PaySlipRptSearch2.cshtml" />
     <Content Include="Views\Report\PaySlipRpt2.cshtml" />
+    <Content Include="Views\WorkerInfo\WorkerTaxInfo.cshtml" />
+    <Content Include="Views\WorkerInfo\_WorkerTaxInfo.cshtml" />
+    <Content Include="Views\WorkerInfo\_WorkerTaxInfoEdit.cshtml" />
+    <Content Include="Views\WorkerInfo\_WorkerTaxInfoCreate.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Asset\Upload\120\" />
