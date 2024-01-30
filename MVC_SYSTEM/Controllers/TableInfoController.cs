@@ -26,6 +26,7 @@ namespace MVC_SYSTEM.Controllers
 {
     public class TableInfoController : Controller
     {
+        private MVC_SYSTEM_Models db3 = new MVC_SYSTEM_Models();
         private MVC_SYSTEM_MasterModels db = new MVC_SYSTEM_MasterModels();
         private GetIdentity getidentity = new GetIdentity();
         private GetConfig GetConfig = new GetConfig();
@@ -570,6 +571,7 @@ namespace MVC_SYSTEM.Controllers
             ViewBag.NamaCaruman = db.tbl_SubCarumanTambahan.Where(x => x.fld_KodSubCaruman == subcont && x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID && x.fld_Deleted == false).Select(s => s.fld_KeteranganSubCaruman).FirstOrDefault();
             ViewBag.NamaSyarikat = db.tbl_Syarikat.Where(x => x.fld_SyarikatID == SyarikatID && x.fld_NegaraID == NegaraID).Select(s => s.fld_NamaSyarikat).FirstOrDefault();
             ViewBag.NoSyarikat = db.tbl_Syarikat.Where(x => x.fld_SyarikatID == SyarikatID && x.fld_NegaraID == NegaraID).Select(s => s.fld_NoSyarikat).FirstOrDefault();
+            ViewBag.JenisKodSubCaruman = subcont;
             return View(resultreport);
         }
 
@@ -1227,6 +1229,76 @@ namespace MVC_SYSTEM.Controllers
             }
 
             return report;
+        }
+        [HttpPost]
+        public ActionResult ConvertPDF2(string myHtml, string filename, string reportname)
+        {
+            int? NegaraID, SyarikatID, WilayahID, LadangID = 0;
+            int? getuserid = getidentity.ID(User.Identity.Name);
+            string host, catalog, user, pass = "";
+            GetNSWL.GetData(out NegaraID, out SyarikatID, out WilayahID, out LadangID, getuserid, User.Identity.Name);
+            Connection.GetConnection(out host, out catalog, out user, out pass, WilayahID.Value, SyarikatID.Value, NegaraID.Value);
+            MVC_SYSTEM_Models dbr = MVC_SYSTEM_Models.ConnectToSqlServer(host, catalog, user, pass);
+
+            bool success = false;
+            string msg = "";
+            string status = "";
+            Models.tblHtmlReport tblHtmlReport = new Models.tblHtmlReport();
+
+            tblHtmlReport.fldHtlmCode = myHtml;
+            tblHtmlReport.fldFileName = filename;
+            tblHtmlReport.fldReportName = reportname;
+
+            dbr.tblHtmlReports.Add(tblHtmlReport);
+            dbr.SaveChanges();
+
+            success = true;
+            status = "success";
+
+            return Json(new { success = success, id = tblHtmlReport.fldID, msg = msg, status = status, link = Url.Action("GetPDF", "TableInfo", null, "http") + "/" + tblHtmlReport.fldID });
+        }
+
+
+        public ActionResult GetPDF(int id)
+        {
+            int? NegaraID = 0;
+            int? SyarikatID = 0;
+            int? WilayahID = 0;
+            int? LadangID = 0;
+            int? getuserid = getidentity.ID(User.Identity.Name);
+            string width = "1684", height = "1190";
+            string imagepath = Server.MapPath("~/Asset/Images/");
+
+            var gethtml = db3.tblHtmlReports.Find(id);
+
+            GetNSWL.GetData(out NegaraID, out SyarikatID, out WilayahID, out LadangID, getuserid, User.Identity.Name);
+            var logosyarikat = db.tbl_Syarikat.Where(x => x.fld_SyarikatID == SyarikatID && x.fld_NegaraID == NegaraID).Select(s => s.fld_LogoName).FirstOrDefault();
+
+
+            Document pdfDoc = new Document(new Rectangle(int.Parse(width), int.Parse(height)), 50f, 50f, 50f, 50f);
+
+            PdfWriter writer = PdfWriter.GetInstance(pdfDoc, Response.OutputStream);
+            pdfDoc.Open();
+
+                using (TextReader sr = new StringReader(gethtml.fldHtlmCode))
+                {
+                    using (var htmlWorker = new HTMLWorkerExtended(pdfDoc, imagepath + logosyarikat))
+                    {
+                        htmlWorker.Open();
+                        htmlWorker.Parse(sr);
+                    }
+                }
+
+            pdfDoc.Close();
+            Response.ContentType = "application/pdf";
+            Response.AddHeader("content-disposition", "attachment;filename=" + gethtml.fldFileName + ".pdf");
+            Response.Cache.SetCacheability(HttpCacheability.NoCache);
+            Response.Write(pdfDoc);
+            Response.End();
+
+            db3.Entry(gethtml).State = EntityState.Deleted;
+            db3.SaveChanges();
+            return View();
         }
     }
 }

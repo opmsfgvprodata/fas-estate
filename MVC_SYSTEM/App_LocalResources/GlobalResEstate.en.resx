@@ -2460,4 +2460,16 @@
   <data name="lblPaymentMode" xml:space="preserve">
     <value>Payment Mode</value>
   </data>
+  <data name="lblContributionTableCat1" xml:space="preserve">
+    <value>B Category 1 &amp; 3 (RM)</value>
+  </data>
+  <data name="lblContributionTableCat2" xml:space="preserve">
+    <value>B Category 2(RM)</value>
+  </data>
+  <data name="lblContributionTableEmpyeeM" xml:space="preserve">
+    <value>M (RM)</value>
+  </data>
+  <data name="lblContributionTableR" xml:space="preserve">
+    <value>R (%)</value>
+  </data>
 </root>
