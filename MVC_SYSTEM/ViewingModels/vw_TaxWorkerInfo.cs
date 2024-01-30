@@ -19,6 +19,10 @@ namespace MVC_SYSTEM.ViewingModels
 
         public tbl_Pkjmast Pkjmast { get; set; }
 
+        [Key]
+        [Column(Order = 0)]
+        public Guid fld_UniqueID { get; set; }
+
         [StringLength(20)]
         public string fld_NopkjPermanent { get; set; }
 

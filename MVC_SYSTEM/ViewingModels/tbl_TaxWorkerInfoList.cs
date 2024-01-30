@@ -13,6 +13,8 @@
     public partial class tbl_TaxWorkerInfo
     {
         [Key]
+        public Guid fld_UniqueID { get; set; }
+
         [StringLength(20)]
         public string fld_NopkjPermanent { get; set; }
 
