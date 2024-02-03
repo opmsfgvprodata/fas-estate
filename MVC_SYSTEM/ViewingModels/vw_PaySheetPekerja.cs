@@ -164,8 +164,8 @@
         [Column(TypeName = "numeric")]
         public decimal? netincome { get; set; }
 
-        [Column(TypeName = "numeric")]
-        public decimal? deduction { get; set; }
+        [StringLength(2)]
+        public string fld_Kdrkyt { get; set; }
 
     }
 }
