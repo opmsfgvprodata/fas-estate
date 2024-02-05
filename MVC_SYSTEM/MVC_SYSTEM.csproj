@@ -266,6 +266,7 @@
     <Compile Include="AuthModels\vw_NSWL.cs" />
     <Compile Include="Class\Connection.cs" />
     <Compile Include="Class\CheckrollFunction.cs" />
+    <Compile Include="Class\Constans.cs" />
     <Compile Include="Class\DatabaseAction.cs" />
     <Compile Include="Class\DownloadFiles.cs" />
     <Compile Include="Class\GenerateSalaryHub.cs" />
@@ -3198,6 +3199,7 @@
     <Content Include="Views\WorkerInfo\_WorkerTaxInfo.cshtml" />
     <Content Include="Views\WorkerInfo\_WorkerTaxInfoEdit.cshtml" />
     <Content Include="Views\WorkerInfo\_WorkerTaxInfoCreate.cshtml" />
+    <Content Include="Views\PCBReport\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Asset\Upload\120\" />
@@ -3212,7 +3214,6 @@
     <Folder Include="Views\Home\" />
     <Folder Include="Views\IntegrationLogin\" />
     <Folder Include="Views\OPMSHQ\" />
-    <Folder Include="Views\PCBReport\" />
     <Folder Include="Views\PdfCreator\" />
     <Folder Include="Views\Report3\" />
     <Folder Include="Views\ReportPdf\" />
