@@ -53,6 +53,9 @@
       <HintPath>..\packages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Dapper, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Dapper.2.1.28\lib\net461\Dapper.dll</HintPath>
+    </Reference>
     <Reference Include="ImpersUsr, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>bin\ImpersUsr.dll</HintPath>
@@ -307,6 +310,7 @@
     <Compile Include="Controllers\ModulesController.cs" />
     <Compile Include="Controllers\MVC_SYSTEM_ModelsCorporate.cs" />
     <Compile Include="Controllers\OPMSHQController.cs" />
+    <Compile Include="Controllers\PCBReportController.cs" />
     <Compile Include="Controllers\PdfCreatorController.cs" />
     <Compile Include="Controllers\Report2Controller.cs" />
     <Compile Include="Controllers\ReportController.cs" />
@@ -3208,6 +3212,7 @@
     <Folder Include="Views\Home\" />
     <Folder Include="Views\IntegrationLogin\" />
     <Folder Include="Views\OPMSHQ\" />
+    <Folder Include="Views\PCBReport\" />
     <Folder Include="Views\PdfCreator\" />
     <Folder Include="Views\Report3\" />
     <Folder Include="Views\ReportPdf\" />
