@@ -13812,5 +13812,9 @@ namespace MVC_SYSTEM.Controllers
             return View(ContributionReportList);
         }
 
+        public ActionResult PCBReport()
+        {
+            return RedirectToAction("Index", "PCBReport");
+        }
     }
 }
