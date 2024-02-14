@@ -3,9 +3,10 @@
 
 @{
     GetConfig getConfig = new GetConfig();
+    string uniquefilename = "Worker Tax Info";
 }
 
-<div>
+<div id="scrollArea2" class="modal-body">
     @if (Model != null && Model.Count > 0)
     {
         var grid = new WebGrid(
@@ -35,43 +36,63 @@
                 grid.Column("Pkjmast.fld_Nama", GlobalResEstate.hdrName, style: "namapkj"),
                 grid.Column(header: GlobalResEstate.hdrTaxNo, format: @<text>
                         @(item.WorkerTax != null && item.WorkerTax.Count > 0 ? item.WorkerTax[0].fld_TaxNo : "")</text>, style: "account"),
-grid.Column(header: GlobalResEstate.hdrResidency, format: @<text>
-                @(getConfig.GetResidency(item.WorkerTax != null && item.WorkerTax.Count > 0 ? item.WorkerTax[0].fld_TaxResidency : "", item.Pkjmast.fld_NegaraID, item.Pkjmast.fld_SyarikatID)) </text>, style: "account"),
-grid.Column(header: GlobalResEstate.lblMaritalStatus, format: @<text>
-    @(getConfig.GetMaritalStatus(item.WorkerTax != null && item.WorkerTax.Count > 0 ? item.WorkerTax[0].fld_TaxMaritalStatus : "", item.Pkjmast.fld_NegaraID, item.Pkjmast.fld_SyarikatID))</text>, style: "status"),
-grid.Column(header: GlobalResEstate.lblYear, format: @<text>
-    @(item.WorkerTax != null && item.WorkerTax.Count > 0 ? item.WorkerTax[0].fld_Year : "")</text>, style: "account"),
+                grid.Column(header: GlobalResEstate.hdrResidency, format: @<text>
+                    @(getConfig.GetResidency(item.WorkerTax != null && item.WorkerTax.Count > 0 ? item.WorkerTax[0].fld_TaxResidency : "", item.Pkjmast.fld_NegaraID, item.Pkjmast.fld_SyarikatID)) </text>, style: "account"),
+                grid.Column(header: GlobalResEstate.lblMaritalStatus, format: @<text>
+                    @(getConfig.GetMaritalStatus(item.WorkerTax != null && item.WorkerTax.Count > 0 ? item.WorkerTax[0].fld_TaxMaritalStatus : "", item.Pkjmast.fld_NegaraID, item.Pkjmast.fld_SyarikatID))</text>, style: "status"),
+                grid.Column(header: GlobalResEstate.lblYear, format: @<text>
+                    @(item.WorkerTax != null && item.WorkerTax.Count > 0 ? item.WorkerTax[0].fld_Year : "")</text>, style: "account"),
 
-grid.Column(GlobalResEstate.hdrAction, format: (item) =>
-{
-//var hasTaxNo = item.WorkerTax != null && item.WorkerTax.Count > 0 && !string.IsNullOrEmpty(item.WorkerTax[0].fld_TaxNo);
+                grid.Column(GlobalResEstate.hdrAction, format: (item) =>
+                {
+                //var hasTaxNo = item.WorkerTax != null && item.WorkerTax.Count > 0 && !string.IsNullOrEmpty(item.WorkerTax[0].fld_TaxNo);
 
-if (item.WorkerTax.Count > 0)
-{
-var tindakan = "<a data-modal1='' href='" + @Url.Action("_WorkerTaxInfoEdit", "WorkerInfo") + "/?id=" + item.Pkjmast.fld_NopkjPermanent + "' title='Update Worker Tax Info' class='btn btn-success'><i class='fa fa-edit fa-lg'></i></a>";
-return @Html.Raw(tindakan);
-}
-else
-{
-var tindakan = "<a data-modal1='' href='" + @Url.Action("_WorkerTaxInfoCreate", "WorkerInfo") + "/?id=" + item.Pkjmast.fld_NopkjPermanent + "' title='Add Worker Tax Info' class='btn btn-success'><i class='fa fa-plus fa-lg'></i></a>";
+                if (item.WorkerTax.Count > 0)
+                {
+                var tindakan = "<a data-modal1='' href='" + @Url.Action("_WorkerTaxInfoEdit", "WorkerInfo") + "/?id=" + item.Pkjmast.fld_NopkjPermanent + "' title='Update Worker Tax Info' class='btn btn-success'><i class='fa fa-edit fa-lg'></i></a>";
+                return @Html.Raw(tindakan);
+                }
+                else
+                {
+                var tindakan = "<a data-modal1='' href='" + @Url.Action("_WorkerTaxInfoCreate", "WorkerInfo") + "/?id=" + item.Pkjmast.fld_NopkjPermanent + "' title='Add Worker Tax Info' class='btn btn-success'><i class='fa fa-plus fa-lg'></i></a>";
 
-return @Html.Raw(tindakan);
-}
-}, canSort: false, style: "tindakan")
-))
-    }
-    else
-    {
-        <div>
-            @Html.Label(GlobalResEstate.msgErrorSearch)
-        </div>
-    }
+                return @Html.Raw(tindakan);
+                }
+                }, canSort: false, style: "tindakan")
+                ))
+
+                if (ViewBag.Print == null)
+                {
+                    <div style="text-align:right; margin-top:10px">
+
+                        <a class="btn btn-default btn-sm" href="#" onclick="HTMLtoExcel('@uniquefilename')">
+                            <span><img src="~/Asset/Images/excel-icon.png" width="20px" height="20px" /></span> @GlobalResEstate.btnDownloadExcel
+                        </a>
+                    </div> 
+                }
+      }
+    @*else
+        {
+            <div>
+                @Html.Label(GlobalResEstate.msgErrorSearch)
+            </div>
+        }*@
 </div>
+
+@if (Model == null || Model.Count() == 0)
+{
+    <div id="scrollArea2" class="modal-body" style="text-align: center">
+        <p style="color: red">@ViewBag.Message</p>
+
+    </div>
+}
 
 <style>
     // Your styles
 </style>
 
+<script src="~/Asset/Scripts/FromHTML.js"></script>
+<script src="~/Asset/Scripts/FileSaver.js"></script>
 
 <style>
     .header_table th {
