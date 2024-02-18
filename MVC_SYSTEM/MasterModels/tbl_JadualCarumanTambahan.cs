@@ -42,5 +42,10 @@ namespace MVC_SYSTEM.MasterModels
         public int fld_NegaraID { get; set; }
 
         public bool fld_Deleted { get; set; }
+        //Added by Shazana 15/1/2024
+        public decimal? fld_TaxPercent_R { get; set; }
+        public decimal? fld_Category1_B { get; set; }
+        public decimal? fld_Category2_B { get; set; }
+
     }
 }
