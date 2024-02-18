@@ -282,6 +282,7 @@
     <Compile Include="Class\GetTriager.cs" />
     <Compile Include="Class\GetWilayah.cs" />
     <Compile Include="Class\GlobalFunction.cs" />
+    <Compile Include="Class\HTMLWorkerExtended.cs" />
     <Compile Include="Class\IniParser.cs" />
     <Compile Include="Class\NumberToWord.cs" />
     <Compile Include="Class\PDFHeaderFooter.cs" />
