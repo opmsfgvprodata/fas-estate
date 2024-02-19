@@ -74,7 +74,8 @@ namespace MVC_SYSTEM.Controllers
             var CheckBlockKeyInDay = db.tblOptionConfigsWebs.Where(x => x.fldOptConfFlag1 == "blokdatakerja" && x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID && x.fldDeleted == false).Select(s => s.fldOptConfValue).FirstOrDefault();
             var CheckBlockValidDayApp = db.tblOptionConfigsWebs.Where(x => x.fldOptConfFlag1 == "blokdatakerjavlddt" && x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID && x.fldDeleted == false).Select(s => s.fldOptConfValue).FirstOrDefault();
             //fitri 10-08-2020
-            var CheckLastDataKeyIn = dbr.tbl_Kerjahdr.Where(x => x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID && x.fld_WilayahID == WilayahID && x.fld_LadangID == LadangID && x.fld_Tarikh.Value.Year == date.Value.Year && x.fld_Tarikh.Value.Month == date.Value.Month).Select(s => s.fld_Tarikh).FirstOrDefault();
+            //fatin modified add orderby - 16/02/2023
+            var CheckLastDataKeyIn = dbr.tbl_Kerjahdr.Where(x => x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID && x.fld_WilayahID == WilayahID && x.fld_LadangID == LadangID && x.fld_Tarikh.Value.Year == date.Value.Year && x.fld_Tarikh.Value.Month == date.Value.Month).OrderByDescending(o => o.fld_Tarikh).Select(s => s.fld_Tarikh).FirstOrDefault();
             ValidDayApp = double.Parse(CheckBlockValidDayApp) - 1;
 
             if (CheckLastDataKeyIn == null)
