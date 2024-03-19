@@ -168,6 +168,81 @@ namespace MVC_SYSTEM.Controllers
             {
                 monthstring = "0" + monthstring;
             }
+
+            #region generate worker AL
+            var workerLdg = dbr.tbl_Pkjmast
+                .Where(x => x.fld_Kdaktf == "1" &&
+                    x.fld_NegaraID == NegaraID &&
+                    x.fld_SyarikatID == SyarikatID &&
+                    x.fld_WilayahID == WilayahID &&
+                    x.fld_LadangID == LadangID)
+                .ToList();
+
+            var workerIDs = workerLdg.Select(s => s.fld_Nopkj).ToList();
+            var currentYear = short.Parse(DateTime.Now.ToString("yyyy"));
+            var workersLeave = dbr.tbl_CutiPeruntukan
+                .Where(x => x.fld_Deleted == false &&
+                    x.fld_KodCuti == "C02" &&
+                    x.fld_Tahun == currentYear &&
+                    workerIDs.Contains(x.fld_NoPkj))
+                .ToList();
+
+            var leaveTerms = db.tbl_CutiMaintenance
+                .Where(x => x.fld_Deleted == false &&
+                    x.fld_NegaraID == NegaraID &&
+                    x.fld_SyarikatID == SyarikatID &&
+                    x.fld_JenisCuti == "C02")
+                .ToList();
+
+            foreach (var worker in workerLdg)
+            {
+                #region calculate working days
+                DateTime startWork = (DateTime)worker.fld_Trmlkj;
+                DateTime currentDate = DateTime.Now;
+
+                double daysOfWork = (int)(currentDate - startWork).TotalDays;
+
+                // 5 hari = 0 month
+                // 30 hari = 0 month
+                // 31 hari = 1 month
+                double monthsOfWork = Math.Floor(daysOfWork / 30.44);
+                #endregion
+
+                var leave = workersLeave
+                    .Where(x => x.fld_NoPkj == worker.fld_Nopkj)
+                    .FirstOrDefault();
+
+                var leaveAmount = leaveTerms
+                        .Where(x => x.fld_LowerLimit <= monthsOfWork)
+                        .OrderByDescending(o => o.fld_LowerLimit)
+                        .Select(s => s.fld_PeruntukkanCuti)
+                        .FirstOrDefault();
+
+                if (leave == null)
+                {
+                    var newLeaveRecord = new Models.tbl_CutiPeruntukan();
+                    newLeaveRecord.fld_KodCuti = "C02";
+                    newLeaveRecord.fld_NoPkj = worker.fld_Nopkj;
+                    newLeaveRecord.fld_Tahun = currentYear;
+                    newLeaveRecord.fld_JumlahCutiDiambil = 0;
+                    newLeaveRecord.fld_NegaraID = NegaraID;
+                    newLeaveRecord.fld_SyarikatID = SyarikatID;
+                    newLeaveRecord.fld_WilayahID = WilayahID;
+                    newLeaveRecord.fld_LadangID = LadangID;
+                    newLeaveRecord.fld_Deleted = false;
+
+                    newLeaveRecord.fld_JumlahCuti = leaveAmount;
+                    dbr.tbl_CutiPeruntukan.Add(newLeaveRecord);
+                    dbr.SaveChanges();
+                }
+                else if (leave.fld_JumlahCuti != leaveAmount)
+                {
+                    leave.fld_JumlahCuti = leaveAmount;
+                    dbr.SaveChanges();
+                }
+            }
+            #endregion
+
             var ClosingTransaction = dbr.tbl_TutupUrusNiaga.Where(x => x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID && x.fld_WilayahID == WilayahID && x.fld_LadangID == LadangID && x.fld_Month == Month && x.fld_Year == Year && x.fld_DivisionID == DivisionID).FirstOrDefault();
             var CheckScTransSalary = dbr.tbl_Sctran.Where(x => x.fld_Month == Month && x.fld_Year == Year && x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID && x.fld_WilayahID == WilayahID && x.fld_LadangID == LadangID && x.fld_KodAktvt == "4000").Select(s => s.fld_Amt).FirstOrDefault();
             var CheckSkbReg = dbr.tbl_Skb.Where(x => x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID && x.fld_WilayahID == WilayahID && x.fld_LadangID == LadangID && x.fld_Bulan == monthstring && x.fld_Tahun == Year && x.fld_DivisionID == DivisionID).FirstOrDefault();
