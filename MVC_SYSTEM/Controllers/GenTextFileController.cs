@@ -183,8 +183,13 @@ namespace MVC_SYSTEM.Controllers
                                                    x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID),
                 "fldOptConfValue", "fldOptConfDesc", month);
 
+            //add by faeza 09.04.2024
+            var incentiveList = new List<SelectListItem>();
+            incentiveList = new SelectList(db.tbl_JenisInsentif.Where(x => x.fld_InclSecondPayslip == true && x.fld_JenisInsentif == "P" && x.fld_Deleted == false && x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID).OrderBy(o => o.fld_KodInsentif).Select(s => new SelectListItem { Value = s.fld_KodInsentif, Text = s.fld_Keterangan }), "Value", "Text").ToList();
+
             ViewBag.MonthList = monthList;
             ViewBag.StatusList = statusList;
+            ViewBag.IncentiveList = incentiveList;
 
             return View();
         }
@@ -302,7 +307,7 @@ namespace MVC_SYSTEM.Controllers
         }
 
         //added by faeza 26.02.2023
-        public ViewResult _eWalletInsentive(int? MonthList, int? YearList, string print)
+        public ViewResult _eWalletInsentive(int? MonthList, int? YearList, string IncentiveList, string print)
         {
             int? NegaraID, SyarikatID, WilayahID, LadangID = 0;
             int? DivisionID = 0;
@@ -310,6 +315,7 @@ namespace MVC_SYSTEM.Controllers
             string host, catalog, user, pass = "";
             string LdgName = "";
             string LdgCode = "";
+            string IncentiveDescription = "";
             string TelNo, NewTelNo, NoKp, NewNoKp = "";
 
             GetNSWL.GetData(out NegaraID, out SyarikatID, out WilayahID, out LadangID, getuserid, User.Identity.Name);
@@ -339,6 +345,11 @@ namespace MVC_SYSTEM.Controllers
                 .Where(x => x.fld_SyarikatID == SyarikatID && x.fld_NegaraID == NegaraID && x.fld_ID == LadangID)
                 .Select(s => s.fld_LdgCode)
                 .FirstOrDefault();
+            IncentiveDescription = db.tbl_JenisInsentif
+                .Where(x => x.fld_KodInsentif == IncentiveList && x.fld_JenisInsentif == "P" && x.fld_Deleted == false && x.fld_SyarikatID == SyarikatID && x.fld_NegaraID == NegaraID)
+                .Select(s => s.fld_Keterangan)
+                .FirstOrDefault();
+
             ViewBag.Ladang = LdgName.Trim();
             ViewBag.NegaraID = NegaraID;
             ViewBag.SyarikatID = SyarikatID;
@@ -346,7 +357,7 @@ namespace MVC_SYSTEM.Controllers
             ViewBag.UserName = User.Identity.Name;
             ViewBag.Date = DateTime.Now.ToShortDateString();
             ViewBag.Print = print;
-            ViewBag.Description = LdgCode + " - Penggantian Fi Pengambilan " + MonthList + "/" + YearList;
+            ViewBag.Description = LdgCode + " " + IncentiveDescription + " " + MonthList + "/" + YearList;
             if (MonthList == null && YearList == null)
             {
                 ViewBag.Message = GlobalResEstate.msgChooseWork;
@@ -360,7 +371,7 @@ namespace MVC_SYSTEM.Controllers
                                 x.fld_NegaraID == NegaraID &&
                                 x.fld_SyarikatID == SyarikatID &&
                                 x.fld_WilayahID == WilayahID && x.fld_LadangID == LadangID &&
-                                x.fld_DivisionID == DivisionID && x.fld_PaymentMode == "3")
+                                x.fld_DivisionID == DivisionID && x.fld_PaymentMode == "3" && x.fld_KodInsentif == IncentiveList)
                     .OrderBy(x => x.fld_Nama);
 
 
@@ -554,7 +565,7 @@ namespace MVC_SYSTEM.Controllers
         }
 
         //added by faeza 26.02.2023
-        public ActionResult _eWalletInsentiveGen(int Month, int Year)
+        public ActionResult _eWalletInsentiveGen(int Month, int Year, string Incentive)
         {
             int? NegaraID, SyarikatID, WilayahID, LadangID = 0;
             int? getuserid = getidentity.ID(User.Identity.Name);
@@ -582,7 +593,7 @@ namespace MVC_SYSTEM.Controllers
                 MVC_SYSTEM_Viewing dbview = MVC_SYSTEM_Viewing.ConnectToSqlServer(host, catalog, user, pass);
                 DivisionID = GetNSWL.GetDivisionSelection(getuserid, NegaraID, SyarikatID, WilayahID, LadangID);
 
-                var salaryData = dbview.vw_SpecialInsentive.Where(x => x.fld_Year == Year && x.fld_Month == Month && x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID && x.fld_WilayahID == WilayahID && x.fld_LadangID == LadangID && x.fld_DivisionID == DivisionID && x.fld_PaymentMode == "3").OrderBy(x => x.fld_Nama).ToList();
+                var salaryData = dbview.vw_SpecialInsentive.Where(x => x.fld_Year == Year && x.fld_Month == Month && x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID && x.fld_WilayahID == WilayahID && x.fld_LadangID == LadangID && x.fld_DivisionID == DivisionID && x.fld_PaymentMode == "3" && x.fld_KodInsentif == Incentive).OrderBy(x => x.fld_Nama).ToList();
 
                 var LadangDetail = db.tbl_Ladang.Where(x => x.fld_ID == LadangID && x.fld_WlyhID == WilayahID).FirstOrDefault();
 
