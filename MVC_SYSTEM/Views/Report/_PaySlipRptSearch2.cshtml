@@ -70,8 +70,9 @@ else
             var StatusList = $("#StatusList").val();
             var SelectionList = $("#SelectionList").val();
             var JnsPkjList = $("#JnsPkjList").val();
+            var IncentiveList = $("#IncentiveList").val();
 
-            var param = '/?RadioGroup=' + RadioGroup + '&MonthList=' + MonthList + '&YearList=' + YearList + '&StatusList=' + StatusList + '&SelectionList=' + SelectionList + '&JnsPkjList=' + JnsPkjList;
+            var param = '/?RadioGroup=' + RadioGroup + '&MonthList=' + MonthList + '&YearList=' + YearList + '&StatusList=' + StatusList + '&SelectionList=' + SelectionList + '&JnsPkjList=' + JnsPkjList + '&IncentiveList=' + IncentiveList;
             PDFObject.embed("@Url.Action("PaySlipPdf2", "ReportPdf")" + param, "#searchResultWorkerPaySlipRptInfo", { height: "450px" });
 
             return false;
