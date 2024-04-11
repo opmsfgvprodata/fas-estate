@@ -402,7 +402,8 @@ namespace MVC_SYSTEM.Controllers
                             fld_Notel = TelNo,
                             fld_Nokp = NewNoKp,
                             fld_Last4Pan = salary.fld_Last4Pan,
-                            fld_NilaiInsentif = salary.fld_NilaiInsentif,
+                            //fld_NilaiInsentif = salary.fld_NilaiInsentif,
+                            fld_GajiBersih = salary.fld_GajiBersih,
                             fld_Keterangan = salary.fld_Keterangan //added by faeza 18.04.2023
                         });
                 }
@@ -465,7 +466,7 @@ namespace MVC_SYSTEM.Controllers
         }
 
         //added by faeza 26.02.2023
-        public JsonResult GetEwalletInsentiveRecord(int Month, int Year)
+        public JsonResult GetEwalletInsentiveRecord(int Month, int Year, string Incentive)
         {
             int? NegaraID, SyarikatID, WilayahID, LadangID = 0;
             int? DivisionID = 0;
@@ -487,7 +488,7 @@ namespace MVC_SYSTEM.Controllers
                                x.fld_NegaraID == NegaraID &&
                                x.fld_SyarikatID == SyarikatID &&
                                x.fld_WilayahID == WilayahID && x.fld_LadangID == LadangID &&
-                               x.fld_DivisionID == DivisionID && x.fld_PaymentMode == "3")
+                               x.fld_DivisionID == DivisionID && x.fld_PaymentMode == "3" && x.fld_KodInsentif == Incentive)
                    .OrderBy(x => x.fld_Nama).ToList();
 
             var LadangDetail = db.tbl_Ladang.Where(x => x.fld_ID == LadangID && x.fld_WlyhID == WilayahID).FirstOrDefault();
@@ -496,7 +497,8 @@ namespace MVC_SYSTEM.Controllers
 
             if (salaryData.Count() != 0)
             {
-                TotalSalary = salaryData.Sum(s => s.fld_NilaiInsentif);
+                //TotalSalary = salaryData.Sum(s => s.fld_NilaiInsentif);
+                TotalSalary = salaryData.Sum(s => s.fld_GajiBersih);
                 CountData = salaryData.Count();
                 msg = GlobalResEstate.msgDataFound;
                 statusmsg = "success";

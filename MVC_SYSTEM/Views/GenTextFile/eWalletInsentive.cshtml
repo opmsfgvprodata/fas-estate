@@ -111,12 +111,13 @@
         $("#btnSubmit").click(function (e) {
             var Month = $("#MonthList").val();
             var Year = $("#YearList").val();
+            var Incentive = $("#IncentiveList").val();
             $("#UpdateProgress1").css("display", "");
             var ajxfn = {};
             ajxfn.url = "@Url.Action("GetEwalletInsentiveRecord", "GenTextFile")";
             ajxfn.type = "POST";
             ajxfn.async = false;
-            ajxfn.data = JSON.stringify({ Month: Month, Year: Year });
+            ajxfn.data = JSON.stringify({ Month: Month, Year: Year, Incentive: Incentive });
             ajxfn.datatype = "json";
             ajxfn.contentType = "application/json";
             ajxfn.success = function (result) {
