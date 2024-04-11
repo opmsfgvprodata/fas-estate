@@ -28,7 +28,7 @@ else
     <div id="scrollArea2" class="modal-body">
         @foreach (var pkj in Model.Select(s => s.fld_Nopkj).Distinct())
         {
-            @Html.Action("_PaySlipRptDetail2", "Report", new { pkj = pkj, month = ViewBag.SelectedMonth, year = ViewBag.SelectedYear })
+            @Html.Action("_PaySlipRptDetail2", "Report", new { pkj = pkj, month = ViewBag.SelectedMonth, year = ViewBag.SelectedYear, incentive = ViewBag.IncentiveList })
         }
     </div>
 

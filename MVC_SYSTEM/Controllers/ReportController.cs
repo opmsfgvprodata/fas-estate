@@ -9354,7 +9354,7 @@ namespace MVC_SYSTEM.Controllers
         }
 
         //added by faeza 26.02.2023
-        public ActionResult _PaySlipRptSearch2(int? RadioGroup, int? MonthList, int? YearList, string SelectionList, string StatusList, string WorkCategoryList, string JnsPkjList, string print)
+        public ActionResult _PaySlipRptSearch2(int? RadioGroup, int? MonthList, int? YearList, string SelectionList, string StatusList, string WorkCategoryList, string JnsPkjList, string IncentiveList, string print)
         {
             int? NegaraID, SyarikatID, WilayahID, LadangID = 0;
             int? DivisionID = 0;
@@ -9367,6 +9367,7 @@ namespace MVC_SYSTEM.Controllers
 
             ViewBag.SelectedMonth = MonthList;
             ViewBag.SelectedYear = YearList;
+            ViewBag.IncentiveList = IncentiveList;
             ViewBag.Print = print;
             //find pekerja
             if (WorkCategoryList == "0" || WorkCategoryList == null)
