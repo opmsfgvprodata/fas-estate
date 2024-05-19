@@ -44,5 +44,8 @@ namespace MVC_SYSTEM.MasterModels
         [Required(ErrorMessageResourceType = typeof(GlobalResEstate), ErrorMessageResourceName = "msgModelValidation")]
         [StringLength(10)]
         public string fld_RequestCode { get; set; }
+
+        [StringLength(15)]
+        public string fld_EmployerTaxNo { get; set; }
     }
 }

@@ -300,6 +300,7 @@
     <Compile Include="Controllers\CheckRollController.cs" />
     <Compile Include="Controllers\CheckRollMainController.cs" />
     <Compile Include="Controllers\ClosingTransactionController.cs" />
+    <Compile Include="Controllers\EAFormReportController.cs" />
     <Compile Include="Controllers\ErrorHandlerController.cs" />
     <Compile Include="Controllers\GenTextFileController.cs" />
     <Compile Include="Controllers\GetProcessStatusController.cs" />
@@ -312,6 +313,7 @@
     <Compile Include="Controllers\ModulesController.cs" />
     <Compile Include="Controllers\MVC_SYSTEM_ModelsCorporate.cs" />
     <Compile Include="Controllers\OPMSHQController.cs" />
+    <Compile Include="Controllers\PCB2FormReportController.cs" />
     <Compile Include="Controllers\PCBReportController.cs" />
     <Compile Include="Controllers\PdfCreatorController.cs" />
     <Compile Include="Controllers\Report2Controller.cs" />
@@ -538,6 +540,7 @@
     <Compile Include="Models\tbl_Asaspkt.cs" />
     <Compile Include="Models\tbl_Blok.cs" />
     <Compile Include="Models\tbl_ByrCarumanTambahan.cs" />
+    <Compile Include="Models\tbl_TaxPCB2Form.cs" />
     <Compile Include="Models\tbl_TaxWorkerInfo.cs" />
     <Compile Include="Models\tbl_CutiDiambil.cs" />
     <Compile Include="Models\tbl_CutiPeruntukan.cs" />
@@ -1593,6 +1596,8 @@
     <Content Include="fonts\fontawesome-webfont.woff2" />
     <Content Include="fonts\FontAwesome.otf" />
     <Content Include="App_Browsers\qt.browser" />
+    <Content Include="Asset\pdf\EA.pdf" />
+    <Content Include="Asset\pdf\PCB2.pdf" />
     <None Include="Asset\Scripts\jquery-3.1.0.intellisense.js" />
     <None Include="Asset\Scripts\jquery.validate-vsdoc.js" />
     <None Include="Asset\Scripts\_references.js" />
@@ -3201,6 +3206,8 @@
     <Content Include="Views\WorkerInfo\_WorkerTaxInfoEdit.cshtml" />
     <Content Include="Views\WorkerInfo\_WorkerTaxInfoCreate.cshtml" />
     <Content Include="Views\PCBReport\Index.cshtml" />
+    <Content Include="Views\EAFormReport\Index.cshtml" />
+    <Content Include="Views\PCB2FormReport\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Asset\Upload\120\" />
