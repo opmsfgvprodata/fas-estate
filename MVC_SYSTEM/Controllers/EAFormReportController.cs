@@ -348,9 +348,13 @@ namespace MVC_SYSTEM.Controllers
 
                     var QC = pkjPcbContribution.Where(x => x.fld_KodCaruman == "PCB").OrderBy(o => o.fld_n).Take(1).FirstOrDefault();
                     cb.BeginText();
-                    var qC = Math.Round(QC.fld_Q.Value * QC.fld_C.Value, 2);
+                    decimal qC = 0m;
+                    if (QC != null)
+                    {
+                        qC = Math.Round(QC.fld_Q.Value * QC.fld_C.Value, 2);
+                    }
                     text = qC.ToString(); //QC
-                                                             // put the alignment and coordinates here
+                                          // put the alignment and coordinates here
                     cb.ShowTextAligned(1, text, 515f, 208f, 0); //-10
                     cb.EndText();
 
