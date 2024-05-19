@@ -1861,7 +1861,7 @@ namespace MVC_SYSTEM.Controllers
             cell = new PdfPCell(new Phrase(chunk));
             CellPropoties(cell, table, Element.ALIGN_LEFT, Element.ALIGN_TOP, 0, 2, 10, 5);
 
-            chunk = new Chunk(GetTriager.GetTotalForMoney(pkjPCBInfo.fld_CarumanPekerja), FontFactory.GetFont("Arial", 10, Font.NORMAL, BaseColor.BLACK));
+            chunk = new Chunk(GetTriager.GetTotalForMoney(pkjPCBInfo.fld_CarumanPekerjaNet), FontFactory.GetFont("Arial", 10, Font.NORMAL, BaseColor.BLACK));
             cell = new PdfPCell(new Phrase(chunk));
             CellPropoties(cell, table, Element.ALIGN_RIGHT, Element.ALIGN_TOP, 0, 1, 10, 5);
 
@@ -1925,7 +1925,7 @@ namespace MVC_SYSTEM.Controllers
             cell = new PdfPCell(new Phrase(chunk));
             CellPropoties(cell, table, Element.ALIGN_LEFT, Element.ALIGN_TOP, 0, 1, 10, 5);
 
-            chunk = new Chunk(GetTriager.GetTotalForMoney(pkjPCBInfo.fld_CarumanPekerjaNet), FontFactory.GetFont("Arial", 10, Font.BOLD, BaseColor.BLACK));
+            chunk = new Chunk(GetTriager.GetTotalForMoney(pkjPCBInfo.fld_CarumanPekerja), FontFactory.GetFont("Arial", 10, Font.BOLD, BaseColor.BLACK));
             cell = new PdfPCell(new Phrase(chunk));
             cell.BackgroundColor = BaseColor.YELLOW;
             CellPropoties(cell, table, Element.ALIGN_RIGHT, Element.ALIGN_TOP, 0, 1, 10, 1);
