@@ -46,5 +46,7 @@ namespace MVC_SYSTEM.CustomModels
 
         public int? fld_LadangID { get; set; }
 
+        public bool isActionLocked { get; set; }
+
     }
 }

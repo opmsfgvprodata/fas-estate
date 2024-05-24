@@ -50,7 +50,7 @@
             if (loopitem == 1)
             {
                 <td align="center" rowspan="@datakrjas.Count()" style="vertical-align:middle !important; border:1px solid black;" border="1">
-                    @if (!ViewBag.CutOfDateStatus && !CheckrollFunction.CheckHariTerabai(datakrja.fld_Nopkj, datakrja.fld_Tarikh, datakrja.fld_NegaraID, datakrja.fld_SyarikatID, datakrja.fld_WilayahID, datakrja.fld_LadangID))
+                    @if (!ViewBag.CutOfDateStatus && !CheckrollFunction.CheckHariTerabai(datakrja.fld_Nopkj, datakrja.fld_Tarikh, datakrja.fld_NegaraID, datakrja.fld_SyarikatID, datakrja.fld_WilayahID, datakrja.fld_LadangID) && !datakrja.isActionLocked)
                     {
                         <button id="delete_@itemno" name="delete_@itemno" class="btn btn-danger" title="Padam" onclick="return DeleteWorkInfo('@kodaktvt.fld_KodPkt','@kodaktvt.fld_KodAktvt');"><i class='fa fa-trash fa-lg'></i></button>
                     }

@@ -78,7 +78,7 @@
                 <td align="center" style="vertical-align:middle !important; border:1px solid black;" border="1">
                     @if (item.fld_Status == "Ada rekod")
                     {
-                        if (!ViewBag.CutOfDateStatus)
+                        if (!ViewBag.CutOfDateStatus && !item.isActionLocked)
                         {
                             <button id="deleteAtt_@itemno" name="deleteAtt_@itemno" class="btn btn-danger" title="Padam" onclick="return DeleteAttInfo('@item.fld_UniqueID');"><i class='fa fa-trash fa-lg'></i></button>
                         }
