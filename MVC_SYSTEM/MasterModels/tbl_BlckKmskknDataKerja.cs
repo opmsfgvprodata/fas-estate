@@ -42,6 +42,9 @@ namespace MVC_SYSTEM.MasterModels
 
         [StringLength(300)]
         public string fld_Remark { get; set; }
+
+        [StringLength(50)]
+        public string fld_Purpose { get; set; }
     }
 
     [Table("tbl_BlckKmskknDataKerja")]
