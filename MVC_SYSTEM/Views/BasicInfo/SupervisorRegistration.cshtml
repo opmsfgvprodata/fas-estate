@@ -23,7 +23,7 @@
 <section class="content-wrapper main-content clear-fix">
     <div class="well bottom" style="padding-bottom: 16px">
         <div class="row">
-            @using (Ajax.BeginForm("_SupervisorRegistration", "WorkerInfo", null, options, new { @id = "SupervisorRegistrationSearchDetails" }))
+            @using (Ajax.BeginForm("_SupervisorRegistration", "BasicInfo", null, options, new { @id = "SupervisorRegistrationSearchDetails" }))
             {
                 @Html.AntiForgeryToken()
                 <div class="col-sm-4">
@@ -49,8 +49,8 @@
             </div>
         </div>
         <div class="modal-footer col-md-12">
-            <a data-modal1='' href=@Url.Action("SupervisorRegistrationCreate", "WorkerInfo") class="btn btn-success" role="button" onclick="return DisplayProgressMessage(this);">Add Supervisor</a>
-            <a href=@Url.Action("Index", "WorkerInfo") class="btn btn-warning" role="button" onclick="return DisplayProgressMessage(this);">@GlobalResEstate.btnBack</a>
+            <a data-modal1='' href=@Url.Action("SupervisorRegistrationCreate", "BasicInfo") class="btn btn-success" role="button" onclick="return DisplayProgressMessage(this);">Add Supervisor</a>
+            <a href=@Url.Action("Index", "BasicInfo") class="btn btn-warning" role="button" onclick="return DisplayProgressMessage(this);">@GlobalResEstate.btnBack</a>
         </div>
     </div>
     @*</div>*@
