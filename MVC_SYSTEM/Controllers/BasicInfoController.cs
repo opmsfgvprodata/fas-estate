@@ -57,7 +57,7 @@ namespace MVC_SYSTEM.Controllers
             ViewBag.BasicInfo = "class = active";
             ViewBag.BasicInfoList = new SelectList(
                 db.tblMenuLists.Where(x => x.fld_Flag == "asasldgList" && x.fldDeleted == false && x.fld_NegaraID == NegaraID &&
-                                           x.fld_SyarikatID == SyarikatID).OrderBy(o => o.fld_Desc),
+                                           x.fld_SyarikatID == SyarikatID).OrderBy(o => o.fld_ID),
                 "fld_Val", "fld_Desc");
 
             return View();
@@ -5569,7 +5569,7 @@ namespace MVC_SYSTEM.Controllers
             Connection.GetConnection(out host, out catalog, out user, out pass, WilayahID, SyarikatID.Value, NegaraID.Value);
             MVC_SYSTEM_Models dbr = MVC_SYSTEM_Models.ConnectToSqlServer(host, catalog, user, pass);
 
-           // errorlog geterror = new errorlog();
+            // errorlog geterror = new errorlog();
             try
             {
 
@@ -5605,7 +5605,7 @@ namespace MVC_SYSTEM.Controllers
                         div = "SupervisorRegistrationDetails",
                         rootUrl = domain,
                         action = "_SupervisorRegistration",
-                        controller = "WorkerInfo"
+                        controller = "BasicInfo"
                     });
                 }
             }
@@ -5615,6 +5615,5 @@ namespace MVC_SYSTEM.Controllers
                 return Json(new { success = true, msg = GlobalResEstate.msgError, status = "danger", checkingdata = "1" });
             }
         }
-
     }
 }
