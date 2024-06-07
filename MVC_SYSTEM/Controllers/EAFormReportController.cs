@@ -249,14 +249,14 @@ namespace MVC_SYSTEM.Controllers
                     cb.EndText();
 
                     cb.BeginText();
-                    text = pkjInfo.fld_Nokp; //IC No
+                    text = pkjInfo.fld_Kdrkyt == "MA" ? pkjInfo.fld_Nokp : ""; //IC No
                                              // put the alignment and coordinates here
                     text = text == null ? "" : text;
                     cb.ShowTextAligned(0, text, 163f, 656f, 0); //-10
                     cb.EndText();
 
                     cb.BeginText();
-                    text = pkjInfo.fld_Psptno; //Passport
+                    text = pkjInfo.fld_Kdrkyt != "MA" && string.IsNullOrEmpty(pkjInfo.fld_Psptno) ? pkjInfo.fld_Nokp : pkjInfo.fld_Psptno; //Passport
                                                // put the alignment and coordinates here
                     text = text == null ? "" : text;
                     cb.ShowTextAligned(0, text, 436f, 656f, 0); //-10
