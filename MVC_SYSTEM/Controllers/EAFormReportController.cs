@@ -373,8 +373,9 @@ namespace MVC_SYSTEM.Controllers
 
                     string[] perkesoConCode = new string[] { "SIP", "SBKP" };
                     cb.BeginText();
-                    text = pkjPcbContribution.Where(x => perkesoConCode.Contains(x.fld_KodCaruman)).Sum(s => s.fld_CarumanPekerja).ToString(); //PERKESO Worker Pay
-                                                                                                                                               // put the alignment and coordinates here
+                    var perkeso = pkjPcbContribution.Where(x => perkesoConCode.Contains(x.fld_KodCaruman)).Sum(s => s.fld_CarumanPekerja) + pkjGajiInfo.Sum(s => s.fld_SocsoPkj);
+                    text = perkeso.ToString(); //PERKESO Worker Pay //PERKESO Worker Pay
+                                               // put the alignment and coordinates here
                     text = text == null ? "" : text;
                     cb.ShowTextAligned(1, text, 515f, 147f, 0); //-10
                     cb.EndText();
