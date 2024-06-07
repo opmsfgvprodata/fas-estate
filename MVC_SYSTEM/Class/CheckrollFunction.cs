@@ -1185,7 +1185,7 @@ namespace MVC_SYSTEM.Class
             var Month = CurrentDate.Month;
             var Year = CurrentDate.Year;
 
-            var isUnlockBackDatedKeyin = db.tbl_BlckKmskknDataKerja.Any(x => x.fld_LadangID == LadangID && x.fld_Year == Year && x.fld_Month == Month && x.fld_Purpose == "backdatedkeyin" && x.fld_ValidDT >= CurrentDate);
+            var isUnlockBackDatedKeyin = db.tbl_BlckKmskknDataKerja.Any(x => x.fld_LadangID == LadangID && x.fld_Purpose == "backdatedkeyin" && x.fld_ValidDT >= CurrentDate);
 
             if ((totalDays > BackdateDaysLock) && !isUnlockBackDatedKeyin)
             {
