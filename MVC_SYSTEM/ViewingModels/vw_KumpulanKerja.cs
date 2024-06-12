@@ -34,5 +34,10 @@ namespace MVC_SYSTEM.ViewingModels
         public int? fld_DivisionID { get; set; }
 
         public bool? fld_deleted { get; set; }
+
+        [StringLength(20)]
+        public string fld_SupervisorID { get; set; }
+        [StringLength(150)]
+        public string fld_SupervisorName { get; set; }
     }
 }

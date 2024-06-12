@@ -121,6 +121,9 @@ namespace MVC_SYSTEM.Models
         public virtual DbSet<tbl_TaxWorkerInfo> tbl_TaxWorkerInfo { get; set; }
 
 
+        public virtual DbSet<tbl_Supervisor> tbl_Supervisor { get; set; }
+        public virtual DbSet<tbl_SupervisorMember> tbl_SupervisorMember { get; set; }
+        public virtual DbSet<vw_SupervisorMembersInfo> vw_SupervisorMembersInfo { get; set; }
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Entity<tbl_Kerja>()
