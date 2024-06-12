@@ -315,6 +315,7 @@
     <Compile Include="Controllers\PCBReportController.cs" />
     <Compile Include="Controllers\PdfCreatorController.cs" />
     <Compile Include="Controllers\Report2Controller.cs" />
+    <Compile Include="Controllers\ReportController.cs" />
     <Compile Include="Controllers\ReportPdfController.cs" />
     <Compile Include="Controllers\SalaryGeneratorController.cs" />
     <Compile Include="Controllers\SalaryIncrementController.cs" />
