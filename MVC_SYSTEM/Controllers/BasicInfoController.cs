@@ -3489,8 +3489,8 @@ namespace MVC_SYSTEM.Controllers
                     //Added by Shazana 29/9/2023
                     kumpulanKerja.fld_SupervisorID = kumpulanKerjaViewModelCreate.fld_SupervisorID == null? null : kumpulanKerjaViewModelCreate.fld_SupervisorID;
                     kumpulanKerja.fld_SupervisorName = kumpulanKerjaViewModelCreate.fld_SupervisorID == null? null : supervisor.fld_SupervisorName;
-                    kumpulanKerja.fld_CreatedBy = getuserid;
-                    kumpulanKerja.fld_CreatedDT = DateTime.Today;
+                    //kumpulanKerja.fld_CreatedBy = getuserid;
+                    //kumpulanKerja.fld_CreatedDT = DateTime.Today;
 
                     if (getCurrentGrpNo == null)
                     {
@@ -3653,8 +3653,8 @@ namespace MVC_SYSTEM.Controllers
                     //Added by Shazana 29/9/2023
                     getdata.fld_SupervisorID = tbl_KumpulanKerja.fld_SupervisorID == "0" ? null : tbl_KumpulanKerja.fld_SupervisorID;
                     getdata.fld_SupervisorName = tbl_KumpulanKerja.fld_SupervisorID == "0" ? null : supervisor.fld_SupervisorName;
-                    getdata.fld_ModifiedBy = getuserid;
-                    getdata.fld_ModifiedDT = DateTime.Today;
+                    //getdata.fld_ModifiedBy = getuserid;
+                    //getdata.fld_ModifiedDT = DateTime.Today;
                     dbr.Entry(getdata).State = EntityState.Modified;
                     dbr.SaveChanges();
 

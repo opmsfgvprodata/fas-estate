@@ -1,5 +1,7 @@
 ﻿@model IEnumerable<MVC_SYSTEM.Models.tbl_Pkjmast>
 @using MVC_SYSTEM.Class
+@using MVC_SYSTEM.Models;
+@using MVC_SYSTEM.ModelsDapper;
 
 @{
     ViewBag.Title = "_PaySlipRptSearch";
@@ -14,6 +16,13 @@
     int minute = ChangeTimeZone.gettimezone().Minute;
     int second = ChangeTimeZone.gettimezone().Second;
     string uniquefilename = "PaySlipRpt_" + ViewBag.UserID + "_" + year1.ToString() + month1.ToString() + day.ToString() + hour.ToString() + minute.ToString() + second.ToString();
+    var webConfigList = ViewBag.WebConfigList as List<MVC_SYSTEM.MasterModels.tblOptionConfigsWeb>;
+    var payslipList = ViewBag.PayslipList as List<Payslip_Result>;
+    var NamaSyarikat = ViewBag.NamaSyarikat;
+    var NoSyarikat = ViewBag.NoSyarikat;
+    var NamaLadang = ViewBag.NamaLadang;
+    var Kump = ViewBag.Kump as List<tbl_KumpulanKerja>;
+}
 }
 
 @if (Model.Count() <= 0)
@@ -25,12 +34,16 @@
 }
 else
 {
-    <div id="scrollArea2" class="modal-body">
-        @foreach (var pkj in Model.Select(s => s.fld_Nopkj).Distinct())
+<div id="scrollArea2" class="modal-body">
+    @foreach (var pkj in Model.Select(s => s.fld_Nopkj).Distinct())
+    {
+        var payslip = payslipList.Where(x => x.fldNopkj == pkj).ToList();
+        if (payslip.Count() > 0)
         {
-            @Html.Action("_PaySlipRptDetail", "Report", new { pkj = pkj, month = ViewBag.SelectedMonth, year = ViewBag.SelectedYear })
+            @Html.Action("_PaySlipRptDetail", "Report", new { pkj, payslip, month = ViewBag.SelectedMonth, year = ViewBag.SelectedYear, webConfigList, tbl_Pkjmast = Model, tbl_KumpulanKerja = Kump, NamaSyarikat, NoSyarikat, NamaLadang })
         }
-    </div>
+    }
+</div>
 
     if (ViewBag.Print == null)
     {
@@ -46,8 +59,8 @@ else
                 <span><img src="~/Asset/Images/pdf-icon.png" width="20px" height="20px" /></span> @GlobalResEstate.btnDownloadPdf
             </a>
             @*<a class="btn btn-default btn-sm" href="#" onclick="HTMLtoExcel('@uniquefilename')">
-                <span><img src="~/Asset/Images/excel-icon.png" width="20px" height="20px" /></span> @GlobalResEstate.btnDownloadExcel
-            </a>*@
+                    <span><img src="~/Asset/Images/excel-icon.png" width="20px" height="20px" /></span> @GlobalResEstate.btnDownloadExcel
+                </a>*@
         </div>
     }
 }

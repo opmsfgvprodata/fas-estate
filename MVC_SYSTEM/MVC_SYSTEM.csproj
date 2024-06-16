@@ -493,6 +493,9 @@
     <Compile Include="ModelSAPPUP\tbl_SAPPostRef.cs" />
     <Compile Include="ModelSAPPUP\tbl_SAPPostReturn.cs" />
     <Compile Include="ModelSAPPUP\vw_SAPPostDataFullDetails.cs" />
+    <Compile Include="ModelsDapper\DataSetFunction.cs" />
+    <Compile Include="ModelsDapper\Payslip_Result.cs" />
+    <Compile Include="ModelsDapper\Worker.cs" />
     <Compile Include="Models\MVC_SYSTEM_Models.cs" />
     <Compile Include="Models\MVC_SYSTEM_Models_Config.cs" />
     <Compile Include="Models\MVC_SYSTEM_SP_Models.Context.cs">

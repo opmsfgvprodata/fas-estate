@@ -1,4 +1,4 @@
-﻿@model IEnumerable<MVC_SYSTEM.Models.sp_Payslip_Result>
+﻿@model IEnumerable<MVC_SYSTEM.ModelsDapper.Payslip_Result>
 @using MVC_SYSTEM.Class
 
 @{
@@ -93,24 +93,24 @@
 
                     @*Commented by Shazana on 25/5/2022*@
                     @*@foreach (var item in Model.Where(x => x.fldNopkj == pkj && x.fldFlag <= 2))
-        {
-            <tr>
-                @if (item.fldKodPkt != null)
-                {
-                    <td width="4%" style="margin: 2px !important; padding: 2px !important; vertical-align: middle !important; border-bottom: 1px dotted gray; border-right: none; border-left: none">@item.fldKeterangan - @item.fldKodPkt</td>
-                }
-                else
-                {
-                    <td width="4%" style="margin: 2px !important; padding: 2px !important; vertical-align: middle !important; border-bottom: 1px dotted gray; border-right: none; border-left: none">@item.fldKeterangan</td>
-                }
+                        {
+                            <tr>
+                                @if (item.fldKodPkt != null)
+                                {
+                                    <td width="4%" style="margin: 2px !important; padding: 2px !important; vertical-align: middle !important; border-bottom: 1px dotted gray; border-right: none; border-left: none">@item.fldKeterangan - @item.fldKodPkt</td>
+                                }
+                                else
+                                {
+                                    <td width="4%" style="margin: 2px !important; padding: 2px !important; vertical-align: middle !important; border-bottom: 1px dotted gray; border-right: none; border-left: none">@item.fldKeterangan</td>
+                                }
 
-                <td width="1%" style="margin: 2px !important; padding: 2px !important; vertical-align: middle !important; border-bottom: 1px dotted gray; text-align: right; border-right: none; border-left: none">@GetTriager.GetDashForNull(item.fldKuantiti.ToString())</td>
-                <td width="1%" style="margin: 2px !important; padding: 2px !important; vertical-align: middle !important; border-bottom: 1px dotted gray; text-align: right; border-right: none; border-left: none">@GetTriager.GetDashForNull(item.fldUnit)</td>
-                <td width="1%" style="margin: 2px !important; padding: 2px !important; vertical-align: middle !important; border-bottom: 1px dotted gray; text-align: right; border-right: none; border-left: none">@GetTriager.GetDashForNull(item.fldKadar.ToString())</td>
-                <td width="1%" style="margin: 2px !important; padding: 2px !important; vertical-align: middle !important; border-bottom: 1px dotted gray; text-align: right; border-right: none; border-left: none">@GetTriager.GetDashForNull(item.fldGandaan.ToString())</td>
-                <td width="1.5%" style="margin: 2px !important; padding: 2px !important; vertical-align: middle !important; border-bottom: 1px dotted gray; text-align: right; border-right: none; border-left: none">@GetTriager.GetTotalForMoney(item.fldJumlah)</td>
-            </tr>
-        }*@
+                                <td width="1%" style="margin: 2px !important; padding: 2px !important; vertical-align: middle !important; border-bottom: 1px dotted gray; text-align: right; border-right: none; border-left: none">@GetTriager.GetDashForNull(item.fldKuantiti.ToString())</td>
+                                <td width="1%" style="margin: 2px !important; padding: 2px !important; vertical-align: middle !important; border-bottom: 1px dotted gray; text-align: right; border-right: none; border-left: none">@GetTriager.GetDashForNull(item.fldUnit)</td>
+                                <td width="1%" style="margin: 2px !important; padding: 2px !important; vertical-align: middle !important; border-bottom: 1px dotted gray; text-align: right; border-right: none; border-left: none">@GetTriager.GetDashForNull(item.fldKadar.ToString())</td>
+                                <td width="1%" style="margin: 2px !important; padding: 2px !important; vertical-align: middle !important; border-bottom: 1px dotted gray; text-align: right; border-right: none; border-left: none">@GetTriager.GetDashForNull(item.fldGandaan.ToString())</td>
+                                <td width="1.5%" style="margin: 2px !important; padding: 2px !important; vertical-align: middle !important; border-bottom: 1px dotted gray; text-align: right; border-right: none; border-left: none">@GetTriager.GetTotalForMoney(item.fldJumlah)</td>
+                            </tr>
+                        }*@
                     @*Close Commented by Shazana on 25/5/2022*@
 
                     @*modified by Faeza on 23.11.2022*@

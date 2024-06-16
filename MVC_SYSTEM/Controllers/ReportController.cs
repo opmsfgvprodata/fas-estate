@@ -22,7 +22,10 @@ using Rotativa;
 using Itenso.TimePeriod;
 using MVC_SYSTEM.Attributes;
 using MVC_SYSTEM.CustomModels2;
-using PagedList; // Add by fitri 17-09-2020
+using PagedList;
+using MVC_SYSTEM.ModelsDapper;
+using System.Data.SqlClient;
+using Dapper; // Add by fitri 17-09-2020
 
 namespace MVC_SYSTEM.Controllers
 {
@@ -283,7 +286,7 @@ namespace MVC_SYSTEM.Controllers
                 if (JnsPkjList == "0")
                 {
                     var result = dbr.tbl_Pkjmast.Where(x => x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID && x.fld_WilayahID == WilayahID && x.fld_LadangID == LadangID && x.fld_KumpulanID != null && x.fld_Kdaktf == "1").OrderBy(o => o.fld_KumpulanID);
-                    
+
                     ViewBag.NamaSyarikat = db.tbl_Syarikat.Where(x => x.fld_SyarikatID == SyarikatID && x.fld_NegaraID == NegaraID).Select(s => s.fld_NamaSyarikat).FirstOrDefault();
                     ViewBag.NoSyarikat = db.tbl_Syarikat.Where(x => x.fld_SyarikatID == SyarikatID && x.fld_NegaraID == NegaraID).Select(s => s.fld_NoSyarikat).FirstOrDefault();
                     if (result.Count() == 0)
@@ -297,7 +300,7 @@ namespace MVC_SYSTEM.Controllers
                 else
                 {
                     var result = dbr.tbl_Pkjmast.Where(x => x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID && x.fld_WilayahID == WilayahID && x.fld_LadangID == LadangID && x.fld_KumpulanID != null && x.fld_Kdaktf == "1" && x.fld_Jenispekerja == JnsPkjList).OrderBy(o => o.fld_KumpulanID);
-                   
+
                     ViewBag.NamaSyarikat = db.tbl_Syarikat.Where(x => x.fld_SyarikatID == SyarikatID && x.fld_NegaraID == NegaraID).Select(s => s.fld_NamaSyarikat).FirstOrDefault();
                     ViewBag.NoSyarikat = db.tbl_Syarikat.Where(x => x.fld_SyarikatID == SyarikatID && x.fld_NegaraID == NegaraID).Select(s => s.fld_NoSyarikat).FirstOrDefault();
                     if (result.Count() == 0)
@@ -308,15 +311,15 @@ namespace MVC_SYSTEM.Controllers
                     //ViewBag.getflag = 2;
                     return View(result);
                 }
-               
+
             }
-            else 
+            else
             {
                 if (JnsPkjList == "0")
                 {
                     int groupID = dbr.vw_KumpulanKerja.Where(x => x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID && x.fld_WilayahID == WilayahID && x.fld_LadangID == LadangID && x.fld_deleted == false && x.fld_KodKumpulan == GroupList).Select(s => s.fld_KumpulanID).FirstOrDefault();
                     var result = dbr.tbl_Pkjmast.Where(x => x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID && x.fld_WilayahID == WilayahID && x.fld_LadangID == LadangID && x.fld_KumpulanID == groupID && x.fld_Kdaktf == "1");
-                    
+
                     ViewBag.NamaSyarikat = db.tbl_Syarikat.Where(x => x.fld_SyarikatID == SyarikatID && x.fld_NegaraID == NegaraID).Select(s => s.fld_NamaSyarikat).FirstOrDefault();
                     ViewBag.NoSyarikat = db.tbl_Syarikat.Where(x => x.fld_SyarikatID == SyarikatID && x.fld_NegaraID == NegaraID).Select(s => s.fld_NoSyarikat).FirstOrDefault();
                     if (result.Count() == 0)
@@ -331,7 +334,7 @@ namespace MVC_SYSTEM.Controllers
                 {
                     int groupID = dbr.vw_KumpulanKerja.Where(x => x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID && x.fld_WilayahID == WilayahID && x.fld_LadangID == LadangID && x.fld_deleted == false && x.fld_KodKumpulan == GroupList).Select(s => s.fld_KumpulanID).FirstOrDefault();
                     var result = dbr.tbl_Pkjmast.Where(x => x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID && x.fld_WilayahID == WilayahID && x.fld_LadangID == LadangID && x.fld_KumpulanID == groupID && x.fld_Kdaktf == "1" && x.fld_Jenispekerja == JnsPkjList);
-                    
+
                     ViewBag.NamaSyarikat = db.tbl_Syarikat.Where(x => x.fld_SyarikatID == SyarikatID && x.fld_NegaraID == NegaraID).Select(s => s.fld_NamaSyarikat).FirstOrDefault();
                     ViewBag.NoSyarikat = db.tbl_Syarikat.Where(x => x.fld_SyarikatID == SyarikatID && x.fld_NegaraID == NegaraID).Select(s => s.fld_NoSyarikat).FirstOrDefault();
                     if (result.Count() == 0)
@@ -342,9 +345,9 @@ namespace MVC_SYSTEM.Controllers
                     //ViewBag.getflag = 2;
                     return View(result);
                 }
-               
+
             }
-            
+
 
         }
 
@@ -421,7 +424,7 @@ namespace MVC_SYSTEM.Controllers
                     ViewBag.UserID = getuserid;
                     return View(result);
                 }
-                    
+
             }
             else
             {
@@ -437,7 +440,7 @@ namespace MVC_SYSTEM.Controllers
                     ViewBag.UserID = getuserid;
                     return View(result);
                 }
-                
+
             }
         }
 
@@ -466,7 +469,7 @@ namespace MVC_SYSTEM.Controllers
 
         //[HttpPost]
         //[ValidateAntiForgeryToken]
-        public ActionResult _KwspSocsoReport(string StatusList , string JnsPkjList, string print)
+        public ActionResult _KwspSocsoReport(string StatusList, string JnsPkjList, string print)
         {
             ViewBag.Report = "class = active";
             int? NegaraID, SyarikatID, WilayahID, LadangID = 0;
@@ -511,7 +514,7 @@ namespace MVC_SYSTEM.Controllers
                     var result = dbr.tbl_Pkjmast.Where(x => x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID && x.fld_WilayahID == WilayahID && x.fld_LadangID == LadangID && x.fld_Kdaktf == "1" && x.fld_Jenispekerja == JnsPkjList);
                     return View(result);
                 }
-                
+
             }
             else
             {
@@ -525,7 +528,7 @@ namespace MVC_SYSTEM.Controllers
                     var result = dbr.tbl_Pkjmast.Where(x => x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID && x.fld_WilayahID == WilayahID && x.fld_LadangID == LadangID && x.fld_Kdaktf == "1" && x.fld_StatusKwspSocso == StatusList && x.fld_Jenispekerja == JnsPkjList);
                     return View(result);
                 }
-                
+
             }
         }
 
@@ -723,7 +726,7 @@ namespace MVC_SYSTEM.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult ExpiredNotiReport(string MonthList,string JnsPkjList)
+        public ActionResult ExpiredNotiReport(string MonthList, string JnsPkjList)
         {
             int? NegaraID, SyarikatID, WilayahID, LadangID = 0;
             int? getuserid = GetIdentity.ID(User.Identity.Name);
@@ -783,7 +786,7 @@ namespace MVC_SYSTEM.Controllers
                     ViewBag.Print = print;
                     return View(result);
                 }
-                
+
             }
             else
             {
@@ -805,7 +808,7 @@ namespace MVC_SYSTEM.Controllers
                     ViewBag.Print = print;
                     return View(result);
                 }
-                    
+
             }
         }
 
@@ -843,7 +846,7 @@ namespace MVC_SYSTEM.Controllers
                     ViewBag.Print = print;
                     return View(result);
                 }
-                
+
             }
             else
             {
@@ -867,7 +870,7 @@ namespace MVC_SYSTEM.Controllers
                     ViewBag.Print = print;
                     return View(result);
                 }
-                
+
             }
         }
 
@@ -1058,7 +1061,7 @@ namespace MVC_SYSTEM.Controllers
                 //Individu
                 if (SelectionList == "0")
                 {
-                    var result = dbr.tbl_Kerja.Where(x => x.fld_Tarikh.Value.Month == MonthList && 
+                    var result = dbr.tbl_Kerja.Where(x => x.fld_Tarikh.Value.Month == MonthList &&
                                                           x.fld_Tarikh.Value.Year == YearList &&
                                                           GetAtvtForYield.Contains(x.fld_KodAktvt) &&
                                                           x.fld_NegaraID == NegaraID &&
@@ -1075,9 +1078,9 @@ namespace MVC_SYSTEM.Controllers
                 }
                 else
                 {
-                    var result = dbr.tbl_Kerja.Where(x => x.fld_Tarikh.Value.Month == MonthList && 
+                    var result = dbr.tbl_Kerja.Where(x => x.fld_Tarikh.Value.Month == MonthList &&
                                                           x.fld_Tarikh.Value.Year == YearList &&
-                                                          GetAtvtForYield.Contains(x.fld_KodAktvt) && 
+                                                          GetAtvtForYield.Contains(x.fld_KodAktvt) &&
                                                           x.fld_Nopkj == SelectionList &&
                                                           x.fld_NegaraID == NegaraID &&
                                                           x.fld_SyarikatID == SyarikatID &&
@@ -1098,7 +1101,7 @@ namespace MVC_SYSTEM.Controllers
                 //Kumpulan
                 if (SelectionList == "0")
                 {
-                    var result = dbr.tbl_Kerja.Where(x => x.fld_Tarikh.Value.Month == MonthList && 
+                    var result = dbr.tbl_Kerja.Where(x => x.fld_Tarikh.Value.Month == MonthList &&
                                                           x.fld_Tarikh.Value.Year == YearList &&
                                                           GetAtvtForYield.Contains(x.fld_KodAktvt) &&
                                                           x.fld_NegaraID == NegaraID &&
@@ -1115,9 +1118,9 @@ namespace MVC_SYSTEM.Controllers
                 }
                 else
                 {
-                    var result = dbr.tbl_Kerja.Where(x => x.fld_Tarikh.Value.Month == MonthList && 
+                    var result = dbr.tbl_Kerja.Where(x => x.fld_Tarikh.Value.Month == MonthList &&
                                                           x.fld_Tarikh.Value.Year == YearList &&
-                                                          GetAtvtForYield.Contains(x.fld_KodAktvt) && 
+                                                          GetAtvtForYield.Contains(x.fld_KodAktvt) &&
                                                           x.fld_Kum == SelectionList &&
                                                           x.fld_NegaraID == NegaraID &&
                                                           x.fld_SyarikatID == SyarikatID &&
@@ -1138,7 +1141,7 @@ namespace MVC_SYSTEM.Controllers
                 //Peringkat/subperingkat
                 if (SelectionList == "0")
                 {
-                    var result = dbr.tbl_Kerja.Where(x => x.fld_Tarikh.Value.Month == MonthList && 
+                    var result = dbr.tbl_Kerja.Where(x => x.fld_Tarikh.Value.Month == MonthList &&
                                                           x.fld_Tarikh.Value.Year == YearList &&
                                                           GetAtvtForYield.Contains(x.fld_KodAktvt) &&
                                                           x.fld_NegaraID == NegaraID &&
@@ -1155,9 +1158,9 @@ namespace MVC_SYSTEM.Controllers
                 }
                 else
                 {
-                    var result = dbr.tbl_Kerja.Where(x => x.fld_Tarikh.Value.Month == MonthList && 
+                    var result = dbr.tbl_Kerja.Where(x => x.fld_Tarikh.Value.Month == MonthList &&
                                                           x.fld_Tarikh.Value.Year == YearList &&
-                                                          GetAtvtForYield.Contains(x.fld_KodAktvt) && 
+                                                          GetAtvtForYield.Contains(x.fld_KodAktvt) &&
                                                           x.fld_KodPkt == SelectionList &&
                                                           x.fld_NegaraID == NegaraID &&
                                                           x.fld_SyarikatID == SyarikatID &&
@@ -1249,7 +1252,7 @@ namespace MVC_SYSTEM.Controllers
             GroupList.Insert(0, (new SelectListItem { Text = GlobalResEstate.lblAll, Value = "0" }));
 
             List<SelectListItem> WorkerList = new List<SelectListItem>();
-            WorkerList = new SelectList(dbr.tbl_Pkjmast.Where(x => x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID && x.fld_WilayahID == WilayahID && x.fld_LadangID == LadangID && x.fld_Kdaktf=="1").OrderBy(o => o.fld_Nama).Select(s => new SelectListItem { Value = s.fld_Nopkj, Text = s.fld_Nopkj + " - " + s.fld_Nama }).Distinct(), "Value", "Text").ToList();
+            WorkerList = new SelectList(dbr.tbl_Pkjmast.Where(x => x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID && x.fld_WilayahID == WilayahID && x.fld_LadangID == LadangID && x.fld_Kdaktf == "1").OrderBy(o => o.fld_Nama).Select(s => new SelectListItem { Value = s.fld_Nopkj, Text = s.fld_Nopkj + " - " + s.fld_Nama }).Distinct(), "Value", "Text").ToList();
             WorkerList.Insert(0, (new SelectListItem { Text = GlobalResEstate.lblAll, Value = "0" }));
 
             List<SelectListItem> JnsPkjList = new List<SelectListItem>();
@@ -1285,7 +1288,7 @@ namespace MVC_SYSTEM.Controllers
                 return View();
             }
 
-            if (GroupList=="0")
+            if (GroupList == "0")
             {
                 if (JnsPkjList == "0")
                 {
@@ -1307,14 +1310,14 @@ namespace MVC_SYSTEM.Controllers
                     ViewBag.DataCount = result.Count();
                     return PartialView(result);
                 }
-                
+
             }
             else
             {
                 int groupID = int.Parse(GroupList);
                 if (WorkerList == "0")
                 {
-                    var result = dbr.vw_RptAIPS.Where(x =>x.fld_KumpulanID==groupID && x.fld_Year == YearList && x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID && x.fld_WilayahID == WilayahID && x.fld_LadangID == LadangID);
+                    var result = dbr.vw_RptAIPS.Where(x => x.fld_KumpulanID == groupID && x.fld_Year == YearList && x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID && x.fld_WilayahID == WilayahID && x.fld_LadangID == LadangID);
                     if (result.Count() == 0)
                     {
                         ViewBag.Message = GlobalResEstate.msgNoRecord;
@@ -1324,7 +1327,7 @@ namespace MVC_SYSTEM.Controllers
                 }
                 else
                 {
-                    var result = dbr.vw_RptAIPS.Where(x =>x.fld_KumpulanID==groupID && x.fld_Nopkj == WorkerList && x.fld_Year == YearList && x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID && x.fld_WilayahID == WilayahID && x.fld_LadangID == LadangID && x.fld_Jenispekerja == JnsPkjList);
+                    var result = dbr.vw_RptAIPS.Where(x => x.fld_KumpulanID == groupID && x.fld_Nopkj == WorkerList && x.fld_Year == YearList && x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID && x.fld_WilayahID == WilayahID && x.fld_LadangID == LadangID && x.fld_Jenispekerja == JnsPkjList);
                     if (result.Count() == 0)
                     {
                         ViewBag.Message = GlobalResEstate.msgNoRecord;
@@ -1333,8 +1336,8 @@ namespace MVC_SYSTEM.Controllers
                     return PartialView(result);
                 }
             }
-           
-        }        
+
+        }
 
         public JsonResult GetList(int RadioGroup, string StatusList)
         {
@@ -1431,9 +1434,9 @@ namespace MVC_SYSTEM.Controllers
                 //Pkt
                 SelectionLabel = "Peringkat";
                 SelectionList = new SelectList(dbr.tbl_Kerja
-                                                  .Where(x => x.fld_NegaraID == NegaraID && 
-                                                              x.fld_SyarikatID == SyarikatID && 
-                                                              x.fld_WilayahID == WilayahID && 
+                                                  .Where(x => x.fld_NegaraID == NegaraID &&
+                                                              x.fld_SyarikatID == SyarikatID &&
+                                                              x.fld_WilayahID == WilayahID &&
                                                               x.fld_LadangID == LadangID)
                                                   .Select(s => new SelectListItem { Value = s.fld_KodPkt, Text = s.fld_KodPkt })
                                                   .Distinct(), "Value", "Text").ToList();
@@ -1455,12 +1458,12 @@ namespace MVC_SYSTEM.Controllers
             int idgroup = int.Parse(groupid);
             if (idgroup == 0)
             {
-                WorkerList = new SelectList(dbr.tbl_Pkjmast.Where(x => x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID && x.fld_WilayahID == WilayahID && x.fld_LadangID == LadangID && x.fld_Kdaktf == "1" && x.fld_KumpulanID!=null).OrderBy(o => o.fld_Nama).Select(s => new SelectListItem { Value = s.fld_Nopkj, Text = s.fld_Nopkj + " - " + s.fld_Nama }).Distinct(), "Value", "Text").ToList();
+                WorkerList = new SelectList(dbr.tbl_Pkjmast.Where(x => x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID && x.fld_WilayahID == WilayahID && x.fld_LadangID == LadangID && x.fld_Kdaktf == "1" && x.fld_KumpulanID != null).OrderBy(o => o.fld_Nama).Select(s => new SelectListItem { Value = s.fld_Nopkj, Text = s.fld_Nopkj + " - " + s.fld_Nama }).Distinct(), "Value", "Text").ToList();
                 //WorkerList.Insert(0, (new SelectListItem { Text = "Semua", Value = "0" }));
             }
             else
             {
-                WorkerList = new SelectList(dbr.tbl_Pkjmast.Where(x => x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID && x.fld_WilayahID == WilayahID && x.fld_LadangID == LadangID && x.fld_Kdaktf == "1" && x.fld_KumpulanID== idgroup).OrderBy(o => o.fld_Nama).Select(s => new SelectListItem { Value = s.fld_Nopkj, Text = s.fld_Nopkj + " - " + s.fld_Nama }).Distinct(), "Value", "Text").ToList();
+                WorkerList = new SelectList(dbr.tbl_Pkjmast.Where(x => x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID && x.fld_WilayahID == WilayahID && x.fld_LadangID == LadangID && x.fld_Kdaktf == "1" && x.fld_KumpulanID == idgroup).OrderBy(o => o.fld_Nama).Select(s => new SelectListItem { Value = s.fld_Nopkj, Text = s.fld_Nopkj + " - " + s.fld_Nama }).Distinct(), "Value", "Text").ToList();
                 //WorkerList.Insert(0, (new SelectListItem { Text = "Semua", Value = "0" }));
             }
             return Json(WorkerList);
@@ -1687,7 +1690,7 @@ namespace MVC_SYSTEM.Controllers
                 {
                     if (SelectionList == "0")
                     {
-                       if (JnsPkjList == "0")
+                        if (JnsPkjList == "0")
                         {
                             IOrderedQueryable<ViewingModels.tbl_Pkjmast> workerData;
 
@@ -1915,7 +1918,7 @@ namespace MVC_SYSTEM.Controllers
                                     {
                                         Pkjmast = workerDataSingle,
                                         Pendapatan = pendapatan,
-                                        Potongan = potongan 
+                                        Potongan = potongan
                                     });
                             }
                         }
@@ -2215,7 +2218,7 @@ namespace MVC_SYSTEM.Controllers
 
             ViewBag.WorkCategoryList = workCategoryList;
 
-           
+
             return View();
         }
 
@@ -2353,7 +2356,7 @@ namespace MVC_SYSTEM.Controllers
                                 var leaveAllocation = dbview.tbl_CutiPeruntukan
                                     .Where(x => x.fld_NoPkj == i.fld_Nopkj && x.fld_Tahun == YearList &&
                                                 x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID &&
-                                                x.fld_WilayahID == WilayahID && x.fld_LadangID == LadangID );
+                                                x.fld_WilayahID == WilayahID && x.fld_LadangID == LadangID);
 
                                 var cutiTahunan = leaveAllocation
                                     .Where(x => x.fld_KodCuti == "C02")
@@ -3030,7 +3033,8 @@ namespace MVC_SYSTEM.Controllers
                             }
 
                             return View(MaklumatCutiPekerja);
-                        } else
+                        }
+                        else
                         {
                             IOrderedQueryable<ViewingModels.tbl_Pkjmast> workerData;
 
@@ -3604,7 +3608,7 @@ namespace MVC_SYSTEM.Controllers
             SelectionList.Insert(0, (new SelectListItem { Text = GlobalResEstate.lblAll, Value = "0" }));
 
             ViewBag.SelectionList = SelectionList;
-            
+
 
             drpyear = timezone.gettimezone().Year - int.Parse(GetConfig.GetData("yeardisplay")) + 1;
             drprangeyear = timezone.gettimezone().Year;
@@ -3834,7 +3838,7 @@ namespace MVC_SYSTEM.Controllers
 
                             return View(MaklumatKehadiranPekerja);
                         }
-                        
+
                     }
 
                     else
@@ -3983,7 +3987,7 @@ namespace MVC_SYSTEM.Controllers
                                     });
                             }
                         }
-                        
+
 
                     }
 
@@ -4158,7 +4162,7 @@ namespace MVC_SYSTEM.Controllers
 
                     else
                     {
-                       if (JnsPkjList == "0")
+                        if (JnsPkjList == "0")
                         {
                             var groupData = dbview.tbl_KumpulanKerja
                             .Where(x => x.fld_KodKumpulan == SelectionList && x.fld_NegaraID == NegaraID &&
@@ -4714,7 +4718,7 @@ namespace MVC_SYSTEM.Controllers
             CookiesValue = "";
 
             MVC_SYSTEM_Models dbr = MVC_SYSTEM_Models.ConnectToSqlServer(host, catalog, user, pass);
-            
+
             try
             {
                 Guid genidC = Guid.Parse(genid);
@@ -4730,7 +4734,7 @@ namespace MVC_SYSTEM.Controllers
                     CookiesValue = CheckIdentity.fld_CookiesVal;
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 result = false;
             }
@@ -4760,7 +4764,7 @@ namespace MVC_SYSTEM.Controllers
             }
             //geterror.testlog("UserName : " + User.Identity.Name, "UserName : " + User.Identity.Name, "UserName : " + User.Identity.Name);
         }
-        
+
         public ViewResult _WorkerPaySlipRptSearch(int? RadioGroup, int? MonthList, int? YearList,
             string SelectionList, string StatusList, string WorkCategoryList, string print)
         {
@@ -4770,7 +4774,7 @@ namespace MVC_SYSTEM.Controllers
             //    geterror.testlog("UserName : " + User.Identity.Name, "UserName : " + User.Identity.Name, "Print Mode : " + print);
             //}
             int? getuserid = GetIdentity.ID(User.Identity.Name);
-            
+
             string host, catalog, user, pass = "";
             GetNSWL.GetData(out NegaraID, out SyarikatID, out WilayahID, out LadangID, getuserid, User.Identity.Name);
             Connection.GetConnection(out host, out catalog, out user, out pass, WilayahID.Value, SyarikatID.Value,
@@ -5966,7 +5970,7 @@ namespace MVC_SYSTEM.Controllers
 
             List<SelectListItem> JnsPkjList = new List<SelectListItem>();
 
-            JnsPkjList = new SelectList(db.tblOptionConfigsWebs.Where(x => x.fldOptConfFlag1 == "jnsPkj" && 
+            JnsPkjList = new SelectList(db.tblOptionConfigsWebs.Where(x => x.fldOptConfFlag1 == "jnsPkj" &&
             x.fldDeleted == false && x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID).OrderBy(o => o.fldOptConfValue)
             .Select(s => new SelectListItem { Value = s.fldOptConfValue, Text = s.fldOptConfDesc }), "Value", "Text").ToList();
             JnsPkjList.Insert(0, (new SelectListItem { Text = GlobalResEstate.lblAll, Value = "0" }));
@@ -7030,7 +7034,7 @@ namespace MVC_SYSTEM.Controllers
             ViewBag.WorkerList = WorkerList;
             return View();
         }
-        
+
         public ViewResult AverageMonthlySalaryReportDetail(int? YearList, string GroupList, string WorkerList)
         {
             ViewBag.Report = "class = active";
@@ -7063,13 +7067,13 @@ namespace MVC_SYSTEM.Controllers
                 int groupID = int.Parse(GroupList);
                 if (WorkerList == "0")
                 {
-                    var result = dbsp.sp_RptPurataGajiBulanan(NegaraID, SyarikatID, WilayahID, LadangID,YearList).Where(x=>x.fld_GroupID==groupID).ToList();
+                    var result = dbsp.sp_RptPurataGajiBulanan(NegaraID, SyarikatID, WilayahID, LadangID, YearList).Where(x => x.fld_GroupID == groupID).ToList();
                     ViewBag.DataCount = result.Count();
                     return View(result);
                 }
                 else
                 {
-                    var result = dbsp.sp_RptPurataGajiBulanan(NegaraID, SyarikatID, WilayahID, LadangID, YearList).Where(x=>x.fld_GroupID==groupID && x.fld_Nopkj==WorkerList).ToList();
+                    var result = dbsp.sp_RptPurataGajiBulanan(NegaraID, SyarikatID, WilayahID, LadangID, YearList).Where(x => x.fld_GroupID == groupID && x.fld_Nopkj == WorkerList).ToList();
                     ViewBag.DataCount = result.Count();
                     return View(result);
                 }
@@ -7553,7 +7557,7 @@ namespace MVC_SYSTEM.Controllers
                     .Where(x => x.fldOptConfFlag1 == "statusaktif" && x.fld_NegaraID == NegaraID &&
                                 x.fld_SyarikatID == SyarikatID && x.fldDeleted == false)
                     .OrderBy(o => o.fldOptConfDesc)
-                    .Select(s => new SelectListItem {Value = s.fldOptConfValue, Text = s.fldOptConfDesc}),
+                    .Select(s => new SelectListItem { Value = s.fldOptConfValue, Text = s.fldOptConfDesc }),
                 "Value", "Text").ToList();
             statusList.Insert(0, (new SelectListItem { Text = "Semua", Value = "" }));
 
@@ -7578,7 +7582,7 @@ namespace MVC_SYSTEM.Controllers
                                 x.fld_SyarikatID == SyarikatID && x.fld_WilayahID == WilayahID &&
                                 x.fld_LadangID == LadangID && x.fld_Deleted == false)
                     .OrderBy(o => o.fld_PktUtama)
-                    .Select(s => new SelectListItem {Value = s.fld_PktUtama, Text = s.fld_PktUtama}),
+                    .Select(s => new SelectListItem { Value = s.fld_PktUtama, Text = s.fld_PktUtama }),
                 "Value", "Text").ToList();
 
             allPeringkatList.AddRange(peringkatList);
@@ -7589,7 +7593,7 @@ namespace MVC_SYSTEM.Controllers
                                 x.fld_SyarikatID == SyarikatID && x.fld_WilayahID == WilayahID &&
                                 x.fld_LadangID == LadangID && x.fld_Deleted == false)
                     .OrderBy(o => o.fld_Pkt)
-                    .Select(s => new SelectListItem {Value = s.fld_Pkt, Text = s.fld_Pkt}),
+                    .Select(s => new SelectListItem { Value = s.fld_Pkt, Text = s.fld_Pkt }),
                 "Value", "Text").ToList();
 
             allPeringkatList.AddRange(subPktList);
@@ -7600,7 +7604,7 @@ namespace MVC_SYSTEM.Controllers
                                 x.fld_SyarikatID == SyarikatID && x.fld_WilayahID == WilayahID &&
                                 x.fld_LadangID == LadangID && x.fld_Deleted == false)
                     .OrderBy(o => o.fld_Blok)
-                    .Select(s => new SelectListItem {Value = s.fld_Blok, Text = s.fld_Blok}),
+                    .Select(s => new SelectListItem { Value = s.fld_Blok, Text = s.fld_Blok }),
                 "Value", "Text").ToList();
 
             allPeringkatList.AddRange(blokList);
@@ -8875,7 +8879,7 @@ namespace MVC_SYSTEM.Controllers
             else
             {
                 //int groupID = int.Parse(GroupList);
-                
+
                 if (WorkerList == "0")
                 {
                     var result = dbr.vw_rptKwspSocso.Where(x => x.fld_KumpulanID == groupID && x.fld_Year == YearList && x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID && x.fld_WilayahID == WilayahID && x.fld_LadangID == LadangID);
@@ -8979,7 +8983,7 @@ namespace MVC_SYSTEM.Controllers
                 }
             }
 
-            var MonthList = new SelectList(db.tblOptionConfigsWebs.Where(x => x.fldOptConfFlag1 == "monthlist" && x.fldDeleted == false && x.fld_NegaraID==NegaraID && x.fld_SyarikatID==SyarikatID), "fldOptConfValue", "fldOptConfDesc", month).ToList();
+            var MonthList = new SelectList(db.tblOptionConfigsWebs.Where(x => x.fldOptConfFlag1 == "monthlist" && x.fldDeleted == false && x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID), "fldOptConfValue", "fldOptConfDesc", month).ToList();
             MonthList.Insert(0, (new SelectListItem { Text = GlobalResEstate.lblAll, Value = "0" }));
 
             ViewBag.MonthList = MonthList;
@@ -9000,15 +9004,15 @@ namespace MVC_SYSTEM.Controllers
             ViewBag.NoSyarikat = db.tbl_Syarikat.Where(x => x.fld_SyarikatID == SyarikatID && x.fld_NegaraID == NegaraID).Select(s => s.fld_NoSyarikat).FirstOrDefault();
             ViewBag.Print = print;
 
-            if(YearList == null && MonthList == null)
+            if (YearList == null && MonthList == null)
             {
                 ViewBag.Message = GlobalResEstate.msgChooseMonthYear;
                 return View();
             }
 
-            if (MonthList==0)
+            if (MonthList == 0)
             {
-                var result = dbr.tbl_TutupUrusNiaga.Where(x => x.fld_Year == YearList && x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID && x.fld_WilayahID == WilayahID && x.fld_LadangID == LadangID).OrderBy(o=>o.fld_Month).ToList();
+                var result = dbr.tbl_TutupUrusNiaga.Where(x => x.fld_Year == YearList && x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID && x.fld_WilayahID == WilayahID && x.fld_LadangID == LadangID).OrderBy(o => o.fld_Month).ToList();
                 ViewBag.DataCount = result.Count();
                 return View(result);
             }
@@ -9043,7 +9047,7 @@ namespace MVC_SYSTEM.Controllers
                 }
             }
 
-            var MonthList = new SelectList(db.tblOptionConfigsWebs.Where(x => x.fldOptConfFlag1 == "monthlist" && x.fldDeleted == false & x.fld_NegaraID==NegaraID && x.fld_SyarikatID==SyarikatID), "fldOptConfValue", "fldOptConfDesc", month).ToList();
+            var MonthList = new SelectList(db.tblOptionConfigsWebs.Where(x => x.fldOptConfFlag1 == "monthlist" && x.fldDeleted == false & x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID), "fldOptConfValue", "fldOptConfDesc", month).ToList();
             MonthList.Insert(0, (new SelectListItem { Text = GlobalResEstate.lblAll, Value = "0" }));
 
             ViewBag.MonthList = MonthList;
@@ -9065,9 +9069,9 @@ namespace MVC_SYSTEM.Controllers
             ViewBag.NegaraID = NegaraID;
             ViewBag.SyarikatID = SyarikatID;
 
-            if (MonthList==0)
+            if (MonthList == 0)
             {
-                var result = db.tbl_SevicesProcess.Where(x => x.fld_Year == YearList && x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID && x.fld_WilayahID == WilayahID && x.fld_LadangID == LadangID).OrderBy(o=>o.fld_Month).ToList();
+                var result = db.tbl_SevicesProcess.Where(x => x.fld_Year == YearList && x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID && x.fld_WilayahID == WilayahID && x.fld_LadangID == LadangID).OrderBy(o => o.fld_Month).ToList();
                 ViewBag.DataCount = result.Count();
                 return View(result);
             }
@@ -9211,8 +9215,11 @@ namespace MVC_SYSTEM.Controllers
             ViewBag.SelectedMonth = MonthList;
             ViewBag.SelectedYear = YearList;
             ViewBag.Print = print;
+
+            var pkjList = new List<Models.tbl_Pkjmast>();
+
             //find pekerja
-            if(WorkCategoryList=="0" || WorkCategoryList == null)
+            if (WorkCategoryList == "0" || WorkCategoryList == null)
             {
                 if (RadioGroup == 0)
                 {
@@ -9225,32 +9232,28 @@ namespace MVC_SYSTEM.Controllers
                             if (JnsPkjList == "0")
                             {
                                 //semua individu
-                                var pkjList = dbr.tbl_Pkjmast.Where(x => x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID && x.fld_WilayahID == WilayahID && x.fld_LadangID == LadangID && x.fld_StatusApproved == 1 && x.fld_DivisionID == DivisionID).OrderBy(o => o.fld_Nama);
-                                return View(pkjList);
+                                pkjList = dbr.tbl_Pkjmast.Where(x => x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID && x.fld_WilayahID == WilayahID && x.fld_LadangID == LadangID && x.fld_StatusApproved == 1 && x.fld_DivisionID == DivisionID).OrderBy(o => o.fld_Nama).ToList();
                             }
                             else
                             {
                                 //semua individu
-                                var pkjList = dbr.tbl_Pkjmast.Where(x => x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID && x.fld_WilayahID == WilayahID && x.fld_LadangID == LadangID && x.fld_StatusApproved == 1 && x.fld_Jenispekerja == JnsPkjList && x.fld_DivisionID == DivisionID).OrderBy(o => o.fld_Nama);
-                                return View(pkjList);
+                                pkjList = dbr.tbl_Pkjmast.Where(x => x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID && x.fld_WilayahID == WilayahID && x.fld_LadangID == LadangID && x.fld_StatusApproved == 1 && x.fld_Jenispekerja == JnsPkjList && x.fld_DivisionID == DivisionID).OrderBy(o => o.fld_Nama).ToList();
                             }
-                            
+
                         }
                         else
                         {
                             if (JnsPkjList == "0")
                             {
                                 //selected individu
-                                var pkjList = dbr.tbl_Pkjmast.Where(x => x.fld_Nopkj == SelectionList && x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID && x.fld_WilayahID == WilayahID && x.fld_LadangID == LadangID && x.fld_StatusApproved == 1 && x.fld_DivisionID == DivisionID).OrderBy(o => o.fld_Nama);
-                                return View(pkjList);
+                                pkjList = dbr.tbl_Pkjmast.Where(x => x.fld_Nopkj == SelectionList && x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID && x.fld_WilayahID == WilayahID && x.fld_LadangID == LadangID && x.fld_StatusApproved == 1 && x.fld_DivisionID == DivisionID).OrderBy(o => o.fld_Nama).ToList();
                             }
                             else
                             {
                                 //selected individu
-                                var pkjList = dbr.tbl_Pkjmast.Where(x => x.fld_Nopkj == SelectionList && x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID && x.fld_WilayahID == WilayahID && x.fld_LadangID == LadangID && x.fld_StatusApproved == 1 && x.fld_Jenispekerja == JnsPkjList && x.fld_DivisionID == DivisionID).OrderBy(o => o.fld_Nama);
-                                return View(pkjList);
+                                pkjList = dbr.tbl_Pkjmast.Where(x => x.fld_Nopkj == SelectionList && x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID && x.fld_WilayahID == WilayahID && x.fld_LadangID == LadangID && x.fld_StatusApproved == 1 && x.fld_Jenispekerja == JnsPkjList && x.fld_DivisionID == DivisionID).OrderBy(o => o.fld_Nama).ToList();
                             }
-                            
+
                         }
 
                     }
@@ -9262,32 +9265,28 @@ namespace MVC_SYSTEM.Controllers
                             if (JnsPkjList == "0")
                             {
                                 //semua individu
-                                var pkjList = dbr.tbl_Pkjmast.Where(x => x.fld_Kdaktf == StatusList && x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID && x.fld_WilayahID == WilayahID && x.fld_LadangID == LadangID && x.fld_StatusApproved == 1 && x.fld_DivisionID == DivisionID).OrderBy(o => o.fld_Nama);
-                                return View(pkjList);
+                                pkjList = dbr.tbl_Pkjmast.Where(x => x.fld_Kdaktf == StatusList && x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID && x.fld_WilayahID == WilayahID && x.fld_LadangID == LadangID && x.fld_StatusApproved == 1 && x.fld_DivisionID == DivisionID).OrderBy(o => o.fld_Nama).ToList();
                             }
                             else
                             {
                                 //semua individu
-                                var pkjList = dbr.tbl_Pkjmast.Where(x => x.fld_Kdaktf == StatusList && x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID && x.fld_WilayahID == WilayahID && x.fld_LadangID == LadangID && x.fld_StatusApproved == 1 && x.fld_Jenispekerja == JnsPkjList && x.fld_DivisionID == DivisionID).OrderBy(o => o.fld_Nama);
-                                return View(pkjList);
+                                pkjList = dbr.tbl_Pkjmast.Where(x => x.fld_Kdaktf == StatusList && x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID && x.fld_WilayahID == WilayahID && x.fld_LadangID == LadangID && x.fld_StatusApproved == 1 && x.fld_Jenispekerja == JnsPkjList && x.fld_DivisionID == DivisionID).OrderBy(o => o.fld_Nama).ToList();
                             }
-                            
+
                         }
                         else
                         {
                             if (JnsPkjList == "0")
                             {
                                 //selected individu
-                                var pkjList = dbr.tbl_Pkjmast.Where(x => x.fld_Kdaktf == StatusList && x.fld_Nopkj == SelectionList && x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID && x.fld_WilayahID == WilayahID && x.fld_LadangID == LadangID && x.fld_StatusApproved == 1 && x.fld_DivisionID == DivisionID).OrderBy(o => o.fld_Nama);
-                                return View(pkjList);
+                                pkjList = dbr.tbl_Pkjmast.Where(x => x.fld_Kdaktf == StatusList && x.fld_Nopkj == SelectionList && x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID && x.fld_WilayahID == WilayahID && x.fld_LadangID == LadangID && x.fld_StatusApproved == 1 && x.fld_DivisionID == DivisionID).OrderBy(o => o.fld_Nama).ToList();
                             }
                             else
                             {
                                 //selected individu
-                                var pkjList = dbr.tbl_Pkjmast.Where(x => x.fld_Kdaktf == StatusList && x.fld_Nopkj == SelectionList && x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID && x.fld_WilayahID == WilayahID && x.fld_LadangID == LadangID && x.fld_StatusApproved == 1 && x.fld_Jenispekerja == JnsPkjList && x.fld_DivisionID == DivisionID).OrderBy(o => o.fld_Nama);
-                                return View(pkjList);
+                                pkjList = dbr.tbl_Pkjmast.Where(x => x.fld_Kdaktf == StatusList && x.fld_Nopkj == SelectionList && x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID && x.fld_WilayahID == WilayahID && x.fld_LadangID == LadangID && x.fld_StatusApproved == 1 && x.fld_Jenispekerja == JnsPkjList && x.fld_DivisionID == DivisionID).OrderBy(o => o.fld_Nama).ToList();
                             }
-                            
+
                         }
                     }
                 }
@@ -9299,16 +9298,14 @@ namespace MVC_SYSTEM.Controllers
                         if (JnsPkjList == "0")
                         {
                             //semua group
-                            var pkjList = dbr.tbl_Pkjmast.Where(x => x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID && x.fld_WilayahID == WilayahID && x.fld_LadangID == LadangID && x.fld_StatusApproved == 1 && x.fld_DivisionID == DivisionID).OrderBy(o => o.fld_Nama);
-                            return View(pkjList);
+                            pkjList = dbr.tbl_Pkjmast.Where(x => x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID && x.fld_WilayahID == WilayahID && x.fld_LadangID == LadangID && x.fld_StatusApproved == 1 && x.fld_DivisionID == DivisionID).OrderBy(o => o.fld_Nama).ToList();
                         }
                         else
                         {
                             //semua group
-                            var pkjList = dbr.tbl_Pkjmast.Where(x => x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID && x.fld_WilayahID == WilayahID && x.fld_LadangID == LadangID && x.fld_StatusApproved == 1 && x.fld_Jenispekerja == JnsPkjList && x.fld_DivisionID == DivisionID).OrderBy(o => o.fld_Nama);
-                            return View(pkjList);
+                            pkjList = dbr.tbl_Pkjmast.Where(x => x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID && x.fld_WilayahID == WilayahID && x.fld_LadangID == LadangID && x.fld_StatusApproved == 1 && x.fld_Jenispekerja == JnsPkjList && x.fld_DivisionID == DivisionID).OrderBy(o => o.fld_Nama).ToList();
                         }
-                        
+
                     }
                     else
                     {
@@ -9316,17 +9313,15 @@ namespace MVC_SYSTEM.Controllers
                         {
                             //selected group
                             var kumpID = dbr.tbl_KumpulanKerja.Where(x => x.fld_KodKumpulan == SelectionList && x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID && x.fld_WilayahID == WilayahID && x.fld_LadangID == LadangID && x.fld_deleted == false && x.fld_DivisionID == DivisionID).Select(s => s.fld_KumpulanID).FirstOrDefault();
-                            var pkjList = dbr.tbl_Pkjmast.Where(x => x.fld_KumpulanID == kumpID && x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID && x.fld_WilayahID == WilayahID && x.fld_LadangID == LadangID && x.fld_StatusApproved == 1);
-                            return View(pkjList);
+                            pkjList = dbr.tbl_Pkjmast.Where(x => x.fld_KumpulanID == kumpID && x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID && x.fld_WilayahID == WilayahID && x.fld_LadangID == LadangID && x.fld_StatusApproved == 1).ToList();
                         }
                         else
                         {
                             //selected group
                             var kumpID = dbr.tbl_KumpulanKerja.Where(x => x.fld_KodKumpulan == SelectionList && x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID && x.fld_WilayahID == WilayahID && x.fld_LadangID == LadangID && x.fld_deleted == false && x.fld_DivisionID == DivisionID).Select(s => s.fld_KumpulanID).FirstOrDefault();
-                            var pkjList = dbr.tbl_Pkjmast.Where(x => x.fld_KumpulanID == kumpID && x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID && x.fld_WilayahID == WilayahID && x.fld_LadangID == LadangID && x.fld_StatusApproved == 1 && x.fld_Jenispekerja == JnsPkjList);
-                            return View(pkjList);
+                            pkjList = dbr.tbl_Pkjmast.Where(x => x.fld_KumpulanID == kumpID && x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID && x.fld_WilayahID == WilayahID && x.fld_LadangID == LadangID && x.fld_StatusApproved == 1 && x.fld_Jenispekerja == JnsPkjList).ToList();
                         }
-                        
+
                     }
                 }
             }
@@ -9335,17 +9330,64 @@ namespace MVC_SYSTEM.Controllers
                 if (JnsPkjList == "0")
                 {
                     //kategori pkj
-                    var pkjList = dbr.tbl_Pkjmast.Where(x => x.fld_Ktgpkj == WorkCategoryList && x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID && x.fld_WilayahID == WilayahID && x.fld_LadangID == LadangID && x.fld_StatusApproved == 1 && x.fld_DivisionID == DivisionID).OrderBy(o => o.fld_Nama);
-                    return View(pkjList);
+                    pkjList = dbr.tbl_Pkjmast.Where(x => x.fld_Ktgpkj == WorkCategoryList && x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID && x.fld_WilayahID == WilayahID && x.fld_LadangID == LadangID && x.fld_StatusApproved == 1 && x.fld_DivisionID == DivisionID).OrderBy(o => o.fld_Nama).ToList();
                 }
                 else
                 {
                     //kategori pkj
-                    var pkjList = dbr.tbl_Pkjmast.Where(x => x.fld_Ktgpkj == WorkCategoryList && x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID && x.fld_WilayahID == WilayahID && x.fld_LadangID == LadangID && x.fld_StatusApproved == 1 && x.fld_Jenispekerja == JnsPkjList && x.fld_DivisionID == DivisionID).OrderBy(o => o.fld_Nama);
-                    return View(pkjList);
+                    pkjList = dbr.tbl_Pkjmast.Where(x => x.fld_Ktgpkj == WorkCategoryList && x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID && x.fld_WilayahID == WilayahID && x.fld_LadangID == LadangID && x.fld_StatusApproved == 1 && x.fld_Jenispekerja == JnsPkjList && x.fld_DivisionID == DivisionID).OrderBy(o => o.fld_Nama).ToList();
                 }
-                
+
             }
+
+            List<Payslip_Result> payslipList = new List<Payslip_Result>();
+
+            if (MonthList != null && YearList != null)
+            {
+                var pkjNoList = pkjList.Select(s => s.fld_Nopkj).ToList();
+                var workers = new List<Worker>();
+                foreach (var pkjNo in pkjNoList)
+                {
+                    workers.Add(new Worker { WorkerID = pkjNo });
+                }
+                var workersDT = workers.ToDataTable();
+
+                string constr = Connection.GetConnectionString(WilayahID.Value, SyarikatID.Value, NegaraID.Value);
+                var con = new SqlConnection(constr);
+                try
+                {
+                    DynamicParameters parameters = new DynamicParameters();
+                    parameters.Add("NegaraID", NegaraID);
+                    parameters.Add("SyarikatID", SyarikatID);
+                    parameters.Add("WilayahID", WilayahID);
+                    parameters.Add("LadangID", LadangID);
+                    parameters.Add("Month", MonthList);
+                    parameters.Add("Year", YearList);
+                    parameters.Add("Workers", workersDT.AsTableValuedParameter("[dbo].[Workers]"));
+                    con.Open();
+                    SqlMapper.Settings.CommandTimeout = 300;
+                    payslipList = SqlMapper.Query<Payslip_Result>(con, "sp_Payslip_V2", parameters).ToList();
+                    con.Close();
+                }
+                catch (Exception)
+                {
+                    throw;
+                }
+            }
+
+            string[] flag1 = new string[] { "designation", "jantina" };
+
+            var tblOptionConfigsWebs = db.tblOptionConfigsWebs.Where(x => x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID && x.fldDeleted == false && flag1.Contains(x.fldOptConfFlag1)).ToList();
+
+            ViewBag.PayslipList = payslipList;
+            ViewBag.Kump = dbr.tbl_KumpulanKerja.Where(x => x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID && x.fld_WilayahID == WilayahID && x.fld_LadangID == LadangID && x.fld_deleted == false).ToList();
+            ViewBag.WebConfigList = tblOptionConfigsWebs;
+
+            var tbl_Syarikat = db.tbl_Syarikat.Where(x => x.fld_SyarikatID == SyarikatID && x.fld_NegaraID == NegaraID && x.fld_Deleted == false).FirstOrDefault();
+            ViewBag.NamaSyarikat = tbl_Syarikat.fld_NamaSyarikat;
+            ViewBag.NoSyarikat = tbl_Syarikat.fld_NoSyarikat;
+            ViewBag.NamaLadang = db.tbl_Ladang.Where(x => x.fld_ID == LadangID && x.fld_Deleted == false).Select(s => s.fld_LdgCode + " - " + s.fld_LdgName).FirstOrDefault();
+            return View(pkjList);
         }
 
         //added by faeza 26.02.2023
@@ -9500,7 +9542,7 @@ namespace MVC_SYSTEM.Controllers
             }
         }
 
-        public ActionResult _PaySlipRptDetail(string pkj, int month, int year)
+        public ActionResult _PaySlipRptDetail(string pkj, List<Payslip_Result> payslip, int month, int year, List<MasterModels.tblOptionConfigsWeb> webConfigList, List<Models.tbl_Pkjmast> tbl_Pkjmast, List<tbl_KumpulanKerja> tbl_KumpulanKerja, string NamaSyarikat, string NoSyarikat, string NamaLadang)
         {
             int? NegaraID, SyarikatID, WilayahID, LadangID = 0;
             int? getuserid = GetIdentity.ID(User.Identity.Name);
@@ -9510,30 +9552,29 @@ namespace MVC_SYSTEM.Controllers
             MVC_SYSTEM_Models dbr = MVC_SYSTEM_Models.ConnectToSqlServer(host, catalog, user, pass);
             MVC_SYSTEM_SP_Models dbsp = MVC_SYSTEM_SP_Models.ConnectToSqlServer(host, catalog, user, pass);
 
-            var result = dbsp.sp_Payslip(NegaraID, SyarikatID, WilayahID, LadangID, month, year, pkj).ToList();
-            var getpkjInfo = dbr.tbl_Pkjmast.Where(x => x.fld_Nopkj == pkj && x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID && x.fld_WilayahID == WilayahID && x.fld_LadangID == LadangID && x.fld_StatusApproved == 1);
+            //var result = dbsp.sp_Payslip(NegaraID, SyarikatID, WilayahID, LadangID, month, year, pkj).ToList();
+            var getpkjInfo = tbl_Pkjmast.Where(x => x.fld_Nopkj == pkj && x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID && x.fld_WilayahID == WilayahID && x.fld_LadangID == LadangID && x.fld_StatusApproved == 1);
 
             ViewBag.NamaPkj = getpkjInfo.Select(s => s.fld_Nama).FirstOrDefault();
             ViewBag.NoKwsp = getpkjInfo.Select(s => s.fld_Nokwsp).FirstOrDefault();
             ViewBag.NoSocso = getpkjInfo.Select(s => s.fld_Noperkeso).FirstOrDefault();
             ViewBag.NoKp = getpkjInfo.Select(s => s.fld_Nokp).FirstOrDefault();
-            
+
             int? kumpID = getpkjInfo.Select(s => s.fld_KumpulanID).FirstOrDefault();//desc
             string ktgrPkj = getpkjInfo.Select(s => s.fld_Ktgpkj).FirstOrDefault();//desc
             string jntnaPkj = getpkjInfo.Select(s => s.fld_Kdjnt).FirstOrDefault();//desc
 
-            ViewBag.Kump = dbr.tbl_KumpulanKerja.Where(x => x.fld_KumpulanID == kumpID && x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID && x.fld_WilayahID == WilayahID && x.fld_LadangID == LadangID && x.fld_deleted==false).Select(s => s.fld_Keterangan).FirstOrDefault();
-            ViewBag.Kategori = db.tblOptionConfigsWebs.Where(x => x.fldOptConfFlag1 == "designation" && x.fldOptConfValue == ktgrPkj && x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID && x.fldDeleted==false).Select(s => s.fldOptConfDesc).FirstOrDefault();
-            ViewBag.Jantina = db.tblOptionConfigsWebs.Where(x => x.fldOptConfFlag1 == "jantina" && x.fldOptConfValue == jntnaPkj && x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID && x.fldDeleted==false).Select(s => s.fldOptConfDesc).FirstOrDefault();
+            ViewBag.Kump = tbl_KumpulanKerja.Where(x => x.fld_KumpulanID == kumpID && x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID && x.fld_WilayahID == WilayahID && x.fld_LadangID == LadangID && x.fld_deleted == false).Select(s => s.fld_Keterangan).FirstOrDefault();
+            ViewBag.Kategori = webConfigList.Where(x => x.fldOptConfFlag1 == "designation" && x.fldOptConfValue == ktgrPkj && x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID && x.fldDeleted == false).Select(s => s.fldOptConfDesc).FirstOrDefault();
+            ViewBag.Jantina = webConfigList.Where(x => x.fldOptConfFlag1 == "jantina" && x.fldOptConfValue == jntnaPkj && x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID && x.fldDeleted == false).Select(s => s.fldOptConfDesc).FirstOrDefault();
 
-            ViewBag.NamaSyarikat = db.tbl_Syarikat.Where(x => x.fld_SyarikatID == SyarikatID && x.fld_NegaraID == NegaraID && x.fld_Deleted == false).Select(s => s.fld_NamaSyarikat).FirstOrDefault();
-            ViewBag.NoSyarikat = db.tbl_Syarikat.Where(x => x.fld_SyarikatID == SyarikatID && x.fld_NegaraID == NegaraID && x.fld_Deleted == false).Select(s => s.fld_NoSyarikat).FirstOrDefault();
-            //added by faeza 26.02.2023
-            ViewBag.Ladang = db.tbl_Ladang.Where(x => x.fld_SyarikatID == SyarikatID && x.fld_NegaraID == NegaraID && x.fld_ID == LadangID).Select(s => s.fld_LdgName).FirstOrDefault();
+            ViewBag.NamaSyarikat = NamaSyarikat;
+            ViewBag.NoSyarikat = NoSyarikat;
+            ViewBag.Ladang = NamaLadang;
             ViewBag.Month = month;
             ViewBag.Year = year;
             ViewBag.Date = System.DateTime.Now.ToShortDateString();
-            return View(result);
+            return View(payslip);
         }
 
         //added by faeza 26.02.2023
@@ -9885,7 +9926,7 @@ namespace MVC_SYSTEM.Controllers
             ViewBag.getflag = 1;
             return View();
 
-            
+
         }
 
         [HttpPost]
@@ -9935,11 +9976,11 @@ namespace MVC_SYSTEM.Controllers
             GetNSWL.GetData(out NegaraID, out SyarikatID, out WilayahID, out LadangID, getuserid, User.Identity.Name);
             Connection.GetConnection(out host, out catalog, out user, out pass, WilayahID.Value, SyarikatID.Value, NegaraID.Value);
             MVC_SYSTEM_Models dbr = MVC_SYSTEM_Models.ConnectToSqlServer(host, catalog, user, pass);
-            
-                var result = dbr.tbl_PktUtama.Where(x => x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID && x.fld_WilayahID == WilayahID && x.fld_LadangID == LadangID && x.fld_Deleted == false).OrderBy(x => x.fld_PktUtama).ToList();
-                ViewBag.DataCount = result.Count();
-                ViewBag.getflag = 2;
-                return View(result);            
+
+            var result = dbr.tbl_PktUtama.Where(x => x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID && x.fld_WilayahID == WilayahID && x.fld_LadangID == LadangID && x.fld_Deleted == false).OrderBy(x => x.fld_PktUtama).ToList();
+            ViewBag.DataCount = result.Count();
+            ViewBag.getflag = 2;
+            return View(result);
         }
 
         public ActionResult AsasPeringkatSubPkt()
@@ -9951,13 +9992,13 @@ namespace MVC_SYSTEM.Controllers
             Connection.GetConnection(out host, out catalog, out user, out pass, WilayahID.Value, SyarikatID.Value, NegaraID.Value);
             MVC_SYSTEM_Models dbr = MVC_SYSTEM_Models.ConnectToSqlServer(host, catalog, user, pass);
 
-            
-            var result = dbr.tbl_SubPkt.Where(x => x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID && x.fld_WilayahID == WilayahID && x.fld_LadangID == LadangID && x.fld_Deleted == false).OrderBy(x => x.fld_Pkt).ToList();
-                ViewBag.DataCount = result.Count();
-                ViewBag.getflag = 2;
-                return View(result);
 
-            
+            var result = dbr.tbl_SubPkt.Where(x => x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID && x.fld_WilayahID == WilayahID && x.fld_LadangID == LadangID && x.fld_Deleted == false).OrderBy(x => x.fld_Pkt).ToList();
+            ViewBag.DataCount = result.Count();
+            ViewBag.getflag = 2;
+            return View(result);
+
+
         }
 
         public ActionResult AsasPeringkatBlok()
@@ -9971,14 +10012,14 @@ namespace MVC_SYSTEM.Controllers
             MVC_SYSTEM_MasterModels db = new MVC_SYSTEM_MasterModels();
 
 
-                var result = dbr.tbl_Blok.Where(x => x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID && x.fld_WilayahID == WilayahID && x.fld_LadangID == LadangID && x.fld_Deleted == false).OrderBy(x => x.fld_Blok).ToList();
-                ViewBag.DataCount = result.Count();
-                ViewBag.getflag = 2;
-                return View(result);
+            var result = dbr.tbl_Blok.Where(x => x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID && x.fld_WilayahID == WilayahID && x.fld_LadangID == LadangID && x.fld_Deleted == false).OrderBy(x => x.fld_Blok).ToList();
+            ViewBag.DataCount = result.Count();
+            ViewBag.getflag = 2;
+            return View(result);
 
         }
 
-        
+
         public ActionResult KodMappingAktiviti()
         {
             ViewBag.Report = "class = active";
@@ -9994,7 +10035,7 @@ namespace MVC_SYSTEM.Controllers
 
             ViewBag.NamaSyarikat = db.tbl_Syarikat.Where(x => x.fld_SyarikatID == SyarikatID && x.fld_NegaraID == NegaraID).Select(s => s.fld_NamaSyarikat).FirstOrDefault();
             ViewBag.NoSyarikat = db.tbl_Syarikat.Where(x => x.fld_SyarikatID == SyarikatID && x.fld_NegaraID == NegaraID).Select(s => s.fld_NoSyarikat).FirstOrDefault();
-            
+
             ViewBag.GLlist = GLlist;
             ViewBag.getflag = 1;
             return View();
@@ -10011,7 +10052,7 @@ namespace MVC_SYSTEM.Controllers
             GetNSWL.GetData(out NegaraID, out SyarikatID, out WilayahID, out LadangID, getuserid, User.Identity.Name);
             Connection.GetConnection(out host, out catalog, out user, out pass, WilayahID.Value, SyarikatID.Value, NegaraID.Value);
             //MVC_SYSTEM_Models dbr = MVC_SYSTEM_Models.ConnectToSqlServer(host, catalog, user, pass);
-            
+
 
             List<SelectListItem> GLlist2 = new List<SelectListItem>();
             GLlist2 = new SelectList(db.tbl_MapGL.Where(x => x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID & x.fld_WilayahID == WilayahID && x.fld_LadangID == LadangID && x.fld_Deleted == false).OrderBy(o => o.fld_ID)
@@ -10997,7 +11038,7 @@ namespace MVC_SYSTEM.Controllers
             return report;
         }
 
-        public ActionResult PrintHasilPdf( int? RadioGroup, int? MonthList, int? YearList, string SelectionList, int id, string genid)
+        public ActionResult PrintHasilPdf(int? RadioGroup, int? MonthList, int? YearList, string SelectionList, int id, string genid)
         {
             int? getuserid = 0;
             string getusername = "";
@@ -11224,14 +11265,14 @@ namespace MVC_SYSTEM.Controllers
                 .Select(s => new SelectListItem { Value = s.fld_KodKategori.ToString(), Text = s.fld_Kategori }).Distinct(), "Value", "Text").ToList();
             KategoriAktiviti.Insert(0, (new SelectListItem { Text = GlobalResEstate.lblAll, Value = "0" }));
 
-            
+
             List<SelectListItem> Costcnt = new List<SelectListItem>();
             Costcnt = new SelectList(db.vw_GmnMapping
-                .Where(x => x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID  && x.fld_Deleted == false)
+                .Where(x => x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID && x.fld_Deleted == false)
                 .Select(s => new SelectListItem { Value = s.fld_CostCentre, Text = s.fld_CostCentre }).Distinct(), "Value", "Text").ToList();
             Costcnt.Insert(0, (new SelectListItem { Text = GlobalResEstate.lblAll, Value = "0" }));
 
-           
+
             ViewBag.NamaSyarikat = db.tbl_Syarikat
                 .Where(x => x.fld_SyarikatID == SyarikatID && x.fld_NegaraID == NegaraID).Select(s => s.fld_NamaSyarikat).FirstOrDefault();
             ViewBag.NoSyarikat = db.tbl_Syarikat
@@ -11282,7 +11323,7 @@ namespace MVC_SYSTEM.Controllers
                 var result = db.vw_GmnMapping
                     .Where(x => x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID && x.fld_WilayahID == WilayahID && x.fld_LadangID == LadangID).OrderBy(o => o.bil);
                 return View(result);
-            }            
+            }
             else
             {
                 var result = db.vw_GmnMapping
@@ -11291,7 +11332,7 @@ namespace MVC_SYSTEM.Controllers
             }
         }
 
-       
+
         public JsonResult GetReportGMN(string KategoriAktiviti)
         {
             int? NegaraID, SyarikatID, WilayahID, LadangID = 0;
@@ -11299,11 +11340,11 @@ namespace MVC_SYSTEM.Controllers
             //string host, catalog, user, pass = "";
 
             GetNSWL.GetData(out NegaraID, out SyarikatID, out WilayahID, out LadangID, getuserid, User.Identity.Name);
-            
+
             List<SelectListItem> PilihAktiviti = new List<SelectListItem>();
-            PilihAktiviti = new SelectList(db.vw_GmnMapping.Where(x=>x.fld_KodKategori==KategoriAktiviti && x.fld_NegaraID==NegaraID && x.fld_SyarikatID==SyarikatID )
-                .Select(s=> new SelectListItem { Value = s.fld_CostCentre, Text = s.fld_CostCentre }).Distinct(), "Value", "Text").ToList();
-           
+            PilihAktiviti = new SelectList(db.vw_GmnMapping.Where(x => x.fld_KodKategori == KategoriAktiviti && x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID)
+                .Select(s => new SelectListItem { Value = s.fld_CostCentre, Text = s.fld_CostCentre }).Distinct(), "Value", "Text").ToList();
+
             PilihAktiviti.Insert(0, (new SelectListItem { Text = GlobalResEstate.lblChoose, Value = "" }));
 
             //dbr.Dispose();
@@ -11326,13 +11367,13 @@ namespace MVC_SYSTEM.Controllers
                 .Select(s => new SelectListItem { Value = s.fld_KodKategori.ToString(), Text = s.fld_Kategori }), "Value", "Text").ToList();
             kodKategorilist.Insert(0, (new SelectListItem { Text = GlobalResEstate.lblAll, Value = "0" }));
 
-            
+
             ViewBag.NamaSyarikat = db.tbl_Syarikat
                 .Where(x => x.fld_SyarikatID == SyarikatID && x.fld_NegaraID == NegaraID).Select(s => s.fld_NamaSyarikat).FirstOrDefault();
             ViewBag.NoSyarikat = db.tbl_Syarikat
                 .Where(x => x.fld_SyarikatID == SyarikatID && x.fld_NegaraID == NegaraID).Select(s => s.fld_NoSyarikat).FirstOrDefault();
 
-            ViewBag.kodKategorilist = kodKategorilist;            
+            ViewBag.kodKategorilist = kodKategorilist;
             ViewBag.getflag = 1;
             return View();
         }
@@ -11406,7 +11447,7 @@ namespace MVC_SYSTEM.Controllers
 
             List<CustMod_CustSatisfaction> InfoCustSatisList = new List<CustMod_CustSatisfaction>();
 
-            
+
             ViewBag.Print = print;
 
             if (EstateList == null)
@@ -11446,7 +11487,7 @@ namespace MVC_SYSTEM.Controllers
                 }
 
                 return View(InfoCustSatisList);
-            
+
             }
             else
             {
@@ -11523,7 +11564,7 @@ namespace MVC_SYSTEM.Controllers
             return report;
 
         }
- 
+
 
         public ActionResult workerPbklReport()
         {
@@ -11599,7 +11640,7 @@ namespace MVC_SYSTEM.Controllers
             string host, catalog, user, pass = "";
             GetNSWL.GetData(out NegaraID, out SyarikatID, out WilayahID, out LadangID, getuserid, User.Identity.Name);
             Connection.GetConnection(out host, out catalog, out user, out pass, WilayahID.Value, SyarikatID.Value, NegaraID.Value);
-            
+
             List<SelectListItem> PbklList = new List<SelectListItem>();
             PbklList = new SelectList(db.tbl_Pembekal.Where(x => x.fld_KodPbkl == pbklkod && x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID)
                 .Select(s => new SelectListItem { Value = s.fld_KodPbkl, Text = s.fld_NamaPbkl }).Distinct(), "Value", "Text").ToList();
@@ -11670,12 +11711,12 @@ namespace MVC_SYSTEM.Controllers
                 return View(pbklPekerja);
             }
 
-           
+
             if (StatusList == "0")
             {
                 if (JnsPkjList == "0")
                 {
-                    var app2 = dbr.tbl_Pkjmast.Where(x => x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID && x.fld_WilayahID == WilayahID && x.fld_LadangID == LadangID);                  
+                    var app2 = dbr.tbl_Pkjmast.Where(x => x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID && x.fld_WilayahID == WilayahID && x.fld_LadangID == LadangID);
 
                     foreach (var ListPekerja in app2)
                     {
@@ -11686,7 +11727,7 @@ namespace MVC_SYSTEM.Controllers
                             pbklPekerja.Add(ListPekerja);
                         }
                     }
-                       
+
                     if (pbklPekerja.Count() == 0)
                     {
                         ViewBag.Message = GlobalResEstate.msgNoRecord;
@@ -11777,7 +11818,7 @@ namespace MVC_SYSTEM.Controllers
             string host, catalog, user, pass = "";
             GetNSWL.GetData(out NegaraID, out SyarikatID, out WilayahID, out LadangID, getuserid, User.Identity.Name);
             Connection.GetConnection(out host, out catalog, out user, out pass, WilayahID.Value, SyarikatID.Value, NegaraID.Value);
-           
+
             List<SelectListItem> PbklList = new List<SelectListItem>();
             PbklList = new SelectList(db.tbl_Pembekal.Where(x => x.fld_KodPbkl == pbklkod && x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID)
                 .Select(s => new SelectListItem { Value = s.fld_KodPbkl, Text = s.fld_NamaPbkl }).Distinct(), "Value", "Text").ToList();
@@ -11859,7 +11900,7 @@ namespace MVC_SYSTEM.Controllers
             GetNSWL.GetData(out NegaraID, out SyarikatID, out WilayahID, out LadangID, getuserid, User.Identity.Name);
             Connection.GetConnection(out host, out catalog, out user, out pass, WilayahID.Value, SyarikatID.Value,
                 NegaraID.Value);
-           MVC_SYSTEM_Models dbr = MVC_SYSTEM_Models.ConnectToSqlServer(host, catalog, user, pass);
+            MVC_SYSTEM_Models dbr = MVC_SYSTEM_Models.ConnectToSqlServer(host, catalog, user, pass);
 
             List<CustMod_GajiKasar> MaklumatGajiPekerja = new List<CustMod_GajiKasar>();
 
@@ -11873,7 +11914,7 @@ namespace MVC_SYSTEM.Controllers
                 .Where(x => x.fld_SyarikatID == SyarikatID && x.fld_NegaraID == NegaraID)
                 .Select(s => s.fld_NoSyarikat)
                 .FirstOrDefault();
-            
+
             ViewBag.Print = print;
 
             if (YearList == null)
@@ -11977,7 +12018,7 @@ namespace MVC_SYSTEM.Controllers
                                 IOrderedQueryable<Models.tbl_Pkjmast> workerData;
 
                                 workerData = dbr.tbl_Pkjmast
-                                         .Where(x => x.fld_Kodbkl == PbklList && x.fld_NegaraID == NegaraID && 
+                                         .Where(x => x.fld_Kodbkl == PbklList && x.fld_NegaraID == NegaraID &&
                                                      x.fld_SyarikatID == SyarikatID &&
                                                      x.fld_WilayahID == WilayahID && x.fld_LadangID == LadangID)
                                          .OrderBy(x => x.fld_Nama);
@@ -12055,7 +12096,7 @@ namespace MVC_SYSTEM.Controllers
                                 return View(MaklumatGajiPekerja);
                             }
                         }
-                        
+
                     }
                     else
                     {
@@ -12439,11 +12480,11 @@ namespace MVC_SYSTEM.Controllers
                         {
                             if (JnsPkjList == "0")
                             {
-                                
+
                                 List<Models.vw_hutangPekerjaLadang> workerData;
 
                                 workerData = dbr.vw_hutangPekerjaLadang
-                                   .Where(x => x.fld_NegaraID == NegaraID && 
+                                   .Where(x => x.fld_NegaraID == NegaraID &&
                                                x.fld_SyarikatID == SyarikatID &&
                                                x.fld_WilayahID == WilayahID && x.fld_LadangID == LadangID && x.fld_Deleted == false).DistinctBy(d => d.fld_NoPkj)
                                    .OrderBy(x => x.fld_Nama).ToList();
@@ -13418,7 +13459,7 @@ namespace MVC_SYSTEM.Controllers
             StatusList2 = new SelectList(db.tblOptionConfigsWebs.Where(x => x.fldOptConfFlag1 == "statusaktif" && x.fldDeleted == false && x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID).OrderBy(o => o.fldOptConfValue).Select(s => new SelectListItem { Value = s.fldOptConfValue, Text = s.fldOptConfDesc }), "Value", "Text", StatusList).ToList();
             StatusList2.Insert(0, (new SelectListItem { Text = GlobalResEstate.lblAll, Value = "0" }));
 
-            JnsPkjList2 = new SelectList(db.tblOptionConfigsWebs.Where(x => x.fldOptConfFlag1 == "jnsPkj"  && x.fldDeleted == false && x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID).OrderBy(o => o.fldOptConfValue).Select(s => new SelectListItem { Value = s.fldOptConfValue, Text = s.fldOptConfDesc }), "Value", "Text", JnsPkjList).ToList();
+            JnsPkjList2 = new SelectList(db.tblOptionConfigsWebs.Where(x => x.fldOptConfFlag1 == "jnsPkj" && x.fldDeleted == false && x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID).OrderBy(o => o.fldOptConfValue).Select(s => new SelectListItem { Value = s.fldOptConfValue, Text = s.fldOptConfDesc }), "Value", "Text", JnsPkjList).ToList();
             JnsPkjList2.Insert(0, (new SelectListItem { Text = GlobalResEstate.lblAll, Value = "0" }));
 
             PbklList2 = new SelectList(db.tbl_Pembekal.Where(x => x.fld_KodPbkl == PbklList && x.fld_Deleted == false && x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID)
@@ -13455,7 +13496,7 @@ namespace MVC_SYSTEM.Controllers
                             {
                                 if (JnsPkjList == "0")
                                 {
-                                    var result = dbr.tbl_Pkjmast.Where(x => x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID && x.fld_WilayahID == WilayahID && x.fld_LadangID == LadangID );
+                                    var result = dbr.tbl_Pkjmast.Where(x => x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID && x.fld_WilayahID == WilayahID && x.fld_LadangID == LadangID);
                                     ViewBag.UserID = getuserid;
                                     return View(result);
                                 }
@@ -13480,8 +13521,8 @@ namespace MVC_SYSTEM.Controllers
                                     ViewBag.UserID = getuserid;
                                     return View(result);
                                 }
-                            }                         
-                         }
+                            }
+                        }
                         else
                         {
                             if (JnsPkjList == "0")

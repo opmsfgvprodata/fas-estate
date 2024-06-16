@@ -40,10 +40,10 @@ namespace MVC_SYSTEM.Models
         public string fld_SupervisorID { get; set; }
         [StringLength(150)]
         public string fld_SupervisorName { get; set; }
-        public DateTime? fld_ModifiedDT { get; set; }
-        public int? fld_ModifiedBy { get; set; }
-        public DateTime? fld_CreatedDT { get; set; }
-        public int? fld_CreatedBy { get; set; }
+        //public DateTime? fld_ModifiedDT { get; set; }
+        //public int? fld_ModifiedBy { get; set; }
+        //public DateTime? fld_CreatedDT { get; set; }
+        //public int? fld_CreatedBy { get; set; }
 
     }
 
