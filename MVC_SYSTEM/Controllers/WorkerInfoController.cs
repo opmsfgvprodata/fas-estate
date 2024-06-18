@@ -9027,9 +9027,9 @@ namespace MVC_SYSTEM.Controllers
                 var workerData = dbo.tbl_Pkjmast
                     .Where(x => x.fld_DivisionID == DivisionID && x.fld_Kdaktf == "1" && x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID &&
                                 x.fld_WilayahID == WilayahID && x.fld_LadangID == LadangID &&
-                                x.fld_Nopkj.ToString().ToUpper().Contains(filter.ToUpper()) ||
+                                (x.fld_Nopkj.ToString().ToUpper().Contains(filter.ToUpper()) ||
                                 x.fld_NopkjPermanent.ToString().ToUpper().Contains(filter.ToUpper()) ||
-                                x.fld_Nama.ToUpper().Contains(filter.ToUpper()))
+                                x.fld_Nama.ToUpper().Contains(filter.ToUpper())))
                     .OrderBy(x => x.fld_Nama);
 
                 foreach (var i in workerData)
