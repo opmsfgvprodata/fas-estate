@@ -52,7 +52,8 @@
 
                     bil = bil + 1;
 
-                    totalNetPay += item.fld_NilaiInsentif;
+                    //totalNetPay += item.fld_NilaiInsentif;
+                    totalNetPay += item.fld_GajiBersih;
 
                     //if(item.fld_Notel.Substring(0,1) == "0" )
                     //{
@@ -70,7 +71,7 @@
                         <td align="center" style="margin: 2px !important; padding: 4px !important; vertical-align: middle !important; border: 1px dotted gray; text-align: left; border-right: none; border-left: none">@item.fld_Nokp.ToUpper()</td>
                         <td align="center" style="margin: 2px !important; padding: 4px !important; vertical-align: middle !important; border: 1px dotted gray; text-align: left; border-right: none; border-left: none">@item.fld_Notel</td>
                         <td align="center" style="margin: 2px !important; padding: 4px !important; vertical-align: middle !important; border: 1px dotted gray; text-align: right; border-right: none; border-left: none">@item.fld_Last4Pan</td>
-                        <td align="center" style="margin: 2px !important; padding: 4px !important; vertical-align: middle !important; border: 1px dotted gray; text-align: right; border-right: none; border-left: none">@item.fld_NilaiInsentif</td>
+                        <td align="center" style="margin: 2px !important; padding: 4px !important; vertical-align: middle !important; border: 1px dotted gray; text-align: right; border-right: none; border-left: none">@item.fld_GajiBersih</td>
                         <td align="center" style="margin: 2px !important; padding: 4px !important; vertical-align: middle !important; border: 1px dotted gray; text-align: left; border-right: none; border-left: none">@item.fld_Keterangan</td>
                     </tr>
                 }
@@ -144,12 +145,13 @@
         $("#downloadtxt").click(function () {
             var Month = $("#MonthList").val();
             var Year = $("#YearList").val();
+            var Incentive = $("#IncentiveList").val();
             $("#UpdateProgress1").css("display", "");
             var ajxfn = {};
             ajxfn.url = "@Url.Action("_eWalletInsentiveGen", "GenTextFile")";
             ajxfn.type = "POST";
             ajxfn.async = false;
-            ajxfn.data = JSON.stringify({ Month: Month, Year: Year });
+            ajxfn.data = JSON.stringify({ Month: Month, Year: Year, Incentive: Incentive });
             ajxfn.datatype = "json";
             ajxfn.contentType = "application/json";
             ajxfn.success = function (result) {

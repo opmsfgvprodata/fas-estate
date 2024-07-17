@@ -9174,11 +9174,16 @@ namespace MVC_SYSTEM.Controllers
             JnsPkjList = new SelectList(db.tblOptionConfigsWebs.Where(x => x.fldOptConfFlag1 == "jnsPkj" && x.fldDeleted == false && x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID).OrderBy(o => o.fldOptConfValue).Select(s => new SelectListItem { Value = s.fldOptConfValue, Text = s.fldOptConfDesc }), "Value", "Text").ToList();
             JnsPkjList.Insert(0, (new SelectListItem { Text = GlobalResEstate.lblAll, Value = "0" }));
 
+            //add by faeza 09.04.2024
+            List<SelectListItem> IncentiveList = new List<SelectListItem>();
+            IncentiveList = new SelectList(db.tbl_JenisInsentif.Where(x => x.fld_InclSecondPayslip == true && x.fld_JenisInsentif == "P" && x.fld_Deleted == false && x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID).OrderBy(o => o.fld_KodInsentif).Select(s => new SelectListItem { Value = s.fld_KodInsentif, Text = s.fld_Keterangan }), "Value", "Text").ToList();
+
             ViewBag.SelectionList = SelectionList;
             ViewBag.MonthList = monthList;
             ViewBag.YearList = yearlist;
             ViewBag.StatusList = StatusList;
             ViewBag.JnsPkjList = JnsPkjList;
+            ViewBag.IncentiveList = IncentiveList;
             return View();
         }
 
@@ -9349,7 +9354,7 @@ namespace MVC_SYSTEM.Controllers
         }
 
         //added by faeza 26.02.2023
-        public ActionResult _PaySlipRptSearch2(int? RadioGroup, int? MonthList, int? YearList, string SelectionList, string StatusList, string WorkCategoryList, string JnsPkjList, string print)
+        public ActionResult _PaySlipRptSearch2(int? RadioGroup, int? MonthList, int? YearList, string SelectionList, string StatusList, string WorkCategoryList, string JnsPkjList, string IncentiveList, string print)
         {
             int? NegaraID, SyarikatID, WilayahID, LadangID = 0;
             int? DivisionID = 0;
@@ -9362,6 +9367,7 @@ namespace MVC_SYSTEM.Controllers
 
             ViewBag.SelectedMonth = MonthList;
             ViewBag.SelectedYear = YearList;
+            ViewBag.IncentiveList = IncentiveList;
             ViewBag.Print = print;
             //find pekerja
             if (WorkCategoryList == "0" || WorkCategoryList == null)
@@ -9537,7 +9543,7 @@ namespace MVC_SYSTEM.Controllers
         }
 
         //added by faeza 26.02.2023
-        public ActionResult _PaySlipRptDetail2(string pkj, int month, int year)
+        public ActionResult _PaySlipRptDetail2(string pkj, int month, int year, string incentive)
         {
             int? NegaraID, SyarikatID, WilayahID, LadangID = 0;
             int? getuserid = GetIdentity.ID(User.Identity.Name);
@@ -9547,7 +9553,7 @@ namespace MVC_SYSTEM.Controllers
             MVC_SYSTEM_Models dbr = MVC_SYSTEM_Models.ConnectToSqlServer(host, catalog, user, pass);
             MVC_SYSTEM_SP_Models dbsp = MVC_SYSTEM_SP_Models.ConnectToSqlServer(host, catalog, user, pass);
 
-            var result = dbsp.sp_Payslip2(NegaraID, SyarikatID, WilayahID, LadangID, month, year, pkj).ToList();
+            var result = dbsp.sp_Payslip2(NegaraID, SyarikatID, WilayahID, LadangID, month, year, pkj, incentive).ToList();
             var getpkjInfo = dbr.tbl_Pkjmast.Where(x => x.fld_Nopkj == pkj && x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID && x.fld_WilayahID == WilayahID && x.fld_LadangID == LadangID && x.fld_StatusApproved == 1);
 
             ViewBag.NamaPkj = getpkjInfo.Select(s => s.fld_Nama).FirstOrDefault();
