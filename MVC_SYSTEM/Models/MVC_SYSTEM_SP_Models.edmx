@@ -32,6 +32,7 @@
           <Parameter Name="Month" Type="int" Mode="In" />
           <Parameter Name="Year" Type="int" Mode="In" />
           <Parameter Name="Nopkj" Type="varchar" Mode="In" />
+          <Parameter Name="Incentive" Type="varchar" Mode="In" />
         </Function>
         <Function Name="sp_RptBulPenPekLad" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="DataSource" Type="nvarchar" Mode="In" />
@@ -250,6 +251,7 @@
             <Parameter Name="Month" Mode="In" Type="Int32" />
             <Parameter Name="Year" Mode="In" Type="Int32" />
             <Parameter Name="Nopkj" Mode="In" Type="String" />
+            <Parameter Name="Incentive" Mode="In" Type="String" />
           </FunctionImport>
         </EntityContainer>
         <ComplexType Name="sp_KerjaInfoDetails_Result">

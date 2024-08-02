@@ -43,7 +43,7 @@
                     <label>@GlobalResEstate.lblYear</label>
                     @Html.DropDownList("YearList", null, htmlAttributes: new { @class = "form-control" })
                 </div>
-                <div class="col-sm-2" id="divlist">
+                <div class="col-sm-1" id="divlist">
                     @Html.Label(GlobalResEstate.lblStatus)
                     @Html.DropDownList("StatusList", null, htmlAttributes: new { @class = "form-control" })
                 </div>
@@ -55,6 +55,11 @@
                     <label id="SelectionLabel">@GlobalResEstate.lblWorkerType</label>
                     @Html.DropDownList("JnsPkjList", null, htmlAttributes: new { @class = "form-control" })
                 </div>
+                <div class="col-sm-1">
+                    <label id="SelectionLabel">Incentive</label>
+                    @Html.DropDownList("IncentiveList", null, htmlAttributes: new { @class = "form-control" })
+                </div>
+
                 <div class="col-sm-2">
                     <input class="btn btn-primary btn-block" type="submit" name="Lihat" value=@GlobalResEstate.btnView />
                     <a data-modal1='' href="@Url.Action("_PaySlipRptAdvance", "Report")" class='btn btn-primary btn-block' role='button'>@GlobalResEstate.btnSearchAdvance</a>

@@ -116,7 +116,7 @@ namespace MVC_SYSTEM.Controllers
                 CutOfDateStatus = EstateFunction.GetStatusCutGenProcess2(dbr, SelectedDate, NegaraID, SyarikatID, WilayahID, LadangID, DivisionID, out LastCloseBizStatus);
                 if (!CutOfDateStatus)
                 {
-                    var servicesname = db.tbl_ServicesList.Where(x => x.fldNegaraID == NegaraID && x.fldSyarikatID == SyarikatID && x.fldWilayahID == WilayahID && x.fldLadangID == LadangID && x.fldDivisionID == DivisionID).Select(s => s.fld_ServicesName).FirstOrDefault();
+                    var servicesname = db.tbl_ServicesList.Where(x => x.fldNegaraID == NegaraID && x.fldSyarikatID == SyarikatID && x.fldWilayahID == WilayahID && x.fldLadangID == LadangID && x.fldDivisionID == DivisionID && x.fld_SevicesActivity == ProcessList).Select(s => s.fld_ServicesName).FirstOrDefault();
                     if (servicesname != null)
                     {
                         var deleteprocess = db.tbl_SevicesProcess.Where(x => x.fld_ServicesName == servicesname && x.fld_Flag == 0).FirstOrDefault();
