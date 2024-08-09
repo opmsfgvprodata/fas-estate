@@ -261,16 +261,17 @@
                         <td align="center" style="margin: 2px !important; padding-top: 60px !important; padding-bottom: 2px !important; vertical-align: middle !important; border: 1px dotted gray; text-align: right; border-right: none; border-left: none">@item.PaySheetPekerja.basicincome</td>
                         <td align="center" style="margin: 2px !important; padding-top: 60px !important; padding-bottom: 2px !important; vertical-align: middle !important; border: 1px dotted gray; text-align: right; border-right: none; border-left: none">@item.PaySheetPekerja.othersincome</td>
                         <td align="center" style="margin: 2px !important; padding-top: 60px !important; padding-bottom: 2px !important; vertical-align: middle !important; border: 1px dotted gray; text-align: right; border-right: none; border-left: none">@item.PaySheetPekerja.fld_KWSPMjk</td>
-                            @*<td align="center" style="margin: 2px !important; padding-top: 60px !important; padding-bottom: 2px !important; vertical-align: middle !important; border: 1px dotted gray; text-align: right; border-right: none; border-left: none">@item.PaySheetPekerja.fld_SocsoMjk</td>*@
+                        <td align="center" style="margin: 2px !important; padding-top: 60px !important; padding-bottom: 2px !important; vertical-align: middle !important; border: 1px dotted gray; text-align: right; border-right: none; border-left: none">@item.PaySheetPekerja.fld_SocsoMjk</td>
 
-                        @if (item.PaySheetPekerja.fld_Kdrkyt == "MA")
+                        @*commented by faeza 06.08.2024*@
+                        @*@if (item.PaySheetPekerja.fld_Kdrkyt == "MA")
                         {
                             <td align="center" style="margin: 2px !important; padding-top: 60px !important; padding-bottom: 2px !important; vertical-align: middle !important; border: 1px dotted gray; text-align: right; border-right: none; border-left: none">@item.PaySheetPekerja.fld_SocsoMjk</td>
                         }
                         else
                         {
                             <td align="center" style="margin: 2px !important; padding-top: 60px !important; padding-bottom: 2px !important; vertical-align: middle !important; border: 1px dotted gray; text-align: right; border-right: none; border-left: none">@sbkpMjk</td>
-                        }
+                        }*@
 
                          @if (item.PaySheetPekerja.fld_Kdrkyt == "MA")
                          {
@@ -284,15 +285,16 @@
                         <td align="center" style="margin: 2px !important; padding-top: 60px !important; padding-bottom: 2px !important; vertical-align: middle !important; border: 1px dotted gray; text-align: right; border-right: none; border-left: none">@item.PaySheetPekerja.fld_GajiKasar</td>
                         <td align="center" style="margin: 2px !important; padding-top: 60px !important; padding-bottom: 2px !important; vertical-align: middle !important; border: 1px dotted gray; text-align: right; border-right: none; border-left: none">@item.PaySheetPekerja.fld_LainPotongan</td>
                         <td align="center" style="margin: 2px !important; padding-top: 60px !important; padding-bottom: 2px !important; vertical-align: middle !important; border: 1px dotted gray; text-align: right; border-right: none; border-left: none">@item.PaySheetPekerja.fld_KWSPPkj</td>
-                            @*<td align="center" style="margin: 2px !important; padding-top: 60px !important; padding-bottom: 2px !important; vertical-align: middle !important; border: 1px dotted gray; text-align: right; border-right: none; border-left: none">@item.PaySheetPekerja.fld_SocsoPkj</td>*@
-                        @if (item.PaySheetPekerja.fld_Kdrkyt == "MA")
+                        <td align="center" style="margin: 2px !important; padding-top: 60px !important; padding-bottom: 2px !important; vertical-align: middle !important; border: 1px dotted gray; text-align: right; border-right: none; border-left: none">@item.PaySheetPekerja.fld_SocsoPkj</td>
+                        
+                        @*@if (item.PaySheetPekerja.fld_Kdrkyt == "MA")
                         {
                         <td align="center" style="margin: 2px !important; padding-top: 60px !important; padding-bottom: 2px !important; vertical-align: middle !important; border: 1px dotted gray; text-align: right; border-right: none; border-left: none">@item.PaySheetPekerja.fld_SocsoPkj</td>
                         }
                         else
                         {
                             <td align="center" style="margin: 2px !important; padding-top: 60px !important; padding-bottom: 2px !important; vertical-align: middle !important; border: 1px dotted gray; text-align: right; border-right: none; border-left: none">@sbkpPkj</td>
-                        }
+                        }*@
 
                         @if (item.PaySheetPekerja.fld_Kdrkyt == "MA")
                         {
