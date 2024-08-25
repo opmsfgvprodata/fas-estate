@@ -9011,6 +9011,8 @@ namespace MVC_SYSTEM.Controllers
             var records = new PagedList<ViewingModels.vw_TaxWorkerInfo>();
             int role = GetIdentity.RoleID(getuserid).Value;
             ViewBag.pageSize = int.Parse(GetConfig.GetData("paging"));
+
+            int year = DateTime.Now.Year;
             // var workerTaxList = dbview.vw_TaxWorkerInfo
             //.Where(x => x.fld_DivisionID == DivisionID && x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID &&
             //            x.fld_WilayahID == WilayahID && x.fld_LadangID == LadangID);
@@ -9019,6 +9021,7 @@ namespace MVC_SYSTEM.Controllers
             //            x.fld_WilayahID == WilayahID && x.fld_LadangID == LadangID).Count();
             // ViewBag.countWorkerTax = countDataExist;
 
+
             List<tbl_TaxWorkerDetailsList> WorkerTaxInfo = new List<tbl_TaxWorkerDetailsList>();
 
             if (!String.IsNullOrEmpty(filter))
@@ -9026,9 +9029,9 @@ namespace MVC_SYSTEM.Controllers
                 var workerData = dbo.tbl_Pkjmast
                     .Where(x => x.fld_DivisionID == DivisionID && x.fld_Kdaktf == "1" && x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID &&
                                 x.fld_WilayahID == WilayahID && x.fld_LadangID == LadangID &&
-                                x.fld_Nopkj.ToString().ToUpper().Contains(filter.ToUpper()) ||
+                                (x.fld_Nopkj.ToString().ToUpper().Contains(filter.ToUpper()) ||
                                 x.fld_NopkjPermanent.ToString().ToUpper().Contains(filter.ToUpper()) ||
-                                x.fld_Nama.ToUpper().Contains(filter.ToUpper()))
+                                x.fld_Nama.ToUpper().Contains(filter.ToUpper())))
                     .OrderBy(x => x.fld_Nama);
 
                 foreach (var i in workerData)
@@ -9073,7 +9076,7 @@ namespace MVC_SYSTEM.Controllers
                     var WrkTaxData = dbo.tbl_TaxWorkerInfo
                         .Where(a => a.fld_NopkjPermanent == i.fld_NopkjPermanent && a.fld_DivisionID == DivisionID && a.fld_NegaraID == NegaraID &&
                                     a.fld_SyarikatID == SyarikatID && a.fld_WilayahID == WilayahID &&
-                                    a.fld_LadangID == LadangID)
+                                    a.fld_LadangID == LadangID && a.fld_Year == year)
                         .OrderBy(x => x.fld_NopkjPermanent)
                         .ToList();
                     WorkerTaxInfo.Add(new tbl_TaxWorkerDetailsList { Pkjmast = i, WorkerTax = WrkTaxData });
@@ -9152,6 +9155,14 @@ namespace MVC_SYSTEM.Controllers
             var workerData = dbr.tbl_Pkjmast
                    .Where(x => x.fld_NopkjPermanent == id && x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID &&
                                x.fld_WilayahID == WilayahID && x.fld_LadangID == LadangID && x.fld_DivisionID == DivisionID).FirstOrDefault();
+
+            if (workerData == null)
+            {
+
+                ViewBag.ErrorMessage = "Worker Permanent ID is null";
+
+                return View("_WorkerTaxInfoCreate");
+            }
 
             var workerTaxDetails = dbr.tbl_TaxWorkerInfo
                 .Where(w => w.fld_NopkjPermanent == id && w.fld_WilayahID == WilayahID && w.fld_SyarikatID == SyarikatID && w.fld_NegaraID == NegaraID &&
