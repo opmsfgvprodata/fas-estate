@@ -62,7 +62,11 @@
         [StringLength(50)]
         public string fld_Keterangan { get; set; }
 
+        [Column(TypeName = "numeric")]
+        public decimal? fld_GajiKasar { get; set; }
 
+        [Column(TypeName = "numeric")]
+        public decimal? fld_GajiBersih { get; set; }
 
     }
 }

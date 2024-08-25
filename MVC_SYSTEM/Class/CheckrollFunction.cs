@@ -3,6 +3,7 @@ using MVC_SYSTEM.MasterModels;
 using MVC_SYSTEM.Models;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Web;
 
@@ -93,6 +94,10 @@ namespace MVC_SYSTEM.Class
         {
             List<tbl_Kerja> tbl_KerjaList = new List<tbl_Kerja>();
             List<CustMod_WorkerWork> CustMod_WorkerWorks = new List<CustMod_WorkerWork>();
+
+            var dackDatedDay = int.Parse(db.tblOptionConfigsWebs.Where(x => x.fldOptConfFlag1 == "backdatedkeyin" && x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID && x.fldDeleted == false).Select(s => s.fldOptConfValue).FirstOrDefault());
+            var getIsActionLocked = isActionLocked(SelectDate, timezone.gettimezone(), dackDatedDay, NegaraID, SyarikatID, WilayahID, LadangID);
+
             string namepkj = "";
             if (SelectionCategory == 1)
             {
@@ -106,7 +111,7 @@ namespace MVC_SYSTEM.Class
             foreach (var tbl_KerjaData in tbl_KerjaList)
             {
                 namepkj = PkjName(dbr, NegaraID, SyarikatID, WilayahID, LadangID, tbl_KerjaData.fld_Nopkj);
-                CustMod_WorkerWorks.Add(new CustMod_WorkerWork() { fld_ID = tbl_KerjaData.fld_ID, fld_Nopkj = tbl_KerjaData.fld_Nopkj, fld_NamaPkj = namepkj, fld_Amount = tbl_KerjaData.fld_Amount, fld_JumlahHasil = tbl_KerjaData.fld_JumlahHasil, fld_KodAktvt = tbl_KerjaData.fld_KodAktvt, fld_KodGL = tbl_KerjaData.fld_KodGL, fld_KodPkt = tbl_KerjaData.fld_KodPkt, fld_Kum = tbl_KerjaData.fld_Kum, fld_Tarikh = tbl_KerjaData.fld_Tarikh, fld_Unit = tbl_KerjaData.fld_Unit, fld_JamOT = tbl_KerjaData.fld_JamOT, fld_NegaraID = NegaraID, fld_SyarikatID = SyarikatID, fld_WilayahID = WilayahID, fld_LadangID = LadangID, fld_AmountOA = tbl_KerjaData.fld_OverallAmount, fld_DailyIncentive = tbl_KerjaData.fld_DailyIncentive });
+                CustMod_WorkerWorks.Add(new CustMod_WorkerWork() { fld_ID = tbl_KerjaData.fld_ID, fld_Nopkj = tbl_KerjaData.fld_Nopkj, fld_NamaPkj = namepkj, fld_Amount = tbl_KerjaData.fld_Amount, fld_JumlahHasil = tbl_KerjaData.fld_JumlahHasil, fld_KodAktvt = tbl_KerjaData.fld_KodAktvt, fld_KodGL = tbl_KerjaData.fld_KodGL, fld_KodPkt = tbl_KerjaData.fld_KodPkt, fld_Kum = tbl_KerjaData.fld_Kum, fld_Tarikh = tbl_KerjaData.fld_Tarikh, fld_Unit = tbl_KerjaData.fld_Unit, fld_JamOT = tbl_KerjaData.fld_JamOT, fld_NegaraID = NegaraID, fld_SyarikatID = SyarikatID, fld_WilayahID = WilayahID, fld_LadangID = LadangID, fld_AmountOA = tbl_KerjaData.fld_OverallAmount, fld_DailyIncentive = tbl_KerjaData.fld_DailyIncentive, isActionLocked = getIsActionLocked });
             }
 
             return CustMod_WorkerWorks;
@@ -1122,6 +1127,72 @@ namespace MVC_SYSTEM.Class
                 SlryLastMonth = SlryLastMonth > 0 ? SlryLastMonth : 0;
                 SlryCurrentMonth = SlryCurrentMonth > 0 ? SlryCurrentMonth : 0;
             }
+        }
+
+        public bool isCheckrollBlock(DateTime CurrentDate, DateTime LastKeyinDate, int TotalDaysToLock, int? NegaraID, int? SyarikatID, int? WilayahID, int? LadangID)
+        {
+            bool result = false;
+
+            CurrentDate = CurrentDate.Date;
+            LastKeyinDate = LastKeyinDate.Date;
+
+            //Check if the last keyin date is more than the total days to lock
+            DateTime LastToKeyinDate = CurrentDate.AddDays(-TotalDaysToLock);
+
+            var Month = CurrentDate.Month;
+            var Year = CurrentDate.Year;
+
+            var blockDataEntryDetail = db.tbl_BlckKmskknDataKerja.Where(x => x.fld_LadangID == LadangID && x.fld_Year == Year && x.fld_Month == Month && x.fld_Purpose == "blockdataentry").FirstOrDefault();
+
+            if (LastToKeyinDate > LastKeyinDate && blockDataEntryDetail == null)
+            {
+                short totalDaysNoKeyin = (short)(CurrentDate - LastKeyinDate).TotalDays;
+                var tbl_BlckKmskknDataKerja = new tbl_BlckKmskknDataKerja
+                {
+                    fld_Month = Month,
+                    fld_Year = Year,
+                    fld_LadangID = LadangID,
+                    fld_WilayahID = WilayahID,
+                    fld_SyarikatID = SyarikatID,
+                    fld_NegaraID = NegaraID,
+                    fld_BilHariXKyIn = totalDaysNoKeyin,
+                    fld_BlokStatus = true,
+                    fld_Purpose = "blockdataentry"
+                };
+                db.tbl_BlckKmskknDataKerja.Add(tbl_BlckKmskknDataKerja);
+                db.SaveChanges();
+                result = true;
+            }
+            else if (LastToKeyinDate > LastKeyinDate && (blockDataEntryDetail.fld_BlokStatus == true || (blockDataEntryDetail.fld_BlokStatus == false && CurrentDate > blockDataEntryDetail.fld_ValidDT.Value.Date)))
+            {
+                short totalDaysNoKeyin = (short)(CurrentDate - LastKeyinDate).TotalDays;
+                blockDataEntryDetail.fld_BlokStatus = true;
+                db.Entry(blockDataEntryDetail).State = EntityState.Modified;
+                db.SaveChanges();
+                result = true;
+            }
+            return result;
+        }
+
+        public bool isActionLocked(DateTime KeyinDate, DateTime CurrentDate, int BackdateDaysLock, int? NegaraID, int? SyarikatID, int? WilayahID, int? LadangID)
+        {
+            bool result = false;
+
+            CurrentDate = CurrentDate.Date;
+            KeyinDate = KeyinDate.Date;
+
+            var totalDays = (CurrentDate - KeyinDate).TotalDays;
+            var Month = CurrentDate.Month;
+            var Year = CurrentDate.Year;
+
+            var isUnlockBackDatedKeyin = db.tbl_BlckKmskknDataKerja.Any(x => x.fld_LadangID == LadangID && x.fld_Purpose == "backdatedkeyin" && x.fld_ValidDT >= CurrentDate);
+
+            if ((totalDays > BackdateDaysLock) && !isUnlockBackDatedKeyin)
+            {
+                result = true;
+            }
+
+            return result;
         }
     }
 }

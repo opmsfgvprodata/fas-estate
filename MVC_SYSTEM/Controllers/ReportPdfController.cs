@@ -672,7 +672,7 @@ namespace MVC_SYSTEM.Controllers
                             var getdeduction = deductiondata.Where(x => x.fldID == f).FirstOrDefault();
                             if (getdeduction != null)
                             {
-                                chunk = new Chunk(item.fldKeterangan, FontFactory.GetFont("Arial", 7, Font.NORMAL, BaseColor.BLACK));
+                                chunk = new Chunk(getdeduction.fldKeterangan, FontFactory.GetFont("Arial", 7, Font.NORMAL, BaseColor.BLACK));
                                 cell = new PdfPCell(new Phrase(chunk));
                                 cell.HorizontalAlignment = Element.ALIGN_LEFT;
                                 cell.VerticalAlignment = Element.ALIGN_MIDDLE;
@@ -1332,7 +1332,7 @@ namespace MVC_SYSTEM.Controllers
         }
 
         //added by faeza 26.02.2023
-        public FileStreamResult PaySlipPdf2(int? RadioGroup, int? MonthList, int? YearList, string SelectionList, string StatusList, string WorkCategoryList, string JnsPkjList)
+        public FileStreamResult PaySlipPdf2(int? RadioGroup, int? MonthList, int? YearList, string SelectionList, string StatusList, string WorkCategoryList, string JnsPkjList, string IncentiveList)
         {
             int? NegaraID, SyarikatID, WilayahID, LadangID = 0;
             int? DivisionID = 0;
@@ -1485,7 +1485,7 @@ namespace MVC_SYSTEM.Controllers
                 {
                     var getpkjInfo = getpkjInfo2.Where(x => x.fld_Nopkj == pkj);
 
-                    var result = dbsp.sp_Payslip2(NegaraID, SyarikatID, WilayahID, LadangID, MonthList, YearList, pkj).ToList();
+                    var result = dbsp.sp_Payslip2(NegaraID, SyarikatID, WilayahID, LadangID, MonthList, YearList, pkj, IncentiveList).ToList();
                     if (result.Count() > 0)
                     {
                         var NamaPkj = getpkjInfo.Select(s => s.fld_Nama).FirstOrDefault();
