@@ -672,7 +672,7 @@ namespace MVC_SYSTEM.Controllers
                             var getdeduction = deductiondata.Where(x => x.fldID == f).FirstOrDefault();
                             if (getdeduction != null)
                             {
-                                chunk = new Chunk(item.fldKeterangan, FontFactory.GetFont("Arial", 7, Font.NORMAL, BaseColor.BLACK));
+                                chunk = new Chunk(getdeduction.fldKeterangan, FontFactory.GetFont("Arial", 7, Font.NORMAL, BaseColor.BLACK));
                                 cell = new PdfPCell(new Phrase(chunk));
                                 cell.HorizontalAlignment = Element.ALIGN_LEFT;
                                 cell.VerticalAlignment = Element.ALIGN_MIDDLE;
