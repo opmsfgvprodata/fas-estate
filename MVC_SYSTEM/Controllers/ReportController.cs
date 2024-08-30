@@ -13696,6 +13696,7 @@ namespace MVC_SYSTEM.Controllers
             int ID = 1;
             string WorkerName = "";
             string WorkerIDNo = "";
+            string WorkerSocsoNo = "";
 
             var GetInsetifEffectCode = db.tbl_JenisInsentif.Where(x => x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID && x.fld_JenisInsentif == "P" && x.fld_AdaCaruman == true && x.fld_Deleted == false).Select(s => s.fld_KodInsentif).ToList();
             //var GetAddContributionDetails = db.tbl_SubCarumanTambahan.Where(x => x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID && x.fld_Deleted == false).ToList();
@@ -13800,12 +13801,13 @@ namespace MVC_SYSTEM.Controllers
 
                 WorkerName = tbl_PkjmastList.Where(x => x.fld_Nopkj == GajiBulananDetail.fld_Nopkj).Select(s => s.fld_Nama).FirstOrDefault();
                 WorkerIDNo = tbl_PkjmastList.Where(x => x.fld_Nopkj == GajiBulananDetail.fld_Nopkj).Select(s => s.fld_Nokp).FirstOrDefault();
+                WorkerSocsoNo = tbl_PkjmastList.Where(x => x.fld_Nopkj == GajiBulananDetail.fld_Nopkj).Select(s => s.fld_Noperkeso).FirstOrDefault();
 
                 //original code
                 //if (SBKPEmplyer != 0 || SocsoEmplyer != 0 || KWSPEmplyer != 0 )
                 if (SIPEmplyer != 0 || SBKPEmplyer != 0 || SocsoEmplyer != 0 || KWSPEmplyer != 0 || PCBEmplyer != 0)
                 {
-                    ContributionReportList.Add(new ContributionReport() { ID = ID, WorkerName = WorkerName, TotalSalaryForKwsp = TotalSalaryForKWSP.Value, TotalSalaryForPerkeso = TotalSalaryForPerkeso.Value, KwspContributionEmplyee = KWSPEmplyee.Value, KwspContributionEmplyer = KWSPEmplyer.Value, SipContributionEmplyee = SIPEmplyee.Value, SipContributionEmplyer = SIPEmplyer.Value, SocsoContributionEmplyee = SocsoEmplyee.Value, SocsoContributionEmplyer = SocsoEmplyer.Value, SbkpContributionEmplyee = SBKPEmplyee.Value, SbkpContributionEmplyer = SBKPEmplyer.Value, PcbContributionEmplyee = PCBEmplyee.Value, PcbContributionEmplyer = PCBEmplyer.Value, WorkerNo = GajiBulananDetail.fld_Nopkj, WorkerIDNo = WorkerIDNo });
+                    ContributionReportList.Add(new ContributionReport() { ID = ID, WorkerName = WorkerName, TotalSalaryForKwsp = TotalSalaryForKWSP.Value, TotalSalaryForPerkeso = TotalSalaryForPerkeso.Value, KwspContributionEmplyee = KWSPEmplyee.Value, KwspContributionEmplyer = KWSPEmplyer.Value, SipContributionEmplyee = SIPEmplyee.Value, SipContributionEmplyer = SIPEmplyer.Value, SocsoContributionEmplyee = SocsoEmplyee.Value, SocsoContributionEmplyer = SocsoEmplyer.Value, SbkpContributionEmplyee = SBKPEmplyee.Value, SbkpContributionEmplyer = SBKPEmplyer.Value, PcbContributionEmplyee = PCBEmplyee.Value, PcbContributionEmplyer = PCBEmplyer.Value, WorkerNo = GajiBulananDetail.fld_Nopkj, WorkerIDNo = WorkerIDNo , WorkerSocsoNo = WorkerSocsoNo });
                     ID++;
                 }
             }

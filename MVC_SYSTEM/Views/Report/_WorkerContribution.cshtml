@@ -16,7 +16,7 @@
         <table class="table table-bordered" style="font-size: 11px;" border="0" width="100%">
             <thead>
                 <tr>
-                    <th colspan="16" style="text-align:center;vertical-align:middle;">
+                    <th colspan="17" style="text-align:center;vertical-align:middle;">
                         @ViewBag.NamaSyarikat
                         <br />
                         (@GlobalResEstate.lblCompanyNo : @ViewBag.NoSyarikat)
@@ -36,6 +36,7 @@
                     <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Salary For Contribution KWSP (RM)</th>
                     <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">KWSP Employee Contribution (RM)</th>
                     <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">KWSP Employer Contribution (RM)</th>
+                    <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Socso No.</th>
                     <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">Salary For Contribution Perkeso (RM)</th>
                     <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">SOCSO Employee Contribution (RM)</th>
                     <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">SOCSO Employer Contribution (RM)</th>
@@ -72,6 +73,9 @@
                     </td>
                     <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
                         @GetTriager.GetDashForNull(item.KwspContributionEmplyer.ToString())
+                    </td>
+                    <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                        @item.WorkerSocsoNo
                     </td>
                     <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
                         @GetTriager.GetDashForNull(item.TotalSalaryForPerkeso.ToString())
