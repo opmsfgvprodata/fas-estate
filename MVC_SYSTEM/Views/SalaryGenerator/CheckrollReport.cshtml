@@ -4,6 +4,7 @@
     ViewBag.Title = "Checkroll Report";
     Layout = "~/Views/Shared/_LayoutPopup.cshtml";
     GetConfig GetConfig = new GetConfig();
+    string uniquefilename = "Checkroll Report";
     int Loop = 1;
     GetIdentity GetIdentity = new GetIdentity();
     CheckrollFunction CheckrollFunction = new CheckrollFunction();
@@ -28,6 +29,7 @@
     .panel-primary {
         border-color: white !important;
     }
+
     table {
         width: 100%;
         border-collapse: collapse;
@@ -193,91 +195,91 @@
                             JumlahKslrhan = JumlahKslrhan + JumlahKslrhan1;
 
                             var rowspncount = WorkDetails.Where(x => x.fld_Tarikh == WorkDetail.fld_Tarikh).Count();
-                        <tr>
-                            @if (Loop == 1)
-    {
-                        <td rowspan="@rowspncount" align="center" valign="middle" width="2%">
-                            @string.Format("{0:dd/MM/yyyy}", WorkDetail.fld_Tarikh)
-                        </td>
-                        <td rowspan="@rowspncount" align="center" valign="middle" width="3%">
-                            @{var Hujan = WorkDetail.fld_Hujan == 0 ? "Tidak" : "Ya";}
-                            @Hujan
-                        </td>
-                        <td rowspan="@rowspncount" align="center" valign="middle" width="5%">
-                            @GetConfig.GetWebConfigDesc(WorkDetail.fld_Kdhdct, "cuti", ViewBag.NegaraID, ViewBag.SyarikatID)
-                        </td>
-}
-                            @if (KeepOldDateTime != WorkDetail.fld_Tarikh)
-    {
-                        <td rowspan="@rowspncount" align="center" valign="middle" width="2%">
-                            @string.Format("{0:dd/MM/yyyy}", WorkDetail.fld_Tarikh)
-                        </td>
-                        <td rowspan="@rowspncount" align="center" valign="middle" width="3%">
-                            @{var Hujan = WorkDetail.fld_Hujan == 0 ? "Tidak" : "Ya";}
-                            @Hujan
-                        </td>
-                        <td rowspan="@rowspncount" align="center" valign="middle" width="5%">
-                            @GetConfig.GetWebConfigDesc(WorkDetail.fld_Kdhdct, "cuti", ViewBag.NegaraID, ViewBag.SyarikatID)
-                        </td>
-}
-                            <td align="center" width="5%">
-                                @{var KodPkt = WorkDetail.fld_KodPkt == null ? "-" : WorkDetail.fld_KodPkt;}
-                                @KodPkt
-                            </td>
-                            <td align="center" width="5%">
-                                @{var KodAktvt = WorkDetail.fld_KodAktvt == null ? "-" : WorkDetail.fld_KodAktvt;}
-                                @KodAktvt
-                            </td>
-                            <td align="center" width="5%">
-                                @{var Unit = WorkDetail.fld_Unit == null ? "-" : WorkDetail.fld_Unit;}
-                                @Unit
-                            </td>
-                            <td align="right" width="5%">
-                                @{var JmlahHasil = WorkDetail.fld_JumlahHasil == null ? "-" : WorkDetail.fld_JumlahHasil.ToString();}
-                                @JmlahHasil
-                            </td>
-                            <td align="right" width="5%">
-                                @{var KadarUnit = WorkDetail.fld_KadarByr == null ? "-" : WorkDetail.fld_KadarByr.ToString();}
-                                @KadarUnit
-                            </td>
-                            <td align="right" width="5%">
-                                @{var Jmlah = WorkDetail.fld_Amount == null ? "-" : WorkDetail.fld_Amount.ToString();}
-                                @Jmlah
-                            </td>
-                            <td align="right" width="5%">
-                                @{var HrgaKwsnSkr = WorkDetail.fld_HrgaKwsnSkar == null ? "-" : WorkDetail.fld_HrgaKwsnSkar.ToString();}
-                                @HrgaKwsnSkr
-                            </td>
-                            <td align="right" width="5%">
-                                @{var JmlhSlrh = WorkDetail.fld_OverallAmount == null ? "-" : WorkDetail.fld_OverallAmount.ToString();}
-                                @JmlhSlrh
-                            </td>
-                            <td align="right" width="5%">
-                                @{var JamOT = WorkDetail.fld_JamOT == null ? "-" : WorkDetail.fld_JamOT.ToString();}
-                                @JamOT
-                            </td>
-                            <td align="right" width="5%">
-                                @{var OT = WorkDetail.fld_JumlahOT == null ? "-" : WorkDetail.fld_JumlahOT.ToString();}
-                                @OT
-                            </td>
-                            <td align="right" width="5%">
-                                @{var BonusHarian = WorkDetail.fld_JumlahBonus == null ? "-" : WorkDetail.fld_JumlahBonus.ToString();}
-                                @BonusHarian
-                            </td>
-                            <td align="right" width="5%">
-                                @{var Total = Total2 == 0 ? "-" : Total2.ToString();}
-                                @Total
-                            </td>
-                            <td align="center" width="5%">
-                                @GetIdentity.Username2(WorkDetail.fld_CreatedBy)
-                            </td>
-                            <td align="center" width="5%">
-                                @GetIdentity.MyNameFullName(WorkDetail.fld_CreatedBy)
-                            </td>
-                        </tr>
-                                            KeepOldDateTime = WorkDetail.fld_Tarikh;
-                                            Loop++;
-                                        }
+                            <tr>
+                                @if (Loop == 1)
+                                {
+                                    <td rowspan="@rowspncount" align="center" valign="middle" width="2%">
+                                        @string.Format("{0:dd/MM/yyyy}", WorkDetail.fld_Tarikh)
+                                    </td>
+                                    <td rowspan="@rowspncount" align="center" valign="middle" width="3%">
+                                        @{var Hujan = WorkDetail.fld_Hujan == 0 ? "Tidak" : "Ya";}
+                                        @Hujan
+                                    </td>
+                                    <td rowspan="@rowspncount" align="center" valign="middle" width="5%">
+                                        @GetConfig.GetWebConfigDesc(WorkDetail.fld_Kdhdct, "cuti", ViewBag.NegaraID, ViewBag.SyarikatID)
+                                    </td>
+                                }
+                                @if (KeepOldDateTime != WorkDetail.fld_Tarikh)
+                                {
+                                    <td rowspan="@rowspncount" align="center" valign="middle" width="2%">
+                                        @string.Format("{0:dd/MM/yyyy}", WorkDetail.fld_Tarikh)
+                                    </td>
+                                    <td rowspan="@rowspncount" align="center" valign="middle" width="3%">
+                                        @{var Hujan = WorkDetail.fld_Hujan == 0 ? "Tidak" : "Ya";}
+                                        @Hujan
+                                    </td>
+                                    <td rowspan="@rowspncount" align="center" valign="middle" width="5%">
+                                        @GetConfig.GetWebConfigDesc(WorkDetail.fld_Kdhdct, "cuti", ViewBag.NegaraID, ViewBag.SyarikatID)
+                                    </td>
+                                }
+                                <td align="center" width="5%">
+                                    @{var KodPkt = WorkDetail.fld_KodPkt == null ? "-" : WorkDetail.fld_KodPkt;}
+                                    @KodPkt
+                                </td>
+                                <td align="center" width="5%">
+                                    @{var KodAktvt = WorkDetail.fld_KodAktvt == null ? "-" : WorkDetail.fld_KodAktvt;}
+                                    @KodAktvt
+                                </td>
+                                <td align="center" width="5%">
+                                    @{var Unit = WorkDetail.fld_Unit == null ? "-" : WorkDetail.fld_Unit;}
+                                    @Unit
+                                </td>
+                                <td align="right" width="5%">
+                                    @{var JmlahHasil = WorkDetail.fld_JumlahHasil == null ? "-" : WorkDetail.fld_JumlahHasil.ToString();}
+                                    @JmlahHasil
+                                </td>
+                                <td align="right" width="5%">
+                                    @{var KadarUnit = WorkDetail.fld_KadarByr == null ? "-" : WorkDetail.fld_KadarByr.ToString();}
+                                    @KadarUnit
+                                </td>
+                                <td align="right" width="5%">
+                                    @{var Jmlah = WorkDetail.fld_Amount == null ? "-" : WorkDetail.fld_Amount.ToString();}
+                                    @Jmlah
+                                </td>
+                                <td align="right" width="5%">
+                                    @{var HrgaKwsnSkr = WorkDetail.fld_HrgaKwsnSkar == null ? "-" : WorkDetail.fld_HrgaKwsnSkar.ToString();}
+                                    @HrgaKwsnSkr
+                                </td>
+                                <td align="right" width="5%">
+                                    @{var JmlhSlrh = WorkDetail.fld_OverallAmount == null ? "-" : WorkDetail.fld_OverallAmount.ToString();}
+                                    @JmlhSlrh
+                                </td>
+                                <td align="right" width="5%">
+                                    @{var JamOT = WorkDetail.fld_JamOT == null ? "-" : WorkDetail.fld_JamOT.ToString();}
+                                    @JamOT
+                                </td>
+                                <td align="right" width="5%">
+                                    @{var OT = WorkDetail.fld_JumlahOT == null ? "-" : WorkDetail.fld_JumlahOT.ToString();}
+                                    @OT
+                                </td>
+                                <td align="right" width="5%">
+                                    @{var BonusHarian = WorkDetail.fld_JumlahBonus == null ? "-" : WorkDetail.fld_JumlahBonus.ToString();}
+                                    @BonusHarian
+                                </td>
+                                <td align="right" width="5%">
+                                    @{var Total = Total2 == 0 ? "-" : Total2.ToString();}
+                                    @Total
+                                </td>
+                                <td align="center" width="5%">
+                                    @GetIdentity.Username2(WorkDetail.fld_CreatedBy)
+                                </td>
+                                <td align="center" width="5%">
+                                    @GetIdentity.MyNameFullName(WorkDetail.fld_CreatedBy)
+                                </td>
+                            </tr>
+                            KeepOldDateTime = WorkDetail.fld_Tarikh;
+                            Loop++;
+                        }
                         <tfoot>
                             <tr>
                                 <th colspan="8" bgcolor="#085480" style="color:white; text-align: right; vertical-align:middle !important;" border="1">
@@ -311,12 +313,25 @@
                         </tfoot>
                     </table>
                     <hr class="style6">
-                                        }
+                }
 
             </div>
+            @if (ViewBag.Print == null)
+            {
+                <div style="text-align:right; margin-top:10px">
+
+                    <a class="btn btn-default btn-sm" href="#" onclick="HTMLtoExcel('@uniquefilename')">
+                        <span><img src="~/Asset/Images/excel-icon.png" width="20px" height="20px" /></span> @GlobalResEstate.btnDownloadExcel
+                    </a>
+                </div>
+            }
         </div>
+
     </section>
-                        }
+}
+
+<script src="~/Asset/Scripts/FromHTML.js"></script>
+<script src="~/Asset/Scripts/FileSaver.js"></script>
 
 <script type="text/javascript">
     function findBlocks(theTable) {
@@ -369,7 +384,7 @@
         });
     });
 
-findBlocks($('table'));
+    findBlocks($('table'));
 </script>
 
 <script>
