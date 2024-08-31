@@ -17,6 +17,9 @@ namespace MVC_SYSTEM.ViewingModels
 
         public string WorkerIDNo { get; set; }
 
+        //sarah added
+        public string WorkerSocsoNo { get; set; }
+
         public decimal TotalSalaryForKwsp { get; set; }
 
         public decimal TotalSalaryForPerkeso { get; set; }
