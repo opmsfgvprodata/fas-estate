@@ -493,6 +493,8 @@
     <Compile Include="ModelSAPPUP\tbl_SAPPostRef.cs" />
     <Compile Include="ModelSAPPUP\tbl_SAPPostReturn.cs" />
     <Compile Include="ModelSAPPUP\vw_SAPPostDataFullDetails.cs" />
+    <Compile Include="ModelsDapper\sp_PenggajianData_Est_Result.cs" />
+    <Compile Include="ModelsDapper\sp_PenggajianData_Result.cs" />
     <Compile Include="Models\MVC_SYSTEM_Models.cs" />
     <Compile Include="Models\MVC_SYSTEM_Models_Config.cs" />
     <Compile Include="Models\MVC_SYSTEM_SP_Models.Context.cs">
@@ -3210,6 +3212,8 @@
     <Content Include="Views\WorkerInfo\_SupervisorRegistration.cshtml" />
     <Content Include="Views\WorkerInfo\_MembersRegistration.cshtml" />
     <Content Include="Views\WorkerInfo\SupervisorRegistrationDelete.cshtml" />
+    <Content Include="Views\Report\PenggajianDataReport.cshtml" />
+    <Content Include="Views\Report\_PenggajianDataReport.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Asset\Upload\120\" />

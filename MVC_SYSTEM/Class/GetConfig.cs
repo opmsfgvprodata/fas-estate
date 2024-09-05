@@ -497,5 +497,64 @@ namespace MVC_SYSTEM.Class
 
             return getvalue;
         }
+
+        public string GetSyarikatFullName(string costcentre)
+        {
+            MasterModels.tblOptionConfigsWeb OptionConfigsWeb = new MasterModels.tblOptionConfigsWeb();
+            var SyarikatFullName = "";
+            var syarikatInfo = db.tbl_Syarikat.Where(x => x.fld_NamaPndkSyarikat == costcentre && x.fld_Deleted == false).Select(x => x.fld_NamaSyarikat).FirstOrDefault();
+            if (syarikatInfo == null)
+            { SyarikatFullName = ""; }
+            else
+            { SyarikatFullName = syarikatInfo; }
+
+            return SyarikatFullName;
+        }
+
+        public string GetSyarikatName(string costcentre)
+        {
+            var SyarikatName = "";
+            var SyarikatNameInfo = db.tbl_Syarikat.Where(x => x.fld_NamaPndkSyarikat == costcentre && x.fld_Deleted == false).Select(x => x.fld_NamaSyarikat).FirstOrDefault();
+            if (SyarikatNameInfo == null)
+            { SyarikatName = ""; }
+            else
+            { SyarikatName = SyarikatNameInfo; }
+
+            return SyarikatName;
+        }
+
+        public string GetSyarikatNo(string costcentre)
+        {
+            var SyarikatNo = "";
+            var SyarikatNoInfo = db.tbl_Syarikat.Where(x => x.fld_NamaPndkSyarikat == costcentre && x.fld_Deleted == false).Select(s => s.fld_NoSyarikat).FirstOrDefault();
+            if (SyarikatNoInfo == null)
+            { SyarikatNo = ""; }
+            else
+            { SyarikatNo = SyarikatNoInfo; }
+
+            return SyarikatNo;
+        }
+        public string GetWilayahNameFromID(int? id)
+        {
+            var getvalue = db.tbl_Wilayah
+                .SingleOrDefault(x => x.fld_ID == id).fld_WlyhName;
+
+            return getvalue;
+        }
+        public string GetWilayahNameFromIDLadang(int? id)
+        {
+            int? WilayahId = db.tbl_Ladang.Where(x => x.fld_ID == id).Select(x => x.fld_WlyhID).FirstOrDefault();
+            var getvalue = db.tbl_Wilayah
+                .SingleOrDefault(x => x.fld_ID == WilayahId).fld_WlyhName;
+
+            return getvalue;
+        }
+        public string GetLadangNameFromID(int? id)
+        {
+            var getvalue = db.tbl_Ladang
+                .SingleOrDefault(x => x.fld_ID == id).fld_LdgName;
+
+            return getvalue;
+        }
     }
 }
