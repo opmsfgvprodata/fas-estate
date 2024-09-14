@@ -1,12 +1,13 @@
 
 
 
+
 -- =============================================
 -- Author:		<Author,,Name>
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-CREATE PROCEDURE [dbo].[sp_RptEA] 
+create PROCEDURE [dbo].[sp_RptPCB2Form] 
 	-- Add the parameters for the stored procedure here
 	@NegaraID INT,
 	@SyarikatID INT,
@@ -389,7 +390,7 @@ BEGIN
         ,[fld_NoPkjPermanent]
 	FROM tbl_GajiBulanan WITH (NOLOCK) 
 	WHERE fld_LadangID = @LadangID AND fld_Year = @Year 
-	AND fld_NoPkjPermanent IN (SELECT fld_NoPkjPermanent FROM @tbl_Pkjmast WHERE fld_LadangID = @LadangID))
+	AND fld_NoPkjPermanent IN (SELECT fld_NoPkjPermanent FROM @tbl_Pkjmast WHERE fld_DivisionID = @DivisionID))
 
 	SELECT * FROM @tbl_Pkjmast
 
@@ -397,9 +398,11 @@ BEGIN
 
 	SELECT * FROM tbl_TaxWorkerInfo WITH (NOLOCK) WHERE fld_NoPkjPermanent IN (SELECT fld_NoPkjPermanent FROM @tbl_Pkjmast) AND fld_Year = @Year
 
-	SELECT * FROM tbl_ByrCarumanTambahan WITH (NOLOCK) WHERE fld_GajiID IN (SELECT fld_ID FROM @tbl_GajiBulanan) --AND fld_KodCaruman = 'PCB'
+	SELECT * FROM tbl_ByrCarumanTambahan WITH (NOLOCK) WHERE fld_GajiID IN (SELECT fld_ID FROM @tbl_GajiBulanan) AND fld_KodSubCaruman = 'PCB02'
 
-	SELECT * FROM CFASOPMSCORP..tblOptionConfigsWeb WITH (NOLOCK) WHERE fldOptConfFlag1 IN ('taxResidency','taxMaritalStatus','designation')
+	SELECT * FROM PUPOPMSCORP..tblOptionConfigsWeb WITH (NOLOCK) WHERE fldOptConfFlag1 IN ('taxResidency','taxMaritalStatus','designation')
+
+	SELECT * FROM tbl_TaxPCB2Form WITH (NOLOCK) WHERE fld_GajiID IN (SELECT fld_ID FROM @tbl_GajiBulanan)
 END
 GO
 
