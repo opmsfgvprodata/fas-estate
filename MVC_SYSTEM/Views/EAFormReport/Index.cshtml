@@ -1,0 +1,137 @@
+﻿@using MVC_SYSTEM.Class
+
+@{
+    ViewBag.Title = "EA Form Report";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+
+    AjaxOptions options = new AjaxOptions
+    {
+        HttpMethod = "Get",
+        UpdateTargetId = "searchResultWorkerEAFormRpt",
+        InsertionMode = InsertionMode.Replace,
+        LoadingElementId = "divLoading"
+    };
+
+}
+
+<script src="~/Asset/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+
+<div id="divLoading" style="display:none;">
+    <div class="progressTest">
+        <label>
+            @GlobalResEstate.msgWait
+        </label>
+    </div>
+</div>
+
+<section class="content-wrapper main-content clear-fix">
+    <div class="well bottom" style="padding-bottom:16px;">
+        <div class="row">
+            <div class="col-sm-2">
+                @Html.RadioButton("RadioGroup", 0, new { @checked = "checked" })
+                @Html.Label(GlobalResEstate.lblIndividuSelection)<br />
+                @Html.RadioButton("RadioGroup", 1)
+                @Html.Label(GlobalResEstate.lblGroupSelection)
+            </div>
+            <div class="col-sm-1">
+                <label>@GlobalResEstate.lblYear</label>
+                @Html.DropDownList("YearList", null, htmlAttributes: new { @class = "form-control" })
+            </div>
+            <div class="col-sm-2" id="divlist">
+                @Html.Label(GlobalResEstate.lblStatus)
+                @Html.DropDownList("StatusList", null, htmlAttributes: new { @class = "form-control" })
+            </div>
+            <div class="col-sm-2">
+                <label id="SelectionLabel">@GlobalResEstate.lblWorker</label>
+                @Html.DropDownList("SelectionList", null, htmlAttributes: new { @class = "form-control" })
+            </div>
+            <div class="col-sm-2">
+                <a class="btn btn-primary btn-block" href="#" id="pdfview">
+                    @GlobalResEstate.btnView
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="well" style="margin-top:7px;">
+        <div class="panel panel-primary">
+            <div class="panel-heading">EA Form Report</div>
+            <div class="panel-body">
+                <div id="searchResultWorkerEAFormRpt">
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section scripts{
+    @Scripts.Render("~/Asset/Scripts/AjaxModal.js")
+}
+
+<script>
+    $(document).ready(function () {
+        $('input[name="RadioGroup"]').on("click", function (e) {
+            console.log($('input[name=RadioGroup]:checked').val());
+            var Radiogrp = $('input[name=RadioGroup]:checked').val();
+            var radiogroup = {};
+            var disableoption = "";
+            $('#divLoading').show();
+            radiogroup.url = "@Url.Action("GetList", "Report")";
+            radiogroup.type = "POST";
+            radiogroup.data = JSON.stringify({ RadioGroup: Radiogrp, StatusList: $("#StatusList").val() });
+            radiogroup.datatype = "json";
+            radiogroup.contentType = "application/json";
+            radiogroup.success = function (result) {
+                if (Radiogrp == 0) {
+                    $("#divlist").find(":input").prop("disabled", false);
+                }
+                else {
+                    $("#divlist").find(":input").prop("disabled", true);
+                }
+                document.getElementById("SelectionLabel").innerText = result.SelectionLabel;
+                $("#SelectionList").empty();
+                for (var i = 0; i < result.SelectionList.length; i++) {
+                    $("#SelectionList").append("<option value=" + result.SelectionList[i].Value + " " + disableoption + ">" + result.SelectionList[i].Text + "</option>");
+                }
+                $('#divLoading').hide();
+            };
+            radiogroup.error = function () { $.simplyToast('@GlobalResEstate.msgError', 'danger'); };
+            $.ajax(radiogroup);
+        });
+
+        $("#StatusList").change(function () {
+            console.log($("#StatusList").val());
+            var Radiogrp = $('input[name=RadioGroup]:checked').val();
+            var PkjList = {};
+            var disableoption = "";
+            PkjList.url = "@Url.Action("GetList", "Report")";
+            PkjList.type = "POST";
+            PkjList.data = JSON.stringify({ RadioGroup: Radiogrp, StatusList: $("#StatusList").val() });
+            PkjList.datatype = "json";
+            PkjList.contentType = "application/json";
+            PkjList.success = function (result) {
+                $("#SelectionList").empty();
+                for (var i = 0; i < result.SelectionList.length; i++) {
+                    $("#SelectionList").append("<option value=" + result.SelectionList[i].Value + " " + disableoption + ">" + result.SelectionList[i].Text + "</option>");
+                }
+                $('#divLoading').hide();
+            };
+            PkjList.error = function () { $.simplyToast('@GlobalResEstate.msgError', 'danger'); };
+            $.ajax(PkjList);
+        });
+
+        $("#pdfview").click(function () {
+            var RadioGroup = $('input[name=RadioGroup]:checked').val();
+            var MonthList = $("#MonthList").val();
+            var YearList = $("#YearList").val();
+            var StatusList = $("#StatusList").val();
+            var SelectionList = $("#SelectionList").val();
+            var JnsPkjList = $("#JnsPkjList").val();
+
+            var param = '/?RadioGroup=' + RadioGroup + '&YearList=' + YearList + '&StatusList=' + StatusList + '&SelectionList=' + SelectionList;
+            PDFObject.embed("@Url.Action("EAFormPdf", "EAFormReport")" + param, "#searchResultWorkerEAFormRpt", { height: "450px" });
+
+            return false;
+        });
+
+    });
+</script>
