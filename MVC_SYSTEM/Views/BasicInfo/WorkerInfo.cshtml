@@ -54,66 +54,72 @@
                             <div class="text-center">@grid.TotalRowCount @Html.Label(GlobalResEstate.lblTotalRecord)</div>
 
                             //user ladang
-                            <div>
-                                @{
-                                    @grid.GetHtml(htmlAttributes: new { id = "grid" }, // id for ajaxUpdateContainerId parameter
-                                fillEmptyRows: false,
-                                tableStyle: "table table-bordered table-striped table-list table-hover",
-                                headerStyle: "header_table",
-                                alternatingRowStyle: "Grid-alt",
-                                selectedRowStyle: "Grid-selected",
-                                rowStyle: "Grid-rowstyle",
-                                footerStyle: "table-pager",
-                                mode: WebGridPagerModes.All,
-                                columns: grid.Columns(
-                                    grid.Column(GlobalResEstate.hdrNo, canSort: false, format: item => item.WebGrid.Rows.IndexOf(item) + 1 + Math.Round(Convert.ToDouble(grid.TotalRowCount / grid.PageCount) / grid.RowsPerPage) * grid.RowsPerPage * grid.PageIndex, style: "count"),
-                                    grid.Column("fld_Nopkj", GlobalResEstate.hdrNoPkj, style: "nopkj"),
-                                    grid.Column("fld_Nama", GlobalResEstate.hdrName, style: "namapkj"),
-                                    grid.Column("fld_Nokp", GlobalResEstate.hdrNoKp, style: "nokp"),
-                                    grid.Column("fld_Kdaktf", GlobalResEstate.lblActiveStatus, style: "nokp", format: @<text>@( GetConfig.GetWebConfigDesc(item.fld_Kdaktf, "statusaktif", item.fld_NegaraID, item.fld_SyarikatID))</text>),
-                     grid.Column("fld_StatusApproved", GlobalResEstate.hdrStatusApp, style: "status", format: @<text>@( GetStatus.GetStatusApprove(item.fld_StatusApproved))</text>),
-     grid.Column("fld_AppliedBy", GlobalResEstate.hdrRequestID, style: "appliedby"),
-     grid.Column(GlobalResEstate.hdrAction, canSort: false, style: "tindakan",
-         format: @<text>
-            @Html.Raw("<a href='" + Url.Action("ModulesSelection", "Modules", new { Modules = "labour" }, this.Request.Url.Scheme) + "' class='btn btn-success' title='Update Worker' onclick='return DisplayProgressMessage(this);'><i class='fa fa-edit fa-lg'></i></a>")
-        </text>)
+                    <div>
+                        @{
+                            @grid.GetHtml(htmlAttributes: new { id = "grid" }, // id for ajaxUpdateContainerId parameter
+                        fillEmptyRows: false,
+                        tableStyle: "table table-bordered table-striped table-list table-hover",
+                        headerStyle: "header_table",
+                        alternatingRowStyle: "Grid-alt",
+                        selectedRowStyle: "Grid-selected",
+                        rowStyle: "Grid-rowstyle",
+                        footerStyle: "table-pager",
+                        mode: WebGridPagerModes.All,
+                        columns: grid.Columns(
+                            grid.Column(GlobalResEstate.hdrNo, canSort: false, format: item => item.WebGrid.Rows.IndexOf(item) + 1 + Math.Round(Convert.ToDouble(grid.TotalRowCount / grid.PageCount) / grid.RowsPerPage) * grid.RowsPerPage * grid.PageIndex, style: "count"),
+                            grid.Column("fld_Nopkj", GlobalResEstate.hdrNoPkj, style: "nopkj"),
+                            grid.Column("fld_Nama", GlobalResEstate.hdrName, style: "namapkj"),
+                            grid.Column("fld_Nokp", GlobalResEstate.hdrNoKp, style: "nokp"),
+                            grid.Column("fld_Kdaktf", GlobalResEstate.lblActiveStatus, style: "nokp", format: @<text>@( GetConfig.GetWebConfigDesc(item.fld_Kdaktf, "statusaktif", item.fld_NegaraID, item.fld_SyarikatID))</text>),
+                            grid.Column("fld_StatusApproved", GlobalResEstate.hdrStatusApp, style: "status", format: @<text>@( GetStatus.GetStatusApprove(item.fld_StatusApproved))</text>),
+                            grid.Column("fld_KodSAPPekerja", GlobalResEstate.hdrCostCenter, style: "nokp"),
+                            grid.Column("fld_AppliedBy", GlobalResEstate.hdrRequestID, style: "appliedby"),
+                            grid.Column(GlobalResEstate.hdrAction, canSort: false, style: "tindakan",
+                            format: @<text>
+                        @*@Html.Raw("<a href='" + Url.Action("ModulesSelection", "Modules", new { Modules = "labour" }, this.Request.Url.Scheme) + "' class='btn btn-success' title='Update Worker' onclick='return DisplayProgressMessage(this);'><i class='fa fa-edit fa-lg'></i></a>")*@
+                        @Html.Raw("<a data-modal='' href='" + @Url.Action("CostCenterUpdate", "BasicInfo") + "/?id=" + item.fld_Nopkj + "' class='btn btn-success' title='Update Cost Center' onclick='return DisplayProgressMessage(this);'><i class='fa fa-edit fa-lg'></i></a>")
+
+                    </text>)
 ))
-                                }
-                            </div>
+                        }
+                    </div>
                         }
                         else
                         {
 
-                            <div>
-                                @{
+                    <div>
+                        @{
 
-                                    @grid.Pager(WebGridPagerModes.All)
-                                    ;
+                            @grid.Pager(WebGridPagerModes.All)
+                            ;
 
-                                    @grid.GetHtml(htmlAttributes: new { id = "grid" }, // id for ajaxUpdateContainerId parameter
-                    fillEmptyRows: false,
-                    tableStyle: "table table-bordered table-striped table-list table-hover",
-                    headerStyle: "header_table",
-                    alternatingRowStyle: "Grid-alt",
-                    selectedRowStyle: "Grid-selected",
-                    rowStyle: "Grid-rowstyle",
-                    footerStyle: "table-pager",
-                    mode: WebGridPagerModes.All,
-                    columns: grid.Columns(
-                        grid.Column(GlobalResEstate.hdrNo, canSort: false, format: item => item.WebGrid.Rows.IndexOf(item) + 1 + Math.Round(Convert.ToDouble(grid.TotalRowCount / grid.PageCount) / grid.RowsPerPage) * grid.RowsPerPage * grid.PageIndex, style: "count"),
-                        grid.Column("fld_Nopkj", GlobalResEstate.hdrNoPkj, style: "nopkj"),
-                        grid.Column("fld_Nama", GlobalResEstate.hdrName, style: "namapkj"),
-                        grid.Column("fld_Nokp", GlobalResEstate.hdrNoKp, style: "nokp"),
-                        grid.Column("fld_StatusApproved", GlobalResEstate.hdrStatusApp, style: "status", format: @<text>@( GetStatus.GetStatusApprove(item.fld_StatusApproved))</text>),
-grid.Column("fld_AppliedBy", GlobalResEstate.hdrRequestID, style: "appliedby"),
-grid.Column(GlobalResEstate.hdrAction, canSort: false, style: "tindakan",
-format: @<text>
-    @Html.Raw("<a href='" + Url.Action("ModulesSelection", "Modules", new { Modules = "labour" }, this.Request.Url.Scheme) + "' class='btn btn-success' title='Update Worker' onclick='return DisplayProgressMessage(this);'><i class='fa fa-edit fa-lg'></i></a>")
-</text>)
-))
-                                    ;
-                                }
-                            </div>
+                            @grid.GetHtml(htmlAttributes: new { id = "grid" }, // id for ajaxUpdateContainerId parameter
+            fillEmptyRows: false,
+            tableStyle: "table table-bordered table-striped table-list table-hover",
+            headerStyle: "header_table",
+            alternatingRowStyle: "Grid-alt",
+            selectedRowStyle: "Grid-selected",
+            rowStyle: "Grid-rowstyle",
+            footerStyle: "table-pager",
+            mode: WebGridPagerModes.All,
+            columns: grid.Columns(
+                grid.Column(GlobalResEstate.hdrNo, canSort: false, format: item => item.WebGrid.Rows.IndexOf(item) + 1 + Math.Round(Convert.ToDouble(grid.TotalRowCount / grid.PageCount) / grid.RowsPerPage) * grid.RowsPerPage * grid.PageIndex, style: "count"),
+                grid.Column("fld_Nopkj", GlobalResEstate.hdrNoPkj, style: "nopkj"),
+                grid.Column("fld_Nama", GlobalResEstate.hdrName, style: "namapkj"),
+                grid.Column("fld_Nokp", GlobalResEstate.hdrNoKp, style: "nokp"),
+                grid.Column("fld_StatusApproved", GlobalResEstate.hdrStatusApp, style: "status", format: @<text>@( GetStatus.GetStatusApprove(item.fld_StatusApproved))</text>),
+                grid.Column("fld_KodSAPPekerja", GlobalResEstate.hdrCostCenter, style: "nokp"),
+                grid.Column("fld_AppliedBy", GlobalResEstate.hdrRequestID, style: "appliedby"),
+                grid.Column(GlobalResEstate.hdrAction, canSort: false, style: "tindakan",
+                format: @<text>
+                        @*@Html.Raw("<a href='" + Url.Action("ModulesSelection", "Modules", new { Modules = "labour" }, this.Request.Url.Scheme) + "' class='btn btn-success' title='Update Worker' onclick='return DisplayProgressMessage(this);'><i class='fa fa-edit fa-lg'></i></a>")*@
+                        @Html.Raw("<a data-modal='' href='" + @Url.Action("CostCenterUpdate", "BasicInfo") + "/?id=" + item.fld_Nopkj + "' class='btn btn-success' title='Update Cost Center' onclick='return DisplayProgressMessage(this);'><i class='fa fa-edit fa-lg'></i></a>")
+
+                    </text>             )
+             ))
+                            ;
+                        }
+                    </div>
                         }
                     </div>
                 </div>

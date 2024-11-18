@@ -3534,4 +3534,10 @@
   <data name="lblTitleSupervisorRegistration" xml:space="preserve">
     <value>Daftar Supervisor</value>
   </data>
+  <data name="titleUpdateCostCenter" xml:space="preserve">
+    <value>KEMASKINI COST CENTER</value>
+  </data>
+  <data name="hdrCostCenter" xml:space="preserve">
+    <value>Cost Center</value>
+  </data>
 </root>
