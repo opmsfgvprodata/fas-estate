@@ -2502,4 +2502,10 @@
   <data name="lblTitleSupervisorRegistration" xml:space="preserve">
     <value>Supervisor Registration</value>
   </data>
+  <data name="sltAll" xml:space="preserve">
+    <value>Please Select</value>
+  </data>
+  <data name="String1" xml:space="preserve">
+    <value>Please Select</value>
+  </data>
 </root>
