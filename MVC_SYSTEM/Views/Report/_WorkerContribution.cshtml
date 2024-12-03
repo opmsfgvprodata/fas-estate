@@ -7,6 +7,20 @@
     ChangeTimeZone ChangeTimeZone = new ChangeTimeZone();
     DateTime Todaydate = ChangeTimeZone.gettimezone();
     string uniquefilename = "ContributionReport" + "_" + Todaydate.Year.ToString() + Todaydate.Month.ToString() + Todaydate.Day.ToString() + Todaydate.Hour.ToString() + Todaydate.Minute.ToString() + Todaydate.Second.ToString();
+    decimal GrandTotalSalaryForKwsp =0;
+    decimal GrandKwspContributionEmplyee = 0;
+    decimal GrandKwspContributionEmplyer = 0;
+    decimal GrandTotalSalaryForPerkeso = 0;
+    decimal GrandSocsoContributionEmplyee = 0;
+    decimal GrandSocsoContributionEmplyer = 0;
+    decimal GrandSipContributionEmplyee = 0;
+    decimal GrandSipContributionEmplyer = 0;
+    decimal GrandSbkpContributionEmplyee = 0;
+    decimal GrandSbkpContributionEmplyer = 0;
+    decimal GrandPcbContributionEmplyee = 0;
+    decimal GrandPcbContributionEmplyer = 0;
+    decimal GrandNUPWContributionEmplyee = 0;
+
 }
 
 @if (Model != null && Model.Count() != 0)
@@ -16,7 +30,7 @@
         <table class="table table-bordered" style="font-size: 11px;" border="0" width="100%">
             <thead>
                 <tr>
-                    <th colspan="17" style="text-align:center;vertical-align:middle;">
+                    <th colspan="18" style="text-align:center;vertical-align:middle;">
                         @ViewBag.NamaSyarikat
                         <br />
                         (@GlobalResEstate.lblCompanyNo : @ViewBag.NoSyarikat)
@@ -46,68 +60,135 @@
                     <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">SBKP Employer Contribution (RM)</th>
                     <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">PCB Employee Contribution (RM)</th>
                     <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">PCB Employer Contribution (RM)</th>
+                    <th bgcolor="#ffcc80" style="color:black;text-align:center;vertical-align:middle !important;border:1px solid black;" border="1">NUPW Employee Contribution (RM)</th>
                 </tr>
             </thead>
             <tbody>
 
                 @foreach (var item in Model)
                 {
+
+                    GrandTotalSalaryForKwsp = GrandTotalSalaryForKwsp + item.TotalSalaryForKwsp;
+                    GrandKwspContributionEmplyee = GrandKwspContributionEmplyee + item.KwspContributionEmplyee;
+                    GrandKwspContributionEmplyer = GrandKwspContributionEmplyer + item.KwspContributionEmplyer;
+                    GrandTotalSalaryForPerkeso = GrandTotalSalaryForPerkeso + item.TotalSalaryForPerkeso;
+                    GrandSocsoContributionEmplyee = GrandSocsoContributionEmplyee + item.SocsoContributionEmplyee;
+                    GrandSocsoContributionEmplyer = GrandSocsoContributionEmplyer + item.SocsoContributionEmplyer;
+                    GrandSipContributionEmplyee = GrandSipContributionEmplyee + item.SipContributionEmplyee;
+                    GrandSipContributionEmplyer = GrandSipContributionEmplyer + item.SipContributionEmplyer;
+                    GrandSbkpContributionEmplyee = GrandSbkpContributionEmplyee + item.SbkpContributionEmplyee;
+                    GrandSbkpContributionEmplyer = GrandSbkpContributionEmplyer + item.SbkpContributionEmplyer;
+                    GrandPcbContributionEmplyee = GrandPcbContributionEmplyee + item.PcbContributionEmplyee;
+                    GrandPcbContributionEmplyer = GrandPcbContributionEmplyer + item.PcbContributionEmplyer;
+                    GrandNUPWContributionEmplyee = GrandNUPWContributionEmplyee + item.NUPWContributionEmplyee;
+                    <tr>
+                        <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                            @bill
+                        </td>
+                        <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                            @item.WorkerNo
+                        </td>
+                        <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                            @item.WorkerName
+                        </td>
+                        <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                            @item.WorkerIDNo
+                        </td>
+                        <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                            @GetTriager.GetDashForNull(item.TotalSalaryForKwsp.ToString())
+                        </td>
+                        <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                            @GetTriager.GetDashForNull(item.KwspContributionEmplyee.ToString())
+                        </td>
+                        <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                            @GetTriager.GetDashForNull(item.KwspContributionEmplyer.ToString())
+                        </td>
+                        <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                            @item.WorkerSocsoNo
+                        </td>
+                        <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                            @GetTriager.GetDashForNull(item.TotalSalaryForPerkeso.ToString())
+                        </td>
+                        <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                            @GetTriager.GetDashForNull(item.SocsoContributionEmplyee.ToString())
+                        </td>
+                        <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                            @GetTriager.GetDashForNull(item.SocsoContributionEmplyer.ToString())
+                        </td>
+                        <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                            @GetTriager.GetDashForNull(item.SipContributionEmplyee.ToString())
+                        </td>
+                        <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                            @GetTriager.GetDashForNull(item.SipContributionEmplyer.ToString())
+                        </td>
+                        <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                            @GetTriager.GetDashForNull(item.SbkpContributionEmplyee.ToString())
+                        </td>
+                        <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                            @GetTriager.GetDashForNull(item.SbkpContributionEmplyer.ToString())
+                        </td>
+                        <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                            @GetTriager.GetDashForNull(item.PcbContributionEmplyee.ToString())
+                        </td>
+                        <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                            @GetTriager.GetDashForNull(item.PcbContributionEmplyer.ToString())
+                        </td>
+                        <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                            @GetTriager.GetDashForNull(item.NUPWContributionEmplyee.ToString())
+                        </td>
+
+                    </tr>
+                    bill++;
+                }
+
                 <tr>
-                    <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
-                        @bill
+                    <td colspan="4" align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
+                        <b>TOTAL</b> 
                     </td>
                     <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
-                        @item.WorkerNo
+                        @GetTriager.GetDashForNull(@GrandTotalSalaryForKwsp.ToString())
                     </td>
                     <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
-                        @item.WorkerName
+                        @GetTriager.GetDashForNull(@GrandKwspContributionEmplyee.ToString())
                     </td>
                     <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
-                        @item.WorkerIDNo
+                        @GetTriager.GetDashForNull(@GrandKwspContributionEmplyer.ToString())
                     </td>
                     <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
-                        @GetTriager.GetDashForNull(item.TotalSalaryForKwsp.ToString())
+                        
                     </td>
                     <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
-                        @GetTriager.GetDashForNull(item.KwspContributionEmplyee.ToString())
+                        @GetTriager.GetDashForNull(@GrandTotalSalaryForPerkeso.ToString())
                     </td>
                     <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
-                        @GetTriager.GetDashForNull(item.KwspContributionEmplyer.ToString())
+                        @GetTriager.GetDashForNull(@GrandSocsoContributionEmplyee.ToString())
                     </td>
                     <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
-                        @item.WorkerSocsoNo
+                        @GetTriager.GetDashForNull(@GrandSocsoContributionEmplyer.ToString())
                     </td>
                     <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
-                        @GetTriager.GetDashForNull(item.TotalSalaryForPerkeso.ToString())
+                        @GetTriager.GetDashForNull(@GrandSipContributionEmplyee.ToString())
                     </td>
                     <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
-                        @GetTriager.GetDashForNull(item.SocsoContributionEmplyee.ToString())
+                        @GetTriager.GetDashForNull(@GrandSipContributionEmplyer.ToString())
                     </td>
                     <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
-                        @GetTriager.GetDashForNull(item.SocsoContributionEmplyer.ToString())
+                        @GetTriager.GetDashForNull(@GrandSbkpContributionEmplyee.ToString())
                     </td>
                     <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
-                        @GetTriager.GetDashForNull(item.SipContributionEmplyee.ToString())
+                        @GetTriager.GetDashForNull(@GrandSbkpContributionEmplyer.ToString())
                     </td>
                     <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
-                        @GetTriager.GetDashForNull(item.SipContributionEmplyer.ToString())
+                        @GetTriager.GetDashForNull(@GrandPcbContributionEmplyee.ToString())
                     </td>
                     <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
-                        @GetTriager.GetDashForNull(item.SbkpContributionEmplyee.ToString())
+                        @GetTriager.GetDashForNull(@GrandPcbContributionEmplyer.ToString())
                     </td>
                     <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
-                        @GetTriager.GetDashForNull(item.SbkpContributionEmplyer.ToString())
-                    </td>
-                    <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
-                        @GetTriager.GetDashForNull(item.PcbContributionEmplyee.ToString())
-                    </td>
-                    <td align="center" style="vertical-align:middle !important;border:1px solid black;" border="1">
-                        @GetTriager.GetDashForNull(item.PcbContributionEmplyer.ToString())
+                        @GetTriager.GetDashForNull(@GrandNUPWContributionEmplyee.ToString())
                     </td>
 
                 </tr>
-                    bill++;
-                }
             </tbody>
         </table>
     </div>
