@@ -10099,7 +10099,7 @@ namespace MVC_SYSTEM.Controllers
             string host, catalog, user, pass = "";
             GetNSWL.GetData(out NegaraID, out SyarikatID, out WilayahID, out LadangID, getuserid, User.Identity.Name);
             Connection.GetConnection(out host, out catalog, out user, out pass, WilayahID.Value, SyarikatID.Value, NegaraID.Value);
-
+            
             MVC_SYSTEM_Models dbr = MVC_SYSTEM_Models.ConnectToSqlServer(host, catalog, user, pass);
 
             List<SelectListItem> StatusList2 = new List<SelectListItem>();
@@ -10123,7 +10123,7 @@ namespace MVC_SYSTEM.Controllers
             DateTime time = DateTime.Now; // add by fitri 17-09-2020
             ViewBag.Time = time.ToString("t");
             // add by fitri 17-09-2020
-            ViewBag.NamaLadang = db.tbl_Ladang.Where(x => x.fld_SyarikatID == SyarikatID && x.fld_NegaraID == NegaraID && x.fld_Deleted == false).Select(s => s.fld_LdgName).FirstOrDefault();
+            ViewBag.NamaLadang = db.tbl_Ladang.Where(x => x.fld_ID == LadangID && x.fld_NegaraID == NegaraID && x.fld_Deleted == false && x.fld_SyarikatID == SyarikatID).Select(s => s.fld_LdgName).FirstOrDefault();
             int Size_Of_Page = 1; // add by fitri 17-09-2020
             int No_Of_Page = (Page_No ?? 1); // add by fitri 17-09-2020
             //ViewBag.CurrentSortOrder = Sorting_Order; // add by fitri 17-09-2020

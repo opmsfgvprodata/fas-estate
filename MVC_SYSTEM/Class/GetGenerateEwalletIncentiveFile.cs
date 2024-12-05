@@ -97,8 +97,8 @@ namespace MVC_SYSTEM.Class
                 foreach (var eWalletFileDetail in vw_SpecialInsentive)
                 {
                     Last4pan = decimal.Parse(eWalletFileDetail.fld_Last4Pan);
-                    Salary = eWalletFileDetail.fld_NilaiInsentif;
-                    //Salary = eWalletFileDetail.fld_GajiBersih;
+                    //Salary = eWalletFileDetail.fld_NilaiInsentif;
+                    Salary = eWalletFileDetail.fld_GajiBersih;
 
                     Last4panTimeSalary = (decimal)(Last4pan * Salary);
 
