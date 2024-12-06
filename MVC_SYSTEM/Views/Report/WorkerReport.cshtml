@@ -70,6 +70,31 @@
     </div>
 </section>
 
+<script>
+      $('#StatusList').change(function () {
+          var statusId = $(this).val();
+          var Radiogrp = $('input[name=RadioGroup]:checked').val();
+          var radiogroup = {};
+          var disableoption = "";
+          $('#divLoading').show();
+            radiogroup.url = "@Url.Action("GetList", "Report")";
+            radiogroup.type = "POST";
+          radiogroup.data = JSON.stringify({ RadioGroup: Radiogrp, StatusList: statusId });
+            radiogroup.datatype = "json";
+            radiogroup.contentType = "application/json";
+            radiogroup.success = function (result) {
+                document.getElementById("SelectionLabel").innerText = result.SelectionLabel;
+                $("#SelectionList").empty();
+                for (var i = 0; i < result.SelectionList.length; i++) {
+                    $("#SelectionList").append("<option value=" + result.SelectionList[i].Value + " " + disableoption + ">" + result.SelectionList[i].Text + "</option>");
+                }
+                $('#divLoading').hide();
+            };
+            radiogroup.error = function () { $.simplyToast('@GlobalResEstate.msgError', 'danger'); };
+            $.ajax(radiogroup);
+
+        });
+</script>
 
 <script>
     $(document).ready(function () {
