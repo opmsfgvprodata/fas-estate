@@ -5146,10 +5146,10 @@ namespace MVC_SYSTEM.Controllers
 
             List<SelectListItem> SupervisorIdList = new List<SelectListItem>();
             var SupervisorListing = dbr.tbl_Supervisor.Where(x => x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID && x.fld_WilayahID == fld_WilayahID && x.fld_LadangID == LadangID).Select(x => x.fld_SupervisorID).ToList();
-            var SupervisorExcludedListed = db.vw_SupervisorInfo.Where(x => x.fldNegaraID == NegaraID && x.fldSyarikatID == SyarikatID && x.fldWilayahID == fld_WilayahID && x.fldLadangID == LadangID && x.fldJawatan == "PL" && x.fldDeleted == false && !SupervisorListing.Contains(x.fldUserid)).ToList();
+            var SupervisorExcludedListed = db.vw_SupervisorInfo.Where(x => x.fldNegaraID == NegaraID && x.fldSyarikatID == SyarikatID && x.fldWilayahID == fld_WilayahID && x.fldLadangID == LadangID && x.fldDeleted == false && !SupervisorListing.Contains(x.fldUserName)).ToList();
 
 
-            SupervisorIdList = new SelectList(SupervisorExcludedListed.OrderBy(o => o.fldUserid).Select(s => new SelectListItem { Value = s.fldUserid.ToString(), Text = s.fldUserid.ToString() + "-" + s.fldUserFullName }), "Value", "Text").ToList();
+            SupervisorIdList = new SelectList(SupervisorExcludedListed.OrderBy(o => o.fldUserName).Select(s => new SelectListItem { Value = s.fldUserName.ToString(), Text = s.fldUserName.ToString() + "-" + s.fldUserFullName }), "Value", "Text").ToList();
             SupervisorIdList.Insert(0, (new SelectListItem { Text = GlobalResEstate.lblChoose, Value = "0" }));
             var LadangInfo = db.tbl_Ladang.Where(x => x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID && x.fld_WlyhID == fld_WilayahID && x.fld_ID == LadangID).FirstOrDefault();
             ViewBag.fld_SupervisorID = SupervisorIdList;
@@ -5175,7 +5175,7 @@ namespace MVC_SYSTEM.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    var supervisorInfo = db.vw_SupervisorInfo.Where(x => x.fldUserid == Supervisor.fld_SupervisorID && x.fldJawatan == "PL" && x.fldDeleted == false).FirstOrDefault();
+                    var supervisorInfo = db.vw_SupervisorInfo.Where(x => x.fldUserName == Supervisor.fld_SupervisorID && x.fldDeleted == false).FirstOrDefault();
                     if (supervisorInfo != null)
                     {
                         Models.tbl_Supervisor tbl_Supervisor = new Models.tbl_Supervisor();
