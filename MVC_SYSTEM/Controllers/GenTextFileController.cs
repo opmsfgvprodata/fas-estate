@@ -34,6 +34,7 @@ namespace MVC_SYSTEM.Controllers
         // GET: GenTextFile
         public ActionResult Index()
         {
+
             int? getuserid = getidentity.ID(User.Identity.Name);
             int? getroleid = getidentity.getRoleID(getuserid);
             int?[] reportid = new int?[] { };
@@ -43,11 +44,10 @@ namespace MVC_SYSTEM.Controllers
             GetNSWL.GetData(out NegaraID, out SyarikatID, out WilayahID, out LadangID, getuserid, User.Identity.Name);
 
             ViewBag.GenTextFile = "class = active";
-            ViewBag.TextfileModeList = new SelectList(
-                db.tblMenuLists.Where(x => x.fld_Flag == "GenTxtFile" && x.fldDeleted == false && x.fld_NegaraID == NegaraID &&
-                                           x.fld_SyarikatID == SyarikatID).OrderBy(o => o.fld_ID),
-                "fld_Val", "fld_Desc");
-
+            List<SelectListItem> sublist = new List<SelectListItem>();
+            ViewBag.MenuSubList = sublist;
+            ViewBag.MenuList = new SelectList(db.tblMenuLists.Where(x => x.fld_Flag == "GenTxtFile" && x.fldDeleted == false && x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID).OrderBy(o => o.fld_ID).Select(s => new SelectListItem { Value = s.fld_ID.ToString(), Text = s.fld_Desc }), "Value", "Text").ToList();
+            db.Dispose();
             return View();
         }
 
@@ -632,6 +632,20 @@ namespace MVC_SYSTEM.Controllers
             return File(CurrentFileName.FilePath, contentType, CurrentFileName.FileName);
         }
 
+        public JsonResult GetSubList(int ListID)
+        {
+            int? getuserid = getidentity.ID(User.Identity.Name);
+            int? NegaraID, SyarikatID, WilayahID, LadangID = 0;
+            GetNSWL.GetData(out NegaraID, out SyarikatID, out WilayahID, out LadangID, getuserid, User.Identity.Name);
 
+            var findsub = db.tblMenuLists.Where(x => x.fld_ID == ListID).Select(s => s.fld_Sub).FirstOrDefault();
+            List<SelectListItem> sublist = new List<SelectListItem>();
+            if (findsub != null)
+            {
+                sublist = new SelectList(db.tblMenuLists.Where(x => x.fld_Flag == findsub && x.fldDeleted == false && x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID).OrderBy(o => o.fld_ID).Select(s => new SelectListItem { Value = s.fld_Val, Text = s.fld_Desc }), "Value", "Text").ToList();
+            }
+            db.Dispose();
+            return Json(sublist);
+        }
     }
 }

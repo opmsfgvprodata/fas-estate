@@ -23,8 +23,12 @@
                         <div class="panel-body">
                             <div class="form-group">
                                 <div class="col-sm-6">
-                                    <label for="ListReport">Choose Textfile Mode</label>
-                                    @Html.DropDownList("TextfileModeList", null, htmlAttributes: new { @class = "form-control" })
+                                    <label for="ListReport">Payment Mode</label>
+                                    @Html.DropDownList("MenuList", null, htmlAttributes: new { @class = "form-control" })
+                                </div>
+                                <div id="sublist" class="col-sm-6">
+                                    <label for="ListReport">Sub Menu</label>
+                                    @Html.DropDownList("MenuSubList", null, htmlAttributes: new { @class = "form-control" })
                                 </div>
                             </div>
                         </div>
@@ -38,9 +42,56 @@
     </div>
 </section>
 <script>
-    function DisplayProgressMessage(ctl) {
-        $("#UpdateProgress1").css("display", "");
-        return true;
-    }
+    $(document).ready(function () {
+        var SubList = {};
+        //var disableoption = "";
+        SubList.url = "@Url.Action("GetSubList", "GenTextFile")";
+        SubList.type = "POST";
+        SubList.data = JSON.stringify({ ListID: $("#MenuList").val() });
+        SubList.datatype = "json";
+        SubList.contentType = "application/json";
+        SubList.success = function (sublist) {
+            $("#MenuSubList").empty();
+            if (sublist.length != 0) {
+                $("#sublist").removeClass("hidden");
+                $.simplyToast('@GlobalResEstate.msgSubMenu', 'success');
+                for (var i = 0; i < sublist.length; i++) {
+                    $("#MenuSubList").append("<option value=" + sublist[i].Value + ">" + sublist[i].Text + "</option>");
+                }
+            }
+            else {
+                $("#MenuSubList").empty();
+                $("#sublist").addClass("hidden");
+            }
+        };
+        SubList.error = function () { $.simplyToast('@GlobalResEstate.msgError', 'error'); };
+        $.ajax(SubList);
+
+        $("#MenuList").change(function () {
+            var SubList = {};
+            //var disableoption = "";
+            SubList.url = "@Url.Action("GetSubList", "GenTextFile")";
+            SubList.type = "POST";
+            SubList.data = JSON.stringify({ ListID: $("#MenuList").val() });
+            SubList.datatype = "json";
+            SubList.contentType = "application/json";
+            SubList.success = function (sublist) {
+                $("#MenuSubList").empty();
+                if (sublist.length != 0) {
+                    $("#sublist").removeClass("hidden");
+                    $.simplyToast('@GlobalResEstate.msgSubMenu', 'success');
+                    for (var i = 0; i < sublist.length; i++) {
+                        $("#MenuSubList").append("<option value=" + sublist[i].Value + ">" + sublist[i].Text + "</option>");
+                    }
+                }
+                else {
+                    $("#MenuSubList").empty();
+                    $("#sublist").addClass("hidden");
+                }
+            };
+            SubList.error = function () { $.simplyToast('@GlobalResEstate.msgError', 'error'); };
+            $.ajax(SubList);
+        });
+    });
 </script>
 
