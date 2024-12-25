@@ -47,5 +47,9 @@ namespace MVC_SYSTEM.MasterModels
 
         [StringLength(15)]
         public string fld_EmployerTaxNo { get; set; }
+
+        public string fld_CorporateID { get; set; }
+        public string fld_ClientBatchID { get; set; }
+        public string fld_AccountNo { get; set; }
     }
 }

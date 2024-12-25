@@ -497,6 +497,7 @@
     <Compile Include="ModelSAPPUP\vw_SAPPostDataFullDetails.cs" />
     <Compile Include="ModelsDapper\sp_PenggajianData_Est_Result.cs" />
     <Compile Include="ModelsDapper\sp_PenggajianData_Result.cs" />
+    <Compile Include="Models\Model1.cs" />
     <Compile Include="Models\MVC_SYSTEM_Models.cs" />
     <Compile Include="Models\MVC_SYSTEM_Models_Config.cs" />
     <Compile Include="Models\MVC_SYSTEM_SP_Models.Context.cs">
@@ -611,6 +612,8 @@
     <Compile Include="Models\vw_KumpulanPekerja.cs" />
     <Compile Include="Models\vw_MaklumatInsentif.cs" />
     <Compile Include="Models\vw_MaybankFile.cs" />
+    <Compile Include="Models\vw_MaybankRcms.cs" />
+    <Compile Include="Models\vw_MaybankRcmsOthers.cs" />
     <Compile Include="Models\vw_PkjCarumanTambahan.cs" />
     <Compile Include="Models\vw_RptAIPS.cs" />
     <Compile Include="Models\vw_rptKwspSocso.cs" />
@@ -3221,6 +3224,10 @@
     <Content Include="Views\PCB2FormReport\Index.cshtml" />
     <Content Include="Views\Report\PenggajianDataReport.cshtml" />
     <Content Include="Views\Report\_PenggajianDataReport.cshtml" />
+    <Content Include="Views\GenTextFile\ewalletindividu.cshtml" />
+    <Content Include="Views\GenTextFile\_ewalletindividu.cshtml" />
+    <Content Include="Views\GenTextFile\ewalletInsentiveindividu.cshtml" />
+    <Content Include="Views\GenTextFile\_ewalletInsentiveindividu.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Asset\Upload\120\" />
