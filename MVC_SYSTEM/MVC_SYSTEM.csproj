@@ -426,6 +426,7 @@
     <Compile Include="MasterModels\tbl_CutiMaintenance.cs" />
     <Compile Include="MasterModels\tbl_CutiUmum.cs" />
     <Compile Include="MasterModels\tbl_Division.cs" />
+    <Compile Include="MasterModels\tbl_EAWorkerSiriNo.cs" />
     <Compile Include="MasterModels\tbl_EstateDivisionSelection.cs" />
     <Compile Include="MasterModels\tbl_EstateSelection.cs" />
     <Compile Include="MasterModels\tbl_GLSAP.cs" />
@@ -545,6 +546,7 @@
     <Compile Include="Models\tbl_Asaspkt.cs" />
     <Compile Include="Models\tbl_Blok.cs" />
     <Compile Include="Models\tbl_ByrCarumanTambahan.cs" />
+    <Compile Include="Models\tbl_SpecialInsentif.cs" />
     <Compile Include="Models\tbl_TaxPCB2Form.cs" />
     <Compile Include="Models\tbl_TaxWorkerInfo.cs" />
     <Compile Include="Models\tbl_CutiDiambil.cs" />

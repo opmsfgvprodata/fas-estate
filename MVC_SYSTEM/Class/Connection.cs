@@ -18,6 +18,9 @@ namespace MVC_SYSTEM.Class
             user = getconnection.userID;
             pass = getconnection.Password;
 
+            //debug prod
+            host = "4.144.178.156,11433";
+
         }
 
         public string GetConnectionString(int? wlyhID, int? syrktID, int? ngrID)
@@ -29,6 +32,8 @@ namespace MVC_SYSTEM.Class
             var catalog = getConnection.InitialCatalog;
             var user = getConnection.userID;
             var pass = getConnection.Password;
+            //debug prod
+            host = "4.144.178.156,11433";
             var connectionString = String.Format("data source={0};initial catalog={1};user id={2};password={3};MultipleActiveResultSets=True;App=EntityFramework;Connection Timeout=300", host, catalog, user, pass);
             return connectionString;
         }

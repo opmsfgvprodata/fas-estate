@@ -9576,14 +9576,15 @@ namespace MVC_SYSTEM.Controllers
 
             try
             {
+                var activeWorkerNo = dbr.tbl_Pkjmast.Where(x => x.fld_Kdaktf == "1" && x.fld_LadangID == LadangID && x.fld_DivisionID == DivisionID).Select(s => s.fld_NopkjPermanent).Distinct().ToList();
 
                 var currentYearTaxWorkerInfo = dbr.tbl_TaxWorkerInfo
                .Where(x => x.fld_Year == CurrentYear &&
-                           x.fld_WilayahID == WilayahID && x.fld_LadangID == LadangID && x.fld_DivisionID == DivisionID).ToList();
+                           x.fld_WilayahID == WilayahID && x.fld_LadangID == LadangID && x.fld_DivisionID == DivisionID && activeWorkerNo.Contains(x.fld_NopkjPermanent)).ToList();
 
                 var lastYearTaxWorkerInfo = dbr.tbl_TaxWorkerInfo
                .Where(x => x.fld_Year == LastYear &&
-                          x.fld_WilayahID == WilayahID && x.fld_LadangID == LadangID && x.fld_DivisionID == DivisionID).ToList();
+                          x.fld_WilayahID == WilayahID && x.fld_LadangID == LadangID && x.fld_DivisionID == DivisionID && activeWorkerNo.Contains(x.fld_NopkjPermanent)).ToList();
 
                 var currentYearTaxWorkerIDs = currentYearTaxWorkerInfo.Select(s => s.fld_NopkjPermanent).ToList();
 
@@ -9593,7 +9594,7 @@ namespace MVC_SYSTEM.Controllers
 
                 List<Models.tbl_TaxWorkerInfo> tbl_TaxWorkerInfos = new List<Models.tbl_TaxWorkerInfo>();
 
-                foreach(var workerID in notExistIDs.Distinct().ToList())
+                foreach (var workerID in notExistIDs.Distinct().ToList())
                 {
                     var taxWorkerInfo = lastYearTaxWorkerInfo.Where(x => x.fld_NopkjPermanent == workerID).FirstOrDefault();
                     taxWorkerInfo.fld_Year = CurrentYear;
