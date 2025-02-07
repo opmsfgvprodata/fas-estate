@@ -115,6 +115,7 @@ namespace MVC_SYSTEM.Models
         [StringLength(20)]
         public string fld_Nopkj { get; set; }
 
+        [Required(ErrorMessage = "Tax No is required.")]
         [DataType(DataType.Text)]
         [RegularExpression("^[a-zA-Z0-9]*$", ErrorMessage = "Please enter a valid text or number.")]
         [StringLength(30)]
@@ -204,6 +205,7 @@ namespace MVC_SYSTEM.Models
         [StringLength(20)]
         public string fld_Nopkj { get; set; }
 
+        [Required(ErrorMessage = "Tax No is required.")]
         [DataType(DataType.Text)]
         [RegularExpression("^[a-zA-Z0-9]*$", ErrorMessage = "Please enter a valid text or number.")]
         [StringLength(30)]
