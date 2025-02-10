@@ -9386,8 +9386,8 @@ namespace MVC_SYSTEM.Controllers
             }
 
             var workerTaxDetails = dbr.tbl_TaxWorkerInfo
-                .Where(w => w.fld_NopkjPermanent == id && w.fld_WilayahID == WilayahID && w.fld_SyarikatID == SyarikatID && w.fld_NegaraID == NegaraID && w.fld_WilayahID == WilayahID && w.fld_LadangID == LadangID && w.fld_Year == year1)
-                .FirstOrDefault();
+                .Where(w => w.fld_NopkjPermanent == id && w.fld_NegaraID == NegaraID && w.fld_SyarikatID == SyarikatID && 
+                w.fld_WilayahID == WilayahID && w.fld_LadangID == LadangID && w.fld_DivisionID == DivisionID && w.fld_Year == year1) .FirstOrDefault();
 
             // var workerTaxList = dbview.vw_TaxWorkerInfo
             //.Where(w => w.fld_NopkjPermanent == id && w.fld_DivisionID == DivisionID && w.fld_WilayahID == WilayahID && w.fld_SyarikatID == SyarikatID && w.fld_NegaraID == NegaraID && w.fld_WilayahID == WilayahID && w.fld_LadangID == LadangID)
@@ -9487,9 +9487,9 @@ namespace MVC_SYSTEM.Controllers
                 if (ModelState.IsValid)
                 {
 
-                    var getdata = dbr.tbl_TaxWorkerInfo.Where(w => w.fld_NopkjPermanent == tbl_TaxWorkerInfo.fld_NopkjPermanent &&
-                    w.fld_LadangID == LadangID && w.fld_WilayahID == WilayahID &&
-                    w.fld_SyarikatID == SyarikatID && w.fld_NegaraID == NegaraID).FirstOrDefault();
+                    var getdata = dbr.tbl_TaxWorkerInfo.Where(w => w.fld_NopkjPermanent == tbl_TaxWorkerInfo.fld_NopkjPermanent && w.fld_NegaraID == NegaraID &&
+                    w.fld_SyarikatID == SyarikatID && w.fld_WilayahID == WilayahID  &&  w.fld_LadangID == LadangID  &&
+                    w.fld_DivisionID == tbl_TaxWorkerInfo.fld_DivisionID && w.fld_Year == tbl_TaxWorkerInfo.fld_Year).FirstOrDefault();
 
                     getdata.fld_TaxNo = tbl_TaxWorkerInfo.fld_TaxNo;
                     getdata.fld_TaxResidency = tbl_TaxWorkerInfo.fld_TaxResidency;
