@@ -1,4 +1,5 @@
-﻿using MVC_SYSTEM.App_LocalResources;
+﻿using Itenso.TimePeriod;
+using MVC_SYSTEM.App_LocalResources;
 using MVC_SYSTEM.Attributes;
 using MVC_SYSTEM.Class;
 using MVC_SYSTEM.CustomModels;
@@ -1419,7 +1420,24 @@ namespace MVC_SYSTEM.Controllers
                 CustMod_WorkerWorks.Add(new CustMod_WorkerWork() { fld_ID = tbl_KerjaData.fld_ID, fld_Nopkj = tbl_KerjaData.fld_Nopkj, fld_NamaPkj = namepkj, fld_Amount = tbl_KerjaData.fld_Amount, fld_JumlahHasil = tbl_KerjaData.fld_JumlahHasil, fld_KodAktvt = tbl_KerjaData.fld_KodAktvt, fld_KodGL = tbl_KerjaData.fld_KodGL, fld_KodPkt = tbl_KerjaData.fld_KodPkt, fld_Kum = tbl_KerjaData.fld_Kum, fld_Tarikh = tbl_KerjaData.fld_Tarikh, fld_JamOT = tbl_KerjaData.fld_JamOT, fld_Unit = tbl_KerjaData.fld_Unit, fld_NegaraID = NegaraID, fld_SyarikatID = SyarikatID, fld_WilayahID = WilayahID, fld_LadangID = LadangID, fld_AmountOA = tbl_KerjaData.fld_OverallAmount, isActionLocked = isActionLocked });
             }
 
-            bodyview = RenderRazorViewToString("WorkerListDetailsCheck", CustMod_Kerjahdrs, NegaraID, SyarikatID, false);
+            List<SelectListItem> timeIn = new List<SelectListItem>();
+            List<SelectListItem> timeOut = new List<SelectListItem>();
+            var timeinterval = 30;
+            var starttime = "06:30";
+            var endtime = "17:30";
+            var todaydt = EstateFunction.GetDateTime().Date.AddHours(5);
+            var tomorrowdt = EstateFunction.GetDateTime().Date.AddHours(22);
+            var timefilter = new List<timefilter>();
+            int id = 0;
+            for (DateTime i = todaydt; i < tomorrowdt; i = i.AddMinutes(timeinterval))
+            {
+                timefilter.Add(new timefilter { id = id, time = i.ToString("HH:mm") });
+                id++;
+            }
+            timeIn = new SelectList(timefilter.OrderBy(o => o.id).Select(s => new SelectListItem { Value = s.time, Text = s.time }), "Value", "Text", starttime).ToList();
+            timeOut = new SelectList(timefilter.OrderBy(o => o.id).Select(s => new SelectListItem { Value = s.time, Text = s.time }), "Value", "Text", endtime).ToList();
+
+            bodyview = RenderRazorViewToString("WorkerListDetailsCheck", CustMod_Kerjahdrs, NegaraID, SyarikatID, false, timeIn, timeOut);
             bodyview2 = RenderRazorViewToString("WorkRecordList", CustMod_WorkerWorks, false);
 
             string dayname = "";
@@ -1575,7 +1593,24 @@ namespace MVC_SYSTEM.Controllers
                 }
             }
 
-            bodyview = RenderRazorViewToString("WorkerListDetailsCheck", CustMod_Kerjahdrs, NegaraID, SyarikatID, false);
+            List<SelectListItem> timeIn = new List<SelectListItem>();
+            List<SelectListItem> timeOut= new List<SelectListItem>();
+            var timeinterval = 30;
+            var starttime = "06:30";
+            var endtime = "17:30";
+            var todaydt = EstateFunction.GetDateTime().Date.AddHours(5);
+            var tomorrowdt = EstateFunction.GetDateTime().Date.AddHours(22);
+            var timefilter = new List<timefilter>();
+            int id = 0;
+            for (DateTime i = todaydt; i < tomorrowdt; i = i.AddMinutes(timeinterval))
+            {
+                timefilter.Add(new timefilter { id = id, time = i.ToString("HH:mm") });
+                id++;
+            }
+            timeIn = new SelectList(timefilter.OrderBy(o => o.id).Select(s => new SelectListItem { Value = s.time, Text = s.time }), "Value", "Text", starttime).ToList();
+            timeOut = new SelectList(timefilter.OrderBy(o => o.id).Select(s => new SelectListItem { Value = s.time, Text = s.time }), "Value", "Text", endtime).ToList();
+
+            bodyview = RenderRazorViewToString("WorkerListDetailsCheck", CustMod_Kerjahdrs, NegaraID, SyarikatID, false, timeIn, timeOut);
             dbr.Dispose();
             return Json(new { statusmsg, msg, tablelisting = bodyview, proceedstatus = disablesavebtn, namelabel, datedisable });
         }
@@ -1746,7 +1781,24 @@ namespace MVC_SYSTEM.Controllers
 
             CutOfDateStatus = EstateFunction.GetStatusCutProcess(dbr, SelectDate, NegaraID, SyarikatID, WilayahID, LadangID, DivisionID);
 
-            bodyview = RenderRazorViewToString("WorkerListDetailsCheck", CustMod_Kerjahdrs, NegaraID, SyarikatID, CutOfDateStatus);
+            List<SelectListItem> timeIn = new List<SelectListItem>();
+            List<SelectListItem> timeOut = new List<SelectListItem>();
+            var timeinterval = 30;
+            var starttime = "06:30";
+            var endtime = "17:30";
+            var todaydt = EstateFunction.GetDateTime().Date.AddHours(5);
+            var tomorrowdt = EstateFunction.GetDateTime().Date.AddHours(22);
+            var timefilter = new List<timefilter>();
+            int id = 0;
+            for (DateTime i = todaydt; i < tomorrowdt; i = i.AddMinutes(timeinterval))
+            {
+                timefilter.Add(new timefilter { id = id, time = i.ToString("HH:mm") });
+                id++;
+            }
+            timeIn = new SelectList(timefilter.OrderBy(o => o.id).Select(s => new SelectListItem { Value = s.time, Text = s.time }), "Value", "Text", starttime).ToList();
+            timeOut = new SelectList(timefilter.OrderBy(o => o.id).Select(s => new SelectListItem { Value = s.time, Text = s.time }), "Value", "Text", endtime).ToList();
+
+            bodyview = RenderRazorViewToString("WorkerListDetailsCheck", CustMod_Kerjahdrs, NegaraID, SyarikatID, CutOfDateStatus, timeIn, timeOut);
             bodyview2 = RenderRazorViewToString("WorkRecordList", CustMod_WorkerWorks, CutOfDateStatus);
 
             string dayname = "";
@@ -2866,6 +2918,25 @@ namespace MVC_SYSTEM.Controllers
             ViewBag.NegaraID = NegaraID;
             ViewBag.SyarikatID = SyarikatID;
             ViewBag.CutOfDateStatus = CutOfDateStatus;
+            using (var sw = new System.IO.StringWriter())
+            {
+                var viewResult = ViewEngines.Engines.FindPartialView(ControllerContext, viewname);
+                var viewContext = new ViewContext(ControllerContext, viewResult.View, ViewData, TempData, sw);
+                viewResult.View.Render(viewContext, sw);
+                viewResult.ViewEngine.ReleaseView(ControllerContext, viewResult.View);
+                return sw.GetStringBuilder().ToString();
+            }
+        }
+
+        public string RenderRazorViewToString(string viewname, object dataview, int? NegaraID, int? SyarikatID, bool CutOfDateStatus, object checkIn, object checkOut)
+        {
+            ViewData.Model = dataview;
+            ViewBag.NegaraID = NegaraID;
+            ViewBag.SyarikatID = SyarikatID;
+            ViewBag.CutOfDateStatus = CutOfDateStatus;
+            ViewBag.checkin = checkIn;
+            ViewBag.checkout = checkOut;
+
             using (var sw = new System.IO.StringWriter())
             {
                 var viewResult = ViewEngines.Engines.FindPartialView(ControllerContext, viewname);

@@ -25,4 +25,10 @@ namespace MVC_SYSTEM.CustomModels
 
         public int Division { get; set; }
     }
+
+    public class timefilter
+    {
+        public int id { get; set; }
+        public string time { get; set; }
+    }
 }

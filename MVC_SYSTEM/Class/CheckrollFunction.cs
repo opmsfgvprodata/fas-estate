@@ -1194,5 +1194,12 @@ namespace MVC_SYSTEM.Class
 
             return result;
         }
+
+        public DateTime GetDateTime()
+        {
+            DateTime serverTime = DateTime.Now;
+            DateTime _localTime = TimeZoneInfo.ConvertTimeBySystemTimeZoneId(serverTime, TimeZoneInfo.Local.Id, "Singapore Standard Time");
+            return _localTime;
+        }
     }
 }
