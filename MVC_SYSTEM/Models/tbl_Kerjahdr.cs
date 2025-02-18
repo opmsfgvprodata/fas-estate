@@ -40,5 +40,14 @@ namespace MVC_SYSTEM.Models
         public int? fld_CreatedBy { get; set; }
 
         public DateTime? fld_CreatedDT { get; set; }
+
+        [StringLength(20)]
+        public string fld_CheckInTime { get; set; }
+
+        [StringLength(20)]
+        public string fld_CheckOutTime { get; set; }
+
+        [Column(TypeName = "numeric")]
+        public decimal? fld_TotalHours { get; set; }
     }
 }

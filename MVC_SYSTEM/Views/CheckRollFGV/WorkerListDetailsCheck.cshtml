@@ -18,7 +18,6 @@
         <th bgcolor="#ffcc80" width="2%" style="color:black; text-align:center; vertical-align:middle;border:1px solid black;" border="1">@GlobalResEstate.hdrNo</th>
         <th bgcolor="#ffcc80" width="10%" style="color:black; text-align:center; vertical-align:middle;border:1px solid black;" border="1">@GlobalResEstate.hdrNoPkj</th>
         <th bgcolor="#ffcc80" width="10%" style="color:black; text-align:center; vertical-align:middle;border:1px solid black;" border="1">@GlobalResEstate.hdrName</th>
-        <th bgcolor="#ffcc80" width="10%" style="color:black; text-align:center; vertical-align:middle;border:1px solid black;" border="1">Attandance Time</th>
         <th bgcolor="#ffcc80" width="10%" style="color:black; text-align:center; vertical-align:middle;border:1px solid black;" border="1">@GlobalResEstate.lblGroup</th>
         <th bgcolor="#ffcc80" width="10%" style="color:black; text-align:center; vertical-align:middle;border:1px solid black;" border="1">@GlobalResEstate.lblAttend / @GlobalResEstate.lblLeave</th>
         <th bgcolor="#ffcc80" width="10%" style="color:black; text-align:center; vertical-align:middle;border:1px solid black;" border="1">@GlobalResEstate.lblRaining</th>
@@ -70,7 +69,6 @@
                 <td align="center" style="vertical-align:middle !important; border:1px solid black;" border="1">@itemno</td>
                 <td align="center" style="vertical-align:middle !important; border:1px solid black;" border="1">@item.fld_Nopkj</td>
                 <td align="center" style="vertical-align:middle !important; border:1px solid black;" border="1">@item.fld_Nama</td>
-                <td align="center" style="vertical-align:middle !important; border:1px solid black;" border="1">@Html.DropDownList("checkin", null, htmlAttributes: new { @class = "form-control" }) <br /> @Html.DropDownList("checkout", null, htmlAttributes: new { @class = "form-control" })</td>
                 <td align="center" style="vertical-align:middle !important; border:1px solid black;" border="1">@item.fld_Kum</td>
                 <td align="center" style="vertical-align:middle !important; border:1px solid black;" border="1">@item.fld_HdrCt</td>
                 <td align="center" style="vertical-align:middle !important; border:1px solid black;" border="1">@item.fld_Hujan</td>
@@ -88,6 +86,10 @@
                         {
                             <p>-</p>
                         }
+                    }
+                    else if (item.fld_Status == "Tiada rekod")
+                    {
+                        <input type="checkbox" class="checkbox" checked value="@item.fld_Nopkj" name="SaveWorkerNo" id="SaveWorkerNo_@itemno" onchange="ticksavechange(this)" />
                     }
                     else
                     {

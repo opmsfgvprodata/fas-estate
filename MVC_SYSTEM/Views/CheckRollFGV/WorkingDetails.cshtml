@@ -625,8 +625,70 @@
         if ($("#allsame").is(":checked")) {
             for (var i = 0; i < loopdatahdr; i++) {
                 $("#ot_" + splitdata[i]).val(ot1);
+                $("#otshow_" + splitdata[i]).val(ot1);
             }
         }
+    }
+
+    function ottimeinchange(ot, ot2, ot3, ot4) {
+        var ot1 = $(ot).val();
+        var datano = $("#datano").val();
+        var loopdatahdr = $("#loopdatahdr").val();
+        var otOut = $(ot2).val();
+        var otHour = getOTHour(ot1, otOut);
+        getOTHour(otIn, ot1, function (otHour) {
+            var splitdata = datano.split(',');
+            if ($("#allsame").is(":checked")) {
+                for (var i = 0; i < loopdatahdr; i++) {
+                    $("#otcheckin_" + splitdata[i]).val(ot1);
+                    $("#ot_" + splitdata[i]).val(otHour);
+                }
+            }
+            else {
+                $(ot3).val(otHour);
+                $(ot4).val(otHour);
+            }
+        });
+    }
+
+    function ottimeoutchange(ot, ot2, ot3, ot4) {
+        var ot1 = $(ot).val();
+        var datano = $("#datano").val();
+        var loopdatahdr = $("#loopdatahdr").val();
+        var otIn = $(ot2).val();
+        getOTHour(otIn, ot1, function (otHour) {
+            var splitdata = datano.split(',');
+            if ($("#allsame").is(":checked")) {
+                for (var i = 0; i < loopdatahdr; i++) {
+                    $("#otcheckout_" + splitdata[i]).val(ot1);
+                    $("#ot_" + splitdata[i]).val(otHour);
+                    $("#otshow_" + splitdata[i]).val(otHour);
+                }
+            }
+            else {
+                $(ot3).val(otHour);
+                $(ot4).val(otHour);
+            }
+        });
+    }
+
+    function getOTHour(TimeIn, TimeOut, callback) {
+        var ajxfn = {};
+        ajxfn.url = "@Url.Action("GetOTHour", "CheckRollFGV")";
+        ajxfn.type = "POST";
+        ajxfn.data = JSON.stringify({ TimeIn: TimeIn, TimeOut: TimeOut });
+        ajxfn.datatype = "json";
+        ajxfn.contentType = "application/json";
+        ajxfn.success = function (result) {
+            if (callback) {
+                callback(result); // Call the callback function with the result
+            }
+        };
+        ajxfn.error = function () {
+            $.simplyToast('@GlobalResEstate.msgError', 'danger');
+            $("#UpdateProgress1").css("display", "none");
+        };
+        $.ajax(ajxfn);
     }
 
     function ratechange(rate, kadar, hasil) {
@@ -749,9 +811,10 @@
             var bonus = null;
             var bonus2 = null;
             var ot = null;
+            var ottimein = null;
+            var ottimeout = null;
             var savethis = null;
             var sapgl = null;
-
             var SelectDate = $('#datetimepicker1').data("DateTimePicker").date();
             var SelectionData = $("#SelectionData").val();
             var SelectionCategory = $('input[name="SelectionCategory"]:checked').val();
@@ -808,6 +871,8 @@
                 incentivecode = $("#incentivedesc_" + splitdata[i]).val();
                 incentiveval = $("#incentiveval_" + splitdata[i]).val();
                 ot = $("#ot_" + splitdata[i]).val();
+                ottimein = $("#otcheckin_" + splitdata[i]).val();
+                ottimeout = $("#otcheckout_" + splitdata[i]).val();
                 kdhmnuai = $("#kdhmnuai_" + splitdata[i]).val();
                 checkpurpose = $("#checkpurpose_" + splitdata[i]).val();
                 if ($("#savecheck_" + splitdata[i]).is(":checked")) {
@@ -829,6 +894,8 @@
                 loopdataitems["incentivecode"] = incentivecode;
                 loopdataitems["incentiveval"] = parseFloat(incentiveval).toFixed(2);
                 loopdataitems["ot"] = parseFloat(ot).toFixed(2);
+                loopdataitems["ottimein"] = ottimein;
+                loopdataitems["ottimeout"] = ottimeout;
                 loopdataitems["kdhmnuai"] = kdhmnuai;
                 loopdataitems["checkpurpose"] = checkpurpose;
                 loopdataitems["savethis"] = savethis;

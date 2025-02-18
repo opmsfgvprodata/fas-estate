@@ -100,5 +100,11 @@ namespace MVC_SYSTEM.Models
         public decimal? fld_OverallAmount { get; set; }
 
         public bool? fld_PinjamStatus { get; set; }
+
+        [StringLength(20)]
+        public string fld_JamOTIn { get; set; }
+
+        [StringLength(20)]
+        public string fld_JamOTOut { get; set; }
     }
 }
