@@ -8656,6 +8656,15 @@ namespace MVC_SYSTEM.App_LocalResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Laporan Waktu Bekerja Mingguan.
+        /// </summary>
+        public static string lblWeeklyWorkingHoursReport {
+            get {
+                return ResourceManager.GetString("lblWeeklyWorkingHoursReport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Selamat Datang Ke.
         /// </summary>
         public static string lblWelcome {

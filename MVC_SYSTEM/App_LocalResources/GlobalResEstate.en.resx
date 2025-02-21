@@ -2520,4 +2520,7 @@
   <data name="lblCopyTo" xml:space="preserve">
     <value>Copy To Year</value>
   </data>
+  <data name="lblWeeklyWorkingHoursReport" xml:space="preserve">
+    <value>Weekly Working Hours Report</value>
+  </data>
 </root>

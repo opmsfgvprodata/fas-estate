@@ -13950,6 +13950,259 @@ namespace MVC_SYSTEM.Controllers
             con.Close();
             return View(PenggajianDataResult);
         }
+
+        public ActionResult WeeklyWorkingHoursReport()
+        {
+            ViewBag.Report = "class = active";
+            int? NegaraID, SyarikatID, WilayahID, LadangID = 0;
+            int? getuserid = GetIdentity.ID(User.Identity.Name);
+            string host, catalog, user, pass = "";
+            GetNSWL.GetData(out NegaraID, out SyarikatID, out WilayahID, out LadangID, getuserid, User.Identity.Name);
+            Connection.GetConnection(out host, out catalog, out user, out pass, WilayahID.Value, SyarikatID.Value, NegaraID.Value);
+            MVC_SYSTEM_Models dbr = MVC_SYSTEM_Models.ConnectToSqlServer(host, catalog, user, pass);
+
+            int drpyear = 0;
+            int drprangeyear = 0;
+            int month = timezone.gettimezone().Month;
+
+            List<SelectListItem> SelectionList = new List<SelectListItem>();
+            SelectionList = new SelectList(
+                dbr.tbl_Pkjmast
+                    .Where(x => x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID &&
+                                x.fld_WilayahID == WilayahID && x.fld_LadangID == LadangID && x.fld_Kdaktf == "1")
+                    .OrderBy(o => o.fld_Nopkj)
+                    .Select(s => new SelectListItem { Value = s.fld_Nopkj, Text = s.fld_Nopkj + "-" + s.fld_Nama }),
+                "Value", "Text").ToList();
+            SelectionList.Insert(0, (new SelectListItem { Text = GlobalResEstate.lblAll, Value = "0" }));
+
+            ViewBag.SelectionList = SelectionList;
+
+            ViewBag.MonthList = new SelectList(
+               db.tblOptionConfigsWebs.Where(x => x.fldOptConfFlag1 == "monthlist" && x.fldDeleted == false &&
+                                                  x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID),
+               "fldOptConfValue", "fldOptConfDesc");
+
+            drpyear = timezone.gettimezone().Year - int.Parse(GetConfig.GetData("yeardisplay")) + 1;
+            drprangeyear = timezone.gettimezone().Year;
+
+            var yearlist = new List<SelectListItem>();
+            for (var i = drpyear; i <= drprangeyear; i++)
+            {
+                if (i == timezone.gettimezone().Year)
+                {
+                    yearlist.Add(new SelectListItem { Text = i.ToString(), Value = i.ToString(), Selected = true });
+                }
+                else
+                {
+                    yearlist.Add(new SelectListItem { Text = i.ToString(), Value = i.ToString() });
+                }
+            }
+
+            ViewBag.YearList = yearlist;
+
+            var jobSpecList = new List<SelectListItem>();
+            jobSpecList = new SelectList(
+                db.tblOptionConfigsWebs
+                    .Where(x => x.fldOptConfFlag1 == "designation" && x.fldDeleted == false &&
+                                x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID)
+                    .OrderBy(o => o.fldOptConfDesc)
+                    .Select(s => new SelectListItem { Value = s.fldOptConfValue, Text = s.fldOptConfDesc }),
+                "Value", "Text").ToList();
+            jobSpecList.Insert(0, (new SelectListItem { Text = GlobalResEstate.lblAll, Value = "0" }));
+
+            ViewBag.JobSpecList = jobSpecList;
+
+            var statusList = new List<SelectListItem>();
+            statusList = new SelectList(
+                db.tblOptionConfigsWebs
+                    .Where(x => x.fldOptConfFlag1 == "statusaktif" && x.fldDeleted == false &&
+                                x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID)
+                    .OrderBy(o => o.fldOptConfDesc)
+                    .Select(s => new SelectListItem { Value = s.fldOptConfValue, Text = s.fldOptConfDesc }),
+                "Value", "Text").ToList();
+
+            ViewBag.StatusList = statusList;
+
+            List<SelectListItem> JnsPkjList = new List<SelectListItem>();
+            JnsPkjList = new SelectList(db.tblOptionConfigsWebs.Where(x => x.fldOptConfFlag1 == "jnsPkj" && x.fldDeleted == false && x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID).OrderBy(o => o.fldOptConfValue).Select(s => new SelectListItem { Value = s.fldOptConfValue, Text = s.fldOptConfDesc }), "Value", "Text").ToList();
+            JnsPkjList.Insert(0, (new SelectListItem { Text = GlobalResEstate.lblAll, Value = "0" }));
+            ViewBag.JnsPkjList = JnsPkjList;
+
+            return View();
+        }
+
+        public ViewResult _WeeklyWorkingHoursRptSearch(int? RadioGroup, int? MonthList, int? YearList, string SelectionList, string StatusList, string JobSpecList, string print)
+        {
+            int? NegaraID, SyarikatID, WilayahID, LadangID = 0;
+            int? DivisionID = 0;
+            int? getuserid = GetIdentity.ID(User.Identity.Name);
+            string host, catalog, user, pass = "";
+            GetNSWL.GetData(out NegaraID, out SyarikatID, out WilayahID, out LadangID, getuserid, User.Identity.Name);
+            Connection.GetConnection(out host, out catalog, out user, out pass, WilayahID.Value, SyarikatID.Value,
+                NegaraID.Value);
+            DivisionID = GetNSWL.GetDivisionSelection(getuserid, NegaraID, SyarikatID, WilayahID, LadangID);
+            MVC_SYSTEM_Viewing dbview = MVC_SYSTEM_Viewing.ConnectToSqlServer(host, catalog, user, pass);
+            MVC_SYSTEM_Viewing dbview2 = new MVC_SYSTEM_Viewing();
+            MVC_SYSTEM_Models dbr = MVC_SYSTEM_Models.ConnectToSqlServer(host, catalog, user, pass);
+
+            ViewBag.MonthList = MonthList;
+            ViewBag.YearList = YearList;
+
+            ViewBag.NamaSyarikat = db.tbl_Syarikat
+                .Where(x => x.fld_SyarikatID == SyarikatID && x.fld_NegaraID == NegaraID)
+                .Select(s => s.fld_NamaSyarikat)
+                .FirstOrDefault();
+            ViewBag.NoSyarikat = db.tbl_Syarikat
+                .Where(x => x.fld_SyarikatID == SyarikatID && x.fld_NegaraID == NegaraID)
+                .Select(s => s.fld_NoSyarikat)
+                .FirstOrDefault();
+            ViewBag.NegaraID = NegaraID;
+            ViewBag.SyarikatID = SyarikatID;
+            ViewBag.UserID = getuserid;
+            ViewBag.UserName = User.Identity.Name;
+            ViewBag.Date = DateTime.Now.ToShortDateString();
+            ViewBag.NamaPengurus = dbview2.tbl_Ladang
+                .Where(x => x.fld_ID == LadangID)
+                .Select(s => s.fld_Pengurus).Single();
+            ViewBag.NamaPenyelia = dbview2.tblUsers
+                .Where(x => x.fldUserID == getuserid)
+                .Select(s => s.fldUserFullName).Single();
+            ViewBag.IDPenyelia = getuserid;
+            ViewBag.Print = print;
+            ViewBag.Ladang = db.tbl_Ladang
+                .Where(x => x.fld_SyarikatID == SyarikatID && x.fld_NegaraID == NegaraID && x.fld_ID == LadangID)
+                .Select(s => s.fld_LdgName)
+                .FirstOrDefault();
+
+
+            if (MonthList == null && YearList == null)
+            {
+                ViewBag.Message = GlobalResEstate.msgChooseMonthYear;
+                return View();
+            }
+
+            else
+            {
+                dbr.Database.CommandTimeout = 4000;
+
+                var rawData = dbr.vw_RptWorkingHours.AsQueryable()
+                    .Where(x => (x.fld_Kdhdct == "H01" || x.fld_Kdhdct == "H03" || x.fld_Kdhdct == "H02") &&
+                                x.fld_NegaraID == NegaraID &&
+                                x.fld_SyarikatID == SyarikatID &&
+                                x.fld_WilayahID == WilayahID &&
+                                x.fld_LadangID == LadangID &&
+                                x.fld_Tarikh.HasValue &&
+                                x.fld_Tarikh.Value.Month == MonthList &&
+                                x.fld_Tarikh.Value.Year == YearList);
+
+
+
+                if (RadioGroup == 0)
+                {
+                    if (SelectionList != "0")
+                    {
+                        rawData = rawData.Where(x => x.fld_Nopkj == SelectionList);
+                    }
+                }
+                else
+                {
+                    if (SelectionList != "0")
+                    {
+                        rawData = rawData.Where(x => x.fld_Kum == SelectionList);
+                    }
+                }
+
+
+                if (JobSpecList != "0")
+                {
+                    rawData = rawData.Where(x => x.fld_Ktgpkj == JobSpecList);
+                }
+
+
+                var wrkngHoursData = rawData.OrderBy(o => o.fld_Nama).ToList();
+
+                var structuredData = wrkngHoursData
+                    .GroupBy(x => new { x.fld_Nopkj, x.fld_Nama, x.fld_Ktgpkj, x.fld_NegaraID, x.fld_SyarikatID })
+                    .Select(g => new vw_WeeklyWorkingHours
+                    {
+                        fld_Nopkj = g.Key.fld_Nopkj,
+                        fld_Nama = g.Key.fld_Nama,
+                        fld_Ktgpkj = g.Key.fld_Ktgpkj,
+                        fld_NegaraID = g.Key.fld_NegaraID,
+                        fld_SyarikatID = g.Key.fld_SyarikatID,
+
+                        M1 = g.Where(x => x.fld_Kdhdct != "H02" && x.fld_Tarikh.Value.Day <= 7)
+                             .Sum(x => (decimal?)x.fld_TotalHours) ?? 0,
+
+                        M2 = g.Where(x => x.fld_Kdhdct != "H02" && x.fld_Tarikh.Value.Day >= 8 && x.fld_Tarikh.Value.Day <= 14)
+                             .Sum(x => (decimal?)x.fld_TotalHours) ?? 0,
+
+                        M3 = g.Where(x => x.fld_Kdhdct != "H02" && x.fld_Tarikh.Value.Day >= 15 && x.fld_Tarikh.Value.Day <= 21)
+                             .Sum(x => (decimal?)x.fld_TotalHours) ?? 0,
+
+                        M4 = g.Where(x => x.fld_Kdhdct != "H02" && x.fld_Tarikh.Value.Day >= 22 && x.fld_Tarikh.Value.Day <= 28)
+                             .Sum(x => (decimal?)x.fld_TotalHours) ?? 0,
+
+                        M5 = g.Where(x => x.fld_Kdhdct != "H02" && x.fld_Tarikh.Value.Day >= 29)
+                             .Sum(x => (decimal?)x.fld_TotalHours) ?? 0,
+
+                        HadirHariCuti = g.Count(x => x.fld_Kdhdct == "H02"),
+
+                        TotalOT = g.Where(x => x.fld_Kdhdct == "H01" || x.fld_Kdhdct == "H03").Sum(x => (decimal?)x.fld_JamOT) ?? 0m,
+
+                        TotalAmountOT = g.Where(x => x.fld_Kdhdct == "H01" || x.fld_Kdhdct == "H03").Sum(x => (decimal?)x.fld_Jumlah) ?? 0m
+                    })
+                    .ToList();
+
+                if (!rawData.Any())
+                {
+                    ViewBag.Message = GlobalResEstate.msgNoRecord;
+                    return View();
+
+                }
+
+
+                return View(structuredData);
+
+            }
+        }
+
+        public ActionResult PrintWorkingHoursPdf(int? RadioGroup, int? MonthList, int? YearList, string SelectionList, string JobSpecList, int id, string genid)
+        {
+            int? getuserid = 0;
+            string getusername = "";
+            string getcookiesval = "";
+            bool checkidentity = false;
+            var getuser = db.tblUsers.Where(u => u.fldUserID == id && u.fldDeleted == false).SingleOrDefault();
+            if (getuser != null)
+            {
+                getuserid = GetIdentity.ID(getuser.fldUserName);
+                getusername = getuser.fldUserName;
+            }
+
+            checkidentity = CheckGenIdentity(id, genid, getuserid, getusername, out getcookiesval);
+
+            ActionAsPdf report = new ActionAsPdf("");
+
+            if (checkidentity)
+            {
+                getBackAuth(getcookiesval);
+                var cookies = Request.Cookies.AllKeys.ToDictionary(k => k, k => Request.Cookies[k].Value);
+                string print = "Yes";
+                report = new ActionAsPdf("_WeeklyWorkingHoursRptSearch", new { RadioGroup, MonthList, YearList, SelectionList, JobSpecList, print })
+                {
+                    FormsAuthenticationCookieName = FormsAuthentication.FormsCookieName,
+                    Cookies = cookies
+                };
+            }
+            else
+            {
+                report = new ActionAsPdf("PDFInvalid");
+            }
+
+            return report;
+        }
+
         public JsonResult GetWilayah(string SyarikatID)
         {
             List<SelectListItem> ladanglist = new List<SelectListItem>();

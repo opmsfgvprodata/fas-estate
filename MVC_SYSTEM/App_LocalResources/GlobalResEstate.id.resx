@@ -2292,4 +2292,7 @@
   <data name="lblCopyTo" xml:space="preserve">
     <value>Salin Ke Tahun</value>
   </data>
+  <data name="lblWeeklyWorkingHoursReport" xml:space="preserve">
+    <value>Laporan Waktu Bekerja Mingguan</value>
+  </data>
 </root>

@@ -1,0 +1,168 @@
+﻿@using MVC_SYSTEM.Class
+@model IEnumerable<MVC_SYSTEM.ViewingModels.vw_WeeklyWorkingHours>
+
+@{
+    GetTriager GetTriager = new GetTriager();
+    GetEstateDetail GetEstateDetail = new GetEstateDetail();
+    GetConfig getConfig = new GetConfig();
+
+    int? month = ViewBag.MonthList;
+    int? year = ViewBag.YearList;
+    int bil = 0;
+
+
+    ChangeTimeZone ChangeTimeZone = new ChangeTimeZone();
+
+    int year1 = ChangeTimeZone.gettimezone().Year;
+    int month1 = ChangeTimeZone.gettimezone().Month;
+    int day = ChangeTimeZone.gettimezone().Day;
+    int hour = ChangeTimeZone.gettimezone().Hour;
+    int minute = ChangeTimeZone.gettimezone().Minute;
+    int second = ChangeTimeZone.gettimezone().Second;
+    string PktName = "";
+    string SAPCode = "";
+    string uniquefilename = "Weekly_Working_Hours_" + ViewBag.UserID + "_" + year1.ToString() + month1.ToString() + day.ToString() + hour.ToString() + minute.ToString() + second.ToString();
+
+}
+
+@if (Model != null && Model.Count() != 0)
+{
+
+    <div id="scrollArea2" class="modal-body">
+        <p style="font-size: 11px" align="right">@GlobalResEstate.lblDate : @ViewBag.Date</p>
+        <table class="table table-hover" style="font-size: 11px;" cellspacing="0" border="0" width="100%">
+            <thead>
+                <tr>
+                    <th colspan="12" style="text-align: center; vertical-align: middle; border: none;">
+                        @ViewBag.NamaSyarikat
+                        <br />
+                        (@ViewBag.NoSyarikat)
+                        <br />
+                        (@GlobalResEstate.lblEstateName : @ViewBag.Ladang)
+                        <br />
+                        @GlobalResEstate.lblWeeklyWorkingHoursReport @GlobalResEstate.hdrForMonth @ViewBag.MonthList/@ViewBag.YearList
+
+                    </th>
+                </tr>
+                <tr>
+                    <th rowspan="2" width="1%" style="margin: 2px !important; padding: 2px !important; text-align: center; vertical-align: middle !important; border-left: 1px solid red;border-top: 1px solid red;border-bottom: 1px solid red;" border="1">@GlobalResEstate.hdrNo</th>
+                    <th rowspan="2" width="2%" style="margin: 2px !important; padding: 2px !important; text-align: center; vertical-align: middle !important; border-left: 1px solid red;border-top: 1px solid red;border-bottom: 1px solid red;" border="1">@GlobalResEstate.hdrNoPkj</th>
+                    <th rowspan="2" width="5%" style="margin: 2px !important; padding: 2px !important; text-align: center; vertical-align: middle !important; border-left: 1px solid red;border-top: 1px solid red;border-bottom: 1px solid red;" border="1">@GlobalResEstate.hdrName</th>
+                    <th rowspan="2" width="5%" style="margin: 2px !important; padding: 2px !important; text-align: center; vertical-align: middle !important; border-left: 1px solid red;border-top: 1px solid red;border-bottom: 1px solid red;" border="1">Job Specialisation</th>
+                    <th colspan="6" width="4%" style="margin: 2px !important; padding: 2px !important; text-align: center; vertical-align: middle !important; border-left: 1px solid red;border-top: 1px solid red;border-bottom: 1px solid red;" border="1">Working Hours (Weekly)</th>
+                    <th rowspan="2" width="2%" style="margin: 2px !important; padding: 2px !important; text-align: center; vertical-align: middle !important; border-left: 1px solid red;border-top: 1px solid red;border-bottom: 1px solid red;" border="1">Total OT (Hour)</th>
+                    <th rowspan="2" width="2%" style="margin: 2px !important; padding: 2px !important; text-align: center; vertical-align: middle !important; border-left: 1px solid red; border-right: 1px solid red; border-top: 1px solid red; border-bottom: 1px solid red;" border="1">OT Amount (RM)</th>
+                </tr>
+                <tr>
+                    <th width="3%" style="margin: 2px !important; padding: 2px !important; text-align: center; vertical-align: middle !important; border-left: 1px solid red;border-top: 1px solid red;border-bottom: 1px solid red;" border="1">M1</th>
+                    <th width="3%" style="margin: 2px !important; padding: 2px !important; text-align: center; vertical-align: middle !important; border-left: 1px solid red;border-top: 1px solid red;border-bottom: 1px solid red;" border="1">M2</th>
+                    <th width="3%" style="margin: 2px !important; padding: 2px !important; text-align: center; vertical-align: middle !important; border-left: 1px solid red;border-top: 1px solid red;border-bottom: 1px solid red;" border="1">M3</th>
+                    <th width="3%" style="margin: 2px !important; padding: 2px !important; text-align: center; vertical-align: middle !important; border-left: 1px solid red;border-top: 1px solid red;border-bottom: 1px solid red;" border="1">M4</th>
+                    <th width="3%" style="margin: 2px !important; padding: 2px !important; text-align: center; vertical-align: middle !important; border-left: 1px solid red;border-top: 1px solid red;border-bottom: 1px solid red;" border="1">M5</th>
+                    <th width="3%" style="margin: 2px !important; padding: 2px !important; text-align: center; vertical-align: middle !important; border-left: 1px solid red;border-top: 1px solid red;border-bottom: 1px solid red;" border="1">Hadir Hari Cuti</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    bil = bil + 1;
+
+                    <tr>
+                        <td align="center" style="margin: 2px !important; padding: 2px !important; vertical-align: middle !important; border-bottom: 1px dotted gray; text-align: center;border-collapse:separate !important;border-spacing:0px !important; border-right: none; border-left: none">@bil</td>
+                        <td align="center" style="margin: 2px !important; padding: 2px !important; vertical-align: middle !important; border-bottom: 1px dotted gray; text-align: left;border-collapse:separate !important;border-spacing:0px !important; border-right: none; border-left: none">@item.fld_Nopkj</td>
+                        <td align="center" style="margin: 2px !important; padding: 2px !important; vertical-align: middle !important; border-bottom: 1px dotted gray; text-align: left;border-collapse:separate !important;border-spacing:0px !important; border-right: none; border-left: none">@item.fld_Nama</td>
+                        <td align="center" style="margin: 2px !important; padding: 2px !important; vertical-align: middle !important; border-bottom: 1px dotted gray; text-align: left;border-collapse:separate !important;border-spacing:0px !important; border-right: none; border-left: none">@getConfig.GetWebConfigDesc(item.fld_Ktgpkj, "designation", item.fld_NegaraID, item.fld_SyarikatID).ToUpper()</td>
+                        <td align="center" style="margin: 2px !important; padding: 2px !important; vertical-align: middle !important; border-bottom: 1px dotted gray; text-align: right;border-collapse:separate !important;border-spacing:0px !important; border-right: none; border-left: none">@item.M1</td>
+                        <td align="center" style="margin: 2px !important; padding: 2px !important; vertical-align: middle !important; border-bottom: 1px dotted gray; text-align: right; border-collapse: separate !important; border-spacing: 0px !important; border-right: none; border-left: none">@item.M2</td>
+                        <td align="center" style="margin: 2px !important; padding: 2px !important; vertical-align: middle !important; border-bottom: 1px dotted gray; text-align: right; border-collapse: separate !important; border-spacing: 0px !important; border-right: none; border-left: none">@item.M3</td>
+                        <td align="center" style="margin: 2px !important; padding: 2px !important; vertical-align: middle !important; border-bottom: 1px dotted gray; text-align: right; border-collapse: separate !important; border-spacing: 0px !important; border-right: none; border-left: none">@item.M4</td>
+                        <td align="center" style="margin: 2px !important; padding: 2px !important; vertical-align: middle !important; border-bottom: 1px dotted gray; text-align: right; border-collapse: separate !important; border-spacing: 0px !important; border-right: none; border-left: none">@item.M5</td>
+                        <td align="center" style="margin: 2px !important; padding: 2px !important; vertical-align: middle !important; border-bottom: 1px dotted gray; text-align: center; border-collapse: separate !important; border-spacing: 0px !important; border-right: none; border-left: none">@item.HadirHariCuti</td>
+                        <td align="center" style="margin: 2px !important; padding: 2px !important; vertical-align: middle !important; border-bottom: 1px dotted gray; text-align: right;border-collapse:separate !important;border-spacing:0px !important; border-right: none; border-left: none">@item.TotalOT</td>
+                        <td align="center" style="margin: 2px !important; padding: 2px !important; vertical-align: middle !important; border-bottom: 1px dotted gray; text-align: right;border-collapse:separate !important;border-spacing:0px !important; border-right: none; border-left: none">@item.TotalAmountOT</td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+
+        <newpage />
+    </div>
+    if (ViewBag.Print == null)
+    {
+        <div style="text-align:right; margin-top:10px">
+            <a class="btn btn-default btn-sm" href="#" id="printpage">
+                <span class="glyphicon glyphicon-print"> </span> @GlobalResEstate.btnPrint
+            </a>
+            <a href="#" id="downloadpdf" class="btn btn-default btn-sm">
+                <span><img src="~/Asset/Images/pdf-icon.png" width="20px" height="20px" /></span> @GlobalResEstate.btnDownloadPdf
+            </a>
+            <a class="btn btn-default btn-sm" href="#" onclick="HTMLtoExcel('@uniquefilename')">
+                <span><img src="~/Asset/Images/excel-icon.png" width="20px" height="20px" /></span> @GlobalResEstate.btnDownloadExcel
+            </a>
+        </div>
+    }
+}
+
+@if (Model == null)
+{
+    <div id="scrollArea2" class="modal-body" style="text-align: center">
+        <p style="color: red">@ViewBag.Message</p>
+
+    </div>
+}
+
+<style>
+    #page td {
+        padding: 2px;
+        margin: 2px;
+    }
+</style>
+<script src="~/Asset/Scripts/FromHTML.js"></script>
+<script src="~/Asset/Scripts/FileSaver.js"></script>
+<script>
+    $(document).ready(function () {
+        $("#printpage").click(function () {
+            var DivElement = document.getElementById("scrollArea2").innerHTML;
+            var oldPage = document.body.innerHTML;
+            document.body.innerHTML = DivElement;
+            window.print();
+            document.body.innerHTML = oldPage;
+        })
+
+        $("#downloadpdf").click(function () {
+            var RadioGroup = $('input[name=RadioGroup]:checked').val();
+            var MonthList = $("#MonthList").val();
+            var YearList = $("#YearList").val();
+            var SelectionList = $("#SelectionList").val();
+            var JobSpecList = $("#JobSpecList").val();
+
+            var param = '/?RadioGroup=' + RadioGroup + '&MonthList=' + MonthList + '&YearList=' + YearList + '&SelectionList=' + SelectionList + '&JobSpecList=' + JobSpecList;
+            var controller = 'Report';
+            var action = 'PrintWorkingHoursPdf';
+
+            var ajxfn = {};
+            ajxfn.url = "@Url.Action("PDFIndetifier", "PdfCreator")";
+            ajxfn.type = "POST";
+            ajxfn.data = JSON.stringify({ controller: controller, action: action, param: param });
+            ajxfn.datatype = "json";
+            ajxfn.contentType = "application/json";
+            ajxfn.success = function (result) {
+                //var win = window.open(result.link, '_blank');
+                //win.focus();
+                PDFObject.embed(result.link, "#searchResultWeeklyWorkingHoursRptInfo", { height: "450px" });
+            };
+
+            ajxfn.error = function () {
+                $.simplyToast('@GlobalResEstate.msgError', 'danger');
+                $("#UpdateProgress1").css("display", "none");
+            };
+            $.ajax(ajxfn);
+
+            return false;
+        });
+
+    });
+</script>
+
