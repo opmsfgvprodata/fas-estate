@@ -75,7 +75,7 @@ namespace MVC_SYSTEM.Controllers
                 int menulist = int.Parse(MenuList);
                 var action = db.tblMenuLists.Where(x => x.fld_ID == menulist && x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID).OrderBy(o => o.fld_ID).Select(s => s.fld_Val).FirstOrDefault();
                 db.Dispose();
-                return RedirectToAction(action, "GenTextFile");
+                return RedirectToAction(action, "MaybankFileGen");
             }
         }
 
