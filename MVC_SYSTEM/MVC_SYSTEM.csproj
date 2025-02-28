@@ -3223,6 +3223,7 @@
     <Content Include="Views\PCB2FormReport\Index.cshtml" />
     <Content Include="Views\Report\PenggajianDataReport.cshtml" />
     <Content Include="Views\Report\_PenggajianDataReport.cshtml" />
+    <Content Include="Views\WorkerInfo\_WorkerTaxInfoCopy.cshtml" />
     <Content Include="Views\GenTextFile\ewalletindividu.cshtml" />
     <Content Include="Views\GenTextFile\_ewalletindividu.cshtml" />
     <Content Include="Views\GenTextFile\ewalletInsentiveindividu.cshtml" />
