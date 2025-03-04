@@ -316,6 +316,8 @@ namespace MVC_SYSTEM.Controllers
             cell = new PdfPCell(new Phrase(chunk));
             CellPropoties(cell, table, Element.ALIGN_CENTER, Element.ALIGN_MIDDLE, 0, 1, 15, 1);
 
+            pkjTaxInfo.fld_TaxNo = pkjTaxInfo.fld_TaxNo == null ? "" : pkjTaxInfo.fld_TaxNo;
+
             chunk = new Chunk(pkjTaxInfo.fld_TaxNo.ToUpper(), FontFactory.GetFont("Arial", 10, Font.NORMAL, BaseColor.BLACK));
             cell = new PdfPCell(new Phrase(chunk));
             CellPropoties(cell, table, Element.ALIGN_LEFT, Element.ALIGN_MIDDLE, 0, 4, 15, 1);

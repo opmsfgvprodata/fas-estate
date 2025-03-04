@@ -40,6 +40,9 @@ namespace MVC_SYSTEM.Models
             user1 = user;
             pass1 = pass;
 
+            //debug prod
+            //host1 = "4.144.178.156,11433";
+
             return new MVC_SYSTEM_Models();
 
         }
@@ -125,6 +128,8 @@ namespace MVC_SYSTEM.Models
         public virtual DbSet<tbl_Supervisor> tbl_Supervisor { get; set; }
         public virtual DbSet<tbl_SupervisorMember> tbl_SupervisorMember { get; set; }
         public virtual DbSet<vw_SupervisorMembersInfo> vw_SupervisorMembersInfo { get; set; }
+        public virtual DbSet<tbl_SpecialInsentif> tbl_SpecialInsentif { get; set; }
+
         public virtual DbSet<vw_MaybankRcms> vw_MaybankRcms { get; set; }
         public virtual DbSet<vw_MaybankRcmsOthers> vw_MaybankRcmsOthers { get; set; }
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
