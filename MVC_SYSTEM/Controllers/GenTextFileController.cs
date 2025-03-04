@@ -686,87 +686,157 @@ namespace MVC_SYSTEM.Controllers
         public ViewResult _ewalletindividu(int? MonthList, int? YearList, string print, string filter, string[] WorkerId)
         {
             int? NegaraID, SyarikatID, WilayahID, LadangID = 0;
+            int? DivisionID = 0;
             int? getuserid = getidentity.ID(User.Identity.Name);
             string host, catalog, user, pass = "";
+            string LdgName = "";
+            string LdgCode = "";
+            string TelNo, NewTelNo, NoKp, NewNoKp = "";
+
             GetNSWL.GetData(out NegaraID, out SyarikatID, out WilayahID, out LadangID, getuserid, User.Identity.Name);
             Connection.GetConnection(out host, out catalog, out user, out pass, WilayahID.Value, SyarikatID.Value,
                 NegaraID.Value);
+            MVC_SYSTEM_Viewing dbview = MVC_SYSTEM_Viewing.ConnectToSqlServer(host, catalog, user, pass);
+            DivisionID = GetNSWL.GetDivisionSelection(getuserid, NegaraID, SyarikatID, WilayahID, LadangID);
+            MVC_SYSTEM_Viewing dbview2 = new MVC_SYSTEM_Viewing();
             MVC_SYSTEM_Models dbr = MVC_SYSTEM_Models.ConnectToSqlServer(host, catalog, user, pass);
-
-            GetNSWL.GetData(out NegaraID, out SyarikatID, out WilayahID, out LadangID, getuserid, User.Identity.Name);
-            List<vw_MaybankRcms> maybankrcmsList = new List<vw_MaybankRcms>();
+            //List<vw_PaySheetPekerjaCustomModel> PaySheetPekerjaList = new List<vw_PaySheetPekerjaCustomModel>();
+            List<vw_PaySheetPekerja> PaySheetPekerjaList = new List<vw_PaySheetPekerja>();
 
             ViewBag.MonthList = MonthList;
             ViewBag.YearList = YearList;
-            var company = db.tbl_Syarikat
-                .Where(x => x.fld_SyarikatID == SyarikatID).FirstOrDefault();
-            ViewBag.NamaSyarikat = company.fld_NamaSyarikat;
-            ViewBag.NamaPendekSyarikat = company.fld_NamaPndkSyarikat;
-            ViewBag.NoSyarikat = company.fld_NoSyarikat;
-            ViewBag.CorpID = company.fld_CorporateID;
-            var ClientId = company.fld_ClientBatchID;
-
-            if (ClientId == null || ClientId == "")
-            {
-                if (company.fld_NamaPndkSyarikat == "FASSB")
-                {
-                    ViewBag.clientid = "FGVASB" + MonthList + YearList;
-                }
-
-                if (company.fld_NamaPndkSyarikat == "RNDSB")
-                {
-                    ViewBag.clientid = "RNDSB" + MonthList + YearList;
-                }
-            }
-            else
-            {
-                ViewBag.clientid = ClientId;
-            }
-
-            ViewBag.AccNo = company.fld_AccountNo;
+            ViewBag.NamaSyarikat = db.tbl_Syarikat
+                .Where(x => x.fld_SyarikatID == SyarikatID && x.fld_NegaraID == NegaraID)
+                .Select(s => s.fld_NamaSyarikat)
+                .FirstOrDefault();
+            ViewBag.NoSyarikat = db.tbl_Syarikat
+                .Where(x => x.fld_SyarikatID == SyarikatID && x.fld_NegaraID == NegaraID)
+                .Select(s => s.fld_NoSyarikat)
+                .FirstOrDefault();
+            LdgName = db.tbl_Ladang
+                .Where(x => x.fld_SyarikatID == SyarikatID && x.fld_NegaraID == NegaraID && x.fld_ID == LadangID)
+                .Select(s => s.fld_LdgName)
+                .FirstOrDefault();
+            LdgCode = db.tbl_Ladang
+                .Where(x => x.fld_SyarikatID == SyarikatID && x.fld_NegaraID == NegaraID && x.fld_ID == LadangID)
+                .Select(s => s.fld_LdgCode)
+                .FirstOrDefault();
+            ViewBag.Ladang = LdgName.Trim();
             ViewBag.NegaraID = NegaraID;
             ViewBag.SyarikatID = SyarikatID;
             ViewBag.UserID = getuserid;
             ViewBag.UserName = User.Identity.Name;
             ViewBag.Date = DateTime.Now.ToShortDateString();
-            ViewBag.Time = DateTime.Now.ToShortTimeString();
             ViewBag.Print = print;
-            //ViewBag.WilayahName = WilayahName;
-
-            ViewBag.Description = "Region " + company.fld_NamaSyarikat + " - Salary payment for " + MonthList + "/" + YearList;
+            ViewBag.Description = LdgCode + " - Salary payment for " + MonthList + "/" + YearList;
             if (MonthList == null && YearList == null)
             {
-                ViewBag.Message = "Please select month, year, company and payment date";
-                return View(maybankrcmsList);
+                ViewBag.Message = GlobalResEstate.msgChooseWork;
+                return View(PaySheetPekerjaList);
             }
             else
             {
-                if (WorkerId.Contains("0"))
-                {
-                    maybankrcmsList = dbr.vw_MaybankRcms.Where(x => x.fld_LadangID == LadangID && x.fld_Year == YearList && x.fld_Month == MonthList).ToList();
-                }
-                else
-                {
-                    maybankrcmsList = dbr.vw_MaybankRcms.Where(x => x.fld_LadangID == LadangID && x.fld_Year == YearList && x.fld_Month == MonthList && WorkerId.Contains(x.fld_Nopkj)).ToList();
-                }
-                
-                var BankList = db.tbl_Bank
-                    .Where(x => x.fld_SyarikatID == SyarikatID && x.fld_NegaraID == NegaraID && x.fld_Deleted == false)
-                    .ToList();
+                var salaryData = dbview.vw_PaySheetPekerja
+                    .Where(x => x.fld_Year == YearList && x.fld_Month == MonthList &&
+                                x.fld_NegaraID == NegaraID &&
+                                x.fld_SyarikatID == SyarikatID &&
+                                x.fld_WilayahID == WilayahID && x.fld_LadangID == LadangID &&
+                                x.fld_DivisionID == DivisionID && x.fld_PaymentMode == "3" && WorkerId.Contains(x.fld_Nopkj))
+                    .OrderBy(x => x.fld_Nama);
 
-                ViewBag.RecordNo = maybankrcmsList.Count();
 
-                if (maybankrcmsList.Count() == 0)
+                foreach (var salary in salaryData)
+                {
+                    //remove space &special char NoTel
+                    TelNo = salary.fld_Notel;
+                    NewTelNo = Regex.Replace(TelNo, @"[^0-9]+", "");
+
+                    if (NewTelNo.Substring(0, 1) == "0")
+                    {
+                        TelNo = "6" + NewTelNo;
+                    }
+                    else
+                    {
+                        TelNo = NewTelNo;
+                    }
+
+                    //remove space & special char NoKp
+                    NoKp = salary.fld_Nokp;
+                    NewNoKp = Regex.Replace(NoKp, @"[^0-9a-zA-Z]+", "");
+
+                    PaySheetPekerjaList.Add(
+                        new vw_PaySheetPekerja()
+                        {
+                            fld_Nopkj = salary.fld_Nopkj,
+                            fld_Nama = salary.fld_Nama,
+                            fld_Notel = TelNo,
+                            fld_Nokp = NewNoKp,
+                            fld_Last4Pan = salary.fld_Last4Pan,
+                            fld_GajiBersih = salary.fld_GajiBersih
+                        });
+
+                }
+
+                ViewBag.RecordNo = PaySheetPekerjaList.Count();
+
+                if (PaySheetPekerjaList.Count() == 0)
                 {
                     ViewBag.Message = GlobalResEstate.msgNoRecord;
                 }
-
-                if (filter != "")
-                {
-                    ViewBag.filter = filter;
-                }
-                return View(maybankrcmsList);
+                return View(PaySheetPekerjaList);
             }
+        }
+
+        [HttpPost]
+        public ActionResult _ewalletindividu(int? MonthList, int? YearList, string[] WorkerId)
+        {
+            int? NegaraID, SyarikatID, WilayahID, LadangID = 0;
+            int? getuserid = getidentity.ID(User.Identity.Name);
+            int? DivisionID = 0;
+            string host, catalog, user, pass = "";
+            string msg = "";
+            string statusmsg = "";
+            string filePath = "";
+            string filename = "";
+
+            string stringyear = "";
+            string stringmonth = "";
+            string link = "";
+            stringyear = YearList.ToString();
+            stringmonth = MonthList.ToString();
+            stringmonth = (stringmonth.Length == 1 ? "0" + stringmonth : stringmonth);
+
+            ViewBag.GenTextFile = "class = active";
+
+            try
+            {
+                GetNSWL.GetData(out NegaraID, out SyarikatID, out WilayahID, out LadangID, getuserid, User.Identity.Name);
+                Connection.GetConnection(out host, out catalog, out user, out pass, WilayahID.Value, SyarikatID.Value, NegaraID.Value);
+                MVC_SYSTEM_Models dbr = MVC_SYSTEM_Models.ConnectToSqlServer(host, catalog, user, pass);
+                MVC_SYSTEM_Viewing dbview = MVC_SYSTEM_Viewing.ConnectToSqlServer(host, catalog, user, pass);
+                DivisionID = GetNSWL.GetDivisionSelection(getuserid, NegaraID, SyarikatID, WilayahID, LadangID);
+
+                var salaryData = dbview.vw_PaySheetPekerja.Where(x => x.fld_Year == YearList && x.fld_Month == MonthList && x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID && x.fld_WilayahID == WilayahID && x.fld_LadangID == LadangID && x.fld_DivisionID == DivisionID && x.fld_PaymentMode == "3" && WorkerId.Contains(x.fld_Nopkj)).OrderBy(x => x.fld_Nama).ToList();
+
+                var LadangDetail = db.tbl_Ladang.Where(x => x.fld_ID == LadangID && x.fld_WlyhID == WilayahID).FirstOrDefault();
+
+                filePath = GetGenerateEwalletFile.GenFileEwallet(salaryData, LadangDetail, stringmonth, stringyear, NegaraID, SyarikatID, WilayahID, LadangID, out filename);
+
+                link = Url.Action("Download", "GenTextFile", new { filePath, filename });
+
+                dbr.Dispose();
+
+                msg = GlobalResEstate.msgGenerateSuccess;
+                statusmsg = "success";
+            }
+            catch (Exception ex)
+            {
+                geterror.catcherro(ex.Message, ex.StackTrace, ex.Source, ex.TargetSite.ToString());
+                msg = GlobalResEstate.msgGenerateFailed;
+                statusmsg = "warning";
+            }
+
+            return Json(new { msg, statusmsg, link });
         }
 
         public ActionResult ewalletInsentiveindividu()

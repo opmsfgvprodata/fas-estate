@@ -39,14 +39,6 @@
                         <label>@GlobalResEstate.lblYear</label>
                         @Html.DropDownList("YearList", null, htmlAttributes: new { @class = "form-control yearmonth" })
                     </div>
-                    <div class="col-sm-2">
-                        <label for="ClientId">Client ID</label>
-                        <input type="text" name="filter" id="filter" class="form-control" value="" disabled />
-                    </div>
-                    <div class="col-sm-2">
-                        <label>Payment Date</label>
-                        <input type="date" class="form-control" name="PaymentDate" id="PaymentDate" onkeydown="return false" required />
-                    </div>
                 </div>
                 <div class="form-group">
                     <br />
@@ -71,10 +63,6 @@
                     <div class="col-sm-4">
                         <label for="TotalSalary">@GlobalResEstate.lblSalaryPaid (RM)</label>
                         <input type="text" name="TotalSalary" id="TotalSalary" class="form-control" value="" disabled />
-                    </div>
-                    <div class="col-sm-4">
-                        <label for="FileName">@GlobalResEstate.lblGenerateFile</label>
-                        <input type="text" name="FileName" id="FileName" class="form-control" value="" disabled />
                     </div>
                 </div>
             </div>
@@ -134,8 +122,6 @@
             ajxfn.success = function (result) {
                 $('#RecordNo').val(result.totaldata);
                 $('#TotalSalary').val(result.salary);
-                $('#FileName').val(result.file);
-                $('#filter').val(result.clientid);
                 $.simplyToast(result.msg, result.statusmsg);
                 $("#UpdateProgress1").css("display", "none");
             };
