@@ -130,6 +130,8 @@ namespace MVC_SYSTEM.Models
         public virtual DbSet<vw_SupervisorMembersInfo> vw_SupervisorMembersInfo { get; set; }
         public virtual DbSet<tbl_SpecialInsentif> tbl_SpecialInsentif { get; set; }
 
+        public virtual DbSet<vw_MaybankRcms> vw_MaybankRcms { get; set; }
+        public virtual DbSet<vw_MaybankRcmsOthers> vw_MaybankRcmsOthers { get; set; }
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Entity<tbl_Kerja>()

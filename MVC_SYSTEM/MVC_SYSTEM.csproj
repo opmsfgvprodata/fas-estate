@@ -613,6 +613,8 @@
     <Compile Include="Models\vw_KumpulanPekerja.cs" />
     <Compile Include="Models\vw_MaklumatInsentif.cs" />
     <Compile Include="Models\vw_MaybankFile.cs" />
+    <Compile Include="Models\vw_MaybankRcms.cs" />
+    <Compile Include="Models\vw_MaybankRcmsOthers.cs" />
     <Compile Include="Models\vw_PkjCarumanTambahan.cs" />
     <Compile Include="Models\vw_RptAIPS.cs" />
     <Compile Include="Models\vw_rptKwspSocso.cs" />
@@ -3224,6 +3226,10 @@
     <Content Include="Views\Report\PenggajianDataReport.cshtml" />
     <Content Include="Views\Report\_PenggajianDataReport.cshtml" />
     <Content Include="Views\WorkerInfo\_WorkerTaxInfoCopy.cshtml" />
+    <Content Include="Views\GenTextFile\ewalletindividu.cshtml" />
+    <Content Include="Views\GenTextFile\_ewalletindividu.cshtml" />
+    <Content Include="Views\GenTextFile\ewalletInsentiveindividu.cshtml" />
+    <Content Include="Views\GenTextFile\_ewalletInsentiveindividu.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Asset\Upload\120\" />
