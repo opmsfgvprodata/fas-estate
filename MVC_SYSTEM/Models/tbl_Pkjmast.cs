@@ -199,6 +199,46 @@ namespace MVC_SYSTEM.Models
         [StringLength(50)]
         public string fld_KodSAPPekerja { get; set; }
 
+        [StringLength(4)]
+        [Display(Name = "Last 4 PAN")]
+        public string fld_Last4Pan { get; set; }
+
+        [StringLength(15)]
+        public string fld_PaymentMode { get; set; }
+
+        //Added by Shazana 18/10/2023
+        [StringLength(10)]
+        public string fld_PassportStatus { get; set; }
+
+        [StringLength(50)]
+        public string fld_PassportRenewalStatus { get; set; }
+
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
+        [Column(TypeName = "date")]
+        public DateTime? fld_PassportRenewalStartDate { get; set; }
+
+        [StringLength(10)]
+        public string fld_PermitStatus { get; set; }
+
+        [StringLength(50)]
+        public string fld_PermitRenewalStatus { get; set; }
+
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
+        [Column(TypeName = "date")]
+        public DateTime? fld_PermitRenewalStartDate { get; set; }
+
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
+        [Column(TypeName = "date")]
+        public DateTime? fld_ContractStartDate { get; set; }
+
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
+        [Column(TypeName = "date")]
+        public DateTime? fld_ContractExpiryDate { get; set; }
+
         [StringLength(20)]
         public string fld_NopkjPermanent { get; set; }
     }
@@ -390,6 +430,43 @@ namespace MVC_SYSTEM.Models
 
         [StringLength(50)]
         public string fld_KodSAPPekerja { get; set; }
+
+        [StringLength(4)]
+        [Display(Name = "Last 4 PAN")]
+        public string fld_Last4Pan { get; set; }
+
+        [StringLength(15)]
+        public string fld_PaymentMode { get; set; }
+
+        //Added by Shazana 18/10/2023
+        [StringLength(50)]
+        public string fld_PassportRenewalStatus { get; set; }
+
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
+        [Column(TypeName = "date")]
+        public DateTime? fld_PassportRenewalStartDate { get; set; }
+
+        [StringLength(10)]
+        public string fld_PermitStatus { get; set; }
+
+        [StringLength(50)]
+        public string fld_PermitRenewalStatus { get; set; }
+
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
+        [Column(TypeName = "date")]
+        public DateTime? fld_PermitRenewalStartDate { get; set; }
+
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
+        [Column(TypeName = "date")]
+        public DateTime? fld_ContractStartDate { get; set; }
+
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
+        [Column(TypeName = "date")]
+        public DateTime? fld_ContractExpiryDate { get; set; }
     }
 
     [Table("tbl_Pkjmast")]
@@ -581,6 +658,13 @@ namespace MVC_SYSTEM.Models
 
         [StringLength(50)]
         public string fld_KodSAPPekerja { get; set; }
+
+        [StringLength(4)]
+        [Display(Name = "Last 4 PAN")]
+        public string fld_Last4Pan { get; set; }
+
+        [StringLength(15)]
+        public string fld_PaymentMode { get; set; }
     }
     //public partial class tbl_PkjmastModel
     //{
