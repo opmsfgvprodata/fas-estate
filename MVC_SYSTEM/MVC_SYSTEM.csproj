@@ -3230,6 +3230,7 @@
     <Content Include="Views\GenTextFile\_ewalletindividu.cshtml" />
     <Content Include="Views\GenTextFile\ewalletInsentiveindividu.cshtml" />
     <Content Include="Views\GenTextFile\_ewalletInsentiveindividu.cshtml" />
+    <Content Include="Views\BasicInfo\WorkerView.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Asset\Upload\120\" />
