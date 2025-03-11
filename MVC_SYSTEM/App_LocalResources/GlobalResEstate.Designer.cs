@@ -484,6 +484,15 @@ namespace MVC_SYSTEM.App_LocalResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cost Center.
+        /// </summary>
+        public static string hdrCostCenter {
+            get {
+                return ResourceManager.GetString("hdrCostCenter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Tahap Kepuasan Pelanggan.
         /// </summary>
         public static string hdrCustLevel {
@@ -10425,6 +10434,15 @@ namespace MVC_SYSTEM.App_LocalResources {
         public static string titleUpdate {
             get {
                 return ResourceManager.GetString("titleUpdate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to KEMASKINI COST CENTER.
+        /// </summary>
+        public static string titleUpdateCostCenter {
+            get {
+                return ResourceManager.GetString("titleUpdateCostCenter", resourceCulture);
             }
         }
         

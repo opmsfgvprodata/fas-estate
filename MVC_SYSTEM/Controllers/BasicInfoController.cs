@@ -2600,6 +2600,71 @@ namespace MVC_SYSTEM.Controllers
                 return Json(new { success = false, msg = GlobalResEstate.msgError, status = "danger", checkingdata = "1" });
             }
         }
+        //fatin added - 15/11/2024
+        public ActionResult CostCenterUpdate(string id)
+        {
+
+            GetStatus GetStatus = new GetStatus();
+            int? NegaraID, SyarikatID, WilayahID, LadangID = 0;
+            int? getuserid = getidentity.ID(User.Identity.Name);
+            string host, catalog, user, pass = "";
+            GetNSWL.GetData(out NegaraID, out SyarikatID, out WilayahID, out LadangID, getuserid, User.Identity.Name);
+            Connection.GetConnection(out host, out catalog, out user, out pass, WilayahID.Value, SyarikatID.Value, NegaraID.Value);
+            MVC_SYSTEM_Models dbr = MVC_SYSTEM_Models.ConnectToSqlServer(host, catalog, user, pass);
+
+            if (id == null)
+            {
+                return RedirectToAction("WorkerInfo");
+            }
+            Models.tbl_Pkjmast tbl_Pkjmast = dbr.tbl_Pkjmast.Where(w => w.fld_Nopkj == id && w.fld_WilayahID == WilayahID && w.fld_SyarikatID == SyarikatID && w.fld_NegaraID == NegaraID).FirstOrDefault();
+
+            if (tbl_Pkjmast == null)
+            {
+                return RedirectToAction("WorkerInfo");
+            }
+
+            List<SelectListItem> statusAktif = new List<SelectListItem>();
+            List<SelectListItem> costCentre = new List<SelectListItem>();
+
+            statusAktif = new SelectList(db.tblOptionConfigsWebs.Where(x => x.fldOptConfFlag1 == "statusaktif" && x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID && x.fldDeleted == false).OrderBy(o => o.fldOptConfValue).Select(s => new SelectListItem { Value = s.fldOptConfValue, Text = s.fldOptConfDesc }).Distinct(), "Value", "Text", tbl_Pkjmast.fld_Kdaktf).ToList();
+            costCentre = new SelectList(db.tbl_SAPCCPUP.Where(x => x.fld_NegaraID == tbl_Pkjmast.fld_NegaraID && x.fld_SyarikatID == tbl_Pkjmast.fld_SyarikatID && x.fld_WilayahID == tbl_Pkjmast.fld_WilayahID && x.fld_LadangID == tbl_Pkjmast.fld_LadangID && x.fld_Deleted == false).OrderBy(o => o.fld_CostCenter).Select(s => new SelectListItem { Value = s.fld_CostCenter, Text = s.fld_CostCenter + " - " + s.fld_CostCenterDesc }), "Value", "Text", tbl_Pkjmast.fld_KodSAPPekerja).ToList();
+
+            ViewBag.fld_Kdaktf = statusAktif;
+            ViewBag.fld_KodSAPPekerja = costCentre;
+
+            return PartialView("CostCenterUpdate", tbl_Pkjmast);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult CostCenterUpdate(Models.tbl_Pkjmast tbl_Pkjmast)
+        {
+            int? NegaraID, SyarikatID, WilayahID, LadangID = 0;
+            int? getuserid = getidentity.ID(User.Identity.Name);
+            string host, catalog, user, pass = "";
+            GetNSWL.GetData(out NegaraID, out SyarikatID, out WilayahID, out LadangID, getuserid, User.Identity.Name);
+            Connection.GetConnection(out host, out catalog, out user, out pass, WilayahID.Value, SyarikatID.Value, NegaraID.Value);
+            MVC_SYSTEM_Models dbr = MVC_SYSTEM_Models.ConnectToSqlServer(host, catalog, user, pass);
+
+      
+            try
+            {
+                var getdata = dbr.tbl_Pkjmast.Where(w => w.fld_Nopkj == tbl_Pkjmast.fld_Nopkj && w.fld_LadangID == LadangID && w.fld_WilayahID == WilayahID && w.fld_SyarikatID == SyarikatID && w.fld_NegaraID == NegaraID).FirstOrDefault();
+
+                getdata.fld_KodSAPPekerja = tbl_Pkjmast.fld_KodSAPPekerja;
+                dbr.Entry(getdata).State = EntityState.Modified;
+                dbr.SaveChanges();
+
+                return Json(new { success = true, msg = GlobalResEstate.msgUpdate, status = "success", checkingdata = "0", method = "1", getid = "", data1 = "", data2 = "" });
+            }
+            catch (Exception ex)
+            {
+                geterror.catcherro(ex.Message, ex.StackTrace, ex.Source, ex.TargetSite.ToString());
+                return Json(new { success = true, msg = GlobalResEstate.msgError, status = "danger", checkingdata = "1" });
+            }
+          
+        }
+
 
         public ActionResult WorkerView(string id)
         {

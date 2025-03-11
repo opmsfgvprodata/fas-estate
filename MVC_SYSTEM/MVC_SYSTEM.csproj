@@ -3223,6 +3223,7 @@
     <Content Include="Views\WorkerInfo\SupervisorRegistrationDelete.cshtml" />
     <Content Include="Views\EAFormReport\Index.cshtml" />
     <Content Include="Views\PCB2FormReport\Index.cshtml" />
+    <Content Include="Views\BasicInfo\CostCenterUpdate.cshtml" />
     <Content Include="Views\Report\PenggajianDataReport.cshtml" />
     <Content Include="Views\Report\_PenggajianDataReport.cshtml" />
     <Content Include="Views\GenTextFile\ewalletindividu.cshtml" />
