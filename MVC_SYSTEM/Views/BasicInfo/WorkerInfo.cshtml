@@ -71,13 +71,14 @@
                             grid.Column("fld_Nama", GlobalResEstate.hdrName, style: "namapkj"),
                             grid.Column("fld_Nokp", GlobalResEstate.hdrNoKp, style: "nokp"),
                             grid.Column("fld_Kdaktf", GlobalResEstate.lblActiveStatus, style: "nokp", format: @<text>@( GetConfig.GetWebConfigDesc(item.fld_Kdaktf, "statusaktif", item.fld_NegaraID, item.fld_SyarikatID))</text>),
-                            grid.Column("fld_StatusApproved", GlobalResEstate.hdrStatusApp, style: "status", format: @<text>@( GetStatus.GetStatusApprove(item.fld_StatusApproved))</text>),
-                            grid.Column("fld_KodSAPPekerja", GlobalResEstate.hdrCostCenter, style: "nokp"),
-                            grid.Column("fld_AppliedBy", GlobalResEstate.hdrRequestID, style: "appliedby"),
-                            grid.Column(GlobalResEstate.hdrAction, canSort: false, style: "tindakan",
-                            format: @<text>
+grid.Column("fld_StatusApproved", GlobalResEstate.hdrStatusApp, style: "status", format: @<text>@( GetStatus.GetStatusApprove(item.fld_StatusApproved))</text>),
+grid.Column("fld_KodSAPPekerja", GlobalResEstate.hdrCostCenter, style: "nokp"),
+grid.Column("fld_AppliedBy", GlobalResEstate.hdrRequestID, style: "appliedby"),
+grid.Column(GlobalResEstate.hdrAction, canSort: false, style: "tindakan",
+format: @<text>
                         @*@Html.Raw("<a href='" + Url.Action("ModulesSelection", "Modules", new { Modules = "labour" }, this.Request.Url.Scheme) + "' class='btn btn-success' title='Update Worker' onclick='return DisplayProgressMessage(this);'><i class='fa fa-edit fa-lg'></i></a>")*@
                         @Html.Raw("<a data-modal='' href='" + @Url.Action("CostCenterUpdate", "BasicInfo") + "/?id=" + item.fld_Nopkj + "' class='btn btn-success' title='Update Cost Center' onclick='return DisplayProgressMessage(this);'><i class='fa fa-edit fa-lg'></i></a>")
+                        @Html.Raw("<a data-modal='' href='" + @Url.Action("WorkerView", "BasicInfo") + "/?id=" + item.fld_Nopkj + "' class='btn btn-primary' title='View Worker' onclick='return DisplayProgressMessage(this);'><i class='fa fa-eye fa-sm'></i></a>")
 
                     </text>)
 ))
@@ -108,15 +109,15 @@
                 grid.Column("fld_Nama", GlobalResEstate.hdrName, style: "namapkj"),
                 grid.Column("fld_Nokp", GlobalResEstate.hdrNoKp, style: "nokp"),
                 grid.Column("fld_StatusApproved", GlobalResEstate.hdrStatusApp, style: "status", format: @<text>@( GetStatus.GetStatusApprove(item.fld_StatusApproved))</text>),
-                grid.Column("fld_KodSAPPekerja", GlobalResEstate.hdrCostCenter, style: "nokp"),
-                grid.Column("fld_AppliedBy", GlobalResEstate.hdrRequestID, style: "appliedby"),
-                grid.Column(GlobalResEstate.hdrAction, canSort: false, style: "tindakan",
-                format: @<text>
+grid.Column("fld_KodSAPPekerja", GlobalResEstate.hdrCostCenter, style: "nokp"),
+grid.Column("fld_AppliedBy", GlobalResEstate.hdrRequestID, style: "appliedby"),
+grid.Column(GlobalResEstate.hdrAction, canSort: false, style: "tindakan",
+format: @<text>
                         @*@Html.Raw("<a href='" + Url.Action("ModulesSelection", "Modules", new { Modules = "labour" }, this.Request.Url.Scheme) + "' class='btn btn-success' title='Update Worker' onclick='return DisplayProgressMessage(this);'><i class='fa fa-edit fa-lg'></i></a>")*@
                         @Html.Raw("<a data-modal='' href='" + @Url.Action("CostCenterUpdate", "BasicInfo") + "/?id=" + item.fld_Nopkj + "' class='btn btn-success' title='Update Cost Center' onclick='return DisplayProgressMessage(this);'><i class='fa fa-edit fa-lg'></i></a>")
-
-                    </text>             )
-             ))
+                        @Html.Raw("<a data-modal='' href='" + @Url.Action("WorkerView", "BasicInfo") + "/?id=" + item.fld_Nopkj + "' class='btn btn-primary' title='View Worker' onclick='return DisplayProgressMessage(this);'><i class='fa fa-eye fa-sm'></i></a>")
+                    </text>)
+))
                             ;
                         }
                     </div>
