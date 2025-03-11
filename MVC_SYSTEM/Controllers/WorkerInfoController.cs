@@ -5330,17 +5330,17 @@ namespace MVC_SYSTEM.Controllers
                 w.fld_SyarikatID == SyarikatID && w.fld_NegaraID == NegaraID).FirstOrDefault();
                 if (getdata.fld_Kdrkyt == "MA")
                 {
-                    //getdata.fld_Nokwsp = tbl_Pkjmast.fld_Nokwsp;
-                    //getdata.fld_Noperkeso = tbl_Pkjmast.fld_Noperkeso;
-                    //getdata.fld_StatusKwspSocso = tbl_Pkjmast.fld_StatusKwspSocso;
+                    getdata.fld_Nokwsp = tbl_Pkjmast.fld_Nokwsp;
+                    getdata.fld_Noperkeso = tbl_Pkjmast.fld_Noperkeso;
+                    getdata.fld_StatusKwspSocso = tbl_Pkjmast.fld_StatusKwspSocso;
                     getdata.fld_KodSocso = tbl_Pkjmast.fld_KodSocso;
-                    //getdata.fld_KodKWSP = tbl_Pkjmast.fld_KodKWSP;
+                    getdata.fld_KodKWSP = tbl_Pkjmast.fld_KodKWSP;
                 }
                 else
                 {
-                    //getdata.fld_StatusKwspSocso = tbl_Pkjmast.fld_StatusKwspSocso;
+                    getdata.fld_StatusKwspSocso = tbl_Pkjmast.fld_StatusKwspSocso;
                     getdata.fld_KodSocso = tbl_Pkjmast.fld_KodSocso;
-                    //getdata.fld_Noperkeso = tbl_Pkjmast.fld_Noperkeso;
+                    getdata.fld_Noperkeso = tbl_Pkjmast.fld_Noperkeso;
                 }
                 dbr.SaveChanges();
 
