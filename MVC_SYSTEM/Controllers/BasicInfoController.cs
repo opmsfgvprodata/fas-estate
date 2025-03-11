@@ -2666,6 +2666,149 @@ namespace MVC_SYSTEM.Controllers
         }
 
 
+        public ActionResult WorkerView(string id)
+        {
+            GetStatus GetStatus = new GetStatus();
+            int? NegaraID, SyarikatID, WilayahID, LadangID = 0;
+            int? getuserid = getidentity.ID(User.Identity.Name);
+            string host, catalog, user, pass = "";
+            GetNSWL.GetData(out NegaraID, out SyarikatID, out WilayahID, out LadangID, getuserid, User.Identity.Name);
+            Connection.GetConnection(out host, out catalog, out user, out pass, WilayahID.Value, SyarikatID.Value, NegaraID.Value);
+            MVC_SYSTEM_Models dbr = MVC_SYSTEM_Models.ConnectToSqlServer(host, catalog, user, pass);
+
+            if (id == null)
+            {
+                return RedirectToAction("WorkerInfo");
+            }
+            Models.tbl_Pkjmast tbl_Pkjmast = dbr.tbl_Pkjmast.Where(w => w.fld_Nopkj == id && w.fld_WilayahID == WilayahID && w.fld_SyarikatID == SyarikatID && w.fld_NegaraID == NegaraID).FirstOrDefault();
+            string statuspkj = GetStatus.GetWorkerStatus(tbl_Pkjmast.fld_Kdaktf);
+            if (tbl_Pkjmast == null)
+            {
+                return RedirectToAction("WorkerInfo");
+            }
+
+            List<SelectListItem> Gender = new List<SelectListItem>();
+            List<SelectListItem> statusKahwin = new List<SelectListItem>();
+            List<SelectListItem> peneroka = new List<SelectListItem>();
+            List<SelectListItem> bangsa = new List<SelectListItem>();
+            List<SelectListItem> agama = new List<SelectListItem>();
+            List<SelectListItem> krytn = new List<SelectListItem>();
+            List<SelectListItem> negeri = new List<SelectListItem>();
+            List<SelectListItem> negara = new List<SelectListItem>();
+            List<SelectListItem> jnsPkj = new List<SelectListItem>();
+            List<SelectListItem> ktgrPkj = new List<SelectListItem>();
+            List<SelectListItem> pembekal = new List<SelectListItem>();
+            List<SelectListItem> statusAktif = new List<SelectListItem>();
+            List<SelectListItem> banklist = new List<SelectListItem>();
+            List<SelectListItem> division = new List<SelectListItem>();
+            List<SelectListItem> paymentMode = new List<SelectListItem>();
+
+
+            Gender = new SelectList(db.tblOptionConfigsWebs.Where(x => x.fldOptConfFlag1 == "jantina" && x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID && x.fldDeleted == false).OrderBy(o => o.fldOptConfValue).Select(s => new SelectListItem { Value = s.fldOptConfValue, Text = s.fldOptConfDesc }).Distinct(), "Value", "Text", tbl_Pkjmast.fld_Kdjnt).ToList();
+            Gender.Insert(0, (new SelectListItem { Text = GlobalResEstate.lblChoose, Value = "0" }));
+
+            statusKahwin = new SelectList(db.tblOptionConfigsWebs.Where(x => x.fldOptConfFlag1 == "tarafKahwin" && x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID && x.fldDeleted == false).OrderBy(o => o.fldOptConfValue).Select(s => new SelectListItem { Value = s.fldOptConfValue, Text = s.fldOptConfDesc }).Distinct(), "Value", "Text", tbl_Pkjmast.fld_Kdkwn).ToList();
+            statusKahwin.Insert(0, (new SelectListItem { Text = GlobalResEstate.lblChoose, Value = "0" }));
+
+            peneroka = new SelectList(db.tblOptionConfigsWebs.Where(x => x.fldOptConfFlag1 == "statusPeneroka" && x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID && x.fldDeleted == false).OrderBy(o => o.fldOptConfID).Select(s => new SelectListItem { Value = s.fldOptConfValue, Text = s.fldOptConfDesc }).Distinct(), "Value", "Text", tbl_Pkjmast.fld_Kpenrka).ToList();
+            peneroka.Insert(0, (new SelectListItem { Text = GlobalResEstate.lblChoose, Value = "0" }));
+
+            bangsa = new SelectList(db.tblOptionConfigsWebs.Where(x => x.fldOptConfFlag1 == "bangsa" && x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID && x.fldDeleted == false).OrderBy(o => o.fldOptConfValue).Select(s => new SelectListItem { Value = s.fldOptConfValue, Text = s.fldOptConfDesc }).Distinct(), "Value", "Text", tbl_Pkjmast.fld_Kdbgsa).ToList();
+            bangsa.Insert(0, (new SelectListItem { Text = GlobalResEstate.lblChoose, Value = "0" }));
+
+            agama = new SelectList(db.tblOptionConfigsWebs.Where(x => x.fldOptConfFlag1 == "agama" && x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID && x.fldDeleted == false).OrderBy(o => o.fldOptConfValue).Select(s => new SelectListItem { Value = s.fldOptConfValue, Text = s.fldOptConfDesc }).Distinct(), "Value", "Text", tbl_Pkjmast.fld_Kdagma).ToList();
+            agama.Insert(0, (new SelectListItem { Text = GlobalResEstate.lblChoose, Value = "0" }));
+
+            krytn = new SelectList(db.tblOptionConfigsWebs.Where(x => x.fldOptConfFlag1 == "krytnlist" && x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID && x.fldDeleted == false).OrderBy(o => o.fldOptConfValue).Select(s => new SelectListItem { Value = s.fldOptConfValue, Text = s.fldOptConfDesc }).Distinct(), "Value", "Text", tbl_Pkjmast.fld_Kdrkyt).ToList();
+            krytn.Insert(0, (new SelectListItem { Text = GlobalResEstate.lblChoose, Value = "0" }));
+
+            negeri = new SelectList(db.tblOptionConfigsWebs.Where(x => x.fldOptConfFlag1 == "negeri" && x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID && x.fldDeleted == false).OrderBy(o => o.fldOptConfValue).Select(s => new SelectListItem { Value = s.fldOptConfValue, Text = s.fldOptConfDesc }).Distinct(), "Value", "Text", tbl_Pkjmast.fld_Neg.Trim()).ToList();
+            negeri.Insert(0, (new SelectListItem { Text = GlobalResEstate.lblChoose, Value = "0" }));
+
+            negara = new SelectList(db.tblOptionConfigsWebs.Where(x => x.fldOptConfFlag1 == "krytnlist" && x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID && x.fldDeleted == false).OrderBy(o => o.fldOptConfValue).Select(s => new SelectListItem { Value = s.fldOptConfValue, Text = s.fldOptConfDesc }).Distinct(), "Value", "Text", tbl_Pkjmast.fld_Negara.Trim()).ToList();
+            negara.Insert(0, (new SelectListItem { Text = GlobalResEstate.lblChoose, Value = "0" }));
+
+            jnsPkj = new SelectList(db.tblOptionConfigsWebs.Where(x => x.fldOptConfFlag1 == "jnsPkj" && x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID && x.fldDeleted == false).OrderBy(o => o.fldOptConfValue).Select(s => new SelectListItem { Value = s.fldOptConfValue, Text = s.fldOptConfDesc.ToUpper() }).Distinct(), "Value", "Text", tbl_Pkjmast.fld_Jenispekerja).ToList();
+            jnsPkj.Insert(0, (new SelectListItem { Text = GlobalResEstate.lblChoose, Value = "0" }));
+
+            ktgrPkj = new SelectList(db.tblOptionConfigsWebs.Where(x => x.fldOptConfFlag1 == "designation" && x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID && x.fldDeleted == false).OrderBy(o => o.fldOptConfValue).Select(s => new SelectListItem { Value = s.fldOptConfValue.Trim(), Text = s.fldOptConfDesc }).Distinct(), "Value", "Text", tbl_Pkjmast.fld_Ktgpkj.Trim()).ToList();
+            ktgrPkj.Insert(0, (new SelectListItem { Text = GlobalResEstate.lblChoose, Value = "0" }));
+
+            pembekal = new SelectList(db.tbl_Pembekal.Where(x => x.fld_SyarikatID == SyarikatID && x.fld_NegaraID == NegaraID && x.fld_Deleted == false).OrderBy(o => o.fld_KodPbkl).Select(s => new SelectListItem { Value = s.fld_KodPbkl, Text = s.fld_NamaPbkl }).Distinct(), "Value", "Text", tbl_Pkjmast.fld_Kodbkl).ToList();
+            pembekal.Insert(0, (new SelectListItem { Text = GlobalResEstate.lblChoose, Value = "0" }));
+
+            statusAktif = new SelectList(db.tblOptionConfigsWebs.Where(x => x.fldOptConfFlag1 == "statusaktif" && x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID && x.fldDeleted == false).OrderBy(o => o.fldOptConfValue).Select(s => new SelectListItem { Value = s.fldOptConfValue, Text = s.fldOptConfValue + " - " + s.fldOptConfDesc }).Distinct(), "Value", "Text", statuspkj).ToList();
+            statusAktif.Insert(0, (new SelectListItem { Text = GlobalResEstate.lblChoose, Value = "0" }));
+
+            division = new SelectList(db.tbl_Division.Where(x => x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID && x.fld_WilayahID == WilayahID && x.fld_LadangID == LadangID && x.fld_Deleted == false).OrderBy(o => o.fld_DivisionName).Select(s => new SelectListItem { Value = s.fld_ID.ToString(), Text = s.fld_DivisionName }).Distinct(), "Value", "Text", tbl_Pkjmast.fld_DivisionID).ToList();
+            division.Insert(0, (new SelectListItem { Text = GlobalResEstate.lblChoose, Value = "0" }));
+
+            paymentMode = new SelectList(db.tblOptionConfigsWebs.Where(x => x.fldOptConfFlag1 == "paymentmode" && x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID && x.fldDeleted == false).OrderBy(o => o.fldOptConfValue).Select(s => new SelectListItem { Value = s.fldOptConfValue, Text = s.fldOptConfDesc }).Distinct(), "Value", "Text", tbl_Pkjmast.fld_PaymentMode).ToList();
+            paymentMode.Insert(0, (new SelectListItem { Text = GlobalResEstate.lblChoose, Value = "0" }));
+
+            //banklist = new SelectList(db.tbl_Bank.Where(x => x.fld_SyarikatID == SyarikatID && x.fld_NegaraID == NegaraID && x.fld_Deleted == false).OrderBy(o => o.fld_KodBank).Select(s => new SelectListItem { Value = s.fld_KodBank, Text = s.fld_KodBank + " - " + s.fld_NamaBank }).Distinct(), "Value", "Text", tbl_Pkjmast.fld_Kdbank).ToList();
+            //banklist.Insert(0, (new SelectListItem { Text = "Sila Pilih", Value = "0" }));
+            ViewBag.EditDivision = 0;
+            var checkAttendance = dbr.tbl_Kerjahdr.Where(x => x.fld_Nopkj == tbl_Pkjmast.fld_Nopkj && x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID && x.fld_WilayahID == WilayahID && x.fld_LadangID == LadangID).Any();
+            if (checkAttendance == false && tbl_Pkjmast.fld_KumpulanID == null)
+            {
+                //boleh edit
+                ViewBag.EditDivision = 1;
+            }
+            else
+            {
+                //xboleh edit
+                ViewBag.EditDivision = 2;
+            }
+            //Comment by fitri 17-09-2020
+            //var findImage = dbr.tbl_SupportedDoc.Where(x => x.fld_Nopkj == id && x.fld_Flag == "picPkj" && x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID && x.fld_WilayahID == WilayahID && x.fld_LadangID == LadangID && x.fld_Deleted == false).Select(s => s.fld_Url).FirstOrDefault();
+            //Add by fitri 17-09-2020
+            var findImage = dbr.tbl_SupportedDoc.Where(x => x.fld_Nopkj == id && x.fld_Flag == "ProfPic" && x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID && x.fld_WilayahID == WilayahID && x.fld_LadangID == LadangID && x.fld_Deleted == false).Select(s => s.fld_Url).FirstOrDefault();
+            if (findImage == null)
+            {
+                findImage = "/Asset/Images/default-user.png";
+            }
+            ViewBag.fld_Kdjnt = Gender;
+            ViewBag.fld_Kdkwn = statusKahwin;
+            ViewBag.fld_Kpenrka = peneroka;
+            ViewBag.fld_Kdbgsa = bangsa;
+            ViewBag.fld_Kdagma = agama;
+            ViewBag.fld_Kdrkyt = krytn;
+            ViewBag.fld_Neg = negeri;
+            ViewBag.fld_Negara = negara;
+            ViewBag.fld_Jenispekerja = jnsPkj;
+            ViewBag.fld_Ktgpkj = ktgrPkj;
+            ViewBag.fld_Kodbkl = pembekal;
+            ViewBag.fld_Kdaktf = statusAktif;
+            ViewBag.ImageSource = findImage;
+            ViewBag.fld_Negara2 = negara;
+            ViewBag.fld_DivisionID = division;
+            ViewBag.fld_PaymentMode = paymentMode;
+
+            List<SelectListItem> PassportStatus = new List<SelectListItem>();
+            List<SelectListItem> PassportRenewalStatus = new List<SelectListItem>();
+            List<SelectListItem> PermitRenewalStatus = new List<SelectListItem>();
+            List<SelectListItem> PermitStatus = new List<SelectListItem>();
+
+            PassportStatus = new SelectList(db.tblOptionConfigsWebs.Where(x => x.fldOptConfFlag1 == "passportpermitstatus" && x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID && x.fldDeleted == false).OrderBy(o => o.fldOptConfValue).Select(s => new SelectListItem { Value = s.fldOptConfValue, Text = s.fldOptConfDesc }).Distinct(), "Value", "Text", tbl_Pkjmast.fld_PassportStatus).ToList();
+            PassportStatus.Insert(0, (new SelectListItem { Text = GlobalResEstate.lblChoose, Value = "0" }));
+            PassportRenewalStatus = new SelectList(db.tblOptionConfigsWebs.Where(x => x.fldOptConfFlag1 == "passportrenewalstatus" && x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID && x.fldDeleted == false).OrderBy(o => o.fldOptConfValue).Select(s => new SelectListItem { Value = s.fldOptConfValue, Text = s.fldOptConfDesc }).Distinct(), "Value", "Text", tbl_Pkjmast.fld_PassportRenewalStatus).ToList();
+            PassportRenewalStatus.Insert(0, (new SelectListItem { Text = GlobalResEstate.lblChoose, Value = "0" }));
+            PermitRenewalStatus = new SelectList(db.tblOptionConfigsWebs.Where(x => x.fldOptConfFlag1 == "permitrenewalstatus" && x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID && x.fldDeleted == false).OrderBy(o => o.fldOptConfValue).Select(s => new SelectListItem { Value = s.fldOptConfValue, Text = s.fldOptConfDesc }).Distinct(), "Value", "Text", tbl_Pkjmast.fld_PermitRenewalStatus).ToList();
+            PermitRenewalStatus.Insert(0, (new SelectListItem { Text = GlobalResEstate.lblChoose, Value = "0" }));
+            //Modified by Shazana 9/1/2024
+            PermitStatus = new SelectList(db.tblOptionConfigsWebs.Where(x => x.fldOptConfFlag1 == "passportpermitstatus" && x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID && x.fldDeleted == false).OrderBy(o => o.fldOptConfValue).Select(s => new SelectListItem { Value = s.fldOptConfValue, Text = s.fldOptConfDesc }).Distinct(), "Value", "Text", tbl_Pkjmast.fld_PermitStatus).ToList();
+            PermitStatus.Insert(0, (new SelectListItem { Text = GlobalResEstate.lblChoose, Value = "0" }));
+
+            ViewBag.fld_PassportStatus = PassportStatus;
+            ViewBag.fld_PassportRenewalStatus = PassportRenewalStatus;
+            ViewBag.fld_PermitRenewalStatus = PermitRenewalStatus;
+            ViewBag.fld_PermitStatus = PermitStatus;
+
+
+            return PartialView("WorkerView", tbl_Pkjmast);
+        }
+
         public ActionResult WorkerStatus(string id)
         {
             //Check_Balik
@@ -5211,10 +5354,10 @@ namespace MVC_SYSTEM.Controllers
 
             List<SelectListItem> SupervisorIdList = new List<SelectListItem>();
             var SupervisorListing = dbr.tbl_Supervisor.Where(x => x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID && x.fld_WilayahID == fld_WilayahID && x.fld_LadangID == LadangID).Select(x => x.fld_SupervisorID).ToList();
-            var SupervisorExcludedListed = db.vw_SupervisorInfo.Where(x => x.fldNegaraID == NegaraID && x.fldSyarikatID == SyarikatID && x.fldWilayahID == fld_WilayahID && x.fldLadangID == LadangID && x.fldJawatan == "PL" && x.fldDeleted == false && !SupervisorListing.Contains(x.fldUserid)).ToList();
+            var SupervisorExcludedListed = db.vw_SupervisorInfo.Where(x => x.fldNegaraID == NegaraID && x.fldSyarikatID == SyarikatID && x.fldWilayahID == fld_WilayahID && x.fldLadangID == LadangID && x.fldDeleted == false && !SupervisorListing.Contains(x.fldUserName)).ToList();
 
 
-            SupervisorIdList = new SelectList(SupervisorExcludedListed.OrderBy(o => o.fldUserid).Select(s => new SelectListItem { Value = s.fldUserid.ToString(), Text = s.fldUserid.ToString() + "-" + s.fldUserFullName }), "Value", "Text").ToList();
+            SupervisorIdList = new SelectList(SupervisorExcludedListed.OrderBy(o => o.fldUserName).Select(s => new SelectListItem { Value = s.fldUserName.ToString(), Text = s.fldUserName.ToString() + "-" + s.fldUserFullName }), "Value", "Text").ToList();
             SupervisorIdList.Insert(0, (new SelectListItem { Text = GlobalResEstate.lblChoose, Value = "0" }));
             var LadangInfo = db.tbl_Ladang.Where(x => x.fld_NegaraID == NegaraID && x.fld_SyarikatID == SyarikatID && x.fld_WlyhID == fld_WilayahID && x.fld_ID == LadangID).FirstOrDefault();
             ViewBag.fld_SupervisorID = SupervisorIdList;
@@ -5240,7 +5383,7 @@ namespace MVC_SYSTEM.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    var supervisorInfo = db.vw_SupervisorInfo.Where(x => x.fldUserid == Supervisor.fld_SupervisorID && x.fldJawatan == "PL" && x.fldDeleted == false).FirstOrDefault();
+                    var supervisorInfo = db.vw_SupervisorInfo.Where(x => x.fldUserName == Supervisor.fld_SupervisorID && x.fldDeleted == false).FirstOrDefault();
                     if (supervisorInfo != null)
                     {
                         Models.tbl_Supervisor tbl_Supervisor = new Models.tbl_Supervisor();

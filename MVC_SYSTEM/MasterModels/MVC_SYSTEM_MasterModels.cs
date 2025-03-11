@@ -119,6 +119,7 @@ namespace MVC_SYSTEM.MasterModels
         public virtual DbSet<tbl_ModulesUrl> tbl_ModulesUrl { get; set; }
         public virtual DbSet<tbl_CustomerVendorGLMap> tbl_CustomerVendorGLMap { get; set; }
         public virtual DbSet<vw_SupervisorInfo> vw_SupervisorInfo { get; set; }
+        public virtual DbSet<tbl_EAWorkerSiriNo> tbl_EAWorkerSiriNo { get; set; }
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Entity<tbl_MapGL>()

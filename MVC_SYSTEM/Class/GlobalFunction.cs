@@ -79,6 +79,6 @@ namespace MVC_SYSTEM.Class
             ReturnData = db.tbl_SAPPDPUP.Where(x => GetNN.Contains(x.fld_NetworkNo)).ToList();
 
             return ReturnData;
-        }
+        } 
     }
 }

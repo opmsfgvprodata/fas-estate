@@ -151,6 +151,15 @@ namespace MVC_SYSTEM.App_LocalResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Salin.
+        /// </summary>
+        public static string btnCopy {
+            get {
+                return ResourceManager.GetString("btnCopy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Hapus.
         /// </summary>
         public static string btnDelete {
@@ -2329,6 +2338,33 @@ namespace MVC_SYSTEM.App_LocalResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Tarikh Tamat Kontrak.
+        /// </summary>
+        public static string lblContractExpiryDate {
+            get {
+                return ResourceManager.GetString("lblContractExpiryDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to MAKLUMAT KONTRAK.
+        /// </summary>
+        public static string lblContractInfo {
+            get {
+                return ResourceManager.GetString("lblContractInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tarikh Mula Kontrak.
+        /// </summary>
+        public static string lblContractStartDate {
+            get {
+                return ResourceManager.GetString("lblContractStartDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Caruman Oleh.
         /// </summary>
         public static string lblContributedBy {
@@ -2640,6 +2676,24 @@ namespace MVC_SYSTEM.App_LocalResources {
         public static string lblContributionTableUpdate {
             get {
                 return ResourceManager.GetString("lblContributionTableUpdate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Salin Dari Tahun.
+        /// </summary>
+        public static string lblCopyFrom {
+            get {
+                return ResourceManager.GetString("lblCopyFrom", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Salin Ke Tahun.
+        /// </summary>
+        public static string lblCopyTo {
+            get {
+                return ResourceManager.GetString("lblCopyTo", resourceCulture);
             }
         }
         
@@ -4876,6 +4930,15 @@ namespace MVC_SYSTEM.App_LocalResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No. Akhir 4 Pan.
+        /// </summary>
+        public static string lblLast4Pan {
+            get {
+                return ResourceManager.GetString("lblLast4Pan", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cuti.
         /// </summary>
         public static string lblLeave {
@@ -5497,6 +5560,15 @@ namespace MVC_SYSTEM.App_LocalResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No. Telefon.
+        /// </summary>
+        public static string lblMobile {
+            get {
+                return ResourceManager.GetString("lblMobile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Bulan.
         /// </summary>
         public static string lblMonth {
@@ -6010,6 +6082,15 @@ namespace MVC_SYSTEM.App_LocalResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Passport Tarikh Tamat.
+        /// </summary>
+        public static string lblPassportExpiryDate {
+            get {
+                return ResourceManager.GetString("lblPassportExpiryDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Hapus Pilihan Tamat Tempoh Passport.
         /// </summary>
         public static string lblPassportExpiryDelete {
@@ -6127,6 +6208,33 @@ namespace MVC_SYSTEM.App_LocalResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to PASSPORT INFORMATION.
+        /// </summary>
+        public static string lblPassportInfo {
+            get {
+                return ResourceManager.GetString("lblPassportInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tarikh Mula Perbaharui Passport.
+        /// </summary>
+        public static string lblPassportRenewalStartDate {
+            get {
+                return ResourceManager.GetString("lblPassportRenewalStartDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Status Perbaharui Passport.
+        /// </summary>
+        public static string lblPassportRenewalStatus {
+            get {
+                return ResourceManager.GetString("lblPassportRenewalStatus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Laporan Tamat Passport.
         /// </summary>
         public static string lblPassportReport {
@@ -6141,6 +6249,24 @@ namespace MVC_SYSTEM.App_LocalResources {
         public static string lblPassportStart {
             get {
                 return ResourceManager.GetString("lblPassportStart", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Passport Tarikh Mula.
+        /// </summary>
+        public static string lblPassportStartDate {
+            get {
+                return ResourceManager.GetString("lblPassportStartDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Status Passport.
+        /// </summary>
+        public static string lblPassportStatus {
+            get {
+                return ResourceManager.GetString("lblPassportStatus", resourceCulture);
             }
         }
         
@@ -6352,11 +6478,38 @@ namespace MVC_SYSTEM.App_LocalResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to MAKLUMAT PERMIT.
+        /// </summary>
+        public static string lblPermitInfo {
+            get {
+                return ResourceManager.GetString("lblPermitInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No Permit.
         /// </summary>
         public static string lblPermitNo {
             get {
                 return ResourceManager.GetString("lblPermitNo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tarikh Mula Perbaharui Permit.
+        /// </summary>
+        public static string lblPermitRenewalStartDate {
+            get {
+                return ResourceManager.GetString("lblPermitRenewalStartDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Status Perbaharui Permit.
+        /// </summary>
+        public static string lblPermitRenewalStatus {
+            get {
+                return ResourceManager.GetString("lblPermitRenewalStatus", resourceCulture);
             }
         }
         
@@ -6375,6 +6528,24 @@ namespace MVC_SYSTEM.App_LocalResources {
         public static string lblPermitStart {
             get {
                 return ResourceManager.GetString("lblPermitStart", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tarikh Mula Permit.
+        /// </summary>
+        public static string lblPermitStartDate {
+            get {
+                return ResourceManager.GetString("lblPermitStartDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Status Permit.
+        /// </summary>
+        public static string lblPermitStatus {
+            get {
+                return ResourceManager.GetString("lblPermitStatus", resourceCulture);
             }
         }
         
@@ -7131,6 +7302,15 @@ namespace MVC_SYSTEM.App_LocalResources {
         public static string lblSelection {
             get {
                 return ResourceManager.GetString("lblSelection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to MAKLUMAT PERKHIDMATAN.
+        /// </summary>
+        public static string lblServiceInfo {
+            get {
+                return ResourceManager.GetString("lblServiceInfo", resourceCulture);
             }
         }
         
@@ -10101,6 +10281,42 @@ namespace MVC_SYSTEM.App_LocalResources {
         public static string msgYieldBracket {
             get {
                 return ResourceManager.GetString("msgYieldBracket", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sila Pilih.
+        /// </summary>
+        public static string sltAll {
+            get {
+                return ResourceManager.GetString("sltAll", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string String {
+            get {
+                return ResourceManager.GetString("String", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string String1 {
+            get {
+                return ResourceManager.GetString("String1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Salin Cukai Pekerja.
+        /// </summary>
+        public static string titleCopyWorkerTax {
+            get {
+                return ResourceManager.GetString("titleCopyWorkerTax", resourceCulture);
             }
         }
         

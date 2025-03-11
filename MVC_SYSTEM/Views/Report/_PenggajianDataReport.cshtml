@@ -1,0 +1,532 @@
+﻿@using MVC_SYSTEM.Class
+@using MVC_SYSTEM.Models
+@model IEnumerable<MVC_SYSTEM.ModelsDapper.sp_PenggajianData_Est_Result>
+
+@{ GetTriager GetTriager = new GetTriager();
+    GetConfig GetConfig = new GetConfig();
+
+    int bil = 0;
+    ChangeTimeZone ChangeTimeZone = new ChangeTimeZone();
+    DateTime Todaydate = ChangeTimeZone.gettimezone();
+    string uniquefilename = "PenggajianData" + "_" + Todaydate.Year.ToString() + Todaydate.Month.ToString() + Todaydate.Day.ToString() + Todaydate.Hour.ToString() + Todaydate.Minute.ToString() + Todaydate.Second.ToString();
+
+}
+
+<section class="content-wrapper main-content">
+
+    @if (Model != null && Model.Count() != 0)
+    {
+        <div id="scrollArea" class="modal-body">
+
+            @foreach (var ladang in Model.OrderBy(x => x.fld_WilayahID).OrderBy(s => s.fld_LadangID).Select(x => x.fld_LadangID).Distinct())
+
+            {
+                bil = 0;
+
+                <table class="table table-hover table-bordered w-100" style="font-size: 11px;" border="0">
+                    <thead>
+                        <tr>
+                            <th colspan="28" style="color: black; text-align: center; vertical-align: middle !important" align="center" class="center-me">
+                                @ViewBag.namapenuhsyarikat
+                                <br />
+                                @ViewBag.NomborSyarikat
+                                <br />
+                                LAPORAN PENGGAJIAN DATA
+                                <br />
+                                @ViewBag.Tahun
+                            </th>
+                            @*@Html.TextBox("WilayahList", (int)ViewBag.WilayahList, new { @readonly = "readonly", @hidden = "true" })
+                                @Html.TextBox("LadangList", (int)ViewBag.LadangList, new { @readonly = "readonly", @hidden = "true" })*@
+                        </tr>
+
+                        <tr>
+                            <th colspan="26" bgcolor="#CC6600" style="color: black; text-align: left; vertical-align: middle !important; border: 1px solid black;" border="1" align="left">
+                                <font color="white">REGION : @GetConfig.GetWilayahNameFromIDLadang(ladang).ToUpper()</font>
+                                <br />
+                                <font color="white">ESTATE : @GetConfig.GetLadangNameFromID(ladang).ToUpper()</font>
+                                <br />
+                                <font color="white">TENAGA KERJA ASING</font>
+                            </th>
+                        </tr>
+                        <tr>
+
+                            <th rowspan="2" width="1%" bgcolor="#ffcc80" style="color: black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">NO</th>
+                            <th rowspan="2" width="3%" bgcolor="#ffcc80" style="color: black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">ITEM</th>
+                            <th colspan="2" width="3%" bgcolor="#ffcc80" style="color: black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">JANUARY</th>
+                            <th colspan="2" width="3%" bgcolor="#ffcc80" style="color: black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">FEBRUARY</th>
+                            <th colspan="2" width="3%" bgcolor="#ffcc80" style="color: black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">MARCH</th>
+                            <th colspan="2" width="3%" bgcolor="#ffcc80" style="color: black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">APRIL</th>
+                            <th colspan="2" width="3%" bgcolor="#ffcc80" style="color: black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">MAY</th>
+                            <th colspan="2" width="3%" bgcolor="#ffcc80" style="color: black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">JUN</th>
+                            <th colspan="2" width="3%" bgcolor="#ffcc80" style="color: black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">JULY</th>
+                            <th colspan="2" width="3%" bgcolor="#ffcc80" style="color: black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">AUGUST</th>
+                            <th colspan="2" width="3%" bgcolor="#ffcc80" style="color: black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">SEPTEMBER</th>
+                            <th colspan="2" width="3%" bgcolor="#ffcc80" style="color: black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">OCTOBER</th>
+                            <th colspan="2" width="3%" bgcolor="#ffcc80" style="color: black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">NOVEMBER</th>
+                            <th colspan="2" width="3%" bgcolor="#ffcc80" style="color: black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">DECEMBER</th>
+                        </tr>
+                        <tr>
+
+                            <th width="3%" bgcolor="#ffcc80" style="color: black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">RM</th>
+                            <th width="3%" bgcolor="#ffcc80" style="color: black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">HEADCOUNT</th>
+                            <th width="3%" bgcolor="#ffcc80" style="color: black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">RM</th>
+                            <th width="3%" bgcolor="#ffcc80" style="color: black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">HEADCOUNT</th>
+                            <th width="3%" bgcolor="#ffcc80" style="color: black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">RM</th>
+                            <th width="3%" bgcolor="#ffcc80" style="color: black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">HEADCOUNT</th>
+                            <th width="3%" bgcolor="#ffcc80" style="color: black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">RM</th>
+                            <th width="3%" bgcolor="#ffcc80" style="color: black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">HEADCOUNT</th>
+                            <th width="3%" bgcolor="#ffcc80" style="color: black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">RM</th>
+                            <th width="3%" bgcolor="#ffcc80" style="color: black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">HEADCOUNT</th>
+                            <th width="3%" bgcolor="#ffcc80" style="color: black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">RM</th>
+                            <th width="3%" bgcolor="#ffcc80" style="color: black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">HEADCOUNT</th>
+                            <th width="3%" bgcolor="#ffcc80" style="color: black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">RM</th>
+                            <th width="3%" bgcolor="#ffcc80" style="color: black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">HEADCOUNT</th>
+                            <th width="3%" bgcolor="#ffcc80" style="color: black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">RM</th>
+                            <th width="3%" bgcolor="#ffcc80" style="color: black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">HEADCOUNT</th>
+                            <th width="3%" bgcolor="#ffcc80" style="color: black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">RM</th>
+                            <th width="3%" bgcolor="#ffcc80" style="color: black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">HEADCOUNT</th>
+                            <th width="3%" bgcolor="#ffcc80" style="color: black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">RM</th>
+                            <th width="3%" bgcolor="#ffcc80" style="color: black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">HEADCOUNT</th>
+                            <th width="3%" bgcolor="#ffcc80" style="color: black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">RM</th>
+                            <th width="3%" bgcolor="#ffcc80" style="color: black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">HEADCOUNT</th>
+                            <th width="3%" bgcolor="#ffcc80" style="color: black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">RM</th>
+                            <th width="3%" bgcolor="#ffcc80" style="color: black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">HEADCOUNT</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        @foreach (string id in Model.OrderBy(x => x.ranking).OrderBy(x => x.fld_JenisPenggajian).OrderBy(x => x.fld_KodInsentif).Select(x => x.fld_KodInsentif).Distinct())
+
+                        {
+                            bil += 1;
+                            decimal? NilaiInsentif1 = Model.Where(x => x.fld_KodInsentif == id && x.fld_krkytn != "MA" && x.fld_Bulan == 1 && x.fld_LadangID == ladang).Select(x => x.fld_NilaiInsentif).Sum();
+                            int? HC1 = Model.Where(x => x.fld_KodInsentif == id && x.fld_krkytn != "MA" && x.fld_Bulan == 1 && x.fld_LadangID == ladang).Select(x => x.fld_headcount).Sum();
+                            decimal? NilaiInsentif2 = Model.Where(x => x.fld_KodInsentif == id && x.fld_krkytn != "MA" && x.fld_Bulan == 2 && x.fld_LadangID == ladang).Select(x => x.fld_NilaiInsentif).Sum();
+                            int? HC2 = Model.Where(x => x.fld_KodInsentif == id && x.fld_krkytn != "MA" && x.fld_Bulan == 2 && x.fld_LadangID == ladang).Select(x => x.fld_headcount).Sum();
+
+                            decimal? NilaiInsentif3 = Model.Where(x => x.fld_KodInsentif == id && x.fld_krkytn != "MA" && x.fld_Bulan == 3 && x.fld_LadangID == ladang).Select(x => x.fld_NilaiInsentif).Sum();
+                            int? HC3 = Model.Where(x => x.fld_KodInsentif == id && x.fld_krkytn != "MA" && x.fld_Bulan == 3 && x.fld_LadangID == ladang).Select(x => x.fld_headcount).Sum();
+                            decimal? NilaiInsentif4 = Model.Where(x => x.fld_KodInsentif == id && x.fld_krkytn != "MA" && x.fld_Bulan == 4 && x.fld_LadangID == ladang).Select(x => x.fld_NilaiInsentif).Sum();
+                            int? HC4 = Model.Where(x => x.fld_KodInsentif == id && x.fld_krkytn != "MA" && x.fld_Bulan == 4 && x.fld_LadangID == ladang).Select(x => x.fld_headcount).Sum();
+
+                            decimal? NilaiInsentif5 = Model.Where(x => x.fld_KodInsentif == id && x.fld_krkytn != "MA" && x.fld_Bulan == 5 && x.fld_LadangID == ladang).Select(x => x.fld_NilaiInsentif).Sum();
+                            int? HC5 = Model.Where(x => x.fld_KodInsentif == id && x.fld_krkytn != "MA" && x.fld_Bulan == 5 && x.fld_LadangID == ladang).Select(x => x.fld_headcount).Sum();
+                            decimal? NilaiInsentif6 = Model.Where(x => x.fld_KodInsentif == id && x.fld_krkytn != "MA" && x.fld_Bulan == 6 && x.fld_LadangID == ladang).Select(x => x.fld_NilaiInsentif).Sum();
+                            int? HC6 = Model.Where(x => x.fld_KodInsentif == id && x.fld_krkytn != "MA" && x.fld_Bulan == 6 && x.fld_LadangID == ladang).Select(x => x.fld_headcount).Sum();
+
+                            decimal? NilaiInsentif7 = Model.Where(x => x.fld_KodInsentif == id && x.fld_krkytn != "MA" && x.fld_Bulan == 7 && x.fld_LadangID == ladang).Select(x => x.fld_NilaiInsentif).Sum();
+                            int? HC7 = Model.Where(x => x.fld_KodInsentif == id && x.fld_krkytn != "MA" && x.fld_Bulan == 7 && x.fld_LadangID == ladang).Select(x => x.fld_headcount).Sum();
+                            decimal? NilaiInsentif8 = Model.Where(x => x.fld_KodInsentif == id && x.fld_krkytn != "MA" && x.fld_Bulan == 8 && x.fld_LadangID == ladang).Select(x => x.fld_NilaiInsentif).Sum();
+                            int? HC8 = Model.Where(x => x.fld_KodInsentif == id && x.fld_krkytn != "MA" && x.fld_Bulan == 8 && x.fld_LadangID == ladang).Select(x => x.fld_headcount).Sum();
+
+                            decimal? NilaiInsentif9 = Model.Where(x => x.fld_KodInsentif == id && x.fld_krkytn != "MA" && x.fld_Bulan == 9 && x.fld_LadangID == ladang).Select(x => x.fld_NilaiInsentif).Sum();
+                            int? HC9 = Model.Where(x => x.fld_KodInsentif == id && x.fld_krkytn != "MA" && x.fld_Bulan == 9 && x.fld_LadangID == ladang).Select(x => x.fld_headcount).Sum();
+                            decimal? NilaiInsentif10 = Model.Where(x => x.fld_KodInsentif == id && x.fld_krkytn != "MA" && x.fld_Bulan == 10 && x.fld_LadangID == ladang).Select(x => x.fld_NilaiInsentif).Sum();
+                            int? HC10 = Model.Where(x => x.fld_KodInsentif == id && x.fld_krkytn != "MA" && x.fld_Bulan == 10 && x.fld_LadangID == ladang).Select(x => x.fld_headcount).Sum();
+
+                            decimal? NilaiInsentif11 = Model.Where(x => x.fld_KodInsentif == id && x.fld_krkytn != "MA" && x.fld_Bulan == 11 && x.fld_LadangID == ladang).Select(x => x.fld_NilaiInsentif).Sum();
+                            int? HC11 = Model.Where(x => x.fld_KodInsentif == id && x.fld_krkytn != "MA" && x.fld_Bulan == 11 && x.fld_LadangID == ladang).Select(x => x.fld_headcount).Sum();
+                            decimal? NilaiInsentif12 = Model.Where(x => x.fld_KodInsentif == id && x.fld_krkytn != "MA" && x.fld_Bulan == 12 && x.fld_LadangID == ladang).Select(x => x.fld_NilaiInsentif).Sum();
+                            int? HC12 = Model.Where(x => x.fld_KodInsentif == id && x.fld_krkytn != "MA" && x.fld_Bulan == 12 && x.fld_LadangID == ladang).Select(x => x.fld_headcount).Sum();
+
+                            <tr>
+                                <td align="center" style="vertical-align: middle !important; border: 1px solid black;" border="1">
+                                    @bil
+                                </td>
+
+                                <td align="left" style="vertical-align: middle !important; border: 1px solid black;" border="1">
+                                    @id
+                                </td>
+                                <td align="right" style="vertical-align: middle !important; border: 1px solid black;" border="1">
+                                    @NilaiInsentif1
+                                </td>
+                                <td align="right" style="vertical-align: middle !important; border: 1px solid black;" border="1">
+                                    @HC1
+                                </td>
+                                <td align="right" style="vertical-align: middle !important; border: 1px solid black;" border="1">
+                                    @NilaiInsentif2
+                                </td>
+                                <td align="right" style="vertical-align: middle !important; border: 1px solid black;" border="1">
+                                    @HC2
+                                </td>
+                                <td align="right" style="vertical-align: middle !important; border: 1px solid black;" border="1">
+                                    @NilaiInsentif3
+                                </td>
+                                <td align="right" style="vertical-align: middle !important; border: 1px solid black;" border="1">
+                                    @HC3
+                                </td>
+                                <td align="right" style="vertical-align: middle !important; border: 1px solid black;" border="1">
+                                    @NilaiInsentif4
+                                </td>
+                                <td align="right" style="vertical-align: middle !important; border: 1px solid black;" border="1">
+                                    @HC4
+                                </td>
+                                <td align="right" style="vertical-align: middle !important; border: 1px solid black;" border="1">
+                                    @NilaiInsentif5
+                                </td>
+                                <td align="right" style="vertical-align: middle !important; border: 1px solid black;" border="1">
+                                    @HC5
+                                </td>
+                                <td align="right" style="vertical-align: middle !important; border: 1px solid black;" border="1">
+                                    @NilaiInsentif6
+                                </td>
+                                <td align="right" style="vertical-align: middle !important; border: 1px solid black;" border="1">
+                                    @HC6
+                                </td>
+                                <td align="right" style="vertical-align: middle !important; border: 1px solid black;" border="1">
+                                    @NilaiInsentif7
+                                </td>
+                                <td align="right" style="vertical-align: middle !important; border: 1px solid black;" border="1">
+                                    @HC7
+                                </td>
+                                <td align="right" style="vertical-align: middle !important; border: 1px solid black;" border="1">
+                                    @NilaiInsentif8
+                                </td>
+                                <td align="right" style="vertical-align: middle !important; border: 1px solid black;" border="1">
+                                    @HC8
+                                </td>
+                                <td align="right" style="vertical-align: middle !important; border: 1px solid black;" border="1">
+                                    @NilaiInsentif9
+                                </td>
+                                <td align="right" style="vertical-align: middle !important; border: 1px solid black;" border="1">
+                                    @HC9
+                                </td>
+                                <td align="right" style="vertical-align: middle !important; border: 1px solid black;" border="1">
+                                    @NilaiInsentif10
+                                </td>
+                                <td align="right" style="vertical-align: middle !important; border: 1px solid black;" border="1">
+                                    @HC10
+                                </td>
+
+                                <td align="right" style="vertical-align: middle !important; border: 1px solid black;" border="1">
+                                    @NilaiInsentif11
+                                </td>
+                                <td align="right" style="vertical-align: middle !important; border: 1px solid black;" border="1">
+                                    @HC11
+                                </td>
+                                <td align="right" style="vertical-align: middle !important; border: 1px solid black;" border="1">
+                                    @NilaiInsentif12
+                                </td>
+                                <td align="right" style="vertical-align: middle !important; border: 1px solid black;" border="1">
+                                    @HC12
+                                </td>
+
+                            </tr>
+                        }
+
+                    </tbody>
+
+                    @*TKT*@
+                    <thead>
+                        <tr>
+                            <th colspan="28" style="color: black; text-align: center; vertical-align: middle !important" align="center" class="center-me">
+                                @ViewBag.namapenuhsyarikat
+                                <br />
+                                @ViewBag.NomborSyarikat
+                                <br />
+                                LAPORAN PENGGAJIAN DATA
+                                <br />
+                                @ViewBag.Tahun
+                            </th>
+                            @*@Html.TextBox("WilayahList", (int)ViewBag.WilayahList, new { @readonly = "readonly", @hidden = "true" })
+                                @Html.TextBox("LadangList", (int)ViewBag.LadangList, new { @readonly = "readonly", @hidden = "true" })*@
+                        </tr>
+
+                        <tr>
+                            <th colspan="26" bgcolor="#CC6600" style="color: black; text-align: left; vertical-align: middle !important; border: 1px solid black;" border="1" align="left">
+                                <font color="white">REGION : @GetConfig.GetWilayahNameFromIDLadang(ladang).ToUpper()</font>
+                                <br />
+                                <font color="white">ESTATE : @GetConfig.GetLadangNameFromID(ladang).ToUpper()</font>
+                                <br />
+                                <font color="white">TENAGA KERJA TEMPATAN</font>
+                            </th>
+                        </tr>
+                        <tr>
+
+                            <th rowspan="2" width="1%" bgcolor="#ffcc80" style="color: black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">NO</th>
+                            <th rowspan="2" width="3%" bgcolor="#ffcc80" style="color: black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">ITEM</th>
+                            <th colspan="2" width="3%" bgcolor="#ffcc80" style="color: black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">JANUARY</th>
+                            <th colspan="2" width="3%" bgcolor="#ffcc80" style="color: black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">FEBRUARY</th>
+                            <th colspan="2" width="3%" bgcolor="#ffcc80" style="color: black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">MARCH</th>
+                            <th colspan="2" width="3%" bgcolor="#ffcc80" style="color: black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">APRIL</th>
+                            <th colspan="2" width="3%" bgcolor="#ffcc80" style="color: black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">MAY</th>
+                            <th colspan="2" width="3%" bgcolor="#ffcc80" style="color: black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">JUN</th>
+                            <th colspan="2" width="3%" bgcolor="#ffcc80" style="color: black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">JULY</th>
+                            <th colspan="2" width="3%" bgcolor="#ffcc80" style="color: black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">AUGUST</th>
+                            <th colspan="2" width="3%" bgcolor="#ffcc80" style="color: black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">SEPTEMBER</th>
+                            <th colspan="2" width="3%" bgcolor="#ffcc80" style="color: black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">OCTOBER</th>
+                            <th colspan="2" width="3%" bgcolor="#ffcc80" style="color: black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">NOVEMBER</th>
+                            <th colspan="2" width="3%" bgcolor="#ffcc80" style="color: black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">DECEMBER</th>
+                        </tr>
+                        <tr>
+
+                            <th width="3%" bgcolor="#ffcc80" style="color: black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">RM</th>
+                            <th width="3%" bgcolor="#ffcc80" style="color: black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">HEADCOUNT</th>
+                            <th width="3%" bgcolor="#ffcc80" style="color: black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">RM</th>
+                            <th width="3%" bgcolor="#ffcc80" style="color: black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">HEADCOUNT</th>
+                            <th width="3%" bgcolor="#ffcc80" style="color: black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">RM</th>
+                            <th width="3%" bgcolor="#ffcc80" style="color: black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">HEADCOUNT</th>
+                            <th width="3%" bgcolor="#ffcc80" style="color: black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">RM</th>
+                            <th width="3%" bgcolor="#ffcc80" style="color: black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">HEADCOUNT</th>
+                            <th width="3%" bgcolor="#ffcc80" style="color: black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">RM</th>
+                            <th width="3%" bgcolor="#ffcc80" style="color: black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">HEADCOUNT</th>
+                            <th width="3%" bgcolor="#ffcc80" style="color: black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">RM</th>
+                            <th width="3%" bgcolor="#ffcc80" style="color: black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">HEADCOUNT</th>
+                            <th width="3%" bgcolor="#ffcc80" style="color: black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">RM</th>
+                            <th width="3%" bgcolor="#ffcc80" style="color: black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">HEADCOUNT</th>
+                            <th width="3%" bgcolor="#ffcc80" style="color: black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">RM</th>
+                            <th width="3%" bgcolor="#ffcc80" style="color: black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">HEADCOUNT</th>
+                            <th width="3%" bgcolor="#ffcc80" style="color: black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">RM</th>
+                            <th width="3%" bgcolor="#ffcc80" style="color: black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">HEADCOUNT</th>
+                            <th width="3%" bgcolor="#ffcc80" style="color: black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">RM</th>
+                            <th width="3%" bgcolor="#ffcc80" style="color: black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">HEADCOUNT</th>
+                            <th width="3%" bgcolor="#ffcc80" style="color: black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">RM</th>
+                            <th width="3%" bgcolor="#ffcc80" style="color: black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">HEADCOUNT</th>
+                            <th width="3%" bgcolor="#ffcc80" style="color: black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">RM</th>
+                            <th width="3%" bgcolor="#ffcc80" style="color: black; text-align: center; vertical-align: middle !important; border: 1px solid black;" border="1">HEADCOUNT</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        @foreach (string id in Model.OrderBy(x => x.ranking).OrderBy(x => x.fld_JenisPenggajian).OrderBy(x => x.fld_KodInsentif).Select(x => x.fld_KodInsentif).Distinct())
+
+                        {
+                            bil += 1;
+                            decimal? NilaiInsentif1M = Model.Where(x => x.fld_KodInsentif == id && x.fld_krkytn == "MA" && x.fld_Bulan == 1 && x.fld_LadangID == ladang).Select(x => x.fld_NilaiInsentif).Sum();
+                            int? HC1M = Model.Where(x => x.fld_KodInsentif == id && x.fld_krkytn == "MA" && x.fld_Bulan == 1 && x.fld_LadangID == ladang).Select(x => x.fld_headcount).Sum();
+                            decimal? NilaiInsentif2M = Model.Where(x => x.fld_KodInsentif == id && x.fld_krkytn == "MA" && x.fld_Bulan == 2 && x.fld_LadangID == ladang).Select(x => x.fld_NilaiInsentif).Sum();
+                            int? HC2M = Model.Where(x => x.fld_KodInsentif == id && x.fld_krkytn == "MA" && x.fld_Bulan == 2 && x.fld_LadangID == ladang).Select(x => x.fld_headcount).Sum();
+
+                            decimal? NilaiInsentif3M = Model.Where(x => x.fld_KodInsentif == id && x.fld_krkytn == "MA" && x.fld_Bulan == 3 && x.fld_LadangID == ladang).Select(x => x.fld_NilaiInsentif).Sum();
+                            int? HC3M = Model.Where(x => x.fld_KodInsentif == id && x.fld_krkytn == "MA" && x.fld_Bulan == 3 && x.fld_LadangID == ladang).Select(x => x.fld_headcount).Sum();
+                            decimal? NilaiInsentif4M = Model.Where(x => x.fld_KodInsentif == id && x.fld_krkytn == "MA" && x.fld_Bulan == 4 && x.fld_LadangID == ladang).Select(x => x.fld_NilaiInsentif).Sum();
+                            int? HC4M = Model.Where(x => x.fld_KodInsentif == id && x.fld_krkytn == "MA" && x.fld_Bulan == 4 && x.fld_LadangID == ladang).Select(x => x.fld_headcount).Sum();
+
+                            decimal? NilaiInsentif5M = Model.Where(x => x.fld_KodInsentif == id && x.fld_krkytn == "MA" && x.fld_Bulan == 5 && x.fld_LadangID == ladang).Select(x => x.fld_NilaiInsentif).Sum();
+                            int? HC5M = Model.Where(x => x.fld_KodInsentif == id && x.fld_krkytn == "MA" && x.fld_Bulan == 5 && x.fld_LadangID == ladang).Select(x => x.fld_headcount).Sum();
+                            decimal? NilaiInsentif6M = Model.Where(x => x.fld_KodInsentif == id && x.fld_krkytn == "MA" && x.fld_Bulan == 6 && x.fld_LadangID == ladang).Select(x => x.fld_NilaiInsentif).Sum();
+                            int? HC6M = Model.Where(x => x.fld_KodInsentif == id && x.fld_krkytn == "MA" && x.fld_Bulan == 6 && x.fld_LadangID == ladang).Select(x => x.fld_headcount).Sum();
+
+                            decimal? NilaiInsentif7M = Model.Where(x => x.fld_KodInsentif == id && x.fld_krkytn == "MA" && x.fld_Bulan == 7 && x.fld_LadangID == ladang).Select(x => x.fld_NilaiInsentif).Sum();
+                            int? HC7M = Model.Where(x => x.fld_KodInsentif == id && x.fld_krkytn == "MA" && x.fld_Bulan == 7 && x.fld_LadangID == ladang).Select(x => x.fld_headcount).Sum();
+                            decimal? NilaiInsentif8M = Model.Where(x => x.fld_KodInsentif == id && x.fld_krkytn == "MA" && x.fld_Bulan == 8 && x.fld_LadangID == ladang).Select(x => x.fld_NilaiInsentif).Sum();
+                            int? HC8M = Model.Where(x => x.fld_KodInsentif == id && x.fld_krkytn == "MA" && x.fld_Bulan == 8 && x.fld_LadangID == ladang).Select(x => x.fld_headcount).Sum();
+
+                            decimal? NilaiInsentif9M = Model.Where(x => x.fld_KodInsentif == id && x.fld_krkytn == "MA" && x.fld_Bulan == 9 && x.fld_LadangID == ladang).Select(x => x.fld_NilaiInsentif).Sum();
+                            int? HC9M = Model.Where(x => x.fld_KodInsentif == id && x.fld_krkytn == "MA" && x.fld_Bulan == 9 && x.fld_LadangID == ladang).Select(x => x.fld_headcount).Sum();
+                            decimal? NilaiInsentif10M = Model.Where(x => x.fld_KodInsentif == id && x.fld_krkytn == "MA" && x.fld_Bulan == 10 && x.fld_LadangID == ladang).Select(x => x.fld_NilaiInsentif).Sum();
+                            int? HC10M = Model.Where(x => x.fld_KodInsentif == id && x.fld_krkytn == "MA" && x.fld_Bulan == 10 && x.fld_LadangID == ladang).Select(x => x.fld_headcount).Sum();
+
+                            decimal? NilaiInsentif11M = Model.Where(x => x.fld_KodInsentif == id && x.fld_krkytn == "MA" && x.fld_Bulan == 11 && x.fld_LadangID == ladang).Select(x => x.fld_NilaiInsentif).Sum();
+                            int? HC11M = Model.Where(x => x.fld_KodInsentif == id && x.fld_krkytn == "MA" && x.fld_Bulan == 11 && x.fld_LadangID == ladang).Select(x => x.fld_headcount).Sum();
+                            decimal? NilaiInsentif12M = Model.Where(x => x.fld_KodInsentif == id && x.fld_krkytn == "MA" && x.fld_Bulan == 12 && x.fld_LadangID == ladang).Select(x => x.fld_NilaiInsentif).Sum();
+                            int? HC12M = Model.Where(x => x.fld_KodInsentif == id && x.fld_krkytn == "MA" && x.fld_Bulan == 12 && x.fld_LadangID == ladang).Select(x => x.fld_headcount).Sum();
+
+                            <tr>
+                                <td align="center" style="vertical-align: middle !important; border: 1px solid black;" border="1">
+                                    @bil
+                                </td>
+
+                                <td align="left" style="vertical-align: middle !important; border: 1px solid black;" border="1">
+                                    @id
+                                </td>
+                                <td align="right" style="vertical-align: middle !important; border: 1px solid black;" border="1">
+                                    @NilaiInsentif1M
+                                </td>
+                                <td align="right" style="vertical-align: middle !important; border: 1px solid black;" border="1">
+                                    @HC1M
+                                </td>
+                                <td align="right" style="vertical-align: middle !important; border: 1px solid black;" border="1">
+                                    @NilaiInsentif2M
+                                </td>
+                                <td align="right" style="vertical-align: middle !important; border: 1px solid black;" border="1">
+                                    @HC2M
+                                </td>
+                                <td align="right" style="vertical-align: middle !important; border: 1px solid black;" border="1">
+                                    @NilaiInsentif3M
+                                </td>
+                                <td align="right" style="vertical-align: middle !important; border: 1px solid black;" border="1">
+                                    @HC3M
+                                </td>
+                                <td align="right" style="vertical-align: middle !important; border: 1px solid black;" border="1">
+                                    @NilaiInsentif4M
+                                </td>
+                                <td align="right" style="vertical-align: middle !important; border: 1px solid black;" border="1">
+                                    @HC4M
+                                </td>
+                                <td align="right" style="vertical-align: middle !important; border: 1px solid black;" border="1">
+                                    @NilaiInsentif5M
+                                </td>
+                                <td align="right" style="vertical-align: middle !important; border: 1px solid black;" border="1">
+                                    @HC5M
+                                </td>
+                                <td align="right" style="vertical-align: middle !important; border: 1px solid black;" border="1">
+                                    @NilaiInsentif6M
+                                </td>
+                                <td align="right" style="vertical-align: middle !important; border: 1px solid black;" border="1">
+                                    @HC6M
+                                </td>
+                                <td align="right" style="vertical-align: middle !important; border: 1px solid black;" border="1">
+                                    @NilaiInsentif7M
+                                </td>
+                                <td align="right" style="vertical-align: middle !important; border: 1px solid black;" border="1">
+                                    @HC7M
+                                </td>
+                                <td align="right" style="vertical-align: middle !important; border: 1px solid black;" border="1">
+                                    @NilaiInsentif8M
+                                </td>
+                                <td align="right" style="vertical-align: middle !important; border: 1px solid black;" border="1">
+                                    @HC8M
+                                </td>
+                                <td align="right" style="vertical-align: middle !important; border: 1px solid black;" border="1">
+                                    @NilaiInsentif9M
+                                </td>
+                                <td align="right" style="vertical-align: middle !important; border: 1px solid black;" border="1">
+                                    @HC9M
+                                </td>
+                                <td align="right" style="vertical-align: middle !important; border: 1px solid black;" border="1">
+                                    @NilaiInsentif10M
+                                </td>
+                                <td align="right" style="vertical-align: middle !important; border: 1px solid black;" border="1">
+                                    @HC10M
+                                </td>
+
+                                <td align="right" style="vertical-align: middle !important; border: 1px solid black;" border="1">
+                                    @NilaiInsentif11M
+                                </td>
+                                <td align="right" style="vertical-align: middle !important; border: 1px solid black;" border="1">
+                                    @HC11M
+                                </td>
+                                <td align="right" style="vertical-align: middle !important; border: 1px solid black;" border="1">
+                                    @NilaiInsentif12M
+                                </td>
+                                <td align="right" style="vertical-align: middle !important; border: 1px solid black;" border="1">
+                                    @HC12M
+                                </td>
+
+                            </tr>
+                        }
+
+                    </tbody>
+                </table>
+
+                <newpage />
+
+            }
+
+        </div>
+
+        <div style="text-align:right; margin-top:10px">
+            <a class="btn btn-default btn-sm" href="#" id="Excelbtn" onclick="HTMLtoExcel('@uniquefilename')">
+                <span><img src="~/Asset/Images/excel-icon.png" width="20px" height="20px" /></span> Excel
+            </a>
+
+            <a class="btn btn-default" href="#" id="downloadpdf2" style="float: right;">
+                <img src="~/Asset/Images/pdf-icon.png" width="20px" height="20px" /> Cetak/PDF
+            </a>
+        </div>
+
+    }
+
+    else
+    {
+        <div id="scrollArea" class="modal-body" style="text-align: center">
+            <p style="color: red">No Data</p>
+
+        </div>
+    }
+
+</section>
+<script src="~/Asset/Scripts/FromHTML.js"></script>
+<script src="~/Asset/Scripts/FileSaver.js"></script>
+
+<script>
+       $(document).ready(function () {
+
+        $("#printpage").click(function () {
+            var DivElement = document.getElementById("scrollArea").innerHTML;
+            var oldPage = document.body.innerHTML;
+            document.body.innerHTML = DivElement;
+            window.print();
+            document.body.innerHTML = oldPage;
+        })
+
+        $("#downloadpdf2").click(function () {
+            var myHtml = document.getElementById('scrollArea').innerHTML;
+            debugger
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("ConvertPDF2", "Report")',
+                dataType: 'json',
+                contentType: 'application/json',
+                data: JSON.stringify({ myHtml: myHtml, filename: "@uniquefilename", reportname: "MapaReport" }),
+                success: function (result) {
+                    if (result.success) {
+                        var win = window.open(result.link, '_blank');
+                        win.focus();
+                    } else {
+                        $.simplyToast(result.msg, result.status);
+                    }
+                },
+            });
+            return false;
+        });
+
+       });
+
+</script>
+<style>
+    .header_table th {
+        text-align: center;
+        vertical-align: middle !important;
+    }
+
+    .count {
+        width: 30px;
+        font-size: 12px;
+        text-align: center;
+        vertical-align: middle !important;
+    }
+
+    .kod {
+        width: 100px;
+        font-size: 12px;
+        text-align: center;
+        vertical-align: middle !important;
+    }
+
+    .keterangan {
+        width: 150px;
+        font-size: 12px;
+        text-align: left;
+        vertical-align: middle !important;
+    }
+
+    .tetapan1 {
+        width: 150px;
+        font-size: 12px;
+        text-align: center;
+        vertical-align: middle !important;
+    }
+
+    .tetapan2 {
+        width: 150px;
+        font-size: 12px;
+        text-align: center;
+        vertical-align: middle !important;
+    }
+
+    .tindakan {
+        width: 80px !important;
+        text-align: center;
+        vertical-align: middle !important;
+    }
+
+    .center-me {
+        text-align: center;
+    }
+</style>
+
+
+
+

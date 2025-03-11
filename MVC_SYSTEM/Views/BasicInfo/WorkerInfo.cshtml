@@ -129,12 +129,12 @@
                 <a class="btn btn-success" href="@Url.Action("Index", "SalaryIncrement")" id="btnCreate" onclick="return DisplayProgressMessage2(this);">
                     Increment Salary Request
                 </a>
-                <a class="btn btn-success" href="@Url.Action("ModulesSelection", "Modules", new { Modules = "labour" }, this.Request.Url.Scheme)" id="btnCreate" onclick="return DisplayProgressMessage2(this);">
+                @*<a class="btn btn-success" href="@Url.Action("ModulesSelection", "Modules", new { Modules = "labour" }, this.Request.Url.Scheme)" id="btnCreate" onclick="return DisplayProgressMessage2(this);">
                     @GlobalResEstate.btnWorkerRequest
                 </a>
                 <a class="btn btn-success" href="@Url.Action("ModulesSelection", "Modules", new { Modules = "labour" }, this.Request.Url.Scheme)" id="btnCreate" onclick="return DisplayProgressMessage2(this);">
                     @GlobalResEstate.btnWorkerTransfer
-                </a>
+                </a>*@
                 <a class="btn btn-warning" href="@Url.Action("Index", "BasicInfo")" onclick="return DisplayProgressMessage2(this);">@GlobalResEstate.btnBack</a>
             </div>
         </div>

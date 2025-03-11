@@ -1,0 +1,47 @@
+﻿@using MVC_SYSTEM.Class;
+
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 class="modal-title">@GlobalResEstate.titleCopyWorkerTax</h3>
+</div>
+<section class="content-wrapper main-content clear-fix">
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        <div class="modal-body">
+            <div class="form-horizontal">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">@GlobalResEstate.lblWorkerTaxInfo</div>
+                    <div class="panel-body">
+                        <div class="form-group">
+                            <div class="col-sm-6">
+                                <label class="control-label col-md-4">@GlobalResEstate.lblCopyFrom</label>
+                                <div class="col-md-8">
+                                    <input type="hidden" id="LastYear" name="LastYear" value="@ViewBag.lastYear" />
+                                    <input type="text" value="@ViewBag.lastYear" class="form-control" disabled />
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <label class="control-label col-md-4">@GlobalResEstate.lblCopyTo</label>
+                                <div class="col-md-8">
+                                    <input type="hidden" id="CurrentYear" name="CurrentYear" value="@ViewBag.currentYear" />
+                                    <input type="text" value="@ViewBag.currentYear" class="form-control" disabled />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <input class="btn btn-primary" type="submit" value=@GlobalResEstate.btnCopy />
+            <button class="btn btn-warning" data-dismiss="modal">@GlobalResEstate.btnBack</button>
+        </div>
+    }
+</section>
+
+<script>
+    $("form").removeData("validator");
+    $("form").removeData("unobtrusiveValidation");
+    $.validator.unobtrusive.parse("form");
+</script>
