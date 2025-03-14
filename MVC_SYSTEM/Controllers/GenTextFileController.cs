@@ -1021,6 +1021,9 @@ namespace MVC_SYSTEM.Controllers
                 NegaraID.Value);
             MVC_SYSTEM_Models dbr = MVC_SYSTEM_Models.ConnectToSqlServer(host, catalog, user, pass);
 
+            MVC_SYSTEM_Viewing dbview = MVC_SYSTEM_Viewing.ConnectToSqlServer(host, catalog, user, pass);
+
+
             string stringyear = "";
             string stringmonth = "";
             string CorpID = "";
@@ -1038,16 +1041,17 @@ namespace MVC_SYSTEM.Controllers
             GetNSWL.GetSyarikatRCMSDetail(SyarikatID, out CorpID, out ClientID, out AccNo, out InitialName);
 
             List<vw_MaybankRcms> maybankrcmsList = new List<vw_MaybankRcms>();
+            List<vw_PaySheetPekerja> PaySheetPekerjaList = new List<vw_PaySheetPekerja>();
             if (WorkerId == null)
                 WorkerId = new string[] { "0" };
 
             if (WorkerId.Contains("0"))
             {
-                maybankrcmsList = dbr.vw_MaybankRcms.Where(x => x.fld_LadangID == LadangID && x.fld_Year == Year && x.fld_Month == Month).ToList();
+                PaySheetPekerjaList = dbview.vw_PaySheetPekerja.Where(x => x.fld_LadangID == LadangID && x.fld_Year == Year && x.fld_Month == Month).ToList();
             }
             else
             {
-                maybankrcmsList = dbr.vw_MaybankRcms.Where(x => x.fld_LadangID == LadangID && x.fld_Year == Year && x.fld_Month == Month && WorkerId.Contains(x.fld_Nopkj)).ToList();
+                PaySheetPekerjaList = dbview.vw_PaySheetPekerja.Where(x => x.fld_LadangID == LadangID && x.fld_Year == Year && x.fld_Month == Month && WorkerId.Contains(x.fld_Nopkj)).ToList();
             }
             var SyarikatDetail = db.tbl_Syarikat.Where(x => x.fld_SyarikatID == SyarikatID).FirstOrDefault();
             string filename = "M2E LABOR (" + SyarikatDetail.fld_NamaPndkSyarikat.ToUpper() + ") " + "" + stringmonth + stringyear + ".txt";
