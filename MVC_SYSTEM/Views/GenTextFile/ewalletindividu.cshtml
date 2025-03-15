@@ -1,6 +1,6 @@
 ﻿@using MVC_SYSTEM.Class;
 @{
-    ViewBag.Title = "Payment Report Via M2E";
+    ViewBag.Title = "e-Wallet Report";
     Layout = "~/Views/Shared/_LayoutMain.cshtml";
 
     AjaxOptions options = new AjaxOptions
@@ -71,7 +71,7 @@
     </div>
     <div class="well" style="margin-top:7px;">
         <div class="panel panel-primary">
-            <div class="panel-heading">Payment Report Via M2E</div>
+            <div class="panel-heading">e-Wallet Report (Individu)</div>
             <div class="panel-body">
                 <div id="searchResultWorkerPaySheetRptInfo">
                     @Html.Action("_ewalletindividu")
@@ -134,7 +134,7 @@
 
         var WilayahIDList = {};
         var disableoption = "";
-        WilayahIDList.url = "@Url.Action("GetWorker", "GenTextFile")";
+        WilayahIDList.url = "@Url.Action("GetWorkerEwallet", "GenTextFile")";
         WilayahIDList.type = "POST";
             WilayahIDList.data = JSON.stringify({ Year: $("#YearList").val(), Month: $("#MonthList").val() });
         WilayahIDList.datatype = "json";
@@ -153,7 +153,7 @@
     $(".yearmonth").change(function () {
         var WilayahIDList = {};
         var disableoption = "";
-        WilayahIDList.url = "@Url.Action("GetWorker", "GenTextFile")";
+        WilayahIDList.url = "@Url.Action("GetWorkerEwallet", "GenTextFile")";
         WilayahIDList.type = "POST";
             WilayahIDList.data = JSON.stringify({ Year: $("#YearList").val(), Month: $("#MonthList").val() });
         WilayahIDList.datatype = "json";

@@ -31,7 +31,7 @@
                         <br />
                         (@GlobalResEstate.lblEstateName : @ViewBag.Ladang)
                         <br />
-                        e-Wallet Report @GlobalResEstate.hdrForMonth @ViewBag.MonthList/@ViewBag.YearList
+                        e-Wallet Report (Individu) @GlobalResEstate.hdrForMonth @ViewBag.MonthList/@ViewBag.YearList
                     </th>
                 </tr>
                 <tr>
@@ -131,13 +131,12 @@
             var CompCode = $("#CompCodeList").val();
             var filter = $("#filter").val();
             var WorkerId = $("#WorkerId").val();
-            var PaymentDate = $("#PaymentDate").val();
             $("#UpdateProgress1").css("display", "");
             var ajxfn = {};
             ajxfn.url = "@Url.Action("_ewalletindividu", "GenTextFile")";
             ajxfn.type = "POST";
             ajxfn.async = false;
-            ajxfn.data = JSON.stringify({ Month: Month, Year: Year, filter: filter, WorkerId: WorkerId, PaymentDate: PaymentDate });
+            ajxfn.data = JSON.stringify({ MonthList: Month, YearList: Year, filter: filter, WorkerId: WorkerId });
             ajxfn.datatype = "json";
             ajxfn.contentType = "application/json";
             ajxfn.success = function (result) {
