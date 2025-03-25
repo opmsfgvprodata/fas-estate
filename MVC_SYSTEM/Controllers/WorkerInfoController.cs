@@ -5334,7 +5334,7 @@ namespace MVC_SYSTEM.Controllers
                     //getdata.fld_Noperkeso = tbl_Pkjmast.fld_Noperkeso;
                     //getdata.fld_StatusKwspSocso = tbl_Pkjmast.fld_StatusKwspSocso;
                     getdata.fld_KodSocso = tbl_Pkjmast.fld_KodSocso;
-                    //getdata.fld_KodKWSP = tbl_Pkjmast.fld_KodKWSP;
+                    getdata.fld_KodKWSP = tbl_Pkjmast.fld_KodKWSP;
                 }
                 else
                 {
