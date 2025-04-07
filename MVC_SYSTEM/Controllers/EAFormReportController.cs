@@ -187,6 +187,8 @@ namespace MVC_SYSTEM.Controllers
                 (tbl1, tbl2) => new { tbl_Pkjmast = tbl1, tbl_GajiBulanan = tbl2 }).Join(tbl_ByrCarumanTambahan, ee => ee.tbl_GajiBulanan.fld_ID, dd => dd.fld_GajiID,
                 (tbl1, tbl2) => new { tbl_GajiBulanan = tbl1, tbl_ByrCarumanTambahan = tbl2 }).ToList();
 
+            var getWorkerPCBAvailableForSpclInc = dbr.tbl_SpecialInsentif.Where(x => x.fld_LadangID == LadangID && x.fld_Year == YearList).ToList();
+
             var getWorkerIds = getWorkerPCBAvailable.Select(s => s.tbl_GajiBulanan.tbl_Pkjmast.fld_NopkjPermanent).Distinct().ToList();
             var ladang = db.tbl_Ladang.Where(x => x.fld_ID == LadangID).FirstOrDefault();
             var syarikat = db.tbl_Syarikat.Where(x => x.fld_NamaPndkSyarikat == ladang.fld_CostCentre).FirstOrDefault();
@@ -203,6 +205,7 @@ namespace MVC_SYSTEM.Controllers
                     var pkjGajiInfo = tbl_GajiBulanan.Where(x => x.fld_NoPkjPermanent == WorkerId).ToList();
                     var gajiID = pkjGajiInfo.Select(s => s.fld_ID).ToList();
                     var pkjPcbContribution = tbl_ByrCarumanTambahan.Where(x => gajiID.Contains(x.fld_GajiID.Value)).ToList();
+                    var pkjSpecialInc = getWorkerPCBAvailableForSpclInc.Where(x => x.fld_Nopkj == pkjInfo.fld_Nopkj).ToList();
 
                     document.NewPage();
                     PdfContentByte cb = writer.DirectContent;
@@ -356,7 +359,8 @@ namespace MVC_SYSTEM.Controllers
                     cb.EndText();
 
                     cb.BeginText();
-                    text = pkjPcbContribution.Where(x => x.fld_KodCaruman == "PCB").Sum(s => s.fld_CarumanPekerja).ToString(); //PCB
+                    var totalpcb = pkjPcbContribution.Where(x => x.fld_KodCaruman == "PCB").Sum(s => s.fld_CarumanPekerja) + pkjSpecialInc.Sum(s => s.fld_PCBCarumanPekerja);
+                    text = totalpcb.ToString(); //PCB
                                                                                                                                // put the alignment and coordinates here
                     text = text == null ? "" : text;
                     cb.ShowTextAligned(2, text, 544f, 295f, 0); //-10
