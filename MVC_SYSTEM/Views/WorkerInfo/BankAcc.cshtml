@@ -60,7 +60,7 @@
                     <div class="col-sm-5">
                         <label class="control-label col-md-3">@GlobalResEstate.lblNoAcc</label>
                         <div class="col-md-9">
-                            @Html.TextBoxFor(model => model.fld_NoAkaun, new { @class = "form-control" })
+                            @Html.TextBoxFor(model => model.fld_NoAkaun, new { @class = "form-control", @disabled = "readonly" })
                             @Html.ValidationMessageFor(model => model.fld_NoAkaun, "", new { @class = "text-danger" })
                         </div>
                     </div>
@@ -68,7 +68,7 @@
                         <label class="control-label col-md-3">@GlobalResEstate.lblAccStatus</label>
                         <div class="col-md-9">
                             @*@Html.TextBoxFor(model => model.fld_StatusAkaun, new { @class = "form-control" })*@
-                            @Html.DropDownList("fld_StatusAkaun", null, htmlAttributes: new { @class = "form-control" })
+                            @Html.DropDownList("fld_StatusAkaun", null, htmlAttributes: new { @class = "form-control" , @disabled = "readonly" })
                         </div>
                     </div>
                 </div>
@@ -77,7 +77,7 @@
                     <div class="col-sm-5">
                         <label class="control-label col-md-3">@GlobalResEstate.lblBankName</label>
                         <div class="col-md-9">
-                            @Html.DropDownList("fld_Kdbank", null, htmlAttributes: new { @class = "form-control" })
+                            @Html.DropDownList("fld_Kdbank", null, htmlAttributes: new { @class = "form-control", @disabled = "readonly" })
                             @*@Html.TextBoxFor(model => model.fld_Kdbank, new { @class = "form-control" })*@
                             @Html.ValidationMessageFor(model => model.fld_Kdbank, "", new { @class = "text-danger" })
                         </div>
@@ -87,7 +87,7 @@
             </div>
         </div>
         <div class="modal-footer">
-            <input class="btn btn-primary" type="submit" value=@GlobalResEstate.btnSave />
+            @*<input class="btn btn-primary" type="submit" value=@GlobalResEstate.btnSave />*@
             <button class="btn btn-warning" data-dismiss="modal">@GlobalResEstate.btnBack</button>
         </div>
     }

@@ -17,7 +17,6 @@ namespace MVC_SYSTEM.Class
             catalog = getconnection.InitialCatalog;
             user = getconnection.userID;
             pass = getconnection.Password;
-
         }
 
         public string GetConnectionString(int? wlyhID, int? syrktID, int? ngrID)
@@ -25,7 +24,6 @@ namespace MVC_SYSTEM.Class
             MVC_SYSTEM_MasterModels db = new MVC_SYSTEM_MasterModels();
             var getConnection = db.tblConnections.Where(x => x.wilayahID == wlyhID && x.syarikatID == syrktID && x.negaraID == ngrID && x.deleted == false).FirstOrDefault();
             var host = getConnection.DataSource;
-            //var host = getConnection.DataSourceInternal;
             var catalog = getConnection.InitialCatalog;
             var user = getConnection.userID;
             var pass = getConnection.Password;

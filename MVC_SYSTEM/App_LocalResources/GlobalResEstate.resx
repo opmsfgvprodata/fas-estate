@@ -3555,4 +3555,61 @@
   <data name="lblCopyTo" xml:space="preserve">
     <value>Salin Ke Tahun</value>
   </data>
+  <data name="lblMobile" xml:space="preserve">
+    <value>No. Telefon</value>
+  </data>
+  <data name="lblContractExpiryDate" xml:space="preserve">
+    <value>Tarikh Tamat Kontrak</value>
+  </data>
+  <data name="lblContractInfo" xml:space="preserve">
+    <value>MAKLUMAT KONTRAK</value>
+  </data>
+  <data name="lblContractStartDate" xml:space="preserve">
+    <value>Tarikh Mula Kontrak</value>
+  </data>
+  <data name="lblLast4Pan" xml:space="preserve">
+    <value>No. Akhir 4 Pan</value>
+  </data>
+  <data name="lblPassportExpiryDate" xml:space="preserve">
+    <value>Passport Tarikh Tamat</value>
+  </data>
+  <data name="lblPassportInfo" xml:space="preserve">
+    <value>PASSPORT INFORMATION</value>
+  </data>
+  <data name="lblPassportRenewalStartDate" xml:space="preserve">
+    <value>Tarikh Mula Perbaharui Passport</value>
+  </data>
+  <data name="lblPassportRenewalStatus" xml:space="preserve">
+    <value>Status Perbaharui Passport</value>
+  </data>
+  <data name="lblPassportStartDate" xml:space="preserve">
+    <value>Passport Tarikh Mula</value>
+  </data>
+  <data name="lblPassportStatus" xml:space="preserve">
+    <value>Status Passport</value>
+  </data>
+  <data name="lblPermitInfo" xml:space="preserve">
+    <value>MAKLUMAT PERMIT</value>
+  </data>
+  <data name="lblPermitRenewalStartDate" xml:space="preserve">
+    <value>Tarikh Mula Perbaharui Permit</value>
+  </data>
+  <data name="lblPermitRenewalStatus" xml:space="preserve">
+    <value>Status Perbaharui Permit</value>
+  </data>
+  <data name="lblPermitStartDate" xml:space="preserve">
+    <value>Tarikh Mula Permit</value>
+  </data>
+  <data name="lblPermitStatus" xml:space="preserve">
+    <value>Status Permit</value>
+  </data>
+  <data name="lblServiceInfo" xml:space="preserve">
+    <value>MAKLUMAT PERKHIDMATAN</value>
+  </data>
+  <data name="titleUpdateCostCenter" xml:space="preserve">
+    <value>KEMASKINI COST CENTER</value>
+  </data>
+  <data name="hdrCostCenter" xml:space="preserve">
+    <value>Cost Center</value>
+  </data>
 </root>

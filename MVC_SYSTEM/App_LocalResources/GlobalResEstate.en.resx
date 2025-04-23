@@ -2520,4 +2520,61 @@
   <data name="lblCopyTo" xml:space="preserve">
     <value>Copy To Year</value>
   </data>
+  <data name="lblContractExpiryDate" xml:space="preserve">
+    <value>Contract Expiry Date</value>
+  </data>
+  <data name="lblContractInfo" xml:space="preserve">
+    <value>CONTRACT INFORMATION</value>
+  </data>
+  <data name="lblContractStartDate" xml:space="preserve">
+    <value>Contract Start Date</value>
+  </data>
+  <data name="lblLast4Pan" xml:space="preserve">
+    <value>Last 4 Pan</value>
+  </data>
+  <data name="lblMobile" xml:space="preserve">
+    <value>Telephone No.</value>
+  </data>
+  <data name="lblPassportExpiryDate" xml:space="preserve">
+    <value>Passport Expiry Date</value>
+  </data>
+  <data name="lblPassportInfo" xml:space="preserve">
+    <value>PASSPORT INFORMATION</value>
+  </data>
+  <data name="lblPassportRenewalStartDate" xml:space="preserve">
+    <value>Passport Renewal Start Date</value>
+  </data>
+  <data name="lblPassportRenewalStatus" xml:space="preserve">
+    <value>Passport Renewal Status</value>
+  </data>
+  <data name="lblPassportStartDate" xml:space="preserve">
+    <value>Passport Start Date</value>
+  </data>
+  <data name="lblPassportStatus" xml:space="preserve">
+    <value>Passport Status</value>
+  </data>
+  <data name="lblPermitInfo" xml:space="preserve">
+    <value>PERMIT INFORMATION</value>
+  </data>
+  <data name="lblPermitRenewalStartDate" xml:space="preserve">
+    <value>Permit Renewal Start Date</value>
+  </data>
+  <data name="lblPermitRenewalStatus" xml:space="preserve">
+    <value>Permit Renewal Status</value>
+  </data>
+  <data name="lblPermitStartDate" xml:space="preserve">
+    <value>Permit Start Date</value>
+  </data>
+  <data name="lblPermitStatus" xml:space="preserve">
+    <value>Permit Status</value>
+  </data>
+  <data name="lblServiceInfo" xml:space="preserve">
+    <value>SERVICE INFORMATION</value>
+  </data>
+  <data name="titleUpdateCostCenter" xml:space="preserve">
+    <value>UPDATE COST CENTER</value>
+  </data>
+  <data name="hdrCostCenter" xml:space="preserve">
+    <value>Cost Center</value>
+  </data>
 </root>
