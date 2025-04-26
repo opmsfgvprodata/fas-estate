@@ -45,19 +45,19 @@
 
                 grid.Column(GlobalResEstate.hdrAction, format: (item) =>
                 {
-                //var hasTaxNo = item.WorkerTax != null && item.WorkerTax.Count > 0 && !string.IsNullOrEmpty(item.WorkerTax[0].fld_TaxNo);
+                    //var hasTaxNo = item.WorkerTax != null && item.WorkerTax.Count > 0 && !string.IsNullOrEmpty(item.WorkerTax[0].fld_TaxNo);
 
-                if (item.WorkerTax.Count > 0)
-                {
-                var tindakan = "<a data-modal1='' href='" + @Url.Action("_WorkerTaxInfoEdit", "WorkerInfo") + "/?id=" + item.Pkjmast.fld_NopkjPermanent + "' title='Update Worker Tax Info' class='btn btn-success'><i class='fa fa-edit fa-lg'></i></a>";
-                return @Html.Raw(tindakan);
-                }
-                else
-                {
-                var tindakan = "<a data-modal1='' href='" + @Url.Action("_WorkerTaxInfoCreate", "WorkerInfo") + "/?id=" + item.Pkjmast.fld_NopkjPermanent + "' title='Add Worker Tax Info' class='btn btn-success'><i class='fa fa-plus fa-lg'></i></a>";
+                    if (item.WorkerTax.Count > 0)
+                    {
+                        var tindakan = "<a data-modal1='' href='" + @Url.Action("_WorkerTaxInfoEdit", "WorkerInfo") + "/?id=" + item.Pkjmast.fld_NopkjPermanent + "&year1=" + @ViewBag.year + "' title='Update Worker Tax Info' class='btn btn-success'><i class='fa fa-edit fa-lg'></i></a>";
+                        return @Html.Raw(tindakan);
+                    }
+                    else
+                    {
+                        var tindakan = "<a data-modal1='' href='" + @Url.Action("_WorkerTaxInfoCreate", "WorkerInfo") + "/?id=" + item.Pkjmast.fld_NopkjPermanent + "&year1=" + @ViewBag.year + "' title='Add Worker Tax Info' class='btn btn-success'><i class='fa fa-plus fa-lg'></i></a>";
 
-                return @Html.Raw(tindakan);
-                }
+                        return @Html.Raw(tindakan);
+                    }
                 }, canSort: false, style: "tindakan")
                 ))
 
