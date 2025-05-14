@@ -102,7 +102,8 @@
                                 <label class="control-label col-md-4">@GlobalResEstate.lblYear<font style="color:red">*</font></label>
                                 <div class="col-md-8">
                                     @*@Html.DropDownList("YearList", null, htmlAttributes: new { @class = "form-control" })*@
-                                    @Html.DropDownListFor(model => model.fld_Year, new SelectList(ViewBag.YearList, "Value", "Text"), new { @class = "form-control", required = "required" })
+                                    @*@Html.DropDownListFor(model => model.fld_Year, new SelectList(ViewBag.YearList, "Value", "Text"), new { @class = "form-control", required = "required" })*@
+                                    @Html.TextBoxFor(model => model.fld_Year, new { @class = "form-control", @readonly = "readonly" })
                                     @Html.ValidationMessageFor(model => model.fld_Year, "", new { @class = "text-danger" })
                                 </div>
                             </div>

@@ -844,7 +844,7 @@ namespace MVC_SYSTEM.Controllers
 
                     }
 
-                    var totalPCB = pkjPcbContribution.Sum(x => x.fld_CarumanPekerja) + pkjSpecialInc.Sum(x => x.fld_PCBCarumanPekerja);
+                    var totalPCB = pkjPcbContribution.Sum(x => x.fld_CarumanPekerja);
                     var totalCP38 = pkjPcbForm2.Sum(x => x.fld_CP38Amount);
 
                     cb.BeginText();
