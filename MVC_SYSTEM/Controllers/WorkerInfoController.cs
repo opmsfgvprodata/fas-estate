@@ -9505,14 +9505,14 @@ namespace MVC_SYSTEM.Controllers
 
                     var getdata = dbr.tbl_TaxWorkerInfo.Where(w => w.fld_NopkjPermanent == tbl_TaxWorkerInfo.fld_NopkjPermanent &&
                     w.fld_LadangID == LadangID && w.fld_WilayahID == WilayahID &&
-                    w.fld_SyarikatID == SyarikatID && w.fld_NegaraID == NegaraID).FirstOrDefault();
+                    w.fld_SyarikatID == SyarikatID && w.fld_NegaraID == NegaraID && w.fld_Year == tbl_TaxWorkerInfo.fld_Year).FirstOrDefault();
 
                     getdata.fld_TaxNo = tbl_TaxWorkerInfo.fld_TaxNo;
                     getdata.fld_TaxResidency = tbl_TaxWorkerInfo.fld_TaxResidency;
                     getdata.fld_TaxMaritalStatus = tbl_TaxWorkerInfo.fld_TaxMaritalStatus;
                     getdata.fld_IsIndividuOKU = tbl_TaxWorkerInfo.fld_IsIndividuOKU;
                     getdata.fld_IsSpouseOKU = tbl_TaxWorkerInfo.fld_IsSpouseOKU;
-                    getdata.fld_Year = tbl_TaxWorkerInfo.fld_Year;
+                    //getdata.fld_Year = tbl_TaxWorkerInfo.fld_Year;
                     getdata.fld_ChildBelow18Full = tbl_TaxWorkerInfo.fld_ChildBelow18Full;
                     getdata.fld_ChildBelow18Half = tbl_TaxWorkerInfo.fld_ChildBelow18Half;
                     getdata.fld_ChildAbove18CertFull = tbl_TaxWorkerInfo.fld_ChildAbove18CertFull;
