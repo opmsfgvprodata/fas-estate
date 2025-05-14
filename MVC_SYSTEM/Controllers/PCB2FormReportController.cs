@@ -189,8 +189,11 @@ namespace MVC_SYSTEM.Controllers
             var getWorkerPCBAvailable = tbl_Pkjmast.Join(tbl_GajiBulanan, e => e.fld_Nopkj, d => d.fld_Nopkj,
                 (tbl1, tbl2) => new { tbl_Pkjmast = tbl1, tbl_GajiBulanan = tbl2 }).Join(tbl_ByrCarumanTambahan, ee => ee.tbl_GajiBulanan.fld_ID, dd => dd.fld_GajiID,
                 (tbl1, tbl2) => new { tbl_GajiBulanan = tbl1, tbl_ByrCarumanTambahan = tbl2 }).ToList();
+            //
+            var getWorkerPCBAvailableForSpclInc = dbr.tbl_SpecialInsentif.Where(x => x.fld_LadangID == LadangID && x.fld_Year == YearList).ToList();
 
             var getWorkerIds = getWorkerPCBAvailable.Select(s => s.tbl_GajiBulanan.tbl_Pkjmast.fld_NopkjPermanent).Distinct().ToList();
+
             var ladang = db.tbl_Ladang.Where(x => x.fld_ID == LadangID).FirstOrDefault();
             var syarikat = db.tbl_Syarikat.Where(x => x.fld_NamaPndkSyarikat == ladang.fld_CostCentre).FirstOrDefault();
             // the pdf content
@@ -205,6 +208,7 @@ namespace MVC_SYSTEM.Controllers
                     var gajiID = pkjGajiInfo.Select(s => s.fld_ID).ToList();
                     var pkjPcbContribution = tbl_ByrCarumanTambahan.Where(x => gajiID.Contains(x.fld_GajiID.Value)).ToList();
                     var pkjPcbForm2 = tbl_TaxPCB2Form.Where(x => gajiID.Contains(x.fld_GajiID.Value)).ToList();
+                    var pkjSpecialInc = getWorkerPCBAvailableForSpclInc.Where(x => x.fld_Nopkj == pkjInfo.fld_Nopkj).ToList();
 
                     document.NewPage();
                     PdfContentByte cb = writer.DirectContent;
@@ -255,6 +259,9 @@ namespace MVC_SYSTEM.Controllers
                     cb.BeginText();
                     text = pkjTaxInfo.fld_TaxNo; //Tax number
                                                  // put the alignment and coordinates here
+
+                    text = text == null ? "" : text;
+
                     cb.ShowTextAligned(0, text, 285f, 568f, 0);
                     cb.EndText();
 
@@ -267,15 +274,18 @@ namespace MVC_SYSTEM.Controllers
 
                     cb.BeginText();
                     text = syarikat.fld_EmployerTaxNo; //Worker No
-                                                     // put the alignment and coordinates here
+                                                       // put the alignment and coordinates here
                     cb.ShowTextAligned(0, text, 285f, 543f, 0);
                     cb.EndText();
 
                     var pCB1 = pkjPcbContribution.Where(x => x.fld_Month == 1).FirstOrDefault();
+                    var pkjSpecialInc1 = pkjSpecialInc.Where(x => x.fld_Month == 1).FirstOrDefault(); 
                     var pCB2Form1 = pkjPcbForm2.Where(x => x.fld_Month == 1).FirstOrDefault();
+                    
 
                     if (pCB1 != null)
                     {
+                        pCB1.fld_CarumanPekerja = (pkjSpecialInc1 != null ? pkjSpecialInc1.fld_PCBCarumanPekerja : 0) + pCB1.fld_CarumanPekerja;
                         cb.BeginText();
                         text = pCB1.fld_CarumanPekerja.ToString() == "0.00" || pCB1.fld_CarumanPekerja <= 10 ? "" : pCB1.fld_CarumanPekerja.ToString();
                         cb.ShowTextAligned(1, text, 180f, 437f, 0);
@@ -317,10 +327,12 @@ namespace MVC_SYSTEM.Controllers
                     }
 
                     var pCB2 = pkjPcbContribution.Where(x => x.fld_Month == 2).FirstOrDefault();
+                    var pkjSpecialInc2 = pkjSpecialInc.Where(x => x.fld_Month == 2).FirstOrDefault();
                     var pCB2Form2 = pkjPcbForm2.Where(x => x.fld_Month == 2).FirstOrDefault();
 
                     if (pCB2 != null)
                     {
+                        pCB2.fld_CarumanPekerja = (pkjSpecialInc2 != null ? pkjSpecialInc2.fld_PCBCarumanPekerja : 0) + pCB2.fld_CarumanPekerja;
                         cb.BeginText();
                         text = pCB2.fld_CarumanPekerja.ToString() == "0.00" || pCB2.fld_CarumanPekerja <= 10 ? "" : pCB2.fld_CarumanPekerja.ToString();
                         cb.ShowTextAligned(1, text, 180f, 424f, 0);
@@ -362,10 +374,12 @@ namespace MVC_SYSTEM.Controllers
                     }
 
                     var pCB3 = pkjPcbContribution.Where(x => x.fld_Month == 3).FirstOrDefault();
+                    var pkjSpecialInc3 = pkjSpecialInc.Where(x => x.fld_Month == 3).FirstOrDefault();
                     var pCB2Form3 = pkjPcbForm2.Where(x => x.fld_Month == 3).FirstOrDefault();
 
                     if (pCB3 != null)
                     {
+                        pCB3.fld_CarumanPekerja = (pkjSpecialInc3 != null ? pkjSpecialInc3.fld_PCBCarumanPekerja : 0) + pCB3.fld_CarumanPekerja;
                         cb.BeginText();
                         text = pCB3.fld_CarumanPekerja.ToString() == "0.00" || pCB3.fld_CarumanPekerja <= 10 ? "" : pCB3.fld_CarumanPekerja.ToString();
                         cb.ShowTextAligned(1, text, 180f, 411f, 0);
@@ -407,10 +421,12 @@ namespace MVC_SYSTEM.Controllers
                     }
 
                     var pCB4 = pkjPcbContribution.Where(x => x.fld_Month == 4).FirstOrDefault();
+                    var pkjSpecialInc4 = pkjSpecialInc.Where(x => x.fld_Month == 4).FirstOrDefault();
                     var pCB2Form4 = pkjPcbForm2.Where(x => x.fld_Month == 4).FirstOrDefault();
 
                     if (pCB4 != null)
                     {
+                        pCB4.fld_CarumanPekerja = (pkjSpecialInc4 != null ? pkjSpecialInc4.fld_PCBCarumanPekerja : 0) + pCB4.fld_CarumanPekerja;
                         cb.BeginText();
                         text = pCB4.fld_CarumanPekerja.ToString() == "0.00" || pCB4.fld_CarumanPekerja <= 10 ? "" : pCB4.fld_CarumanPekerja.ToString();
                         cb.ShowTextAligned(1, text, 180f, 398f, 0);
@@ -452,10 +468,12 @@ namespace MVC_SYSTEM.Controllers
                     }
 
                     var pCB5 = pkjPcbContribution.Where(x => x.fld_Month == 5).FirstOrDefault();
+                    var pkjSpecialInc5 = pkjSpecialInc.Where(x => x.fld_Month == 5).FirstOrDefault();
                     var pCB2Form5 = pkjPcbForm2.Where(x => x.fld_Month == 5).FirstOrDefault();
 
                     if (pCB5 != null)
                     {
+                        pCB5.fld_CarumanPekerja = (pkjSpecialInc5 != null ? pkjSpecialInc5.fld_PCBCarumanPekerja : 0) + pCB5.fld_CarumanPekerja;
                         cb.BeginText();
                         text = pCB5.fld_CarumanPekerja.ToString() == "0.00" || pCB5.fld_CarumanPekerja <= 10 ? "" : pCB5.fld_CarumanPekerja.ToString();
                         cb.ShowTextAligned(1, text, 180f, 385f, 0);
@@ -497,10 +515,12 @@ namespace MVC_SYSTEM.Controllers
                     }
 
                     var pCB6 = pkjPcbContribution.Where(x => x.fld_Month == 6).FirstOrDefault();
+                    var pkjSpecialInc6 = pkjSpecialInc.Where(x => x.fld_Month == 6).FirstOrDefault();
                     var pCB2Form6 = pkjPcbForm2.Where(x => x.fld_Month == 6).FirstOrDefault();
 
                     if (pCB6 != null)
                     {
+                        pCB6.fld_CarumanPekerja = (pkjSpecialInc6 != null ? pkjSpecialInc6.fld_PCBCarumanPekerja : 0) + pCB6.fld_CarumanPekerja;
                         cb.BeginText();
                         text = pCB6.fld_CarumanPekerja.ToString() == "0.00" || pCB6.fld_CarumanPekerja <= 10 ? "" : pCB6.fld_CarumanPekerja.ToString();
                         cb.ShowTextAligned(1, text, 180f, 372f, 0);
@@ -542,10 +562,12 @@ namespace MVC_SYSTEM.Controllers
                     }
 
                     var pCB7 = pkjPcbContribution.Where(x => x.fld_Month == 7).FirstOrDefault();
+                    var pkjSpecialInc7 = pkjSpecialInc.Where(x => x.fld_Month == 7).FirstOrDefault();
                     var pCB2Form7 = pkjPcbForm2.Where(x => x.fld_Month == 7).FirstOrDefault();
 
                     if (pCB7 != null)
                     {
+                        pCB7.fld_CarumanPekerja = (pkjSpecialInc7 != null ? pkjSpecialInc7.fld_PCBCarumanPekerja : 0) + pCB7.fld_CarumanPekerja;
                         cb.BeginText();
                         text = pCB7.fld_CarumanPekerja.ToString() == "0.00" || pCB7.fld_CarumanPekerja <= 10 ? "" : pCB7.fld_CarumanPekerja.ToString();
                         cb.ShowTextAligned(1, text, 180f, 359f, 0);
@@ -587,10 +609,12 @@ namespace MVC_SYSTEM.Controllers
                     }
 
                     var pCB8 = pkjPcbContribution.Where(x => x.fld_Month == 8).FirstOrDefault();
+                    var pkjSpecialInc8 = pkjSpecialInc.Where(x => x.fld_Month == 8).FirstOrDefault();
                     var pCB2Form8 = pkjPcbForm2.Where(x => x.fld_Month == 8).FirstOrDefault();
 
                     if (pCB8 != null)
                     {
+                        pCB8.fld_CarumanPekerja = (pkjSpecialInc8 != null ? pkjSpecialInc8.fld_PCBCarumanPekerja : 0) + pCB8.fld_CarumanPekerja;
                         cb.BeginText();
                         text = pCB8.fld_CarumanPekerja.ToString() == "0.00" || pCB8.fld_CarumanPekerja <= 10 ? "" : pCB8.fld_CarumanPekerja.ToString();
                         cb.ShowTextAligned(1, text, 180f, 346f, 0);
@@ -632,10 +656,12 @@ namespace MVC_SYSTEM.Controllers
                     }
 
                     var pCB9 = pkjPcbContribution.Where(x => x.fld_Month == 9).FirstOrDefault();
+                    var pkjSpecialInc9 = pkjSpecialInc.Where(x => x.fld_Month == 9).FirstOrDefault();
                     var pCB2Form9 = pkjPcbForm2.Where(x => x.fld_Month == 9).FirstOrDefault();
 
                     if (pCB9 != null)
                     {
+                        pCB9.fld_CarumanPekerja = (pkjSpecialInc9 != null ? pkjSpecialInc9.fld_PCBCarumanPekerja : 0) + pCB9.fld_CarumanPekerja;
                         cb.BeginText();
                         text = pCB9.fld_CarumanPekerja.ToString() == "0.00" || pCB9.fld_CarumanPekerja <= 10 ? "" : pCB9.fld_CarumanPekerja.ToString();
                         cb.ShowTextAligned(1, text, 180f, 333f, 0);
@@ -677,10 +703,12 @@ namespace MVC_SYSTEM.Controllers
                     }
 
                     var pCB10 = pkjPcbContribution.Where(x => x.fld_Month == 10).FirstOrDefault();
+                    var pkjSpecialInc10 = pkjSpecialInc.Where(x => x.fld_Month == 10).FirstOrDefault();
                     var pCB2Form10 = pkjPcbForm2.Where(x => x.fld_Month == 10).FirstOrDefault();
 
                     if (pCB10 != null)
                     {
+                        pCB10.fld_CarumanPekerja = (pkjSpecialInc10 != null ? pkjSpecialInc10.fld_PCBCarumanPekerja : 0) + pCB10.fld_CarumanPekerja;
                         cb.BeginText();
                         text = pCB10.fld_CarumanPekerja.ToString() == "0.00" || pCB10.fld_CarumanPekerja <= 10 ? "" : pCB10.fld_CarumanPekerja.ToString();
                         cb.ShowTextAligned(1, text, 180f, 320f, 0);
@@ -722,10 +750,12 @@ namespace MVC_SYSTEM.Controllers
                     }
 
                     var pCB11 = pkjPcbContribution.Where(x => x.fld_Month == 11).FirstOrDefault();
+                    var pkjSpecialInc11 = pkjSpecialInc.Where(x => x.fld_Month == 11).FirstOrDefault();
                     var pCB2Form11 = pkjPcbForm2.Where(x => x.fld_Month == 11).FirstOrDefault();
 
                     if (pCB11 != null)
                     {
+                        pCB11.fld_CarumanPekerja = (pkjSpecialInc11 != null ? pkjSpecialInc11.fld_PCBCarumanPekerja : 0) + pCB11.fld_CarumanPekerja;
                         cb.BeginText();
                         text = pCB11.fld_CarumanPekerja.ToString() == "0.00" || pCB11.fld_CarumanPekerja <= 10 ? "" : pCB11.fld_CarumanPekerja.ToString();
                         cb.ShowTextAligned(1, text, 180f, 307f, 0);
@@ -767,10 +797,12 @@ namespace MVC_SYSTEM.Controllers
                     }
 
                     var pCB12 = pkjPcbContribution.Where(x => x.fld_Month == 12).FirstOrDefault();
+                    var pkjSpecialInc12 = pkjSpecialInc.Where(x => x.fld_Month == 12).FirstOrDefault();
                     var pCB2Form12 = pkjPcbForm2.Where(x => x.fld_Month == 12).FirstOrDefault();
 
                     if (pCB12 != null)
                     {
+                        pCB12.fld_CarumanPekerja = (pkjSpecialInc12 != null ? pkjSpecialInc12.fld_PCBCarumanPekerja : 0) + pCB12.fld_CarumanPekerja;
                         cb.BeginText();
                         text = pCB12.fld_CarumanPekerja.ToString() == "0.00" || pCB12.fld_CarumanPekerja <= 10 ? "" : pCB12.fld_CarumanPekerja.ToString();
                         cb.ShowTextAligned(1, text, 180f, 294f, 0);

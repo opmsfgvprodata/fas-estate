@@ -187,7 +187,12 @@ namespace MVC_SYSTEM.Controllers
                 (tbl1, tbl2) => new { tbl_Pkjmast = tbl1, tbl_GajiBulanan = tbl2 }).Join(tbl_ByrCarumanTambahan, ee => ee.tbl_GajiBulanan.fld_ID, dd => dd.fld_GajiID,
                 (tbl1, tbl2) => new { tbl_GajiBulanan = tbl1, tbl_ByrCarumanTambahan = tbl2 }).ToList();
 
+            var getWorkerPCBAvailableForSpclInc = dbr.tbl_SpecialInsentif.Where(x => x.fld_LadangID == LadangID && x.fld_Year == YearList).ToList();
+
             var getWorkerIds = getWorkerPCBAvailable.Select(s => s.tbl_GajiBulanan.tbl_Pkjmast.fld_NopkjPermanent).Distinct().ToList();
+            var ladang = db.tbl_Ladang.Where(x => x.fld_ID == LadangID).FirstOrDefault();
+            var syarikat = db.tbl_Syarikat.Where(x => x.fld_NamaPndkSyarikat == ladang.fld_CostCentre).FirstOrDefault();
+            var eASiriNos = db.tbl_EAWorkerSiriNo.ToList();
 
             // the pdf content
             if (getWorkerIds.Count() > 0)
@@ -200,6 +205,7 @@ namespace MVC_SYSTEM.Controllers
                     var pkjGajiInfo = tbl_GajiBulanan.Where(x => x.fld_NoPkjPermanent == WorkerId).ToList();
                     var gajiID = pkjGajiInfo.Select(s => s.fld_ID).ToList();
                     var pkjPcbContribution = tbl_ByrCarumanTambahan.Where(x => gajiID.Contains(x.fld_GajiID.Value)).ToList();
+                    var pkjSpecialInc = getWorkerPCBAvailableForSpclInc.Where(x => x.fld_Nopkj == pkjInfo.fld_Nopkj).ToList();
 
                     document.NewPage();
                     PdfContentByte cb = writer.DirectContent;
@@ -216,6 +222,19 @@ namespace MVC_SYSTEM.Controllers
                     cb.ShowTextAligned(0, text, 373f, 725f, 0);
                     cb.EndText();
 
+                    var eASiriNo = eASiriNos.Where(x => x.fld_WorkerNo == WorkerId).FirstOrDefault();
+                    cb.BeginText();
+                    text = eASiriNo != null ? eASiriNo.fld_SiriNo : ""; // siri no
+
+                    cb.ShowTextAligned(0, text, 117f, 738f, 0);
+                    cb.EndText();
+
+                    cb.BeginText();
+                    text = syarikat.fld_EmployerTaxNo; // employer no
+
+                    cb.ShowTextAligned(0, text, 117f, 725f, 0);
+                    cb.EndText();
+
                     cb.BeginText();
                     text = "CAW. JALAN DUTA"; //Year
                                               // put the alignment and coordinates here
@@ -223,8 +242,8 @@ namespace MVC_SYSTEM.Controllers
                     cb.EndText();
 
                     cb.BeginText();
-                    text = pkjTaxInfo.fld_TaxNo; //Tax number
-                                                 // put the alignment and coordinates here
+                    text = pkjTaxInfo.fld_TaxNo == null ? "" : pkjTaxInfo.fld_TaxNo; //Tax number
+                                                                                     // put the alignment and coordinates here
                     cb.ShowTextAligned(0, text, 420f, 738f, 0); //-10
                     cb.EndText();
 
@@ -250,14 +269,14 @@ namespace MVC_SYSTEM.Controllers
 
                     cb.BeginText();
                     text = pkjInfo.fld_Kdrkyt == "MA" ? pkjInfo.fld_Nokp : ""; //IC No
-                                             // put the alignment and coordinates here
+                                                                               // put the alignment and coordinates here
                     text = text == null ? "" : text;
                     cb.ShowTextAligned(0, text, 163f, 656f, 0); //-10
                     cb.EndText();
 
                     cb.BeginText();
                     text = pkjInfo.fld_Kdrkyt != "MA" && string.IsNullOrEmpty(pkjInfo.fld_Psptno) ? pkjInfo.fld_Nokp : pkjInfo.fld_Psptno; //Passport
-                                               // put the alignment and coordinates here
+                                                                                                                                           // put the alignment and coordinates here
                     text = text == null ? "" : text;
                     cb.ShowTextAligned(0, text, 436f, 656f, 0); //-10
                     cb.EndText();
@@ -323,27 +342,28 @@ namespace MVC_SYSTEM.Controllers
                     text = pkjGajiInfo.Sum(s => s.fld_GajiKasar).ToString(); //Gross pay
                                                                              // put the alignment and coordinates here
                     text = text == null ? "" : text;
-                    cb.ShowTextAligned(1, text, 515f, 555f, 0); //-10
+                    cb.ShowTextAligned(2, text, 544f, 555f, 0); //-10
                     cb.EndText();
 
                     cb.BeginText();
                     text = ""; //Bonus pay
                                // put the alignment and coordinates here
-                    cb.ShowTextAligned(1, text, 515f, 542f, 0); //-10
+                    cb.ShowTextAligned(2, text, 544f, 542f, 0); //-10
                     cb.EndText();
 
                     cb.BeginText();
                     text = pkjGajiInfo.Sum(s => s.fld_GajiKasar).ToString(); //Gross pay
                     // put the alignment and coordinates here
                     text = text == null ? "" : text;
-                    cb.ShowTextAligned(1, text, 515f, 327f, 0); //-10
+                    cb.ShowTextAligned(2, text, 544f, 327f, 0); //-10
                     cb.EndText();
 
                     cb.BeginText();
-                    text = pkjPcbContribution.Where(x => x.fld_KodCaruman == "PCB").Sum(s => s.fld_CarumanPekerja).ToString(); //PCB
+                    var totalpcb = pkjPcbContribution.Where(x => x.fld_KodCaruman == "PCB").Sum(s => s.fld_CarumanPekerja) + pkjSpecialInc.Sum(s => s.fld_PCBCarumanPekerja);
+                    text = totalpcb.ToString(); //PCB
                                                                                                                                // put the alignment and coordinates here
                     text = text == null ? "" : text;
-                    cb.ShowTextAligned(1, text, 515f, 295f, 0); //-10
+                    cb.ShowTextAligned(2, text, 544f, 295f, 0); //-10
                     cb.EndText();
 
                     var QC = pkjPcbContribution.Where(x => x.fld_KodCaruman == "PCB").OrderBy(o => o.fld_n).Take(1).FirstOrDefault();
@@ -355,7 +375,7 @@ namespace MVC_SYSTEM.Controllers
                     }
                     text = qC.ToString(); //QC
                                           // put the alignment and coordinates here
-                    cb.ShowTextAligned(1, text, 515f, 208f, 0); //-10
+                    cb.ShowTextAligned(2, text, 544f, 208f, 0); //-10
                     cb.EndText();
 
                     cb.BeginText();
@@ -368,7 +388,7 @@ namespace MVC_SYSTEM.Controllers
                     text = pkjGajiInfo.Sum(s => s.fld_KWSPPkj).ToString(); //KWSP Worker Pay
                                                                            // put the alignment and coordinates here
                     text = text == null ? "" : text;
-                    cb.ShowTextAligned(1, text, 515f, 160f, 0); //-10
+                    cb.ShowTextAligned(2, text, 544f, 160f, 0); //-10
                     cb.EndText();
 
                     string[] perkesoConCode = new string[] { "SIP", "SBKP" };
@@ -377,7 +397,7 @@ namespace MVC_SYSTEM.Controllers
                     text = perkeso.ToString(); //PERKESO Worker Pay //PERKESO Worker Pay
                                                // put the alignment and coordinates here
                     text = text == null ? "" : text;
-                    cb.ShowTextAligned(1, text, 515f, 147f, 0); //-10
+                    cb.ShowTextAligned(2, text, 544f, 147f, 0); //-10
                     cb.EndText();
 
                     cb.BeginText();

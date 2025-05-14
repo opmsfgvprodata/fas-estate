@@ -1,0 +1,1142 @@
+﻿@model MVC_SYSTEM.Models.tbl_Pkjmast
+@using MVC_SYSTEM.Class
+@{
+    ViewBag.Title = "WorkerUpdate";
+    //Layout = "~/Views/Shared/_LayoutMain.cshtml";
+    GetConfig getconfig = new GetConfig();
+    GetTriager GetTriager = new GetTriager();
+    string dateformat = getconfig.GetData("dateformat3");
+    //HtmlHelper.UnobtrusiveJavaScriptEnabled = false;
+}
+
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 class="modal-title">@GlobalResEstate.titleUpdate</h3>
+</div>
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div class="modal-body">
+        <div class="form-horizontal">
+            <div class="panel panel-primary">
+                <div class="panel-heading">@GlobalResEstate.lblhdrPersonalInfo.ToUpper()</div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="panel-body col-sm-9">
+                            @* Added by Shazana on 21/9/20
+                                    .@
+                                <div class="form-group">
+                                    <div class="col-sm-2">
+                                        <label><font style="color:red">*</font> - @GlobalResEstate.msgCompulsory</label>
+                                    </div>
+                                </div>
+                                @* Close Added by Shazana on 21/9/2021*@
+                            <div class="form-group">
+                                <div class="col-sm-3">
+                                    <label>@GlobalResEstate.hdrNoPkj</label>
+                                    @Html.EditorFor(model => model.fld_Nopkj, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                                    @Html.ValidationMessageFor(model => model.fld_Nopkj, "", new { @class = "text-danger" })
+                                </div>
+                                <div class="col-sm-6">
+                                    <!--<label>@GlobalResEstate.hdrName</label>--> @*Commented by Shazana on 21/9/2021*@
+                                    <label>@GlobalResEstate.hdrName<font style="color:red">*</font></label> @*Added by Shazana on 21/9/2021*@
+                                    @Html.EditorFor(model => model.fld_Nama, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                                    @Html.ValidationMessageFor(model => model.fld_Nama, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-4">
+                                    @*<label>@GlobalResEstate.hdrNoKp</label> Commented by Shazana on 21/9/2021*@
+                                    <label>@GlobalResEstate.hdrNoKp<font style="color:red">*</font></label> @*Added by Shazana on 21/9/2021*@
+                                    @Html.EditorFor(model => model.fld_Nokp, new { htmlAttributes = new { @class = "form-control numeric", @readonly = "readonly" } })
+                                    @Html.ValidationMessageFor(model => model.fld_Nokp, "", new { @class = "text-danger" })
+                                </div>
+                                <div class="col-sm-3">
+                                    @*<label>@GlobalResEstate.lblDOB</label>Commented by Shazana on 21/9/2021*@
+                                    <label>@GlobalResEstate.lblDOB<font style="color:red">*</font></label> @*Added by Shazana on 21/9/2021*@
+                                    <div class='input-group date' id='datetimepicker1'>
+                                        @Html.EditorFor(Model => Model.fld_Trlhr, new { htmlAttributes = new { @class = "form-control", @type = "text", @data_val = "false", @readonly = "readonly" } })
+
+                                        @*@Html.ValidationMessageFor(model => model.fld_Trlhr, "", new { @class = "text-danger" })*@
+                                        <span class="input-group-addon">
+                                            <span class="glyphicon glyphicon-calendar"></span>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col-sm-2">
+                                    <label>Umur</label>
+                                    @Html.TextBox("UmurPkj", "", new { @class = "form-control", @readonly = "readonly" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-3">
+                                    @*<label>@GlobalResEstate.lblGender</label>Commented by Shazana on 21/9/2021*@
+                                    <label>@GlobalResEstate.lblGender<font style="color:red">*</font></label> @*Added by Shazana on 21/9/2021*@
+                                    @Html.DropDownList("fld_Kdjnt", null, htmlAttributes: new { @class = "form-control", @readonly = "readonly" })
+                                    @Html.ValidationMessageFor(model => model.fld_Kdjnt, "", new { @class = "text-danger" })
+                                </div>
+                                <div class="col-sm-3">
+                                    @*<label>@GlobalResEstate.lblMarriageStatus</label>Commented by Shazana on 21/9/2021*@
+                                    <label>@GlobalResEstate.lblMarriageStatus<font style="color:red">*</font></label> @*Added by Shazana on 21/9/2021*@
+                                    @Html.DropDownList("fld_Kdkwn", null, htmlAttributes: new { @class = "form-control", @readonly = "readonly" })
+                                    @Html.ValidationMessageFor(model => model.fld_Kdkwn, "", new { @class = "text-danger" })
+                                </div>
+                                <div class="col-sm-3">
+                                    @*<label>@GlobalResEstate.lblPeneroka</label>Commented by Shazana on 21/9/2021*@
+                                    <label>@GlobalResEstate.lblPeneroka<font style="color:red">*</font></label> @*Added by Shazana on 21/9/2021*@
+                                    @Html.DropDownList("fld_Kpenrka", null, htmlAttributes: new { @class = "form-control", @readonly = "readonly" })
+                                    @Html.ValidationMessageFor(model => model.fld_Kpenrka, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group col-sm-3" style="text-align:center">
+                            <img src=@ViewBag.ImageSource id="image" style="width:200px;height:200px;border:1px solid;cursor:pointer;" />
+                            <input class="form-control btn btn-default btn-file" style="display:none" type="file" name="file" id="file" onchange="changemediacover()" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-2">
+                            @*<label>@GlobalResEstate.lblRace</label>Commented by Shazana on 21/9/2021*@
+                            <label>@GlobalResEstate.lblRace<font style="color:red">*</font></label> @*Added by Shazana on 21/9/2021*@
+                            @Html.DropDownList("fld_Kdbgsa", null, htmlAttributes: new { @class = "form-control", @readonly = "readonly" })
+                            @Html.ValidationMessageFor(model => model.fld_Kdbgsa, "", new { @class = "text-danger" })
+                        </div>
+                        <div class="col-sm-3">
+                            @*<label>@GlobalResEstate.lblReligion</label>Commented by Shazana on 21/9/2021*@
+                            <label>@GlobalResEstate.lblReligion<font style="color:red">*</font></label> @*Added by Shazana on 21/9/2021*@
+                            @Html.DropDownList("fld_Kdagma", null, htmlAttributes: new { @class = "form-control", @readonly = "readonly" })
+                            @Html.ValidationMessageFor(model => model.fld_Kdagma, "", new { @class = "text-danger" })
+                        </div>
+                        <div class="col-sm-2">
+                            @*<label>@GlobalResEstate.lblCitizen</label>Commented by Shazana on 21/9/2021*@
+                            <label>@GlobalResEstate.lblCitizen<font style="color:red">*</font></label> @*Added by Shazana on 21/9/2021*@
+                            @Html.DropDownList("fld_Kdrkyt", null, htmlAttributes: new { @class = "form-control", @readonly = "readonly" })
+                            @Html.ValidationMessageFor(model => model.fld_Kdrkyt, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-5">
+                            @*<label>@GlobalResEstate.lblAddress</label>Commented by Shazana on 21/9/2021*@
+                            <label>@GlobalResEstate.lblAddress<font style="color:red">*</font></label> @*Added by Shazana on 21/9/2021*@
+                            @Html.EditorFor(model => model.fld_Almt1, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                            @Html.ValidationMessageFor(model => model.fld_Almt1, "", new { @class = "text-danger" })
+                        </div>
+                        <div class="col-sm-3">
+                            @*<label>@GlobalResEstate.lblPostcode</label>Commented by Shazana on 21/9/2021*@
+                            @*@Html.EditorFor(model => model.fld_Poskod, new { htmlAttributes = new { @class = "form-control" } }) Commented by Shazana on 21/9/2021*@
+                            <label>@GlobalResEstate.lblPostcode<font style="color:red">*</font></label> @*Added by Shazana on 21/9/2021*@
+                            @Html.EditorFor(model => model.fld_Poskod, new { htmlAttributes = new { @class = "form-control digit", @maxlength = "5", @readonly = "readonly" } }) @*Added by Shazana on 21/9/2021*@
+                            @Html.ValidationMessageFor(model => model.fld_Poskod, "", new { @class = "text-danger" })
+                        </div>
+                        <div class="col-sm-3">
+                            @*<label>@GlobalResEstate.lblDistrict</label>Commented by Shazana on 21/9/2021*@
+                            <label>@GlobalResEstate.lblDistrict<font style="color:red">*</font></label> @*Added by Shazana on 21/9/2021*@
+                            @Html.EditorFor(model => model.fld_Daerah, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                            @Html.ValidationMessageFor(model => model.fld_Daerah, "", new { @class = "text-danger" })
+                        </div>
+                        <div class="col-sm-3">
+                            @*<label>@GlobalResEstate.lblState</label>Commented by Shazana on 21/9/2021*@
+                            <label>@GlobalResEstate.lblState<font style="color:red">*</font></label> @*Added by Shazana on 21/9/2021*@
+                            @Html.DropDownList("fld_Neg", null, htmlAttributes: new { @class = "form-control", @readonly = "readonly" })
+                            @Html.ValidationMessageFor(model => model.fld_Neg, "", new { @class = "text-danger" })
+                        </div>
+                        <div class="col-sm-3">
+                            @*<label>@GlobalResEstate.lblCountry</label>Commented by Shazana on 21/9/2021*@
+                            <label>@GlobalResEstate.lblCountry<font style="color:red">*</font></label> @*Added by Shazana on 21/9/2021*@
+                            @Html.DropDownList("fld_Negara", null, htmlAttributes: new { @class = "form-control", @readonly = "readonly" })
+                            @Html.ValidationMessageFor(model => model.fld_Negara, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-5">
+                            <label>Alamat kampung halaman</label>
+                            @Html.EditorFor(model => model.fld_Almt2, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                            @Html.ValidationMessageFor(model => model.fld_Almt2, "", new { @class = "text-danger" })
+                        </div>
+                        <div class="col-sm-3">
+                            <label>@GlobalResEstate.lblCountry</label>
+                            @Html.DropDownList("fld_Negara2", null, htmlAttributes: new { @class = "form-control", @readonly = "readonly" })
+                            @Html.ValidationMessageFor(model => model.fld_Negara2, "", new { @class = "text-danger" })
+                        </div>
+
+                        @*Added by faeza on 21.09.2021*@
+                        <div class="col-sm-3">
+                            <label>@GlobalResEstate.lblMobile [eg: 60121234567]<font style="color:red">*</font></label>
+                            @Html.EditorFor(model => model.fld_Notel, new { htmlAttributes = new { @class = "form-control digit", @readonly = "readonly" } })
+                            @Html.ValidationMessageFor(model => model.fld_Notel, "", new { @class = "text-danger" })
+                        </div>
+
+                    </div>
+                </div>
+                <div class="panel-heading">@GlobalResEstate.lblServiceInfo.ToUpper()</div>
+                <div class="panel-body">
+                    <div class="form-group">
+                        <div class="col-sm-2">
+                            @*<label>@GlobalResEstate.lblWorkerType</label>Commented by Shazana on 21/9/2021*@
+                            <label>@GlobalResEstate.lblWorkerType<font style="color:red">*</font></label> @*Added by Shazana on 21/9/2021*@
+                            @Html.DropDownList("fld_Jenispekerja", null, htmlAttributes: new { @class = "form-control", @readonly = "readonly" })
+                            @Html.ValidationMessageFor(model => model.fld_Jenispekerja, "", new { @class = "text-danger" })
+                        </div>
+                        <div class="col-sm-2">
+                            @*<label>@GlobalResEstate.lblWorkerKtgri</label>Commented by Shazana on 21/9/2021*@
+                            <label>@GlobalResEstate.lblWorkerKtgri<font style="color:red">*</font></label> @*Added by Shazana on 21/9/2021*@
+                            @Html.DropDownList("fld_Ktgpkj", null, htmlAttributes: new { @class = "form-control", @readonly = "readonly" })
+                            @Html.ValidationMessageFor(model => model.fld_Ktgpkj, "", new { @class = "text-danger" })
+                        </div>
+                        @if (ViewBag.EditDivision == 1)
+                        {
+                            <div class="col-sm-3">
+                                @*<label>Division</label>Commented by Shazana on 21/9/2021*@
+                                <label>Division<font style="color:red">*</font></label> @*Added by Shazana on 21/9/2021*@
+                                @Html.DropDownList("fld_DivisionID", null, htmlAttributes: new { @class = "form-control", @readonly = "readonly" })
+                                @Html.ValidationMessageFor(model => model.fld_DivisionID, "", new { @class = "text-danger" })
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="col-sm-3">
+                                <label>Division<font style="color:red">*</font></label>
+                                @Html.DropDownList("fld_DivisionID", null, htmlAttributes: new { @class = "form-control", @readonly = "readonly" })
+                                @Html.ValidationMessageFor(model => model.fld_DivisionID, "", new { @class = "text-danger" })
+                            </div>
+                        }
+
+                        <div class="col-sm-3">
+                            <label>@GlobalResEstate.lblSupplier</label>
+                            @Html.DropDownList("fld_Kodbkl", null, htmlAttributes: new { @class = "form-control", @readonly = "readonly" })
+                            @Html.ValidationMessageFor(model => model.fld_Kodbkl, "", new { @class = "text-danger" })
+                        </div>
+
+                        @*Commented by Shazana 18/10/2023*@
+                        @*<div class="col-sm-2">
+                                <label>@GlobalResEstate.lblPermitNo</label>
+                                @Html.EditorFor(model => model.fld_Prmtno, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.fld_Prmtno, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="col-sm-2">
+                                <label>@GlobalResEstate.lblPermitEnd</label>
+                                <div class='input-group date' id='datetimepicker1'>
+                                    @Html.EditorFor(Model => Model.fld_T2prmt, new { htmlAttributes = new { @class = "form-control", @type = "text", @data_val = "false" } })
+                                    @Html.ValidationMessageFor(model => model.fld_T2prmt, "", new { @class = "text-danger" })
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>*@
+                    </div>
+                    <div class="form-group">
+                        @*Commented by Shazana 18/10/2023*@
+                        @*<div class="col-sm-2">
+                                <label>@GlobalResEstate.lblPassportEnd</label>
+                                <div class='input-group date' id='datetimepicker1'>
+                                    @Html.EditorFor(Model => Model.fld_T2pspt, new { htmlAttributes = new { @class = "form-control", @type = "text", @data_val = "false" } })
+                                    @Html.ValidationMessageFor(model => model.fld_T2pspt, "", new { @class = "text-danger" })
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>*@
+                        <div class="col-sm-2">
+                            <label>@GlobalResEstate.lblDateKLIA</label>
+                            <div class='input-group date' id='datetimepicker1'>
+                                @Html.EditorFor(Model => Model.fld_Trmlkj, new { htmlAttributes = new { @class = "form-control", @type = "text", @readonly = "readonly", @data_val = "false" } })
+                                @Html.ValidationMessageFor(model => model.fld_Trmlkj, "", new { @class = "text-danger" })
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-sm-2">
+                            @*<label>@GlobalResEstate.lblStartWork</label>Commented by Shazana on 21/9/2021*@
+                            <label>@GlobalResEstate.lblStartWork<font style="color:red">*</font></label> @*Added by Shazana on 21/9/2021*@
+                            <div class='input-group date' id='datetimepicker1'>
+                                @Html.EditorFor(Model => Model.fld_Trshjw, new { htmlAttributes = new { @class = "form-control", @type = "text", @data_val = "false", @readonly = "readonly" } })
+                                @Html.ValidationMessageFor(model => model.fld_Trshjw, "", new { @class = "text-danger" })
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-2">
+                            <label>Insurans Expired Date</label>
+                            <div class='input-group date' id='datetimepicker1'>
+                                @Html.EditorFor(Model => Model.fld_T2visa, new { htmlAttributes = new { @class = "form-control", @type = "text", @data_val = "false", @placeholder = "dd/mm/yyyy", @readonly = "readonly" } })
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @*Commented by Shazana 18/10/2023*@
+                        @*<div class="col-sm-2">
+                                <label>@GlobalResEstate.lblPassportEnd</label>
+                                <div class='input-group date' id='datetimepicker1'>
+                                    @Html.EditorFor(Model => Model.fld_T2pspt, new { htmlAttributes = new { @class = "form-control", @type = "text", @data_val = "false" } })
+                                    @Html.ValidationMessageFor(model => model.fld_T2pspt, "", new { @class = "text-danger" })
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>*@
+                        <div class="col-sm-2">
+                            <label>@GlobalResEstate.lblPaymentMode<font style="color:red">*</font></label>
+                            @Html.DropDownList("fld_PaymentMode", null, htmlAttributes: new { @class = "form-control", @readonly = "readonly" })
+                            @Html.ValidationMessageFor(model => model.fld_PaymentMode, "", new { @class = "text-danger" })
+                        </div>
+                        <div class="col-sm-3">
+                            <label>@GlobalResEstate.lblLast4Pan [eg:1111]<font style="color:red">*</font></label>
+                            @Html.EditorFor(model => model.fld_Last4Pan, new { htmlAttributes = new { @class = "form-control digit", @maxlength = "4", @readonly = "readonly" } })
+                            @Html.ValidationMessageFor(model => model.fld_Last4Pan, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    @*Added by Faeza on 22/09/2021*@
+                    <!--<div class="form-group">
+                    </div>-->
+
+                </div>
+                @*//Added by Shazana 18/10/2023*@
+                <div class="panel-heading">@GlobalResEstate.lblPassportInfo.ToUpper()</div>
+                <div class="panel-body" id="mklmtPassport">
+
+                    <div class="form-group">
+                        <div class="col-sm-2">
+                            <label>@GlobalResEstate.lblPassportStartDate</label>@*Added by Shazana on 1/9/2021*@
+                            <div class='input-group date' id='datetimepicker1'>
+                                @Html.EditorFor(Model => Model.fld_T1pspt, new { htmlAttributes = new { @class = "form-control", @type = "text", @data_val = "false", @readonly = "readonly" } })
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-sm-2">
+                            <label>@GlobalResEstate.lblPassportExpiryDate@*<font style="color:red">*</font>*@</label>@*Added by Shazana on 1/9/2021*@
+                            <div class='input-group date' id='datetimepicker1'>
+                                @Html.EditorFor(Model => Model.fld_T2pspt, new { htmlAttributes = new { @class = "form-control", @type = "text", @data_val = "false", @readonly = "readonly" } })
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-sm-2">
+                            <label>@GlobalResEstate.lblPassportStatus@*<font style="color:red">*</font>*@</label>
+                            @Html.DropDownList("fld_PassportStatus", null, htmlAttributes: new { @class = "form-control", @readonly = "readonly" })
+                            @Html.ValidationMessageFor(model => model.fld_PassportStatus, "", new { @class = "text-danger" })
+                        </div>
+
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-2">
+                            <label>@GlobalResEstate.lblPassportRenewalStatus@*<font style="color:red">*</font>*@</label>
+                            @Html.DropDownList("fld_PassportRenewalStatus", null, htmlAttributes: new { @class = "form-control", @readonly = "readonly" })
+                            @Html.ValidationMessageFor(model => model.fld_PassportRenewalStatus, "", new { @class = "text-danger" })
+                        </div>
+                        <div class="col-sm-3">
+                            <label>@GlobalResEstate.lblPassportRenewalStartDate@*<font style="color:red">*</font>*@</label>@*Added by Shazana on 1/9/2021*@
+                            <div class='input-group date' id='datetimepicker1'>
+                                @Html.EditorFor(Model => Model.fld_PassportRenewalStartDate, new { htmlAttributes = new { @class = "form-control", @type = "text", @data_val = "false", @readonly = "readonly" } })
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+                                </span>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="panel-heading">@GlobalResEstate.lblPermitInfo.ToUpper()</div>
+                <div class="panel-body" id="mklmtPermit">
+                    <div class="form-group">
+                        <div class="col-sm-2">
+                            <label>@GlobalResEstate.lblPermitNo</label>
+                            @Html.EditorFor(model => model.fld_Prmtno, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                            @Html.ValidationMessageFor(model => model.fld_Prmtno, "", new { @class = "text-danger" })
+                        </div>
+                        <div class="col-sm-2">
+                            <label>@GlobalResEstate.lblPermitStartDate</label>@*Added by Shazana on 1/9/2021*@
+                            <div class='input-group date' id='datetimepicker1'>
+                                @Html.EditorFor(Model => Model.fld_T1prmt, new { htmlAttributes = new { @class = "form-control", @type = "text", @data_val = "false", @readonly = "readonly" } })
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-sm-2">
+                            <label>@GlobalResEstate.lblPermitEnd</label>
+                            <div class='input-group date' id='datetimepicker1'>
+                                @Html.EditorFor(Model => Model.fld_T2prmt, new { htmlAttributes = new { @class = "form-control", @type = "text", @data_val = "false", @readonly = "readonly" } })
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+                                </span>
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-2">
+                            <label>@GlobalResEstate.lblPermitStatus@*<font style="color:red">*</font>*@</label>
+                            @Html.DropDownList("fld_PermitStatus", null, htmlAttributes: new { @class = "form-control", @readonly = "readonly" })
+                            @Html.ValidationMessageFor(model => model.fld_PermitStatus, "", new { @class = "text-danger" })
+
+                        </div>
+                        <div class="col-sm-3">
+                            <label>@GlobalResEstate.lblPermitRenewalStatus@*<font style="color:red">*</font>*@</label>
+                            @Html.DropDownList("fld_PermitRenewalStatus", null, htmlAttributes: new { @class = "form-control", @readonly = "readonly" })
+                            @Html.ValidationMessageFor(model => model.fld_PermitRenewalStatus, "", new { @class = "text-danger" })
+
+                        </div>
+                        <div class="col-sm-3">
+                            <label>@GlobalResEstate.lblPermitRenewalStartDate@*<font style="color:red">*</font>*@</label>
+                            <div class='input-group date' id='datetimepicker1'>
+                                @Html.EditorFor(Model => Model.fld_PermitRenewalStartDate, new { htmlAttributes = new { @class = "form-control", @type = "text", @data_val = "false", @readonly = "readonly" } })
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+                                </span>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="panel-heading">@GlobalResEstate.lblContractInfo.ToUpper()</div>
+                <div class="panel-body" id="mklmtPermit">
+                    <div class="form-group">
+                        <div class="col-sm-2">
+
+                            <label>@GlobalResEstate.lblContractStartDate@*<font style="color:red">*</font>*@</label>@*Added by Shazana on 1/9/2021*@
+                            <div class='input-group date' id='datetimepicker1'>
+                                @Html.EditorFor(Model => Model.fld_ContractStartDate, new { htmlAttributes = new { @class = "form-control", @type = "text", @data_val = "false", @readonly = "readonly" } })
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-sm-2">
+                            <label>@GlobalResEstate.lblContractExpiryDate@*<font style="color:red">*</font>*@</label>@*Added by Shazana on 1/9/2021*@
+                            <div class='input-group date' id='datetimepicker1'>
+                                @Html.EditorFor(Model => Model.fld_ContractExpiryDate, new { htmlAttributes = new { @class = "form-control", @type = "text", @data_val = "false", @readonly = "readonly" } })
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+                                </span>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        @*@if (Model.fld_StatusApproved == 3)
+            {
+                <button class="btn btn-primary" id="btnRequest" name="btnRequest">
+                    Mohon Semula
+                </button>
+            }*@
+        @*<button class="btn btn-primary" id="btnUpload" name="btnUpload" onclick="return DisplayProgressMessage(this);">
+                @GlobalResEstate.btnSave
+            </button>*@
+        @*<input id="btnUpload" class="btn btn-primary" value=@GlobalResEstate.btnSave />*@
+        @*<input id="btnSubmit" style="display:none" class="btn btn-primary" type="submit" value=@GlobalResEstate.btnSave />*@
+            <button class="btn btn-warning" data-dismiss="modal">@GlobalResEstate.btnBack</button>
+    </div>
+}
+<script>
+
+    $(function () {
+        $('#fld_Trlhr').datetimepicker({
+            timepicker: false,
+            format: '@dateformat'
+        });
+        $('#fld_T1prmt').datetimepicker({
+            timepicker: false,
+            format: '@dateformat'
+        });
+        $('#fld_T2prmt').datetimepicker({
+            timepicker: false,
+            format: '@dateformat'
+        });
+        $('#fld_T1pspt').datetimepicker({
+            timepicker: false,
+            format: '@dateformat'
+        });
+        $('#fld_T2pspt').datetimepicker({
+            timepicker: false,
+            format: '@dateformat'
+        });
+        $('#fld_Trmlkj').datetimepicker({
+            timepicker: false,
+            format: '@dateformat'
+        });
+        $('#fld_Trshjw').datetimepicker({
+            timepicker: false,
+            format: '@dateformat'
+        });
+         $('#fld_T2visa').datetimepicker({
+            timepicker: false,
+            format: '@dateformat'
+         });
+        $('#fld_PassportRenewalStartDate').datetimepicker({
+            timepicker: false,
+            format: '@dateformat'
+        });
+        $('#fld_PermitRenewalStartDate').datetimepicker({
+            timepicker: false,
+            format: '@dateformat'
+        });
+        $('#fld_ContractStartDate').datetimepicker({
+            timepicker: false,
+            format: '@dateformat'
+        });
+        $('#fld_ContractExpiryDate').datetimepicker({
+            timepicker: false,
+            format: '@dateformat'
+        });
+    });
+
+    function defaultDate(data) {
+        if (data == null || data == "") {
+            var newdata = "";
+            return newdata;
+        }
+        else{
+            return data;
+        }
+    };
+
+    function changemediacover() {
+        var selectedImg = $('#file')[0].files[0];
+        var selectedImgsize = ($("#file")[0].files[0].size / 1024);
+        var selectedImgtype = $("#file")[0].files[0];
+        selectedImgtype = selectedImgtype.name.substr((selectedImgtype.name.lastIndexOf('.') + 1));
+        //alert(selectedImgtype);
+        if (selectedImg) {
+            var previewId = document.getElementById('image');
+            previewId.src = '';
+
+            var oReader = new FileReader();
+            oReader.onload = function (e) {
+                previewId.src = e.target.result;
+            }
+            oReader.readAsDataURL(selectedImg);
+        }
+    }
+
+    function uploadImage() {
+         if (window.FormData !== undefined) {
+            var fileupload = $('#file').get(0);
+            var files = fileupload.files;
+            var nopkj = $("#fld_Nopkj").val();
+            var ext = "";
+            var filenewname = "";
+            var fileData = new FormData();
+            for (var i = 0; i < files.length; i++) {
+                ext = files[i].name.split(".").pop();
+                filenewname = nopkj.trim() + "." + ext;
+                fileData.append(files[i].name, files[i], filenewname);
+                console.log(ext);
+                console.log(filenewname);
+            }
+            $.ajax({
+                url: '@Url.Action("UploadFiles", "BasicInfo")',
+                type: "POST",
+                contentType: false,
+                processData: false,
+                data: fileData,
+                success: function (result) {
+                    //alert(result);
+                },
+                error: function (err) {
+                    alert(err.statusText);
+                }
+            });
+        }
+        else {
+            alert("Formdata is not supported.")
+        }
+    }
+
+     function uploadSupportedFile() {
+         if (window.FormData !== undefined) {
+            var fileupload = $('#file1').get(0);
+            var files = fileupload.files;
+            var nopkj = $("#fld_Nopkj").val();
+            var ext = "";
+            var filenewname = "";
+            var fileData = new FormData();
+            for (var i = 0; i < files.length; i++) {
+                ext = files[i].name.split(".").pop();
+                filenewname = nopkj.trim() + "_" + files[i].name;
+                fileData.append(files[i].name, files[i], filenewname);
+                console.log(ext);
+                console.log(filenewname);
+            }
+            $.ajax({
+                url: '@Url.Action("UploadSupportedFiles", "BasicInfo")',
+                type: "POST",
+                contentType: false,
+                processData: false,
+                data: fileData,
+                success: function (result) {
+                    //alert(result);
+                    //viewDoc();
+                },
+                error: function (err) {
+                    alert(err.statusText);
+                }
+            });
+        }
+        else {
+            alert("Formdata is not supported.")
+        }
+    }
+
+                $("form").removeData("validator");
+                $("form").removeData("unobtrusiveValidation");
+                $.validator.unobtrusive.parse("form");
+</script>
+<script>
+    $(document).ready(function () {
+        if ($("#fld_Trlhr").val() != "") {
+            var Getumur = {};
+            var disableoption = "";
+            Getumur.url = "@Url.Action("GetUmurPkj", "BasicInfo")";
+            Getumur.type = "POST";
+            Getumur.data = JSON.stringify({ sdate: $("#fld_Trlhr").val()  });
+            Getumur.datatype = "json";
+            Getumur.contentType = "application/json";
+            Getumur.success = function (result) {
+                $("#UmurPkj").val(result);
+            };
+            Getumur.error = function () { $.simplyToast('@GlobalResEstate.msgError', 'danger'); };
+            $.ajax(Getumur);
+        }
+
+         $("#fld_Trlhr").change(function () {
+            var Getumur = {};
+            var disableoption = "";
+            Getumur.url = "@Url.Action("GetUmurPkj", "BasicInfo")";
+            Getumur.type = "POST";
+            Getumur.data = JSON.stringify({ sdate: $("#fld_Trlhr").val()  });
+            Getumur.datatype = "json";
+            Getumur.contentType = "application/json";
+            Getumur.success = function (result) {
+                $("#UmurPkj").val(result);
+            };
+            Getumur.error = function () { $.simplyToast('@GlobalResEstate.msgError', 'danger'); };
+            $.ajax(Getumur);
+        });
+
+        if ($("#fld_Kdrkyt").val() == 0) {
+            var Kdrkyt = {};
+            var disableoption = "";
+            Kdrkyt.url = "@Url.Action("GetNopkj", "BasicInfo")";
+            Kdrkyt.type = "POST";
+            Kdrkyt.data = JSON.stringify({ krkytn: $("#fld_Kdrkyt").val() });
+            Kdrkyt.datatype = "json";
+            Kdrkyt.contentType = "application/json";
+            Kdrkyt.success = function (nopkjnew) {
+                $("#fld_Nopkj").empty();
+                $("#fld_Nopkj").val(nopkjnew);
+            };
+            Kdrkyt.error = function () { $.simplyToast('@GlobalResEstate.msgError', 'danger'); };
+            $.ajax(Kdrkyt);
+         }
+
+        if ($("#fld_Kdrkyt").val() == "MA") {
+            document.getElementById('fld_Prmtno').disabled = true;
+            document.getElementById('fld_T2prmt').disabled = true;
+            document.getElementById('fld_T2pspt').disabled = true;
+            document.getElementById('fld_Kodbkl').disabled = true;
+        }
+
+        $("#fld_Kdrkyt").change(function () {
+            var Stspkt = {};
+            var disableoption = "";
+            Kdrkyt.url = "@Url.Action("GetNopkj", "BasicInfo")";
+            Kdrkyt.type = "POST";
+            Kdrkyt.data = JSON.stringify({ krkytn: $("#fld_Kdrkyt").val() });
+            Kdrkyt.datatype = "json";
+            Kdrkyt.contentType = "application/json";
+            Kdrkyt.success = function (nopkjnew) {
+                $("#fld_Nopkj").empty();
+                $("#fld_Nopkj").val(nopkjnew);
+            };
+            Kdrkyt.error = function () { $.simplyToast('@GlobalResEstate.msgError', 'danger'); };
+            $.ajax(Kdrkyt);
+        });
+
+        if ($("#fld_Poskod").val() == 0 && $("#fld_Neg").val() == 0 && $("#fld_Negra").val() == 0) {
+            var Poskod = {};
+            var disableoption = "";
+            Poskod.url = "@Url.Action("GetDaerah", "BasicInfo")";
+            Poskod.type = "POST";
+            Poskod.data = JSON.stringify({ poskod: $("#fld_Poskod").val(), negeri: $("#fld_Neg").val(), negara: $("#fld_Negra").val() });
+            Poskod.datatype = "json";
+            Poskod.contentType = "application/json";
+            Poskod.success = function (daerah) {
+                $("#fld_Daerah").empty();
+                $("#fld_Daerah").val(daerah);
+            };
+            Poskod.error = function () { $.simplyToast('@GlobalResEstate.msgError', 'danger'); };
+            $.ajax(Poskod);
+        }
+
+        function getdaerah() {
+            var Poskod = {};
+            var disableoption = "";
+            Poskod.url = "@Url.Action("GetDaerah", "BasicInfo")";
+            Poskod.type = "POST";
+            Poskod.data = JSON.stringify({ poskod: $("#fld_Poskod").val(), negeri: $("#fld_Neg").val(), negara: $("#fld_Negara").val() });
+            Poskod.datatype = "json";
+            Poskod.contentType = "application/json";
+            Poskod.success = function (daerah) {
+                $("#fld_Daerah").empty();
+                $("#fld_Daerah").val(daerah);
+            };
+            Poskod.error = function () { $.simplyToast('@GlobalResEstate.msgError', 'danger'); };
+            $.ajax(Poskod);
+        }
+
+        $("#fld_Poskod").change(function () {
+            getdaerah();
+        });
+
+        $("#fld_Neg").change(function () {
+            getdaerah();
+        });
+
+        $("#fld_Negara").change(function () {
+            getdaerah();
+        });
+
+        $("#btnBatch").click(function (e) {
+            e.preventDefault();
+            var Batch = {};
+            var disableoption = "";
+            Batch.url = "@Url.Action("GetBatch", "BasicInfo")";
+            Batch.type = "POST";
+            Batch.data = JSON.stringify(/*{ krkytn: $("#fld_Kdrkyt").val() }*/);
+            Batch.datatype = "json";
+            Batch.contentType = "application/json";
+            Batch.success = function (newbatch) {
+                $("#fld_Batch").empty();
+                $("#fld_Batch").val(newbatch);
+            };
+            Batch.error = function () { $.simplyToast('@GlobalResEstate.msgError', 'danger'); };
+            $.ajax(Batch);
+        });
+
+        $("#fld_T1prmt").change(function () {
+            var TmtPermit = {};
+            var disableoption = "";
+            TmtPermit.url = "@Url.Action("GetPermitExpired", "BasicInfo")";
+            TmtPermit.type = "POST";
+            TmtPermit.data = JSON.stringify({ permitDate: $("#fld_T1prmt").val() });
+            TmtPermit.datatype = "json";
+            TmtPermit.contentType = "application/json";
+            TmtPermit.success = function (exprdDate) {
+                var tarikhTamat = new Date(parseInt(exprdDate.substr(6)));
+                var month = tarikhTamat.getMonth() + 1;
+                var day = tarikhTamat.getDate();
+                var year = tarikhTamat.getFullYear();
+                var result = ("0" + tarikhTamat.getDate()).slice(-2) + '/' + ("0" + (tarikhTamat.getMonth()+1)).slice(-2) + '/' + year;
+                $("#fld_T2prmt").empty();
+                $("#fld_T2prmt").val(result.toString());
+                //console.log(result);
+                //console.log(tarikhTamat);
+                //console.log(month);
+                //console.log(year);
+                //console.log(day);
+                //console.log(exprdDate);
+            };
+            TmtPermit.error = function () { $.simplyToast('@GlobalResEstate.msgError', 'danger'); };
+            $.ajax(TmtPermit);
+        });
+
+        @*$("#btnRequest").click(function (e) {
+            //e.preventDefault();
+            var request = {};
+            var disableoption = "";
+            request.url = "@Url.Action("Reapply", "BasicInfo")";
+            request.type = "POST";
+            request.data = JSON.stringify(/*{ krkytn: $("#fld_Kdrkyt").val() }*/);
+            request.datatype = "json";
+            request.contentType = "application/json";
+            request.success = function (newbatch) {
+                $("#fld_Batch").empty();
+                $("#fld_Batch").val(newbatch);
+            };
+            Batch.error = function () { $.simplyToast('Sistem masalah', 'danger'); };
+            $.ajax(Batch);
+        });*@
+
+        $("#image").click(function () {
+            document.getElementById('file').click();
+        });
+
+        $("#fld_Nama").keyup(function (e) {
+            var nama = $("#fld_Nama").val();
+            var namaNew = titleCase(nama);
+            $("#fld_Nama").val(namaNew);
+        });
+
+        $("#fld_Almt1").keyup(function (e) {
+            var nama = $("#fld_Almt1").val();
+            var namaNew = titleCase(nama);
+            $("#fld_Almt1").val(namaNew);
+        });
+
+        $("#fld_Almt2").keyup(function (e) {
+            var nama1 = $("#fld_Almt2").val();
+            var namaNew1 = titleCase(nama1);
+            $("#fld_Almt2").val(namaNew1);
+        });
+
+        $("#btnUpload").click(function () {
+            uploadImage();
+            $("#UpdateProgress1").hide();
+            document.getElementById('btnSubmit').click();
+        });
+
+         $("#btnUploadFile").click(function () {
+            document.getElementById('file1').click();
+            uploadSupportedFile();
+            viewDoc();
+
+        });
+
+        function viewDoc() {
+            console.log($("#fld_Nopkj").val());
+             var reloadPage2 = {};
+                            //console.log(tbl_Pkjmast);
+                            reloadPage2.url = "@Url.Action("WorkerDoc", "BasicInfo")";
+                            reloadPage2.type = "POST";
+                            reloadPage2.data = { nopkj: $("#fld_Nopkj").val() };
+                            reloadPage2.datatype = "json";
+                            reloadPage2.success = function (result) {
+                                $("#pdfdoc").html(result);
+                                $("#UpdateProgress1").css("display", "none");
+                            };
+                            reloadPage2.error = function () {
+                                $("#UpdateProgress1").css("display", "none");
+                                $.simplyToast('@GlobalResEstate.msgError', 'danger');
+                            };
+                            $.ajax(reloadPage2);
+         }
+
+        if ($("#fld_Nopkj").val() != "") {
+           var reloadPage2 = {};
+                            //console.log(tbl_Pkjmast);
+                            reloadPage2.url = "@Url.Action("WorkerDoc", "BasicInfo")";
+                            reloadPage2.type = "POST";
+                            reloadPage2.data = { nopkj: $("#fld_Nopkj").val() };
+                            reloadPage2.datatype = "json";
+                            reloadPage2.success = function (result) {
+                                $("#pdfdoc").html(result);
+                                $("#UpdateProgress1").css("display", "none");
+                            };
+                            reloadPage2.error = function () {
+                                $("#UpdateProgress1").css("display", "none");
+                                $.simplyToast('@GlobalResEstate.msgError', 'danger');
+                            };
+                            $.ajax(reloadPage2);
+        }
+    });
+
+        /*Added by Shazana on 21/9/2021*/
+    $(".digit").keypress(function (e) {
+        if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+            $("#errormsg").html("Digits Only").show().fadeOut("slow");
+            return false;
+        }
+    });
+
+    //added by faeza 22.09.2021
+    $(".numeric").keypress(function (e) {
+        if (e.which == 8 || e.which == 0 || (!(e.which >= 48 && e.which <= 57) && !(e.which > 96 && e.which < 123) && !(e.which > 64 && e.which < 91) && e.which != 32)) {
+            $("#errormsg").html("Special character not allowed").show().fadeOut("slow");
+            return false;
+        }
+    });
+
+    $('#btnSubmit').click(function () {
+          //debugger
+            var flag = 0;
+            var division = $("#fld_DivisionID").val();
+            var fld_Trshjw = $("#fld_Trshjw").val();
+            var fld_Nama = $("#fld_Nama").val();
+            var fld_Jenispekerja = $("#fld_Jenispekerja").val();
+            var fld_Ktgpkj = $("#fld_Ktgpkj").val();
+            var fld_Trlhr = $("#fld_Trlhr").val();
+            var fld_Kdjnt = $("#fld_Kdjnt").val();
+            var fld_Kdkwn = $("#fld_Kdkwn").val();
+            var fld_Kpenrka = $("#fld_Kpenrka").val();
+            var fld_Kdbgsa = $("#fld_Kdbgsa").val();
+            var fld_Kdagma = $("#fld_Kdagma").val();
+            var fld_Kdrkyt = $("#fld_Kdrkyt").val();
+            var fld_Almt1 = $("#fld_Almt1").val();
+            var fld_Poskod = $("#fld_Poskod").val();
+            var fld_Neg = $("#fld_Neg").val();
+            var fld_Negara = $("#fld_Negara").val();
+            var fld_Daerah = $("#fld_Daerah").val();
+            var fld_Nokp = $("#fld_Nokp").val();
+            //added by faeza 21.09.2021
+            var fld_Notel = $("#fld_Notel").val();
+            var fld_PaymentMode = $("#fld_PaymentMode").val();
+            var fld_Last4Pan = $("#fld_Last4Pan").val();
+
+        /*Added by Shazana 18 / 10 / 2023*/
+        var fld_T2pspt = $("#fld_T2pspt").val();
+        var fld_PassportStatus = $("#fld_PassportStatus").val();
+        var fld_PassportRenewalStatus = $("#fld_PassportRenewalStatus").val();
+        var fld_PassportRenewalStartDate = $("#fld_PassportRenewalStartDate").val();
+        var fld_PermitStatus = $("#fld_PermitStatus").val();
+        var fld_PermitRenewalStatus = $("#fld_PermitRenewalStatus").val();
+        var fld_PermitRenewalStartDate = $("#fld_PermitRenewalStartDate").val();
+        var fld_ContractStartDate = $("#fld_ContractStartDate").val();
+        var fld_ContractExpiryDate = $("#fld_ContractExpiryDate").val();
+        var fld_Kdrkyt = $("#fld_Kdrkyt").val();
+
+    debugger
+
+            @*if (division === "0") {
+                $("#UpdateProgress1").css("display", "none");
+                $.simplyToast('@GlobalResEstate.msgDivision', "danger");
+            }
+            else if (fld_Trshjw === "") {
+                $("#UpdateProgress1").css("display", "none");
+                $.simplyToast('@GlobalResEstate.msgStartWorkingDate', "danger");
+            }
+            else if (fld_Jenispekerja === "0") {
+                $("#UpdateProgress1").css("display", "none");
+                $.simplyToast('@GlobalResEstate.msgWorkerType', "danger");
+            }
+            else if (fld_Ktgpkj === "0")
+            {
+                $("#UpdateProgress1").css("display", "none");
+                $.simplyToast('@GlobalResEstate.msgWorkerCategory', "danger");
+            }
+            else if (fld_Kdjnt === "0")
+            {
+                $("#UpdateProgress1").css("display", "none");
+                $.simplyToast('@GlobalResEstate.msgGender', "danger");
+            }
+            else if (fld_Nama === "")
+            {
+                $("#UpdateProgress1").css("display", "none");
+                $.simplyToast('@GlobalResEstate.msgName', "danger");
+            }
+            else if (fld_Trlhr === "")
+            {
+                $("#UpdateProgress1").css("display", "none");
+                $.simplyToast('@GlobalResEstate.msgDOB', "danger");
+            }
+            else if (fld_Kdkwn === "0")
+            {
+                $("#UpdateProgress1").css("display", "none");
+                $.simplyToast('@GlobalResEstate.msgMarriage', "danger");
+            }
+            else if (fld_Kpenrka === "0") {
+                $("#UpdateProgress1").css("display", "none");
+                $.simplyToast('@GlobalResEstate.msgSettlersFamily', "danger");
+                }
+            else if (fld_Kdbgsa === "0") {
+                $("#UpdateProgress1").css("display", "none");
+                $.simplyToast('@GlobalResEstate.msgRace', "danger");
+                }
+            else if (fld_Kdagma === "0") {
+                $("#UpdateProgress1").css("display", "none");
+                $.simplyToast('@GlobalResEstate.msgReligion', "danger");
+            }
+            else if (fld_Kdrkyt === "0") {
+                $("#UpdateProgress1").css("display", "none");
+                $.simplyToast('@GlobalResEstate.msgCitizen', "danger");
+            }
+            else if (fld_Almt1 === "") {
+                $("#UpdateProgress1").css("display", "none");
+                $.simplyToast('@GlobalResEstate.msgAddress', "danger");
+            }
+            else if (fld_Poskod === "") {
+                $("#UpdateProgress1").css("display", "none");
+                $.simplyToast('@GlobalResEstate.msgPoscode', "danger");
+            }
+            else if (fld_Neg === "0") {
+                $("#UpdateProgress1").css("display", "none");
+                $.simplyToast('@GlobalResEstate.msgState', "danger");
+            }
+            else if (fld_Negara === "0") {
+                $("#UpdateProgress1").css("display", "none");
+                $.simplyToast('@GlobalResEstate.msgCountry', "danger");
+            }
+            else if (fld_Nokp === "") {
+                $("#UpdateProgress1").css("display", "none");
+                $.simplyToast('@GlobalResEstate.msgIcPassport', "danger");
+            }
+            else if (fld_Daerah === "") {
+                $("#UpdateProgress1").css("display", "none");
+                $.simplyToast('@GlobalResEstate.msgDistrict', "danger");
+            }
+            else if (fld_Notel === "") {
+                $("#UpdateProgress1").css("display", "none");
+                $.simplyToast('@GlobalResEstate.msgNoTel', "danger");
+                }
+            else if (fld_PaymentMode === "0") {
+                $("#UpdateProgress1").css("display", "none");
+                $.simplyToast('@GlobalResEstate.msgPaymentMode', "danger");
+            }
+            else if (fld_PaymentMode === "3" && (fld_Last4Pan === "")) {
+                $("#UpdateProgress1").css("display", "none");
+                $.simplyToast('@GlobalResEstate.msgLast4Pan', 'danger');
+            }*@
+            @*/* Added by Shazana 18/10/2023*/
+            else if (fld_T2pspt === "" && fld_Kdrkyt !== "MA") {
+                $("#UpdateProgress1").css("display", "none");
+                $.simplyToast('@GlobalResEstate.msgPassportExpiryDate', 'danger');
+            }
+            else if (fld_PassportStatus === "0" && fld_Kdrkyt !== "MA") {
+                $("#UpdateProgress1").css("display", "none");
+                $.simplyToast('@GlobalResEstate.msgPassportStatus', 'danger');
+            }
+            else if (fld_PassportRenewalStatus === "0" && fld_Kdrkyt !== "MA") {
+                $("#UpdateProgress1").css("display", "none");
+                $.simplyToast('@GlobalResEstate.msgPassportRenewalStatus', 'danger');
+            }
+            else if (fld_PassportRenewalStartDate === "" && fld_Kdrkyt !== "MA") {
+                $("#UpdateProgress1").css("display", "none");
+                $.simplyToast('@GlobalResEstate.msgPassportRenewalStartDate', 'danger');
+            }
+            else if (fld_PermitStatus === "0" && fld_Kdrkyt !== "MA") {
+                $("#UpdateProgress1").css("display", "none");
+                $.simplyToast('@GlobalResEstate.msgPermitStatus', 'danger');
+            }
+            else if (fld_PermitRenewalStatus === "0" && fld_Kdrkyt !== "MA") {
+                $("#UpdateProgress1").css("display", "none");
+                $.simplyToast('@GlobalResEstate.msgPermitRenewalStatus', 'danger');
+            }
+            else if (fld_PermitRenewalStartDate === "" && fld_Kdrkyt !== "MA") {
+                $("#UpdateProgress1").css("display", "none");
+                $.simplyToast('@GlobalResEstate.msgPermitRenewalStartDate', 'danger');
+            }
+            else if (fld_ContractStartDate === "" && fld_Kdrkyt !== "MA") {
+                $("#UpdateProgress1").css("display", "none");
+                $.simplyToast('@GlobalResEstate.msgContractStartDate', 'danger');
+            }
+            else if (fld_ContractExpiryDate === "" && fld_Kdrkyt !== "MA") {
+                $("#UpdateProgress1").css("display", "none");
+                $.simplyToast('@GlobalResEstate.msgContractExpiryDate', 'danger');
+            }*@
+            else {
+
+                if (flag === 0)
+                {
+                    var tbl_Pkjmast = {
+                    fld_Batch: $("#fld_Batch").val(),
+                    fld_Nopkj: $("#fld_Nopkj").val(),
+                    fld_Nama: $("#fld_Nama").val(),
+                    fld_Nokp: $("#fld_Nokp").val(),
+                    fld_Trlhr: $("#fld_Trlhr").val(),
+                    fld_Kdjnt: $("#fld_Kdjnt").val(),
+                    fld_Kdkwn: $("#fld_Kdkwn").val(),
+                    fld_Kpenrka: $("#fld_Kpenrka").val(),
+                    fld_Kdbgsa: $("#fld_Kdbgsa").val(),
+                    fld_Kdagma: $("#fld_Kdagma").val(),
+                    fld_Kdrkyt: $("#fld_Kdrkyt").val(),
+                    fld_Almt1: $("#fld_Almt1").val(),
+                    fld_Poskod: $("#fld_Poskod").val(),
+                    fld_Daerah: $("#fld_Daerah").val(),
+                    fld_Neg: $("#fld_Neg").val(),
+                    fld_Negara: $("#fld_Negara").val(),
+                    fld_Jenispekerja: $("#fld_Jenispekerja").val(),
+                    fld_Ktgpkj: $("#fld_Ktgpkj").val(),
+                    fld_Prmtno: $("#fld_Prmtno").val(),
+                    fld_T2prmt: $("#fld_T2prmt").val(),
+                    fld_T2pspt: $("#fld_T2pspt").val(),
+                    fld_Trmlkj: $("#fld_Trmlkj").val(),
+                    fld_Trshjw: $("#fld_Trshjw").val(),
+                    fld_Kodbkl: $("#fld_Kodbkl").val(),
+                    //fld_Kdaktf: $("#fld_Kdaktf").val(),
+                    fld_DivisionID: $("#fld_DivisionID").val(),
+                    fld_Nokp: $("#fld_Nokp").val(),
+                    //added by faeza 21.09.2021
+                    fld_Notel: $("#fld_Notel").val(),
+                    fld_PaymentMode: $("#fld_PaymentMode").val(),
+                    fld_Last4Pan: $("#fld_Last4Pan").val(),
+
+                        /*Added by Shazana 18/10/2023*/
+                        fld_PassportStatus: $("#fld_PassportStatus").val(),
+                        fld_PassportRenewalStatus: $("#fld_PassportRenewalStatus").val(),
+                        fld_PassportRenewalStartDate: $("#fld_PassportRenewalStartDate").val(),
+                        fld_PermitStatus: $("#fld_PermitStatus").val(),
+                        fld_PermitRenewalStatus: $("#fld_PermitRenewalStatus").val(),
+                        fld_PermitRenewalStartDate: $("#fld_PermitRenewalStartDate").val(),
+                        fld_ContractStartDate: $("#fld_ContractStartDate").val(),
+                        fld_ContractExpiryDate: $("#fld_ContractExpiryDate").val()
+
+                };
+             var reloadPage = {};
+            console.log(tbl_Pkjmast);
+            reloadPage.url = "@Url.Action("WorkerUpdate", "BasicInfo")";
+            reloadPage.type = "POST";
+            reloadPage.data = { Pkjmast: tbl_Pkjmast, id: $("#fld_Nopkj").val()};
+            reloadPage.datatype = "json";
+            reloadPage.success = function (result) {
+                $("#content").html(result.bodyview);
+                //$("#fld_Batch").val();
+              /*  $("#fld_Nopkj").val("");*/
+                $("#fld_Nama").val("");
+                $("#fld_Nokp").val("");
+                $("#fld_Trlhr").val("");
+                $("#fld_Kdjnt").val(0);
+                $("#fld_Kdkwn").val(0);
+                $("#fld_Kpenrka").val(0);
+                $("#fld_Kdbgsa").val(0);
+                $("#fld_Kdagma").val(0);
+                $("#fld_Kdrkyt").val(0);
+                $("#fld_Almt1").val("");
+                $("#fld_Poskod").val("");
+                $("#fld_Daerah").val("");
+                $("#fld_Neg").val(0);
+                $("#fld_Negara").val(0);
+                $("#fld_Jenispekerja").val(0);
+                $("#fld_Ktgpkj").val(0);
+                $("#fld_Prmtno").val("");
+                $("#fld_T1prmt").val("");
+                $("#fld_T2prmt").val("");
+                $("#fld_T1pspt").val("");
+                $("#fld_T2pspt").val("");
+                $("#fld_Trmlkj").val("");
+                $("#fld_Trshjw").val("");
+                $("#fld_Kodbkl").val(0);
+                $("#fld_DivisionID").val(0);
+                $("#fld_Nokp").val("");
+                //added by faeza 21.09.2021
+                $("#fld_Notel").val("");
+                $("#fld_PaymentMode").val(0);
+                $("#fld_Last4Pan").val("");
+
+                /*Added by Shazana 18/10/2023*/
+                $("#fld_PassportStatus").val(0);
+                $("#fld_PassportRenewalStatus").val(0);
+                $("#fld_PassportRenewalStartDate").val();
+                $("#fld_PermitStatus").val(0);
+                $("#fld_PermitRenewalStatus").val(0);
+                $("#fld_PermitRenewalStartDate").val();
+                $("#fld_ContractStartDate").val();
+                $("#fld_ContractExpiryDate").val();
+
+                $.simplyToast(result.msg, result.statusmsg);
+            };
+            reloadPage.error = function () { $.simplyToast('@GlobalResEstate.msgError', 'danger'); };
+            $.ajax(reloadPage);
+                }
+            }
+
+    });
+    /*Close Added by Shazana on 21/9/2021*/
+
+</script>

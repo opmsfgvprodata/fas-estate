@@ -58,7 +58,7 @@
                             <div class="col-sm-5">
                                 <label class="control-label col-md-3">@GlobalResEstate.lblKwspSocsoStatus</label>
                                 <div class="col-md-9">
-                                    @Html.DropDownList("fld_StatusKwspSocso", null, htmlAttributes: new { @class = "form-control" })
+                                    @Html.DropDownList("fld_StatusKwspSocso", null, htmlAttributes: new { @class = "form-control", @disabled = "readonly" })
                                 </div>
                             </div>
                         </div>
@@ -75,7 +75,7 @@
                                 <div class="col-sm-5">
                                     <label class="control-label col-md-3">@GlobalResEstate.lblNoKwsp</label>
                                     <div class="col-md-9">
-                                        @Html.TextBoxFor(model => model.fld_Nokwsp, new { @class = "form-control" })
+                                        @Html.TextBoxFor(model => model.fld_Nokwsp, new { @class = "form-control", @disabled = "readonly" })
                                     </div>
                                 </div>
                             </div>
@@ -93,7 +93,7 @@
                             <div class="col-sm-5">
                                 <label class="control-label col-md-3">@GlobalResEstate.lblNoSocso</label>
                                 <div class="col-md-9">
-                                    @Html.TextBoxFor(model => model.fld_Noperkeso, new { @class = "form-control" })
+                                    @Html.TextBoxFor(model => model.fld_Noperkeso, new { @class = "form-control", @disabled = "readonly" })
                                 </div>
                             </div>
                         </div>

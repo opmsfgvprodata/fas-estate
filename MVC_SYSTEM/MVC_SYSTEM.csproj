@@ -426,6 +426,7 @@
     <Compile Include="MasterModels\tbl_CutiMaintenance.cs" />
     <Compile Include="MasterModels\tbl_CutiUmum.cs" />
     <Compile Include="MasterModels\tbl_Division.cs" />
+    <Compile Include="MasterModels\tbl_EAWorkerSiriNo.cs" />
     <Compile Include="MasterModels\tbl_EstateDivisionSelection.cs" />
     <Compile Include="MasterModels\tbl_EstateSelection.cs" />
     <Compile Include="MasterModels\tbl_GLSAP.cs" />
@@ -545,6 +546,7 @@
     <Compile Include="Models\tbl_Asaspkt.cs" />
     <Compile Include="Models\tbl_Blok.cs" />
     <Compile Include="Models\tbl_ByrCarumanTambahan.cs" />
+    <Compile Include="Models\tbl_SpecialInsentif.cs" />
     <Compile Include="Models\tbl_TaxPCB2Form.cs" />
     <Compile Include="Models\tbl_TaxWorkerInfo.cs" />
     <Compile Include="Models\tbl_CutiDiambil.cs" />
@@ -611,6 +613,8 @@
     <Compile Include="Models\vw_KumpulanPekerja.cs" />
     <Compile Include="Models\vw_MaklumatInsentif.cs" />
     <Compile Include="Models\vw_MaybankFile.cs" />
+    <Compile Include="Models\vw_MaybankRcms.cs" />
+    <Compile Include="Models\vw_MaybankRcmsOthers.cs" />
     <Compile Include="Models\vw_PkjCarumanTambahan.cs" />
     <Compile Include="Models\vw_RptAIPS.cs" />
     <Compile Include="Models\vw_rptKwspSocso.cs" />
@@ -3219,8 +3223,15 @@
     <Content Include="Views\WorkerInfo\SupervisorRegistrationDelete.cshtml" />
     <Content Include="Views\EAFormReport\Index.cshtml" />
     <Content Include="Views\PCB2FormReport\Index.cshtml" />
+    <Content Include="Views\BasicInfo\CostCenterUpdate.cshtml" />
     <Content Include="Views\Report\PenggajianDataReport.cshtml" />
     <Content Include="Views\Report\_PenggajianDataReport.cshtml" />
+    <Content Include="Views\WorkerInfo\_WorkerTaxInfoCopy.cshtml" />
+    <Content Include="Views\GenTextFile\ewalletindividu.cshtml" />
+    <Content Include="Views\GenTextFile\_ewalletindividu.cshtml" />
+    <Content Include="Views\GenTextFile\ewalletInsentiveindividu.cshtml" />
+    <Content Include="Views\GenTextFile\_ewalletInsentiveindividu.cshtml" />
+    <Content Include="Views\BasicInfo\WorkerView.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Asset\Upload\120\" />

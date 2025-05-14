@@ -13,11 +13,11 @@
         public string fldUserName { get; set; }
         [StringLength(200)]
         public string fldUserFullName { get; set; }
-        [StringLength(50)]
-        public string fldJawatan { get; set; }
+        //[StringLength(50)]
+        //public string fldJawatan { get; set; }
 
-        [StringLength(50)]
-        public string fldUserid { get; set; }
+        //[StringLength(50)]
+        //public string fldUserid { get; set; }
 
         public int? fldSyarikatID { get; set; }
         public int? fldNegaraID { get; set; }
